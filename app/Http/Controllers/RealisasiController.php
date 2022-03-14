@@ -12,21 +12,6 @@ class RealisasiController extends Controller
         $page_description = 'Daftar Sasaran Kinerja Pegawai';
         $breadcumb = ['Daftar Sasaran Kinerja Pegawai'];
 
-        $DUMMY_DATA = 
-        [
-            [
-                "no" => "A",
-                "jenis" => "Kinerja Utama"
-            ],[
-                "no" => "B",
-                "jenis" => "Kinerja Tambahan"
-            ],
-
-        ];
-
-        $data = (object) $DUMMY_DATA;
-        // dd($data);
-
 
         return view('pages.realisasi.index', compact('page_title', 'page_description','breadcumb'));
     }

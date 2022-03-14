@@ -5,6 +5,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SkpController;
 use App\Http\Controllers\RealisasiController;
+use App\Http\Controllers\PenilaianController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,6 +25,10 @@ Route::get('/skp', [SkpController::class, 'index']);
 Route::get('/skp/tambah', [SkpController::class, 'create']);
 
 Route::get('/realisasi', [RealisasiController::class, 'index']);
+Route::get('/realisasi/tambah', [RealisasiController::class, 'create']);
+
+
+Route::get('/penilaian', [PenilaianController::class, 'index']);
 Route::get('/realisasi/tambah', [RealisasiController::class, 'create']);
 
 
