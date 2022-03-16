@@ -11,7 +11,7 @@ $root-font-size-md: 12px; // Root font size for mobile mode
 $layout-themes: (
     dark: #0093dd,
     // Dark theme color
-    light: #ffffff // Light theme color,,,
+    light: #ffffff // Light theme color,,,,,
 ) !default;
 
 // Page Background Color
@@ -21,7 +21,7 @@ $page-bg: #eef0f8 !default;
 $page-padding: (
     desktop: 25px,
     // Padding for desktop mode
-    tablet-and-mobile: 15px // Padding for tablet and mobile modes,,,
+    tablet-and-mobile: 15px // Padding for tablet and mobile modes,,,,,
 ) !default;
 
 // Header
@@ -69,7 +69,7 @@ $header-menu-config: (
                     class: header-menu,
                     // menu element class name
                     mode: desktop
-                        // menu mode: "desktop", "desktop-and-tablet" or "general",,,
+                        // menu mode: "desktop", "desktop-and-tablet" or "general",,,,,
                 ),
             // Customize
             build:
@@ -1235,7 +1235,7 @@ $header-menu-config: (
                                                                                     font-color:
                                                                                     (
                                                                                         default:
-                                                                                            #9899ac,
+                                                                                            #ffffff,
                                                                                         open:
                                                                                             #ffffff,
                                                                                         active:
@@ -1250,7 +1250,7 @@ $header-menu-config: (
                                                                                     font-color:
                                                                                     (
                                                                                         default:
-                                                                                            #5c5e81,
+                                                                                            #ffffff,
                                                                                         open:
                                                                                             #ffffff,
                                                                                         here:
@@ -2217,7 +2217,7 @@ $aside-menu-config: (
                                                     text:
                                                         (
                                                             font-color: (
-                                                                default: #a2a3b7,
+                                                                default: #ffffff,
                                                                 open: #ffffff,
                                                                 here: #ffffff,
                                                                 active: #ffffff,
@@ -2228,7 +2228,7 @@ $aside-menu-config: (
                                                     arrow:
                                                         (
                                                             font-color: (
-                                                                default: #5c5e81,
+                                                                default: #ffffff,
                                                                 open: #ffffff,
                                                                 here: #ffffff,
                                                                 active: #ffffff,
@@ -2347,7 +2347,7 @@ $aside-menu-config: (
                                                                             font-color:
                                                                             (
                                                                                 default:
-                                                                                    #9899ac,
+                                                                                    #ffffff,
                                                                                 open:
                                                                                     #ffffff,
                                                                                 active:
@@ -2362,7 +2362,7 @@ $aside-menu-config: (
                                                                             font-color:
                                                                             (
                                                                                 default:
-                                                                                    #5c5e81,
+                                                                                    #ffffff,
                                                                                 open:
                                                                                     #ffffff,
                                                                                 here:
@@ -3137,7 +3137,7 @@ $subheader-config: (
             // Fixed mobile subheader's height
             shadow: 0px 10px 30px 0px rgba(82, 63, 105, 0.08),
             // Fixed subheader's box shadow
-            zindex: 95 // Fixed subheader's z-index,,,
+            zindex: 95 // Fixed subheader's z-index,,,,,
         )
 ) !default;
 
@@ -3151,6 +3151,6 @@ $footer-config: (
             height: 60px,
             // Fixed footer's height
             shadow: 0px 0px 28px 0px rgba(82, 63, 105, 0.13)
-                // Fixed fooer box shadow,,,
+                // Fixed fooer box shadow,,,,,
         )
 ) !default;

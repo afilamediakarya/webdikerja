@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SkpController;
 use App\Http\Controllers\RealisasiController;
 use App\Http\Controllers\PenilaianController;
+use App\Http\Controllers\AktivitasController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,16 +22,17 @@ Route::get('/', [PagesController::class, 'index']);
 Route::get('/login', [AuthController::class, 'index']);
 
 // skp
-Route::get('/skp', [SkpController::class, 'index']);
-Route::get('/skp/tambah', [SkpController::class, 'create']);
+Route::get('/skp', [SkpController::class, 'index'])->name('skp');
+Route::get('/skp/tambah', [SkpController::class, 'create'])->name('tambah-skp');
 
-Route::get('/realisasi', [RealisasiController::class, 'index']);
-Route::get('/realisasi/tambah', [RealisasiController::class, 'create']);
+Route::get('/realisasi', [RealisasiController::class, 'index'])->name('realisasi');
+Route::get('/realisasi/tambah', [RealisasiController::class, 'create'])->name('tambah-realisasi');
 
 
-Route::get('/penilaian', [PenilaianController::class, 'index']);
-Route::get('/realisasi/tambah', [RealisasiController::class, 'create']);
+Route::get('/penilaian/{type}', [PenilaianController::class, 'index'])->name('penilaian');
+Route::get('/penilaian/{type}/{id}', [PenilaianController::class, 'create'])->name('tambah-penilaian');
 
+Route::get('/aktivitas', [AktivitasController::class, 'index']);
 
 
 

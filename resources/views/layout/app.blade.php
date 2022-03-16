@@ -185,8 +185,54 @@
 									</a>
 								</li>
 
+								<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+									<a href="javascript:;" class="menu-link menu-toggle">
+										<span class="svg-icon menu-icon">
+											<!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-arrange.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+													<rect x="0" y="0" width="24" height="24" />
+													<path d="M5.5,4 L9.5,4 C10.3284271,4 11,4.67157288 11,5.5 L11,6.5 C11,7.32842712 10.3284271,8 9.5,8 L5.5,8 C4.67157288,8 4,7.32842712 4,6.5 L4,5.5 C4,4.67157288 4.67157288,4 5.5,4 Z M14.5,16 L18.5,16 C19.3284271,16 20,16.6715729 20,17.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,17.5 C13,16.6715729 13.6715729,16 14.5,16 Z" fill="#000000" />
+													<path d="M5.5,10 L9.5,10 C10.3284271,10 11,10.6715729 11,11.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,11.5 C4,10.6715729 4.67157288,10 5.5,10 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,12.5 C20,13.3284271 19.3284271,14 18.5,14 L14.5,14 C13.6715729,14 13,13.3284271 13,12.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z" fill="#000000" opacity="0.3" />
+												</g>
+											</svg>
+											<!--end::Svg Icon-->
+										</span>
+										<span class="menu-text">Penilaian</span>
+										<i class="menu-arrow"></i>
+									</a>
+									<div class="menu-submenu">
+										<i class="menu-arrow"></i>
+										<ul class="menu-subnav">
+											<li class="menu-item" aria-haspopup="true">
+												<a href="{{route('penilaian',['type' => 'skp'])}}" class="menu-link">
+													<i class="menu-bullet menu-bullet-dot">
+														<span></span>
+													</i>
+													<span class="menu-text">Review SKP</span>
+												</a>
+											</li>
+											<li class="menu-item" aria-haspopup="true">
+												<a href="{{route('penilaian',['type' => 'realisasi'])}}" class="menu-link">
+													<i class="menu-bullet menu-bullet-dot">
+														<span></span>
+													</i>
+													<span class="menu-text">Review Realisasi</span>
+												</a>
+											</li>
+											<li class="menu-item" aria-haspopup="true">
+												<a href="{{route('penilaian',['type' => 'perilaku'])}}" class="menu-link">
+													<i class="menu-bullet menu-bullet-dot">
+														<span></span>
+													</i>
+													<span class="menu-text">Nilai Perilaku</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</li>
 								<li class="menu-item" aria-haspopup="true">
-									<a href="{{url('/penilaian')}}" class="menu-link">
+									<a href="{{url('/laporan')}}" class="menu-link">
 										<span class="svg-icon menu-icon">
 											<!--begin::Svg Icon | path:assets/media/svg/icons/Design/Layers.svg-->
 											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -198,7 +244,7 @@
 											</svg>
 											<!--end::Svg Icon-->
 										</span>
-										<span class="menu-text">Penilaian</span>
+										<span class="menu-text">Laporan</span>
 									</a>
 								</li>
 							</ul>
@@ -920,14 +966,16 @@
 								<div class="dropdown">
 									<!--begin::Toggle-->
 									<div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
-										<div class="btn btn-icon btn-icon-mobile w-auto btn-clean d-flex align-items-center btn-lg px-2">
+										<div class="btn btn-icon btn-icon-mobile w-auto btn-clean d-flex btn-lg px-2">
 											<div class="d-flex flex-column font-size-sm align-items-baseline mr-4">
 												<span class="text-muted mb-1 text-weigth-light">Dg. Kulle</span>
 												<span class="text-dark font-weight-bold">Project Manager</span>
 											</div>
-                                            <span class="symbol symbol-lg-35 symbol-25 symbol-light-success">
-                                                <span class="symbol-label font-size-h5 font-weight-bold">S</span>
-                                            </span>
+											<div class="symbol symbol-40 symbol-light ml-4">
+                                                <span class="symbol-label">
+                                                    <img src="{{asset('media/svg/avatars/001-boy.svg')}}" class="h-60 align-self-end" alt="">
+                                                </span>
+                                            </div>
                                         </div>
 									</div>
 									<!--end::Toggle-->
@@ -1449,6 +1497,8 @@
 		</div>
 		<!--end::Main-->
 
+
+		@yield('side-form')
 
 		<!--begin::Scrolltop-->
 		<div id="kt_scrolltop" class="scrolltop">

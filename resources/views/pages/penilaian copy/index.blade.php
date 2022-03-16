@@ -39,7 +39,7 @@
                                 <td>Kepala Dinas</td>
                                 <td>2</td>
                                 <td nowrap="nowrap">
-                                    <a href="{{route('tambah-penilaian', ['type' => $type, 'id'=> 192])}}" type="button" class="btn btn-primary">Review SKP</a>
+                                    <button type="button" class="btn btn-primary">Review SKP</button>
                                 </td>
                             </tr>
                             <tr>
@@ -49,7 +49,7 @@
                                 <td>Kepala Dinas</td>
                                 <td>3</td>
                                 <td nowrap="nowrap">
-                                    <a href="{{route('tambah-penilaian', ['type' => $type, 'id'=> 192])}}" type="button" class="btn btn-primary">Review SKP</a>
+                                    <button type="button" class="btn btn-primary">Review SKP</button>
                                 </td>
                             </tr>
                             <tr>
@@ -59,7 +59,7 @@
                                 <td>Kepala Dinas</td>
                                 <td>1</td>
                                 <td nowrap="nowrap">
-                                    <a href="{{route('tambah-penilaian', ['type' => $type, 'id'=> 192])}}" type="button" class="btn btn-primary">Review SKP</a>
+                                    <button type="button" class="btn btn-primary">Review SKP</button>
                                 </td>
                             </tr>
                             @endfor

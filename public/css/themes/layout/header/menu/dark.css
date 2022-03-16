@@ -482,7 +482,7 @@
   }
   .header-menu-mobile .menu-nav > .menu-item .menu-submenu .menu-item > .menu-heading .menu-text,
 .header-menu-mobile .menu-nav > .menu-item .menu-submenu .menu-item > .menu-link .menu-text {
-    color: #9899ac;
+    color: #ffffff;
   }
   .header-menu-mobile .menu-nav > .menu-item .menu-submenu .menu-item > .menu-heading .menu-icon,
 .header-menu-mobile .menu-nav > .menu-item .menu-submenu .menu-item > .menu-link .menu-icon {
@@ -507,7 +507,7 @@
   }
   .header-menu-mobile .menu-nav > .menu-item .menu-submenu .menu-item > .menu-heading .menu-arrow,
 .header-menu-mobile .menu-nav > .menu-item .menu-submenu .menu-item > .menu-link .menu-arrow {
-    color: #5c5e81;
+    color: #ffffff;
   }
   .header-menu-mobile .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-open {
     transition: background-color 0.3s;
