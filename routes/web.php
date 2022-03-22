@@ -1,12 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PagesController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\SkpController;
-use App\Http\Controllers\RealisasiController;
-use App\Http\Controllers\PenilaianController;
+
 use App\Http\Controllers\AktivitasController;
+use App\Http\Controllers\AkunController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\PagesController;
+use App\Http\Controllers\PenilaianController;
+use App\Http\Controllers\RealisasiController;
+use App\Http\Controllers\SkpController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,14 +28,34 @@ Route::get('/login', [AuthController::class, 'index']);
 Route::get('/skp', [SkpController::class, 'index'])->name('skp');
 Route::get('/skp/tambah', [SkpController::class, 'create'])->name('tambah-skp');
 
-Route::get('/realisasi', [RealisasiController::class, 'index'])->name('realisasi');
-Route::get('/realisasi/tambah', [RealisasiController::class, 'create'])->name('tambah-realisasi');
+
+Route::prefix('realisasi')->group(function () {
+    Route::get('/', [RealisasiController::class, 'index'])->name('realisasi');
+    Route::get('/tambah', [RealisasiController::class, 'create'])->name('tambah-realisasi');
+});
+
+Route::prefix('laporan')->group(function () {
+    Route::get('/absen', [LaporanController::class, 'absen'])->name('laporan-absen');
+    Route::get('/skp', [LaporanController::class, 'skp'])->name('laporan-skp');
+    Route::get('/aktivitas', [LaporanController::class, 'aktivitas'])->name('laporan-aktivitas');
+    
+});
 
 
 Route::get('/penilaian/{type}', [PenilaianController::class, 'index'])->name('penilaian');
 Route::get('/penilaian/{type}/{id}', [PenilaianController::class, 'create'])->name('tambah-penilaian');
 
 Route::get('/aktivitas', [AktivitasController::class, 'index']);
+
+
+Route::prefix('akun')->group(function () {
+
+    Route::get('/', [AkunController::class, 'index'])->name('akun');
+    Route::get('/edit', [AkunController::class, 'edit'])->name('edit-profil');
+    Route::get('/ganti-password', [AkunController::class, 'index'])->name('ganti-password');
+});
+
+
 
 
 
