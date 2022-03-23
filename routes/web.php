@@ -10,7 +10,11 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\RealisasiController;
 use App\Http\Controllers\SkpController;
+
+
+use App\Http\Controllers\Admin\PegawaiController;
 /*
+
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -53,6 +57,13 @@ Route::prefix('akun')->group(function () {
     Route::get('/', [AkunController::class, 'index'])->name('akun');
     Route::get('/edit', [AkunController::class, 'edit'])->name('edit-profil');
     Route::get('/ganti-password', [AkunController::class, 'index'])->name('ganti-password');
+});
+
+Route::prefix('admin')->group(function() {
+    Route::prefix('pegawai')->group(function(){
+        Route::get('/', [PegawaiController::class, 'index'])->name('pegawai');
+        Route::get('/tambah', [PegawaiController::class, 'add'])->name('tambah-pegawai');
+    });
 });
 
 
