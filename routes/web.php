@@ -12,7 +12,13 @@ use App\Http\Controllers\RealisasiController;
 use App\Http\Controllers\SkpController;
 
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\PegawaiController;
+use App\Http\Controllers\Admin\InformasiController;
+use App\Http\Controllers\Admin\JabatanController;
+use App\Http\Controllers\Admin\JadwalController;
+use App\Http\Controllers\Admin\MasterController;
+use App\Http\Controllers\Admin\SatkerController;
 /*
 
 |--------------------------------------------------------------------------
@@ -63,6 +69,34 @@ Route::prefix('admin')->group(function() {
     Route::prefix('pegawai')->group(function(){
         Route::get('/', [PegawaiController::class, 'index'])->name('pegawai');
         Route::get('/tambah', [PegawaiController::class, 'add'])->name('tambah-pegawai');
+    });
+
+    Route::prefix('informasi')->group(function(){
+        Route::get('/', [InformasiController::class, 'index'])->name('informasi');
+
+    });
+
+    Route::prefix('jadwal')->group(function(){
+        Route::get('/', [JadwalController::class, 'index'])->name('jadwal');
+    });
+
+    Route::prefix('satker')->group(function(){
+        Route::get('/', [SatkerController::class, 'index'])->name('satker');
+    });
+
+    Route::prefix('jabatan')->group(function(){
+        Route::get('/', [JabatanController::class, 'index'])->name('jabatan');
+        Route::get('/kelas-jabatan', [JabatanController::class, 'kelas'])->name('kelas-jabatan');
+    });
+
+    Route::prefix('master')->group(function(){
+        Route::get('/faq', [MasterController::class, 'faq'])->name('faq');
+        Route::get('/satuan', [MasterController::class, 'satuan'])->name('master-satuan');
+        Route::get('/perilaku', [MasterController::class, 'perilaku'])->name('master-perilaku');
+    });
+
+    Route::prefix('admin')->group(function(){
+        Route::get('/', [AdminController::class, 'index'])->name('admin');
     });
 });
 

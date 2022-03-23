@@ -17,6 +17,7 @@ class PegawaiController extends Controller
 
         return view('pages.admin.pegawai.index', compact('page_title', 'page_description','breadcumb'));
     }
+    
     public function add()
     {
         $page_title = 'Aktivitas';
