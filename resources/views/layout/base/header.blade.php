@@ -710,7 +710,7 @@
 										<div class="btn btn-icon btn-icon-mobile w-auto btn-clean d-flex btn-lg px-2">
 											<div class="d-flex flex-column font-size-sm align-items-baseline mr-4">
 												<span class="text-muted mb-1 text-weigth-light">Dg. Kulle</span>
-												<span class="text-dark font-weight-bold">Project Manager</span>
+												<span class="text-dark font-weight-bold">{{Session::get('user.role')}}</span>
 											</div>
 											<div class="symbol symbol-40 symbol-light ml-4">
                                                 <span class="symbol-label">

@@ -334,7 +334,7 @@
                                 </a>
                             </li>
                             <li class="menu-item" aria-haspopup="true">
-                                <a href="{{route('kelas-jabatan')}}" class="menu-link">
+                                <a href="{{route('kelas')}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
@@ -372,7 +372,7 @@
                                 </a>
                             </li>
                             <li class="menu-item" aria-haspopup="true">
-                                <a href="{{route('master-satuan')}}" class="menu-link">
+                                <a href="{{route('satuan')}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
@@ -381,7 +381,7 @@
                             </li>
 
                             <li class="menu-item" aria-haspopup="true">
-                                <a href="{{route('master-perilaku')}}" class="menu-link">
+                                <a href="{{route('master_perilaku')}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>

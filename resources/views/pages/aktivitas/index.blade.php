@@ -28,7 +28,9 @@
                     </div>
                 </div>
                 <div class="card-body">
-                <div id="kt_calendar"></div>
+                    {{-- <div id="kt_calendar"></div> --}}
+                    <div id="kalender"></div>
+
                 </div>
             </div>
             <!--end::Card-->
@@ -130,88 +132,52 @@
 
 @section('script')
     <script src="{{asset('plugins/custom/fullcalendar/fullcalendar.bundle.js')}}"></script>
-    <!-- <script src="assets/js/pages/crud/forms/widgets/bootstrap-datepicker.js"></script> -->
     <script>
-
-    jQuery(document).ready(function() {
-        // KTCalendarBasic.init();
-        // $('#kt_calendar').Calendar();
-        var todayDate = moment().startOf('day');
+        
+        jQuery(document).ready(function() {
+            
+            var dataActivity = [];
+            var todayDate = moment().startOf('day');
             var YM = todayDate.format('YYYY-MM');
             var YESTERDAY = todayDate.clone().subtract(1, 'day').format('YYYY-MM-DD');
             var TODAY = todayDate.format('YYYY-MM-DD');
             var TOMORROW = todayDate.clone().add(1, 'day').format('YYYY-MM-DD');
+    
+            // var calendarEl = document.getElementById('kt_calendar');
+            var calendarEl = document.getElementById('kalender');
 
-            var calendarEl = document.getElementById('kt_calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            var kalender = new FullCalendar.Calendar(calendarEl, {
                 plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list' ],
                 themeSystem: 'bootstrap',
-
-                isRTL: KTUtil.isRTL(),
-
-                header: {
-                    right: 'prev,next',
-                    center: 'title',
-                    left: 'today'
-                },
-
-                height: 800,
-                contentHeight: 780,
-                aspectRatio: 3,  // see: https://fullcalendar.io/docs/aspectRatio
-
-                nowIndicator: true,
-                now: TODAY + 'T09:25:00', // just for demo
-
-                views: {
-                    dayGridMonth: { buttonText: 'month' },
-                    timeGridWeek: { buttonText: 'week' },
-                    timeGridDay: { buttonText: 'day' }
-                },
-
-                defaultView: 'dayGridMonth',
+                initialView: 'dayGridMonth',
                 defaultDate: TODAY,
-
                 editable: true,
                 eventLimit: true, // allow "more" link when too many events
-                navLinks: true,
-                events: [
-                    {
-                        title: 'Rapat Cantik',
-                        start: YM + '-02',
-                        description: 'Rapat Cantik Saja.',
-                        end: YM + '-03',
-                        className: "fc-event-light fc-event-solid-primary"
-                    }
-                ],
-
-                eventRender: function(info) {
-                    var element = $(info.el);
-
-                    if (info.event.extendedProps && info.event.extendedProps.description) {
-                        if (element.hasClass('fc-day-grid-event')) {
-                            element.data('content', info.event.extendedProps.description);
-                            element.data('placement', 'top');
-                            KTApp.initPopover(element);
-                        } else if (element.hasClass('fc-time-grid-event')) {
-                            element.find('.fc-title').append('<div class="fc-description">' + info.event.extendedProps.description + '</div>');
-                        } else if (element.find('.fc-list-item-title').lenght !== 0) {
-                            element.find('.fc-list-item-title').append('<div class="fc-description">' + info.event.extendedProps.description + '</div>');
-                        }
-                    }
-                }
+                events: "{{route('get-aktivitas')}}"
+                });
+            kalender.on('dateClick', function(info) {
+                console.log('clicked on ' + info.dateStr);
+                kalender.addEvent({ title: 'new event', start: info.dateStr });
             });
 
-        calendar.render();
+            kalender.on('eventClick', function(data) {
+                console.log(data);
+                alert('clicked on event');
+            });
+            kalender.render();
 
 
-        $('#kt_datepicker_3').datepicker({
-            todayBtn: "linked",
-            clearBtn: true,
-            todayHighlight: true,
 
+
+            
+            $('#kt_datepicker_3').datepicker({
+                todayBtn: "linked",
+                clearBtn: true,
+                todayHighlight: true,
+    
+            });
+            $('#kt_timepicker_1, #kt_timepicker_2').timepicker();
         });
-        $('#kt_timepicker_1, #kt_timepicker_2').timepicker();
-    });
-
+            
     </script>
 @endsection

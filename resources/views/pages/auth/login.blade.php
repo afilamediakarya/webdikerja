@@ -35,7 +35,8 @@
                 <!--begin::Signin-->
                 <div class="login-form login-signin py-11">
                     <!--begin::Form-->
-                    <form class="form" novalidate="novalidate" id="kt_login_signin_form">
+                    <form method="POST" action="{{route('do-Login')}}" class="form" novalidate="novalidate" >
+                        @csrf
                         <!--begin::Title-->
                         <div class="text-center pb-8">
                             <h2 class="font-weight-bolder text-dark font-size-h1">Selamat Datang</h2>
@@ -59,7 +60,7 @@
                         <!--end::Form group-->
                         <!--begin::Action-->
                         <div class="text-center pt-2">
-                            <button id="kt_login_signin_submit" class="btn btn-dark btn-block font-weight-bolder text-white font-size-h6 px-8 py-4 my-3" style="background: #0093DD;">Masuk</button>
+                            <button type="submit" class="btn btn-dark btn-block font-weight-bolder text-white font-size-h6 px-8 py-4 my-3" style="background: #0093DD;">Masuk</button>
                         </div>
                         <!--end::Action-->
                     </form>
@@ -155,37 +156,37 @@
                 }
             );
 
-            $('#kt_login_signin_submit').on('click', function (e) {
-                e.preventDefault();
+            // $('#kt_login_signin_submit').on('click', function (e) {
+            //     // e.preventDefault();
 
-                validation.validate().then(function(status) {
-                    if (status == 'Valid') {
-                        swal.fire({
-                            text: "All is cool! Now you submit this form",
-                            icon: "success",
-                            buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn font-weight-bold btn-light-primary"
-                            }
-                        }).then(function() {
-                            KTUtil.scrollTop();
-                        });
-                    } else {
-                        swal.fire({
-                            text: "Sorry, looks like there are some errors detected, please try again.",
-                            icon: "error",
-                            buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn font-weight-bold btn-light-primary"
-                            }
-                        }).then(function() {
-                            KTUtil.scrollTop();
-                        });
-                    }
-                });
-            });
+            //     // validation.validate().then(function(status) {
+            //     //     if (status == 'Valid') {
+            //     //         swal.fire({
+            //     //             text: "All is cool! Now you submit this form",
+            //     //             icon: "success",
+            //     //             buttonsStyling: false,
+            //     //             confirmButtonText: "Ok, got it!",
+            //     //             customClass: {
+            //     //                 confirmButton: "btn font-weight-bold btn-light-primary"
+            //     //             }
+            //     //         }).then(function() {
+            //     //             KTUtil.scrollTop();
+            //     //         });
+            //     //     } else {
+            //     //         swal.fire({
+            //     //             text: "Sorry, looks like there are some errors detected, please try again.",
+            //     //             icon: "error",
+            //     //             buttonsStyling: false,
+            //     //             confirmButtonText: "Ok, got it!",
+            //     //             customClass: {
+            //     //                 confirmButton: "btn font-weight-bold btn-light-primary"
+            //     //             }
+            //     //         }).then(function() {
+            //     //             KTUtil.scrollTop();
+            //     //         });
+            //     //     }
+            //     // });
+            // });
 
             // Handle forgot button
             $('#kt_login_forgot').on('click', function (e) {
