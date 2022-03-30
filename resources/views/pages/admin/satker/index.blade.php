@@ -148,7 +148,7 @@
                 columns:[{ 
                         data : 'kode_satuan_kerja'
                     },{
-                        data:'inisisal_satuan_kerja'
+                        data:'inisial_satuan_kerja'
                     },{
                         data:'nama_satuan_kerja'
                     },{
@@ -198,7 +198,7 @@
             }else{
                 _url = "admin/satker/"+_id
             }
-
+            console.log(_url);
             $.ajax({
                 url: _url,
                 method:"POST",
@@ -247,7 +247,7 @@
             Panel.action('show','update');
             var key = $(this).data('id');
             $.ajax({
-                url:"admin/master/faq/"+key,
+                url:"admin/satker/"+key,
                 method:"GET",
                 success: function(data){
                     if(data.success){
@@ -283,7 +283,7 @@
                 if (result.value) {
                     $.ajax({
                         method: 'delete',
-                        url: 'admin/master/faq/'+key,
+                        url: 'admin/satker/'+key,
                         data:{
                             "_token": "{{ csrf_token() }}"
                         }
