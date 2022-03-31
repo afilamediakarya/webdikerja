@@ -46,7 +46,7 @@
                         <!--begin::Form group-->
                         <div class="form-group">
                             <label class="font-size-h6 font-weight-normal text-dark">NIP</label>
-                            <input class="form-control form-control-solid h-auto py-5 px-4 rounded-sm" type="text" name="username" autocomplete="off" />
+                            <input class="form-control form-control-solid h-auto py-5 px-4 rounded-sm" value="{{ old('username') }}" type="text" name="username" autocomplete="off" />
                         </div>
                         <!--end::Form group-->
                         <!--begin::Form group-->
@@ -105,6 +105,15 @@
 @endsection
 
 @section('script')
+    @if(Session::has('error'))
+        <script>
+            Swal.fire(
+                "Error",
+                "User Not Found",
+                "error"
+            );
+        </script>
+    @endif
     <script>
         "use strict";
 
@@ -155,38 +164,6 @@
                     }
                 }
             );
-
-            // $('#kt_login_signin_submit').on('click', function (e) {
-            //     // e.preventDefault();
-
-            //     // validation.validate().then(function(status) {
-            //     //     if (status == 'Valid') {
-            //     //         swal.fire({
-            //     //             text: "All is cool! Now you submit this form",
-            //     //             icon: "success",
-            //     //             buttonsStyling: false,
-            //     //             confirmButtonText: "Ok, got it!",
-            //     //             customClass: {
-            //     //                 confirmButton: "btn font-weight-bold btn-light-primary"
-            //     //             }
-            //     //         }).then(function() {
-            //     //             KTUtil.scrollTop();
-            //     //         });
-            //     //     } else {
-            //     //         swal.fire({
-            //     //             text: "Sorry, looks like there are some errors detected, please try again.",
-            //     //             icon: "error",
-            //     //             buttonsStyling: false,
-            //     //             confirmButtonText: "Ok, got it!",
-            //     //             customClass: {
-            //     //                 confirmButton: "btn font-weight-bold btn-light-primary"
-            //     //             }
-            //     //         }).then(function() {
-            //     //             KTUtil.scrollTop();
-            //     //         });
-            //     //     }
-            //     // });
-            // });
 
             // Handle forgot button
             $('#kt_login_forgot').on('click', function (e) {
@@ -240,25 +217,6 @@
                         KTUtil.scrollTop();
                     });
 
-                // validation.validate().then(function(status) {
-                //     if (status == 'Valid') {
-                //         // Submit form
-                        
-                //         KTUtil.scrollTop();
-                //     } else {
-                //         swal.fire({
-                //             text: "Sorry, looks like there are some errors detected, please try again.",
-                //             icon: "error",
-                //             buttonsStyling: false,
-                //             confirmButtonText: "Ok, got it!",
-                //             customClass: {
-                //                 confirmButton: "btn font-weight-bold btn-light-primary"
-                //             }
-                //         }).then(function() {
-                //             KTUtil.scrollTop();
-                //         });
-                //     }
-                // });
             });
 
             // Handle cancel button

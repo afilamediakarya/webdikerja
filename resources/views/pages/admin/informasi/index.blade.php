@@ -199,6 +199,31 @@
 
         }();
         
+
+        $(document).on('submit', "#createForm[data-type='submit']", function(e){
+            e.preventDefault();
+            var formdata = new FormData(this);
+            AxiosCall.post("{{route('post-informasi')}}", formdata, "#createForm");
+        });
+        
+        $(document).on('click', '.button-update', function(){
+            Panel.action('show','update');
+            var key = $(this).data('id');
+            AxiosCall.show(`admin/informasi/${key}`);
+        })
+
+        $(document).on('submit', "#createForm[data-type='update']", function(e){
+            e.preventDefault();
+            var formdata = new FormData(this);
+            var _id = $("input[name='id']").val();
+            AxiosCall.post(`admin/informasi/${_id}`, formdata, "#createForm");
+        });
+
+        $(document).on('click', '.button-delete', function (e) {
+            e.preventDefault();
+            var key = $(this).data('id');
+            AxiosCall.delete(`admin/informasi/${key}`);
+        })
         
 
         jQuery(document).ready(function() {
@@ -207,118 +232,6 @@
             $(document).on('click','.btn-cancel', function(){
                 Panel.action('hide');
             });
-
-            $('body').on('submit', '#createForm', function(e){
-                e.preventDefault();
-                var form =  $(this);
-                var type = form.data('type');
-                var _url = '';
-                var _id = $("input[name='id']").val();
-                if(type == 'submit'){
-                    _url = "{{route('post-informasi')}}";
-                }else{
-                    _url = "admin/informasi/"+_id
-                }
-                
-                var formdata = new FormData(this);
-                axios.post(_url, formdata)
-                .then(function (res) {
-                    var data = res.data;
-                    console.log(data);
-                    if(data.fail){
-                        swal.fire({
-                            text: "Maaf Terjadi Kesalahan",
-                            title:"Error",
-                            timer: 2000,
-                            icon: "danger",
-                            showConfirmButton:false,
-                        });
-                    }else if(data.invalid){
-                        $("input[type='text']").removeClass('is-invalid');
-                        $("select").removeClass('is-invalid');
-                        $("textarea").removeClass('is-invalid');
-                        $.each(data.invalid, function( key, value ) {
-                            $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
-                            $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
-                        });
-                    }else if(data.success){
-                        swal.fire({
-                            text: "Data anda berhasil disimpan",
-                            title:"Sukses",
-                            icon: "success",
-                            showConfirmButton:true,
-                            confirmButtonText: "OK, Siip",
-                        }).then(function() {
-                            dataRow.destroy();
-                            dataRow.init();
-                            $("#createForm")[0].reset();
-                            Panel.action('hide');
-                        });
-                    }
-                })
-                .catch(function (err) {
-                    Swal.fire('Perhatian!', 'Terjadi kesalahan saat menyimpan data', 'error')
-                })
-            });
-
-            // edit
-            $(document).on('click', '.button-update', function(){
-                Panel.action('show','update');
-                var key = $(this).data('id');
-                $.ajax({
-                    url:"admin/informasi/"+key,
-                    method:"GET",
-                    success: function(data){
-                      if(data.success){
-                        console.log(data.success);
-                        var res = data.success.data;
-                        $.each(res, function( key, value ) {
-                            $("input[name='"+key+"']").val(value);
-                        });
-                      }
-                    }
-                });
-            })
-
-            // delete
-            $('body').on('click', '.button-delete', function (e) {
-                e.preventDefault();
-                var key = $(this).data('id');
-                Swal.fire({
-                    title: "Perhatian ",
-                    text: "Yakin ingin meghapus data.?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Hapus",
-                    cancelButtonText: "Batal",
-                    customClass: {
-                        confirmButton: "btn btn-danger",
-                        cancelButton: "btn btn-light-danger",
-                       }
-                }).then(function(result) {
-                    console.log(result);
-                    if (result.value) {
-                        $.ajax({
-                            method: 'delete',
-                            url: 'admin/informasi/'+key,
-                            data:{
-                                "_token": "{{ csrf_token() }}"
-                            }
-                        })
-                        .then(function(response){
-                            if(response.success){
-                                Swal.fire(
-                                    "Deleted!",
-                                    "Data terhapus",
-                                    "success"
-                                );
-                                dataRow.destroy();
-                                dataRow.init();
-                            }
-                        });
-                    }
-                });
-            })
         });
 
     </script>

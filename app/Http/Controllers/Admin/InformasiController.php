@@ -37,18 +37,32 @@ class InformasiController extends Controller
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         $data = $request->all();
-        $filtered = array_filter(
-            $data,
-            function ($key){
-                if(!in_array($key,['_token', 'id', 'gambar'])){
-                    return $key;
-                };
-            },
-            ARRAY_FILTER_USE_KEY
-        );
-        $image = $request->file('gambar');
-        $response = Http::withToken($token)->attach('gambar', file_get_contents($image), $request->gambar->getClientOriginalName())->post($url."/informasi/store", $filtered);
+        if ($request->file('gambar')) {
+            $filtered = array_filter(
+                $data,
+                function ($key){
+                    if(!in_array($key,['_token', 'id', 'gambar'])){
+                        return $key;
+                    };
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+            $image = $request->file('gambar');
+            $response = Http::withToken($token)->attach('gambar', file_get_contents($image), $request->gambar->getClientOriginalName())->post($url."/informasi/store", $filtered);
+        } else {
+            $filtered = array_filter(
+                $data,
+                function ($key){
+                    if(!in_array($key,['_token', 'id'])){
+                        return $key;
+                    };
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+            $response = Http::withToken($token)->post($url."/informasi/store", $filtered);
+        }
         if($response->successful()){
+            $data = $response->object();
             if (isset($data->status)) {
                 return response()->json(['success'=> 'Berhasil Menambah Data']);
             } else {
@@ -88,8 +102,8 @@ class InformasiController extends Controller
                 ARRAY_FILTER_USE_KEY
             );
             $image = $request->file('gambar');
-            $http = Http::withToken($token)->attach('gambar', file_get_contents($image), $request->gambar->getClientOriginalName());
-        }else{
+            $response = Http::withToken($token)->attach('gambar', file_get_contents($image), $request->gambar->getClientOriginalName())->post($url."/informasi/update/".$id, $filtered);
+        } else {
             $filtered = array_filter(
                 $data,
                 function ($key){
@@ -99,9 +113,8 @@ class InformasiController extends Controller
                 },
                 ARRAY_FILTER_USE_KEY
             );
-            $http = Http::withToken($token);
+            $response = Http::withToken($token)->post($url."/informasi/update/".$id, $filtered);
         }
-        $response = $http->post($url."/informasi/store", $filtered);
         if($response->successful()){
             $data = $response->object();
             if (isset($data->status)) {

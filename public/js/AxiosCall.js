@@ -47,7 +47,7 @@ var AxiosCall = function() {
             axios.get(_url)
             .then(function(res){
                 var data = res.data;
-                console.log(data);
+                console.log(data.success);
                 if(data.success){
                     var res = data.success.data;
                     $.each(res, function( key, value ) {
@@ -55,16 +55,18 @@ var AxiosCall = function() {
                         $("select[name='"+key+"']").val(value);
                         $("textarea[name='"+key+"']").val(value);
                     });
+                    Panel.action('show','update');
+                }else{
+                    swal.fire({
+                        text: "Data tidak ditemukan",
+                        title:"Not Found",
+                        icon: "error",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK",
+                    });
                 }
-            })
-            .catch(function(err){
-                swal.fire({
-                    text: "Terjadi Kesalahan Sistem",
-                    title:"Error",
-                    icon: "error",
-                    showConfirmButton:true,
-                    confirmButtonText: "OK",
-                });
+            }).catch(function(err){
+                console.log(err);
             });
         },
         

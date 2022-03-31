@@ -185,6 +185,29 @@
         };
 
         }();
+
+
+        $(document).on('submit', "#createForm[data-type='submit']", function(e){
+            e.preventDefault();
+            AxiosCall.post("{{route('post-jadwal')}}", $(this).serialize(), "#createForm");
+        });
+        
+        // $(document).on('click', '.button-update', function(){
+        //     var key = $(this).data('id');
+        //     AxiosCall.show(`admin/jadwal/${key}`);
+        // })
+
+        $(document).on('submit', "#createForm[data-type='update']", function(e){
+            e.preventDefault();
+            var _id = $("input[name='id']").val();
+            AxiosCall.post(`admin/jadwal/${_id}`, $(this).serialize(), "#createForm");
+        });
+
+        $(document).on('click', '.button-delete', function (e) {
+            e.preventDefault();
+            var key = $(this).data('id');
+            AxiosCall.delete(`admin/jadwal/${key}`);
+        })
         
         
 
@@ -198,69 +221,7 @@
                 Panel.action('hide');
             });
 
-            $('body').on('submit', '#createForm', function(e){
-                e.preventDefault();
-                var type = $(this).data('type');
-                var _url = '';
-                var _id = $("input[name='id']").val();
-                if(type == 'submit'){
-                    _url = "{{route('post-jadwal')}}";
-                }else{
-                    _url = "admin/jadwal/"+_id
-                }
-
-                var _token = $("input[name='_token']").val();
-                var nama_kegiatan = $("input[name='nama_kegiatan']").val();
-                var nama_sub_kegiatan = $("input[name='nama_sub_kegiatan']").val();
-                var tanggal_awal = $("input[name='tanggal_awal']").val();
-                var tanggal_akhir = $("input[name='tanggal_akhir']").val();
-
-                $.ajax({
-                    url: _url,
-                    method:"POST",
-                    data: {
-                        _token : _token,
-                        nama_kegiatan,
-                        nama_sub_kegiatan,
-                        tanggal_awal,
-                        tanggal_akhir
-                    },
-                    beforeSend: function(){
-                        $("input[type='text']").removeClass('is-invalid');
-                    },
-                    success : function(data) {
-                        if(data.fail){
-                            console.log(data);
-                            swal.fire({
-                                text: "Maaf Terjadi Kesalahan",
-                                title:"Error",
-                                timer: 2000,
-                                icon: "danger",
-                                showConfirmButton:false,
-                            });
-                        }else if(data.invalid){
-                            $.each(data.invalid, function( key, value ) {
-                                $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
-                            });
-                        }else if(data.success){
-                            swal.fire({
-                                text: "Data anda berhasil disimpan",
-                                title:"Sukses",
-                                icon: "success",
-                                showConfirmButton:true,
-                                confirmButtonText: "OK, Siip",
-                            }).then(function() {
-                                dataRow.destroy();
-                                dataRow.init();
-                                $("#createForm")[0].reset();
-                                Panel.action('hide');
-                            });
-                        }
-                    }
-                })
-            });
-
-            // edit
+            // // edit
             $(document).on('click', '.button-update', function(){
                 Panel.action('show','update');
                 var key = $(this).data('id');
@@ -275,46 +236,6 @@
                             $("input[name='"+key+"']").val(value);
                         });
                       }
-                    }
-                });
-            })
-
-            // delete
-            $('body').on('click', '.button-delete', function (e) {
-                e.preventDefault();
-                var key = $(this).data('id');
-                Swal.fire({
-                    title: "Perhatian ",
-                    text: "Yakin ingin meghapus data.?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Hapus",
-                    cancelButtonText: "Batal",
-                    customClass: {
-                        confirmButton: "btn btn-danger",
-                        cancelButton: "btn btn-light-danger",
-                       }
-                }).then(function(result) {
-                    console.log(result);
-                    if (result.value) {
-                        $.ajax({
-                            method: 'delete',
-                            url: 'admin/jadwal/'+key,
-                            data:{
-                                "_token": "{{ csrf_token() }}"
-                            }
-                        })
-                        .then(function(response){
-                            if(response.success){
-                                Swal.fire(
-                                    "Deleted!",
-                                    "Data terhapus",
-                                    "success"
-                                );
-                                dataRow.destroy();
-                                dataRow.init();
-                            }
-                        });
                     }
                 });
             })

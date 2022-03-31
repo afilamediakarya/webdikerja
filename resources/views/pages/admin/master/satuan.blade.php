@@ -191,7 +191,7 @@
                 Panel.action('hide');
             });
 
-            $('body').on('submit', '#createForm', function(e){
+            $(document).on('submit', '#createForm', function(e){
                 e.preventDefault();
                 var type = $(this).data('type');
                 var _url = '';
@@ -265,7 +265,7 @@
             })
 
             // delete
-            $('body').on('click', '.button-delete', function (e) {
+            $(document).on('click', '.button-delete', function (e) {
                 e.preventDefault();
                 var key = $(this).data('id');
                 Swal.fire({

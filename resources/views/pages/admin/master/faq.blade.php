@@ -185,32 +185,28 @@
             };
         }();
 
-        $('body').on('submit', "#createForm[data-type='submit']", function(e){
+        $(document).on('submit', "#createForm[data-type='submit']", function(e){
             e.preventDefault();
             AxiosCall.post("{{route('post-faq')}}", $(this).serialize(), "#createForm");
         });
-
-        $('body').on('submit', "#createForm[data-type='update']", function(e){
+        
+        
+        $(document).on('submit', "#createForm[data-type='update']", function(e){
             e.preventDefault();
             var _id = $("input[name='id']").val();
             AxiosCall.post(`admin/master/faq/${_id}`, $(this).serialize(), "#createForm");
         });
-
-
-        // edit
-        $('body').on('click', '.button-update', function(){
-            Panel.action('show','update');
-            var key = $(this).data('id');
-            AxiosCall.show(`admin/master/faq/${key}`);
-        })
-
+        
         $(document).on('click', '.button-delete', function (e) {
             e.preventDefault();
             var key = $(this).data('id');
             AxiosCall.delete(`admin/master/faq/${key}`);
         })
-// delete
-            
+        
+        $(document).on('click', '.button-update', function(){
+            var key = $(this).data('id');
+            AxiosCall.show(`admin/master/faq/${key}`);
+        })
             
             
 jQuery(document).ready(function() {

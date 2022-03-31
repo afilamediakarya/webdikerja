@@ -174,7 +174,7 @@
                     },{
                         data:'level'
                     },{
-                        data:'satuan_kerja'
+                        data:'satuan_kerja.nama_satuan_kerja'
                     },{
                         data:'id',
                     }
@@ -212,7 +212,23 @@
 
         }();
         
+        $(document).on('submit', "#createForm[data-type='submit']", function(e){
+            e.preventDefault();
+            AxiosCall.post("{{route('post-jabatan')}}", $(this).serialize(), "#createForm");
+        });
         
+        
+        $(document).on('submit', "#createForm[data-type='update']", function(e){
+            e.preventDefault();
+            var _id = $("input[name='id']").val();
+            AxiosCall.post(`admin/jabatan/jabatan/${_id}`, $(this).serialize(), "#createForm");
+        });
+        
+        $(document).on('click', '.button-delete', function (e) {
+            e.preventDefault();
+            var key = $(this).data('id');
+            AxiosCall.delete(`admin/jabatan/jabatan/${key}`);
+        })
 
         jQuery(document).ready(function() {
             Panel.init('side_form');
@@ -224,58 +240,58 @@
                 Panel.action('hide');
             });
 
-            $('body').on('submit', '#createForm', function(e){
-                e.preventDefault();
-                var type = $(this).data('type');
-                var _url = '';
-                var _id = $("input[name='id']").val();
-                if(type == 'submit'){
-                    _url = "{{route('post-jabatan')}}";
-                }else{
-                    _url = "admin/jabatan/jabatan/"+_id
-                }
+            // $(document).on('submit', '#createForm', function(e){
+            //     e.preventDefault();
+            //     var type = $(this).data('type');
+            //     var _url = '';
+            //     var _id = $("input[name='id']").val();
+            //     if(type == 'submit'){
+            //         _url = "{{route('post-jabatan')}}";
+            //     }else{
+            //         _url = "admin/jabatan/jabatan/"+_id
+            //     }
 
-                $.ajax({
-                    url: _url,
-                    method:"POST",
-                    data: $(this).serialize(),
-                    beforeSend: function(){
-                        $("input[type='text']").removeClass('is-invalid');
-                        $("select").removeClass('is-invalid');
-                    },
-                    success : function(data) {
-                        if(data.fail){
-                            console.log(data);
-                            swal.fire({
-                                text: "Maaf Terjadi Kesalahan",
-                                title:"Error",
-                                timer: 2000,
-                                icon: "danger",
-                                showConfirmButton:false,
-                            });
-                        }else if(data.invalid){
-                            $.each(data.invalid, function( key, value ) {
-                                console.log(key);
-                                $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
-                                $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
-                            });
-                        }else if(data.success){
-                            swal.fire({
-                                text: "Data anda berhasil disimpan",
-                                title:"Sukses",
-                                icon: "success",
-                                showConfirmButton:true,
-                                confirmButtonText: "OK, Siip",
-                            }).then(function() {
-                                dataRow.destroy();
-                                dataRow.init();
-                                $("#createForm")[0].reset();
-                                Panel.action('hide');
-                            });
-                        }
-                    }
-                })
-            });
+            //     $.ajax({
+            //         url: _url,
+            //         method:"POST",
+            //         data: $(this).serialize(),
+            //         beforeSend: function(){
+            //             $("input[type='text']").removeClass('is-invalid');
+            //             $("select").removeClass('is-invalid');
+            //         },
+            //         success : function(data) {
+            //             if(data.fail){
+            //                 console.log(data);
+            //                 swal.fire({
+            //                     text: "Maaf Terjadi Kesalahan",
+            //                     title:"Error",
+            //                     timer: 2000,
+            //                     icon: "danger",
+            //                     showConfirmButton:false,
+            //                 });
+            //             }else if(data.invalid){
+            //                 $.each(data.invalid, function( key, value ) {
+            //                     console.log(key);
+            //                     $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+            //                     $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+            //                 });
+            //             }else if(data.success){
+            //                 swal.fire({
+            //                     text: "Data anda berhasil disimpan",
+            //                     title:"Sukses",
+            //                     icon: "success",
+            //                     showConfirmButton:true,
+            //                     confirmButtonText: "OK, Siip",
+            //                 }).then(function() {
+            //                     dataRow.destroy();
+            //                     dataRow.init();
+            //                     $("#createForm")[0].reset();
+            //                     Panel.action('hide');
+            //                 });
+            //             }
+            //         }
+            //     })
+            // });
 
             // edit
             $(document).on('click', '.button-update', function(){
@@ -297,45 +313,45 @@
                 });
             })
 
-            // delete
-            $('body').on('click', '.button-delete', function (e) {
-                e.preventDefault();
-                var key = $(this).data('id');
-                Swal.fire({
-                    title: "Perhatian ",
-                    text: "Yakin ingin meghapus data.?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Hapus",
-                    cancelButtonText: "Batal",
-                    customClass: {
-                        confirmButton: "btn btn-danger",
-                        cancelButton: "btn btn-light-danger",
-                       }
-                }).then(function(result) {
-                    console.log(result);
-                    if (result.value) {
-                        $.ajax({
-                            method: 'delete',
-                            url: 'admin/jabatan/jabatan/'+key,
-                            data:{
-                                "_token": "{{ csrf_token() }}"
-                            }
-                        })
-                        .then(function(response){
-                            if(response.success){
-                                Swal.fire(
-                                    "Deleted!",
-                                    "Data terhapus",
-                                    "success"
-                                );
-                                dataRow.destroy();
-                                dataRow.init();
-                            }
-                        });
-                    }
-                });
-            })
+        //     // delete
+        //     $(document).on('click', '.button-delete', function (e) {
+        //         e.preventDefault();
+        //         var key = $(this).data('id');
+        //         Swal.fire({
+        //             title: "Perhatian ",
+        //             text: "Yakin ingin meghapus data.?",
+        //             icon: "warning",
+        //             showCancelButton: true,
+        //             confirmButtonText: "Hapus",
+        //             cancelButtonText: "Batal",
+        //             customClass: {
+        //                 confirmButton: "btn btn-danger",
+        //                 cancelButton: "btn btn-light-danger",
+        //                }
+        //         }).then(function(result) {
+        //             console.log(result);
+        //             if (result.value) {
+        //                 $.ajax({
+        //                     method: 'delete',
+        //                     url: 'admin/jabatan/jabatan/'+key,
+        //                     data:{
+        //                         "_token": "{{ csrf_token() }}"
+        //                     }
+        //                 })
+        //                 .then(function(response){
+        //                     if(response.success){
+        //                         Swal.fire(
+        //                             "Deleted!",
+        //                             "Data terhapus",
+        //                             "success"
+        //                         );
+        //                         dataRow.destroy();
+        //                         dataRow.init();
+        //                     }
+        //                 });
+        //             }
+        //         });
+        //     })
         });
 
     </script>
