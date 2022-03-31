@@ -221,64 +221,44 @@
                 }
                 
                 var formdata = new FormData(this);
-
-                $.ajax({
-                    url: _url,
-                    type : 'POST',
-                    data:  new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData:false,
-                    success:function(response){
-                        console.log(response);
+                axios.post(_url, formdata)
+                .then(function (res) {
+                    var data = res.data;
+                    console.log(data);
+                    if(data.fail){
+                        swal.fire({
+                            text: "Maaf Terjadi Kesalahan",
+                            title:"Error",
+                            timer: 2000,
+                            icon: "danger",
+                            showConfirmButton:false,
+                        });
+                    }else if(data.invalid){
+                        $("input[type='text']").removeClass('is-invalid');
+                        $("select").removeClass('is-invalid');
+                        $("textarea").removeClass('is-invalid');
+                        $.each(data.invalid, function( key, value ) {
+                            $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                            $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                        });
+                    }else if(data.success){
+                        swal.fire({
+                            text: "Data anda berhasil disimpan",
+                            title:"Sukses",
+                            icon: "success",
+                            showConfirmButton:true,
+                            confirmButtonText: "OK, Siip",
+                        }).then(function() {
+                            dataRow.destroy();
+                            dataRow.init();
+                            $("#createForm")[0].reset();
+                            Panel.action('hide');
+                        });
                     }
                 })
-                // var gambar = $("input[name='gambar']")[0].files;
-                // console.log(gambar[0]);
-                // formdata.append('gambar', gambar);
-                // formdata.append('_token', $("input[name='_token']").val());
-                // axios.post(_url, formdata, {
-                //     headers: {
-                //         'Content-Type': 'multipart/form-data'
-                //     }
-                // })
-                // .then(function (res) {
-                //     var data = res.data;
-                //     if(data.fail){
-                //         swal.fire({
-                //             text: "Maaf Terjadi Kesalahan",
-                //             title:"Error",
-                //             timer: 2000,
-                //             icon: "danger",
-                //             showConfirmButton:false,
-                //         });
-                //     }else if(data.invalid){
-                //         $("input[type='text']").removeClass('is-invalid');
-                //         $("select").removeClass('is-invalid');
-                //         $("textarea").removeClass('is-invalid');
-
-                //         $.each(data.invalid, function( key, value ) {
-                //             $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
-                //             $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
-                //         });
-                //     }else if(data.success){
-                //         swal.fire({
-                //             text: "Data anda berhasil disimpan",
-                //             title:"Sukses",
-                //             icon: "success",
-                //             showConfirmButton:true,
-                //             confirmButtonText: "OK, Siip",
-                //         }).then(function() {
-                //             dataRow.destroy();
-                //             dataRow.init();
-                //             $("#createForm")[0].reset();
-                //             Panel.action('hide');
-                //         });
-                //     }
-                // })
-                // .catch(function (err) {
-                //     Swal.fire('Perhatian!', 'Terjadi kesalahan saat menyimpan data', 'error')
-                // })
+                .catch(function (err) {
+                    Swal.fire('Perhatian!', 'Terjadi kesalahan saat menyimpan data', 'error')
+                })
             });
 
             // edit
@@ -286,7 +266,7 @@
                 Panel.action('show','update');
                 var key = $(this).data('id');
                 $.ajax({
-                    url:"admin/jadwal/"+key,
+                    url:"admin/informasi/"+key,
                     method:"GET",
                     success: function(data){
                       if(data.success){
@@ -320,7 +300,7 @@
                     if (result.value) {
                         $.ajax({
                             method: 'delete',
-                            url: 'admin/jadwal/'+key,
+                            url: 'admin/informasi/'+key,
                             data:{
                                 "_token": "{{ csrf_token() }}"
                             }

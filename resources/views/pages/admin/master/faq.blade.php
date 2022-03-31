@@ -116,191 +116,100 @@
     <script>
         "use strict";
         var dataRow = function() {
-
-        var init = function() {
-            var table = $('#kt_datatable');
-
-            // begin first table
-            table.DataTable({
-                responsive: true,
-                pageLength: 10,
-                order: [[0, 'asc']],
-                processing:true,
-                ajax: "{{ route('faq') }}",
-                columns:[{ 
-                        data : null, 
-                        render: function (data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                        }  
-                    },{
-                        data:'pertanyaan'
-                    },{
-                        data:'jawaban'
-                    },{
-                        data:'status'
-                    },{
-                        data:'id',
-                    }
-                ],
-                columnDefs: [
-                    {
-                        targets: -1,
-                        title: 'Actions',
-                        orderable: false,
-                        render: function(data, type, full, meta) {
-                            return '\
-                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
-                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>\
-                            ';
+            var init = function() {
+                var table = $('#kt_datatable');
+    
+                // begin first table
+                table.DataTable({
+                    responsive: true,
+                    pageLength: 10,
+                    order: [[0, 'asc']],
+                    processing:true,
+                    ajax: "{{ route('faq') }}",
+                    columns:[{ 
+                            data : null, 
+                            render: function (data, type, row, meta) {
+                                    return meta.row + meta.settings._iDisplayStart + 1;
+                            }  
+                        },{
+                            data:'pertanyaan'
+                        },{
+                            data:'jawaban'
+                        },{
+                            data:'status'
+                        },{
+                            data:'id',
+                        }
+                    ],
+                    columnDefs: [
+                        {
+                            targets: -1,
+                            title: 'Actions',
+                            orderable: false,
+                            render: function(data, type, full, meta) {
+                                return '\
+                                    <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
+                                    <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>\
+                                ';
+                            },
+                        },{
+                            targets: 3,
+                            render: function(data, type, full, meta) {
+                                var status = {
+                                    'inactive': {'title': 'inactive', 'class': ' label-light-danger text-capitalize'},
+                                    'active': {'title': 'active', 'class': ' label-light-primary text-capitalize'},
+                                };
+                                if (typeof status[data] === 'undefined') {
+                                    return data;
+                                }
+                                return '<span class="label label-lg font-weight-bold' + status[data].class + ' label-inline">' + status[data].title + '</span>';
+                            },
                         },
-                    },{
-                        targets: 3,
-                        render: function(data, type, full, meta) {
-                            var status = {
-                                'inactive': {'title': 'inactive', 'class': ' label-light-danger text-capitalize'},
-                                'active': {'title': 'active', 'class': ' label-light-primary text-capitalize'},
-                            };
-                            if (typeof status[data] === 'undefined') {
-                                return data;
-                            }
-                            return '<span class="label label-lg font-weight-bold' + status[data].class + ' label-inline">' + status[data].title + '</span>';
-                        },
-                    },
-                ],
-            });
-        };
-
-        var destroy = function(){
-            var table = $('#kt_datatable').DataTable();
-            table.destroy();
-        }
-
-        return {
-            init: function() {
-                init();
-            },
-            destroy:function(){
-                destroy();
+                    ],
+                });
+            };
+    
+            var destroy = function(){
+                var table = $('#kt_datatable').DataTable();
+                table.destroy();
             }
-
-        };
-
+    
+            return {
+                init: function() {
+                    init();
+                },
+                destroy:function(){
+                    destroy();
+                }
+    
+            };
         }();
 
-        $(document).on('submit', '#createForm', function(e){
+        $('body').on('submit', "#createForm[data-type='submit']", function(e){
             e.preventDefault();
-            var type = $(this).data('type');
-            var _url = '';
-            var _id = $("input[name='id']").val();
-            if(type == 'submit'){
-                _url = "{{route('post-faq')}}";
-            }else{
-                _url = "admin/master/faq/"+_id
-            }
-
-            $.ajax({
-                url: _url,
-                method:"POST",
-                data: $(this).serialize(),
-                beforeSend: function(){
-                    $("input[type='text']").removeClass('is-invalid');
-                    $("select").removeClass('is-invalid');
-                    $("textarea").removeClass('is-invalid');
-                },
-                success : function(data) {
-                    if(data.fail){
-                        console.log(data);
-                        swal.fire({
-                            text: "Maaf Terjadi Kesalahan",
-                            title:"Error",
-                            timer: 2000,
-                            icon: "danger",
-                            showConfirmButton:false,
-                        });
-                    }else if(data.invalid){
-                        $.each(data.invalid, function( key, value ) {
-                            console.log(key);
-                            $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
-                            $("textarea[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
-                        });
-                    }else if(data.success){
-                        swal.fire({
-                            text: "Data anda berhasil disimpan",
-                            title:"Sukses",
-                            icon: "success",
-                            showConfirmButton:true,
-                            confirmButtonText: "OK, Siip",
-                        }).then(function() {
-                            dataRow.destroy();
-                            dataRow.init();
-                            $("#createForm")[0].reset();
-                            Panel.action('hide');
-                        });
-                    }
-                }
-            })
+            AxiosCall.post("{{route('post-faq')}}", $(this).serialize(), "#createForm");
         });
 
+        $('body').on('submit', "#createForm[data-type='update']", function(e){
+            e.preventDefault();
+            var _id = $("input[name='id']").val();
+            AxiosCall.post(`admin/master/faq/${_id}`, $(this).serialize(), "#createForm");
+        });
+
+
         // edit
-        $(document).on('click', '.button-update', function(){
+        $('body').on('click', '.button-update', function(){
             Panel.action('show','update');
             var key = $(this).data('id');
-            $.ajax({
-                url:"admin/master/faq/"+key,
-                method:"GET",
-                success: function(data){
-                    if(data.success){
-                    console.log(data.success);
-                    var res = data.success.data;
-                    $.each(res, function( key, value ) {
-                        $("input[name='"+key+"']").val(value);
-                        $("select[name='"+key+"']").val(value);
-                        $("textarea[name='"+key+"']").val(value);
-                    });
-                    }
-                }
-            });
+            AxiosCall.show(`admin/master/faq/${key}`);
         })
 
+        $(document).on('click', '.button-delete', function (e) {
+            e.preventDefault();
+            var key = $(this).data('id');
+            AxiosCall.delete(`admin/master/faq/${key}`);
+        })
 // delete
-$(document).on('click', '.button-delete', function (e) {
-    e.preventDefault();
-    var key = $(this).data('id');
-    Swal.fire({
-        title: "Perhatian ",
-        text: "Yakin ingin meghapus data.?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Hapus",
-        cancelButtonText: "Batal",
-        customClass: {
-            confirmButton: "btn btn-danger",
-            cancelButton: "btn btn-light-danger",
-            }
-    }).then(function(result) {
-        console.log(result);
-        if (result.value) {
-            $.ajax({
-                method: 'delete',
-                url: 'admin/master/faq/'+key,
-                data:{
-                    "_token": "{{ csrf_token() }}"
-                }
-            })
-            .then(function(response){
-                if(response.success){
-                    Swal.fire(
-                        "Deleted!",
-                        "Data terhapus",
-                        "success"
-                    );
-                    dataRow.destroy();
-                    dataRow.init();
-                }
-            });
-        }
-    });
-})
             
             
             

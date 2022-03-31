@@ -265,7 +265,7 @@
                 Panel.action('show','update');
                 var key = $(this).data('id');
                 $.ajax({
-                    url:"admin/jabatan/"+key,
+                    url:"admin/jadwal/"+key,
                     method:"GET",
                     success: function(data){
                       if(data.success){

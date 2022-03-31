@@ -188,6 +188,7 @@
 		<script src="{{asset('plugins/custom/prismjs/prismjs.bundle.js')}}"></script>
 		<script src="{{asset('js/scripts.bundle.js')}}"></script>
 		<script src="{{asset('js/panel.js')}}"></script>
+		<script src="{{asset('js/AxiosCall.js')}}"></script>
 		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 		<!--end::Global Theme Bundle-->
 

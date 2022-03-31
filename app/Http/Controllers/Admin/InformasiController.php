@@ -33,22 +33,22 @@ class InformasiController extends Controller
 
     public function store(Request $request)
     {
+
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         $data = $request->all();
         $filtered = array_filter(
             $data,
             function ($key){
-                if(!in_array($key,['_token', 'id'])){
+                if(!in_array($key,['_token', 'id', 'gambar'])){
                     return $key;
                 };
             },
             ARRAY_FILTER_USE_KEY
         );
-
-        $response = Http::withToken($token)->post($url."/informasi/store", $filtered);
+        $image = $request->file('gambar');
+        $response = Http::withToken($token)->attach('gambar', file_get_contents($image), $request->gambar->getClientOriginalName())->post($url."/informasi/store", $filtered);
         if($response->successful()){
-            return $data = $response->object();
             if (isset($data->status)) {
                 return response()->json(['success'=> 'Berhasil Menambah Data']);
             } else {
@@ -76,12 +76,32 @@ class InformasiController extends Controller
     {
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
-        $response = Http::withToken($token)->post($url."/informasi/update/".$id, [
-            'nama_kegiatan' => $request->nama_kegiatan,
-            'nama_sub_kegiatan' => $request->nama_sub_kegiatan,
-            'tanggal_awal' => date("Y-m-d", strtotime($request->tanggal_awal)),
-            'tanggal_akhir' => date("Y-m-d", strtotime($request->tanggal_akhir)),
-        ]);
+        $data = $request->all();
+        if ($request->file('gambar')) {
+            $filtered = array_filter(
+                $data,
+                function ($key){
+                    if(!in_array($key,['_token', 'id', 'gambar'])){
+                        return $key;
+                    };
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+            $image = $request->file('gambar');
+            $http = Http::withToken($token)->attach('gambar', file_get_contents($image), $request->gambar->getClientOriginalName());
+        }else{
+            $filtered = array_filter(
+                $data,
+                function ($key){
+                    if(!in_array($key,['_token', 'id'])){
+                        return $key;
+                    };
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+            $http = Http::withToken($token);
+        }
+        $response = $http->post($url."/informasi/store", $filtered);
         if($response->successful()){
             $data = $response->object();
             if (isset($data->status)) {
