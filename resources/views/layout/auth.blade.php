@@ -48,7 +48,7 @@
 		<script src="{{asset('plugins/custom/prismjs/prismjs.bundle.js')}}"></script>
 		<script src="{{asset('js/scripts.bundle.js')}}"></script>
 		<!--end::Global Theme Bundle-->
-		@include('sweetalert::alert') 
+		<!-- @include('sweetalert::alert') -->
         @yield('script')
 	</body>
 	<!--end::Body-->
