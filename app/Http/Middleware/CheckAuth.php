@@ -14,14 +14,15 @@ class CheckAuth
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, $role)
+    public function handle(Request $request, Closure $next, $role = null)
     {
-
-        // dd($request->session()->get('user.role'),$role);
-        if($request->session()->has('user.access_token') && $request->session()->get('user.role') == $role){
+        
+        if($request->session()->has('user.access_token')){
             return $next($request);
         }
+            return redirect('login');
+        
 
-        return redirect('login');
+
     }
 }

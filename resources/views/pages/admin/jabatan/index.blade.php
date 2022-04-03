@@ -75,7 +75,7 @@
                         <input class="form-control form-control-solid" type="text" name="nama_jabatan"/>
                         <div class="invalid-feedback"></div>
                     </div>
-
+                    
                     <div class="form-group">
                         <label>Nama Struktur</label>
                         <input class="form-control form-control-solid" type="text" name="nama_struktur"/>
@@ -84,32 +84,26 @@
                     <div class="form-group">
                         <label>Satuan Kerja</label>
                         <select class="form-control form-control-solid" type="text" name="id_satuan_kerja">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            @foreach ($dinas as $item)
+                                <option value="{{$item['id']}}">{{$item['nama_satuan_kerja']}}</option>
+                            @endforeach
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label>Pegawai</label>
                         <select class="form-control form-control-solid" type="text" name="id_pegawai">
                             <option value="1">1</option>
                             <option value="2">2</option>
                         </select>
                         <div class="invalid-feedback"></div>
-                    </div>
+                    </div> --}}
                     <div class="form-group">
                         <label>Kelas Jabatan</label>
                         <select class="form-control form-control-solid" type="text" name="id_kelas_jabatan">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                        </select>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Jabatan Atasan</label>
-                        <select class="form-control form-control-solid" type="text" name="parent_id">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            @foreach ($kelas as $item)
+                            <option value="{{$item['id']}}">{{$item['value']}}</option>
+                            @endforeach
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
@@ -119,6 +113,12 @@
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
+                        </select>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Jabatan Atasan</label>
+                        <select class="form-control form-control-solid" type="text" name="parent_id">
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
@@ -228,6 +228,28 @@
             e.preventDefault();
             var key = $(this).data('id');
             AxiosCall.delete(`admin/jabatan/jabatan/${key}`);
+        })
+
+        $(document).on('change', "select[name='level']", function(){
+            if ($(this).val() != 1) {
+                axios.get("admin/jabatan/getatasan/"+$(this).val())
+                .then(function(res){
+                    if (res.data.success && res.data.success != '') {
+                        var data = res.data.success;
+                        var opt = '';
+                        $.each(data, function(i, val){
+                            console.log(val.id);
+                            opt += '<option value="'+ val.id +'">'+ val.value +'</option>';
+                        });
+                        console.log(opt);
+                        $("select[name='parent_id']").html(opt);
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                })
+            }else{
+                $("select[name='parent_id']").html('');
+            }
         })
 
         jQuery(document).ready(function() {

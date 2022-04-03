@@ -1,6 +1,7 @@
 var AxiosCall = function() {
     return {
         post: function(_url, _data, _element) {
+            console.log(_data);
             axios.post( _url, _data)
             .then(function(res){
                 var data = res.data;

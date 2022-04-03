@@ -38,7 +38,7 @@
 			<!--begin::Logo-->
             <div class="brand-logo">
                 <a href="{{ url('/') }}">
-                    <img alt="{{ config('app.name') }}" src="{{ asset('media/svg/bkpsdm/bkpsdm-text.svg') }}"/>
+                    <img alt="{{ config('app.name') }}" src="{{ asset('image/bkpsdm-text.svg') }}"/>
                 </a>
             </div>
 			<a href="{{url('/')}}">
@@ -191,7 +191,15 @@
 		<script src="{{asset('js/AxiosCall.js')}}"></script>
 		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 		<!--end::Global Theme Bundle-->
-
+		@if(Session::has('auth'))
+			<script>
+				Swal.fire(
+					"Akses Ditolak",
+					"Kamu Gak Punya Akses Ke fitur Ini",
+					"error"
+				);
+			</script>
+		@endif
         @yield('script')
 		<!--end::Page Scripts-->
 	</body>

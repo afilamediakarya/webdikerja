@@ -157,7 +157,13 @@
                 });
             kalender.on('dateClick', function(info) {
                 console.log('clicked on ' + info.dateStr);
-                kalender.addEvent({ title: 'new event', start: info.dateStr });
+                kalender.addEvent({ 
+                    title : "Event Baru", 
+                    start : info.dateStr, 
+                    description : 'desc', 
+                    end : info.dateStr, 
+                    className : 'fc-event-light fc-event-solid-primary'
+                });
             });
 
             kalender.on('eventClick', function(data) {
@@ -166,10 +172,6 @@
             });
             kalender.render();
 
-
-
-
-            
             $('#kt_datepicker_3').datepicker({
                 todayBtn: "linked",
                 clearBtn: true,

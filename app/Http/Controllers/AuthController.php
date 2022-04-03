@@ -10,6 +10,9 @@ class AuthController extends Controller
     public function index(Request $request){
 
             // return 'hei';
+            if ($request->session()->has('user')) {
+                return redirect('/');
+            }
             $page_title = 'Login';
             $page_description = 'Some description for the page';
             return view('pages.auth.login', compact('page_title', 'page_description'));
@@ -22,13 +25,22 @@ class AuthController extends Controller
                 'password' => $request->password
             ]);
 
+
             if($response->status() == 200){
                 $data = $response->json();
                 session(['user' => $response->json()]);
+                session(['user_details' => $response->json()['current']['pegawai']]);
+                session(['tahun' => date("Y")]);
+                // dd($request->session('user_details'));
                 return redirect('/');
             }else{
                 return redirect()->back()->with('error', 'data Salah');
             }
 
+    }
+
+    public function logout(Request $request){
+        $request->session()->flush();
+        return redirect('/');
     }
 }

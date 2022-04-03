@@ -39,9 +39,9 @@ class AktivitasController extends Controller
             foreach ($data as $key => $value) {
                 $temp = [];
                 $temp['title'] = $value->nama_aktivitas; 
-                $temp['start'] = $value->tanggal; 
+                $temp['start'] = "$value->tanggal $value->waktu_awal"; 
                 $temp['description'] = $value->keterangan; 
-                $temp['end'] = $value->tanggal; 
+                $temp['end'] = "$value->tanggal $value->waktu_awal"; 
                 $temp['className'] = 'fc-event-light fc-event-solid-primary'; 
                 $dataArr[] = $temp; 
             }
