@@ -10,6 +10,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\RealisasiController;
 use App\Http\Controllers\SkpController;
+use App\Http\Controllers\AxiosController;
 
 
 use App\Http\Controllers\Admin\AdminController;
@@ -120,10 +121,7 @@ Route::middleware('Auth')->group(function(){
                 Route::post('/jabatan', [JabatanController::class, 'store'])->name('post-jabatan');
                 Route::get('/jabatan/{id}', [JabatanController::class, 'show'])->name('show-jabatan');
                 Route::post('/jabatan/{id}', [JabatanController::class, 'update'])->name('update-jabatan');
-                Route::delete('/jabatan/{id}', [JabatanController::class, 'delete'])->name('delete-jabatan');
-                
-                Route::get('/getatasan/{id}', [JabatanController::class, 'getAtasan'])->name('getAtasan');
-    
+                Route::delete('/jabatan/{id}', [JabatanController::class, 'delete'])->name('delete-jabatan');    
                 Route::get('/kelas', [JabatanController::class, 'kelas'])->name('kelas');
                 Route::post('/kelas', [JabatanController::class, 'store_kelas'])->name('post-kelas');
                 Route::get('/kelas/{id}', [JabatanController::class, 'show_kelas'])->name('show-kelas');
@@ -163,9 +161,15 @@ Route::middleware('Auth')->group(function(){
             
             
             
-            
             Route::prefix('admin')->group(function(){
                 Route::get('/', [AdminController::class, 'index'])->name('admin');
+            });
+
+            Route::prefix('axios')->group(function(){
+                Route::get('/atasan-jabatan/{id}', [AxiosController::class, 'atasan_jabatan']);
+                Route::get('/jabatan/{id}', [AxiosController::class, 'jabatan']);
+                Route::get('/atasan/{id}', [AxiosController::class, 'getAtasan']);
+
             });
         });
     });

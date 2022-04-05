@@ -48,7 +48,6 @@
                                 <th>Nama</th>
                                 <th>NIP</th>
                                 <th>Jabatan</th>
-                                <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -71,67 +70,42 @@
                             <div class="form-group col-6">
                                 <label>Nama</label>
                                 <input type="text" class="form-control form-control-solid" value="" name="nama">
+                                <span class="invalid-feedback"></span>
                             </div>
 
                             <div class="form-group col-6">
                                 <label>NIP</label>
                                 <input type="text" class="form-control form-control-solid" name="nip">
+                                <span class="invalid-feedback"></span>
                             </div>
 
                             <div class="form-group col-6">
                                 <label>Tempat Lahir</label>
                                 <input type="text" class="form-control form-control-solid" name="tempat_lahir">
+                                <span class="invalid-feedback"></span>
                             </div>
                             <div class="form-group col-6">
                                 <label>Tanggal Lahir</label>
                                 <div class="input-group date" >
-                                    <input type="text" class="form-control form-control-solid" readonly name="tgl_lahir" value="{{date("d-m-1990")}}" id="tgl_lahir"/>
+                                    <input type="text" class="form-control form-control-solid" readonly name="tanggal_lahir" value="{{date("1990-m-d")}}" id="tgl_lahir"/>
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>
                                         </span>
                                     </div>
                                 </div>
+                                <span class="invalid-feedback"></span>
                             </div>
-
                             <div class="form-group col-6">
-                                <label>Golongan Pangkat</label>
-                                <select name="golongan_pangkat" class="form-control form-control-solid">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
+                                <label>Satuan Kerja</label>
+                                <select name="id_satuan_kerja" class="form-control form-control-solid">
+                                    <option value="">Pilih Satuan Kerja</option>
+                                    @foreach ($dinas as $item)
+                                        <option value="{{$item['id']}}">{{$item['nama_satuan_kerja']}}</option>
+                                    @endforeach
                                 </select>
+                                <span class="invalid-feedback"></span>
                             </div>
-                            <div class="form-group col-6">
-                                <label>TMT Golongan</label>
-                                <div class="input-group date" >
-                                    <input type="text" class="form-control form-control-solid" readonly  value="{{date("d-m-Y")}}" id="tmt_gol" name="tmt_golongan"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group col-6">
-                                <label>Status Pegawai</label>
-                                <select class="form-control form-control-solid" name="status_pegawai">
-                                    <option value="Aktif">Aktif</option>
-                                    <option value="Non Aktif">Non Aktif</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-6">
-                                <label>TMT Pegawai</label>
-                                <div class="input-group date" >
-                                    <input type="text" class="form-control form-control-solid" readonly  value="{{date("d-m-Y")}}" name="tmt_pegawai" id="tmt_peg"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            
                             <div class="form-group col-6">
                                 <label>Eselon</label>
                                 <select class="form-control form-control-solid" name="eselon">
@@ -142,6 +116,67 @@
                                     <option value="5">Eselon V</option>
                                 </select>
                             </div>
+
+                            <div class="form-group col-6">
+                                <label>Golongan Pangkat</label>
+                                <select name="golongan" class="form-control form-control-solid">
+                                    @foreach ($pangkat as $item)
+                                        <option value="{{$item['value']}}">{{$item['value']}}</option>
+                                    @endforeach
+                                </select>
+                                <span class="invalid-feedback"></span>
+                            </div>
+                            <div class="form-group col-6">
+                                <label>TMT Golongan</label>
+                                <div class="input-group date" >
+                                    <input type="text" class="form-control form-control-solid" readonly  value="{{date("Y-m-d")}}" id="tmt_gol" name="tmt_golongan"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <span class="invalid-feedback"></span>
+                            </div>
+
+                            <div class="form-group col-6">
+                                <label>Jenis Jabatan Pegawai</label>
+                                <select class="form-control form-control-solid" name="jenis_jabatan">
+                                    <option value="Aktif">Aktif</option>
+                                    <option value="Non Aktif">Non Aktif</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-6">
+                                <label>Jabatan Pegawai</label>
+                                <select class="form-control form-control-solid" name="jabatan">
+                                    <option value="Aktif">Aktif</option>
+                                    <option value="Non Aktif">Non Aktif</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-6">
+                                <label>TMT Jabatan</label>
+                                <div class="input-group date" >
+                                    <input type="text" class="form-control form-control-solid" readonly  value="{{date("Y-m-d")}}" name="tmt_jabatan" id="tmt_jab"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-6">
+                                <label>TMT Pegawai</label>
+                                <div class="input-group date" >
+                                    <input type="text" class="form-control form-control-solid" readonly  value="{{date("Y-m-d")}}" name="tmt_pegawai" id="tmt_peg"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
                             <div class="form-group col-6">
                                 <label>Jenis Jabatan</label>
                                 <select class="form-control form-control-solid" name="jenis_jabatan">
@@ -162,8 +197,11 @@
                                 <label>Agama</label>
                                 <select name="agama" class="form-control form-control-solid">
                                     <option value="Islam">Islam</option>
-                                    <option value="Nasrani">Nasrani</option>
-                                    <option value="Budha">Budha</option>
+                                    <option value="Khonghucu">Khonghucu</option>
+                                    <option value="Buddha">Buddha</option>
+                                    <option value="Hindu">Hindu</option>
+                                    <option value="Katolik">Katolik</option>
+                                    <option value="Protestan">Protestan</option>
                                 </select>
                             </div>
 
@@ -171,39 +209,44 @@
                                 <label>Status Perkawinan</label>
                                 <select name="status_perkawinan" class="form-control form-control-solid">
                                     <option value="Menikah">Menikah</option>
-                                    <option value="Cerai">Cerai</option>
                                     <option value="Belum Menikah">Belum Menikah</option>
+                                    <option value="Cerai Hidup">Cerai hidup</option>
+                                    <option value="Cerai Mati">Cerai Mati</option>
                                 </select>
                             </div>
                             <div class="form-group col-6">
                                 <label>Pendidikan Terakhir</label>
-                                <select name="pendidikan_akhir" class="form-control form-control-solid">
-                                    <option value="SLTA/Sederajat">SLTA/Sederajat</option>
-                                    <option value="Diploma I/II">Diploma I/II</option>
-                                    <option value="Akademi/Diploma III/Sarjana Muda">Akademi/Diploma III/Sarjana Muda</option>
-                                    <option value="Diploma IV/Strata I">Diploma IV/Strata I</option>
-                                    <option value="Strata II">Strata II</option>
-                                    <option value="Strata III">Strata III</option>
+                                <select name="pendidikan" class="form-control form-control-solid">
+                                    <option value="SD (Sekolah Dasar)">SD (Sekolah Dasar)</option>
+                                    <option value="SMP (Sekolah Menengah Pertama)">SMP (Sekolah Menengah Pertama)</option>
+                                    <option value="SMA (Sekolah Menengah Atas)">SMA (Sekolah Menengah Atas)</option>
+                                    <option value="Diploma I / Akta I">Diploma I / Akta I</option>
+                                    <option value="Diploma II / Akta II">Diploma II / Akta II</option>
+                                    <option value="Diploma III / Akta III">Diploma III / Akta III</option>
+                                    <option value="Diploma IV / Akta IV">Diploma IV / Akta IV</option>
+                                    <option value="S1/Sarjana">S1/Sarjana</option>
+                                    <option value="S2/Pasca Sarjana">S2/Pasca Sarjana</option>
+                                    <option value="S3/Doktor/Ph.D">S3/Pasca Sarjana</option>
                                 </select>
                             </div>
+                            <div class="form-group col-6">
+                                <label>Tahun Lulus</label>
+                                <input type="text" class="form-control form-control-solid" name="lulus_pendidikan">
+                            </div>
+
 
                             <div class="form-group col-6">
-                                <label>No. NPWP</label>
-                                <input type="text" class="form-control form-control-solid" name="no_npwp">
+                                <label>Pendidikan Struktural</label>
+                                <input type="text" class="form-control form-control-solid" name="pendidikan_struktural">
+                            </div>
+                            <div class="form-group col-6">
+                                <label>Tahun Lulus Pendidikan Struktural</label>
+                                <input type="text" class="form-control form-control-solid" name="lulus_pendidikan_struktural">
                             </div>
 
                             <div class="form-group col-6">
-                                <label>No. KTP</label>
-                                <input type="text" class="form-control form-control-solid" name="no_ktp">
-                            </div>
-
-                            <div class="form-group col-12">
-                                <label>Alamat</label>
-                                <input type="text" class="form-control form-control-solid" name="alamat_rumah">
-                            </div>
-                            <div class="form-group col-6">
-                                <label>E-Mail</label>
-                                <input type="text" class="form-control form-control-solid" name="email">
+                                <label>Jurusan</label>
+                                <input type="text" class="form-control form-control-solid" name="jurusan">
                             </div>
                         </div>
                         
@@ -233,7 +276,7 @@
                 // begin first table
                 table.DataTable({
                     responsive: true,
-                    pageLength: 10,
+                    pageLength: 25,
                     order: [[0, 'asc']],
                     processing:true,
                     ajax: '{{ route('pegawai') }}',
@@ -246,25 +289,14 @@
                         {data:'nama'},
                         {data:'nip'},
                         {data:'jenis_jabatan'},
-                        {data:'status_pegawai'},
                         {
                             data:'id',
                         }
                     ],
+                    filter: function (data) {
+                        console.log(data);
+                    },
                     columnDefs: [
-                        {
-                            targets: 4,
-                            render: function(data, type, full, meta) {
-                                var status = {
-                                    'tidak aktif': {'title': 'tidak aktif', 'class': ' label-light-danger text-capitalize'},
-                                    'Aktif': {'title': 'aktif', 'class': ' label-light-primary text-capitalize'},
-                                };
-                                if (typeof status[data] === 'undefined') {
-                                    return data;
-                                }
-                                return '<span class="label label-lg font-weight-bold' + status[data].class + ' label-inline">' + status[data].title + '</span>';
-                            },
-                        },
                         {
                             targets: -1,
                             title: 'Actions',
@@ -303,6 +335,9 @@
             $(".open_form").toggle();
             $("#createForm").attr('data-type','submit');
             $("#createForm")[0].reset();
+            $("input").removeClass('is-invalid');
+            $("select").removeClass('is-invalid');
+            $("textarea").removeClass('is-invalid');
         })
         
         $(document).on('click', ".btn-cancel", function(){
@@ -311,31 +346,27 @@
             $(".open_form").toggle();
         })
 
-        
-
-        $(document).on('submit', '#createForm', function(e){
+        $(document).on('submit', "#createForm[data-type='submit']", function(e){
             e.preventDefault();
-            $("input").removeClass('is-invalid');
-            var type = $(this).data('type');
-            var url = '';
-            let id = $("input[name='id']").val();
-            if (type == 'submit') {
-                url = "{{route('store-pegawai')}}";
-            }else{
-                url = "admin/pegawai/"+id;
-            }
-
-            axios.post(url, $(this).serialize())
+            axios.post( "{{route('store-pegawai')}}", $(this).serialize())
             .then(function(res){
-                let data = res.data; 
-                if (data.invalid) {
-                    $.map(data.invalid, function(val, i){
-                        if (i == 'tempat_tanggal_lahir') {
-                            $("input[name='tempat_lahir']").addClass('is-invalid').siblings('.invalid-feedback').html(val[0]);
-                        }
-                        $("input[name="+i+"]").addClass('is-invalid').siblings('.invalid-feedback').html(val[0]);
-                    })
-                } else if(data.success){
+                var data = res.data;
+                if(data.fail){
+                    swal.fire({
+                        text: "Maaf Terjadi Kesalahan",
+                        title:"Error",
+                        timer: 2000,
+                        icon: "danger",
+                        showConfirmButton:false,
+                    });
+                }else if(data.invalid){
+                    $.each(data.invalid, function( key, value ) {
+                        console.log(key);
+                        $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                        $("textarea[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                        $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                    });
+                }else if(data.success){
                     swal.fire({
                         text: "Data anda berhasil disimpan",
                         title:"Sukses",
@@ -350,18 +381,8 @@
                         $("#form").toggle();
                         $(".open_form").toggle();
                     });
-                }else{
-                    swal.fire({
-                        text: "Terjadi Kesalahan Sistem",
-                        title:"Error",
-                        icon: "error",
-                        showConfirmButton:true,
-                        confirmButtonText: "OK",
-                    });
                 }
-            })
-            .catch(function(error){
-                console.log('error',error);
+            }).catch(function(){
                 swal.fire({
                     text: "Terjadi Kesalahan Sistem",
                     title:"Error",
@@ -369,8 +390,55 @@
                     showConfirmButton:true,
                     confirmButtonText: "OK",
                 })
-            })
-        })
+            });
+        });
+
+        $(document).on('submit', "#createForm[data-type='update']", function(e){
+            e.preventDefault();
+            var _id = $("input[name='id']").val();
+            axios.post( `admin/pegawai/${_id}`,  $(this).serialize())
+            .then(function(res){
+                var data = res.data;
+                if(data.fail){
+                    swal.fire({
+                        text: "Maaf Terjadi Kesalahan",
+                        title:"Error",
+                        timer: 2000,
+                        icon: "danger",
+                        showConfirmButton:false,
+                    });
+                }else if(data.invalid){
+                    $.each(data.invalid, function( key, value ) {
+                        console.log(key);
+                        $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                        $("textarea[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                    });
+                }else if(data.success){
+                    swal.fire({
+                        text: "Data anda berhasil disimpan",
+                        title:"Sukses",
+                        icon: "success",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        dataRow.destroy();
+                        dataRow.init();
+                        $("#createForm")[0].reset();
+                        $("#table").toggle();
+                        $("#form").toggle();
+                        $(".open_form").toggle();
+                    });
+                }
+            }).catch(function(){
+                swal.fire({
+                    text: "Terjadi Kesalahan Sistem",
+                    title:"Error",
+                    icon: "error",
+                    showConfirmButton:true,
+                    confirmButtonText: "OK",
+                })
+            });
+        });
 
         $(document).on('click', ".button-update", function(){
             $("#table").toggle();
@@ -378,17 +446,18 @@
             $(".open_form").toggle();
             $("#createForm").attr('data-type','update');
             $("#createForm")[0].reset();
+            $("input").removeClass('is-invalid');
+            $("select").removeClass('is-invalid');
+            $("textarea").removeClass('is-invalid');
+
             var key = $(this).data('id');
             axios.get('admin/pegawai/'+key)
             .then(function(res){
                 let data = res.data;
                 $.map(data.data, function(val, i){
                     $("input[name="+i+"]").val(val);
-                    if (i == 'tempat_tanggal_lahir') {
-                        var d = val.split(',');
-                        $("input[name='tempat_lahir']").val(d[0]);
-                        $("input[name='tgl_lahir']").val(d[1]);
-                    }
+                    $("select[name="+i+"]").val(val);
+                    
                 })
             })
             .catch(function(err){
@@ -439,7 +508,7 @@
         })
 
         jQuery(document).ready(function() {
-            $('#tmt_peg, #tmt_gol, #tgl_lahir').datepicker({format: 'dd-mm-yyyy'});
+            $('#tmt_peg, #tmt_jab, #tmt_gol, #tgl_lahir').datepicker({format: 'yyyy-mm-dd'});
             dataRow.init();
         });
 

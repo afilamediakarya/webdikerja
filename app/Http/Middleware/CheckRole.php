@@ -14,6 +14,7 @@ class CheckRole
         if (in_array($request->session()->get('user.role') , $roles)) {
             return $next($request);
         }
-        return back()->with('auth', 'Gak punya Akses');
+        // return back()->with('auth', 'Gak punya Akses');
+        return abort(404);
     }
 }

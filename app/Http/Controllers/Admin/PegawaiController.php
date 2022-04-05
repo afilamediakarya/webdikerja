@@ -13,9 +13,9 @@ class PegawaiController extends Controller
 
     public function index(Request $request)
     {
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
         if($request->ajax()){
-            $url = env('API_URL');
-            $token = $request->session()->get('user.access_token');
             $response = Http::withToken($token)->get($url."/pegawai/list");
             $data = $response->json();
             return $data;
@@ -24,8 +24,18 @@ class PegawaiController extends Controller
         $page_title = 'Aktivitas';
         $page_description = 'Daftar Aktivitas';
         $breadcumb = ['Daftar Aktivitas'];
+        $pangkat = Http::withToken($token)->get($url."/pegawai/get-option-pangkat-golongan")->collect();
 
-        return view('pages.admin.pegawai.index', compact('page_title', 'page_description','breadcumb'));
+        if ($request->session()->get('user.role') == 'super_admin') {
+            $datadinas = Http::withToken($token)->get($url."/satuan_kerja/list");
+            $dinas = $datadinas->collect('data');
+        }else{
+            $datadinas = $request->session()->get('user_details.satuan_kerja');
+            $dinas = collect([$datadinas]);
+        }
+
+        // return $dinas;
+        return view('pages.admin.pegawai.index', compact('page_title', 'page_description','breadcumb', 'dinas', 'pangkat'));
     }
 
     public function store(Request $request)
@@ -33,10 +43,9 @@ class PegawaiController extends Controller
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         $data = $request->all();
-        $data['id_satuan_kerja'] = 1;
-        if ($request->tempat_lahir != null && $request->tgl_lahir != null) {
-            $data['tempat_tanggal_lahir'] = $request->tempat_lahir.','.$request->tgl_lahir;
-        }
+        // if ($request->tempat_lahir != null && $request->tgl_lahir != null) {
+        //     $data['tempat_tanggal_lahir'] = $request->tempat_lahir.','.$request->tgl_lahir;
+        // }
         $filtered = array_filter(
             $data,
             function ($key){
@@ -79,9 +88,9 @@ class PegawaiController extends Controller
         $token = $request->session()->get('user.access_token');
         $data = $request->all();
         $data['id_satuan_kerja'] = 1;
-        if ($request->tempat_lahir != null && $request->tgl_lahir != null) {
-            $data['tempat_tanggal_lahir'] = $request->tempat_lahir.','.$request->tgl_lahir;
-        }
+        // if ($request->tempat_lahir != null && $request->tgl_lahir != null) {
+        //     $data['tempat_tanggal_lahir'] = $request->tempat_lahir.','.$request->tgl_lahir;
+        // }
         $filtered = array_filter(
             $data,
             function ($key){
