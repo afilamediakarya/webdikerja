@@ -95,7 +95,7 @@ Route::middleware('Auth')->group(function(){
             });
     
             
-            Route::middleware('roles:super_admn')->group(function(){
+            Route::middleware('roles:super_admin')->group(function(){
                 Route::prefix('jadwal')->group(function(){
                     Route::get('/', [JadwalController::class, 'index'])->name('jadwal');
                     Route::post('/', [JadwalController::class, 'store'])->name('post-jadwal');
@@ -103,6 +103,25 @@ Route::middleware('Auth')->group(function(){
                     Route::post('/{id}', [JadwalController::class, 'update'])->name('update-jadwal');
                     Route::delete('/{id}', [JadwalController::class, 'delete'])->name('delete-jadwal');
                 });
+                Route::prefix('master')->group(function(){
+                    // Route::get('/faq', [MasterController::class, 'faq'])->name('master_faq');
+                    Route::get('/faq', [FaqController::class, 'faq'])->name('faq');
+                    Route::post('/faq', [FaqController::class, 'store_faq'])->name('post-faq');
+                    Route::get('/faq/{id}', [FaqController::class, 'show_faq'])->name('show-faq');
+                    Route::post('/faq/{id}', [FaqController::class, 'update_faq'])->name('update-faq');
+                    Route::delete('/faq/{id}', [FaqController::class, 'delete_faq'])->name('delete-faq');
+        
+                    Route::get('/satuan', [SatuanController::class, 'index'])->name('satuan');
+                    Route::post('/satuan', [SatuanController::class, 'store'])->name('post-satuan');
+                    Route::get('/satuan/{id}', [SatuanController::class, 'show'])->name('show-satuan');
+                    Route::post('/satuan/{id}', [SatuanController::class, 'update'])->name('update-satuan');
+                    Route::delete('/satuan/{id}', [SatuanController::class, 'delete'])->name('delete-satuan');
+                    
+                    Route::get('/data-satuan', [MasterController::class, 'get_satuan'])->name('data_master_satuan');
+                    
+                    Route::get('/perilaku', [MasterController::class, 'perilaku'])->name('master_perilaku');
+                });
+        
             });
 
             Route::middleware('roles:admin_opd')->group(function(){
@@ -122,31 +141,12 @@ Route::middleware('Auth')->group(function(){
                 Route::get('/jabatan/{id}', [JabatanController::class, 'show'])->name('show-jabatan');
                 Route::post('/jabatan/{id}', [JabatanController::class, 'update'])->name('update-jabatan');
                 Route::delete('/jabatan/{id}', [JabatanController::class, 'delete'])->name('delete-jabatan');    
-                Route::get('/kelas', [JabatanController::class, 'kelas'])->name('kelas');
+                Route::get('/kelas', [JabatanController::class, 'kelas'])->name('kelas')->middleware('roles:super_admin');
                 Route::post('/kelas', [JabatanController::class, 'store_kelas'])->name('post-kelas');
                 Route::get('/kelas/{id}', [JabatanController::class, 'show_kelas'])->name('show-kelas');
                 Route::post('/kelas/{id}', [JabatanController::class, 'update_kelas'])->name('update-kelas');
                 Route::delete('/kelas/{id}', [JabatanController::class, 'delete_kelas'])->name('delete-kelas');
     
-            });
-    
-            Route::prefix('master')->group(function(){
-                // Route::get('/faq', [MasterController::class, 'faq'])->name('master_faq');
-                Route::get('/faq', [FaqController::class, 'faq'])->name('faq');
-                Route::post('/faq', [FaqController::class, 'store_faq'])->name('post-faq');
-                Route::get('/faq/{id}', [FaqController::class, 'show_faq'])->name('show-faq');
-                Route::post('/faq/{id}', [FaqController::class, 'update_faq'])->name('update-faq');
-                Route::delete('/faq/{id}', [FaqController::class, 'delete_faq'])->name('delete-faq');
-    
-                Route::get('/satuan', [SatuanController::class, 'index'])->name('satuan');
-                Route::post('/satuan', [SatuanController::class, 'store'])->name('post-satuan');
-                Route::get('/satuan/{id}', [SatuanController::class, 'show'])->name('show-satuan');
-                Route::post('/satuan/{id}', [SatuanController::class, 'update'])->name('update-satuan');
-                Route::delete('/satuan/{id}', [SatuanController::class, 'delete'])->name('delete-satuan');
-                
-                Route::get('/data-satuan', [MasterController::class, 'get_satuan'])->name('data_master_satuan');
-                
-                Route::get('/perilaku', [MasterController::class, 'perilaku'])->name('master_perilaku');
             });
     
         
