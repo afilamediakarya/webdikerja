@@ -229,7 +229,7 @@
                         <span class="menu-text text-capitalize">informasi</span>
                     </a>
                 </li>
-                @if (Session::get('user.role') == 'admin_opd')
+                @if (Session::get('user.role') == 'super_admin')
                 <li class="menu-item" aria-haspopup="true">
                     <a href="{{route('jadwal')}}" class="menu-link">
                         <span class="svg-icon menu-icon">
@@ -353,6 +353,7 @@
                                     <span class="menu-text text-capitalize">jabatan</span>
                                 </a>
                             </li>
+                            @if (Session::get('user.role') == 'super_admin')
                             <li class="menu-item" aria-haspopup="true">
                                 <a href="{{route('kelas')}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
@@ -361,6 +362,7 @@
                                     <span class="menu-text text-capitalize">kelas jabatan</span>
                                 </a>
                             </li>
+                            @endif
                         </ul>
                     </div>
                 </li>
