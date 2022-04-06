@@ -141,15 +141,16 @@
 						<div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
 							<!--begin::Copyright-->
 							<div class="text-dark order-2 order-md-1">
-								<span class="text-muted font-weight-bold mr-2">2020©</span>
-								<a href="http://keenthemes.com/metronic" target="_blank" class="text-dark-75 text-hover-primary">Keenthemes</a>
+								<span class="text-muted font-weight-bold mr-2">Aplikasi Dikerja</span>
+								<span class="text-muted font-weight-bold mr-2">2022©</span>
+								<a href="https://afila.co.id/" target="_blank" class="text-dark-75 text-hover-primary">Afila Media Karya</a>
 							</div>
 							<!--end::Copyright-->
 							<!--begin::Nav-->
 							<div class="nav nav-dark">
-								<a href="http://keenthemes.com/metronic" target="_blank" class="nav-link pl-0 pr-5">About</a>
-								<a href="http://keenthemes.com/metronic" target="_blank" class="nav-link pl-0 pr-5">Team</a>
-								<a href="http://keenthemes.com/metronic" target="_blank" class="nav-link pl-0 pr-0">Contact</a>
+								<a href="https://afila.co.id/#services" target="_blank" class="nav-link pl-0 pr-5">Services</a>
+								<a href="https://afila.co.id/#team" target="_blank" class="nav-link pl-0 pr-5">Team</a>
+								<a href="https://api.whatsapp.com/send/?phone=6281144411201&text=Hai+Afila%2C+Saya+tertarik+diskusi+mengenai+jasa+pembuatan+aplikasi+website%2C+desktop+dan+mobile&app_absent=0" target="_blank" class="nav-link pl-0 pr-0">Contact</a>
 							</div>
 							<!--end::Nav-->
 						</div>

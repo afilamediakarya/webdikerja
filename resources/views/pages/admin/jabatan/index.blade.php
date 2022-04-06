@@ -232,7 +232,7 @@
 
         $(document).on('change', "select[name='level']", function(){
             if ($(this).val() != 1) {
-                axios.get("admin/jabatan/getatasan/"+$(this).val())
+                axios.get("admin/axios/atasan-jabatan/"+$(this).val())
                 .then(function(res){
                     if (res.data.success && res.data.success != '') {
                         var data = res.data.success;
