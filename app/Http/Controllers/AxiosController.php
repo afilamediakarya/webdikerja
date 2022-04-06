@@ -45,15 +45,14 @@ class AxiosController extends Controller
         return view('pages.admin.jabatan.index', compact('page_title', 'page_description','breadcumb', 'kelas', 'dinas'));
     }
 
-    public function atasan_jabatan(Request $request, $id)
+    public function atasan_jabatan(Request $request, $id, $satuan)
     {
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         // $response = Http::withToken($token)->get($url."/jabatan/get-option-jabatan-atasan/2");
 
-        $response = Http::withToken($token)->get($url."/jabatan/get-option-jabatan-atasan/".$id);
+        $response = Http::withToken($token)->get($url."/jabatan/get-option-jabatan-atasan/".$id."/".$satuan);
         // return $response->body();
-        // dd($response->body());
         if($response->successful()){
             return response()->json(['success'=> $response->json()]);
         }else{

@@ -166,7 +166,7 @@ Route::middleware('Auth')->group(function(){
             });
 
             Route::prefix('axios')->group(function(){
-                Route::get('/atasan-jabatan/{id}', [AxiosController::class, 'atasan_jabatan']);
+                Route::get('/atasan-jabatan/{id}/{satuan}', [AxiosController::class, 'atasan_jabatan']);
                 Route::get('/jabatan/{id}', [AxiosController::class, 'jabatan']);
                 Route::get('/atasan/{id}', [AxiosController::class, 'getAtasan']);
 

@@ -231,8 +231,17 @@
         })
 
         $(document).on('change', "select[name='level']", function(){
-            if ($(this).val() != 1) {
-                axios.get("admin/axios/atasan-jabatan/"+$(this).val())
+            if ($("select[name='id_satuan_kerja']").val() == '') {
+                swal.fire({
+                    text: "Pilih Satuan Kerja Terlebih Dahulu",
+                    icon: "warning",
+                    showConfirmButton:true,
+                })
+            }
+            let satuan_kerja = $("select[name='id_satuan_kerja']").val();
+            let level = $(this).val();
+            if (level != 1) {
+                axios.get(`admin/axios/atasan-jabatan/${level}/${satuan_kerja}`)
                 .then(function(res){
                     if (res.data.success && res.data.success != '') {
                         var data = res.data.success;
