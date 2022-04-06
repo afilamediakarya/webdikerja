@@ -150,7 +150,7 @@
 							<div class="nav nav-dark">
 								<a href="https://afila.co.id/#services" target="_blank" class="nav-link pl-0 pr-5">Services</a>
 								<a href="https://afila.co.id/#team" target="_blank" class="nav-link pl-0 pr-5">Team</a>
-								<a href="https://api.whatsapp.com/send/?phone=6281144411201&text=Hai+Afila%2C+Saya+tertarik+diskusi+mengenai+jasa+pembuatan+aplikasi+website%2C+desktop+dan+mobile&app_absent=0" target="_blank" class="nav-link pl-0 pr-0">Contact</a>
+								<a href="https://api.whatsapp.com/send/?phone=6281144411201&text=Hai+Afila%2C+Saya+ada+pertanyaan+tentang++aplikasi+dikerja+mobile&app_absent=0" target="_blank" class="nav-link pl-0 pr-0">Contact</a>
 							</div>
 							<!--end::Nav-->
 						</div>
