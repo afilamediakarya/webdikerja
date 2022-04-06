@@ -6,7 +6,7 @@
 
 
 @section('button')
-    <a href="javascrip:;" class="btn btn-primary font-weight-bolder" id="kt_quick_user_toggle">
+    <button onclick="Panel.action('show', 'submit')" class="btn btn-primary font-weight-bolder" id="kt_quick_user_toggle">
         <span class="svg-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                 <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1"/>
@@ -14,7 +14,7 @@
             </g>
         </svg><!--end::Svg Icon--></span>
         Tambah FAQ
-    </a>
+    </button>
 @endsection
 
 
@@ -36,33 +36,11 @@
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Satuan Kerja</th>
-                                <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @for ($i=1; $i<=15; $i++)
-                            <tr>
-                                <td>1</td>
-                                <td>Jenny Wilson</td>
-                                <td>Badan Kepegawaian & Pengembangan Sumber Daya Manusia</td>
-                                <td>1</td>
-                                <td nowrap="nowrap">
-                                    <a href="" type="button" class="btn btn-secondary">ubah</a>
-                                    <a href="" type="button" class="btn btn-danger">Hapus</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Besse Kambu</td>
-                                <td>Badan Kepegawaian & Pengembangan Sumber Daya Manusia</td>
-                                <td>0</td>
-                                <td nowrap="nowrap">
-                                    <a href="" type="button" class="btn btn-secondary">ubah</a>
-                                    <a href="" type="button" class="btn btn-danger">Hapus</a>
-                                </td>
-                            </tr>
-                            @endfor
+                           
                         </tbody>
                     </table>
                     <!--end: Datatable-->
@@ -76,35 +54,42 @@
 @endsection
 
 @section('side-form')
-        <div id="kt_quick_user" class="offcanvas offcanvas-right p-10">
+        <div id="side_form" class="offcanvas offcanvas-right p-10">
 			<!--begin::Header-->
 			<div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
 				<h3 class="font-weight-bold m-0">Tambah FAQ<h3>
-				<a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="kt_quick_user_close">
+				<a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="side_form_close">
 					<i class="ki ki-close icon-xs text-muted"></i>
 				</a>
 			</div>
 			<!--end::Header-->
 			<!--begin::Content-->
 			<div class="offcanvas-content pr-5 mr-n5">
-                <form class="form">
-                    <div class="form-group">
-                        <label>Nama</label>
-                        <input class="form-control form-control-solid" type="text"/>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Satuan Kerja</label>
-                        <select class="form-control form-control-solid" type="text">
-                            <option value="">1</option>
-                        </select>
-                    </div>
-
+                <form class="form" id="createForm">
+                    <div class="form-group row">
+                        <label class="col-form-label col-12">Satuan Kerja</label>
+                        <div class="col-12">
+                            <select class="form-control form-control-solid select2" id="satker" name="satker">
+                                <option value="" disabled selected>Pilih Satuan Kerja</option>
+                                @foreach ($dinas as $item)
+                                    <option value="{{$item['id']}}">{{$item['nama_satuan_kerja']}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                   </div>
+                   <div class="form-group row">
+                       <label class="col-form-label col-12">Pegawai</label>
+                       <div class="col-12">
+                           <select class="form-control form-control-solid select2" id="pegawai" name="pegawai">
+                               
+                           </select>
+                       </div>
+                  </div>
                 </form>
                 <div class="separator separator-dashed mt-8 mb-5"></div>
                 <div class="">
-                    <button type="reset" class="btn btn-outline-primary mr-2">Batal</button>
-                    <button type="reset" class="btn btn-primary">Simpan</button>
+                    <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
+                    <button type="reset" class="btn btn-primary btn-submit">Simpan</button>
                 </div>
 
 				<!--begin::Separator-->
@@ -119,54 +104,161 @@
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
         "use strict";
-        var KTDatatablesAdvancedRowGrouping = function() {
-
+        var dataRow = function() {
             var init = function() {
                 var table = $('#kt_datatable');
-
+    
                 // begin first table
                 table.DataTable({
                     responsive: true,
-                    pageLength: 15,
-                    order: [[1, 'asc']],
+                    pageLength: 25,
+                    order: [[0, 'asc']],
+                    processing:true,
+                    ajax: "{{ route('admin') }}",
+                    columns:[{ 
+                            data : null, 
+                            render: function (data, type, row, meta) {
+                                    return meta.row + meta.settings._iDisplayStart + 1;
+                            }  
+                        },{
+                            data:'nama'
+                        },{
+                            data:'satuan_kerja.nama_satuan_kerja'
+                        },{
+                            data:'id',
+                        }
+                    ],
                     columnDefs: [
                         {
-                            targets: 3,
+                            targets: -1,
+                            title: 'Actions',
+                            orderable: false,
                             render: function(data, type, full, meta) {
-                                var status = {
-                                    0: {'title': 'inactive', 'class': ' label-light-danger text-capitalize'},
-                                    1: {'title': 'active', 'class': ' label-light-primary text-capitalize'},
-                                };
-                                if (typeof status[data] === 'undefined') {
-                                    return data;
-                                }
-                                return '<span class="label label-lg font-weight-bold' + status[data].class + ' label-inline">' + status[data].title + '</span>';
+                                return '<a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>';
                             },
-                        },
+                        }
                     ],
                 });
             };
-
+    
+            var destroy = function(){
+                var table = $('#kt_datatable').DataTable();
+                table.destroy();
+            }
+    
             return {
-
-                //main function to initiate the module
                 init: function() {
                     init();
                 },
-
+                destroy:function(){
+                    destroy();
+                }
+    
             };
-
         }();
 
-        jQuery(document).ready(function() {
-            $('#kt_datepicker_3').datepicker({
-                todayBtn: "linked",
-                clearBtn: true,
-                todayHighlight: true,
+        $(document).on('change', "#satker", function(){
+            let id = $(this).val();
+            axios.get('admin/axios/pegawai/'+id)
+            .then(function(res){
+                if (res.data.success && res.data.success != '') {
+                    var data = res.data.success;
+                    var opt = '';
+                    $.each(data, function(i, val){
+                        opt += '<option value="'+ val.id +'">'+ val.value +'</option>';
+                    });
+                    $("#pegawai").html(opt);
+                }
+            })
+        })
 
+        $(document).on('click', ".btn-submit", function(){
+            let id = $("#pegawai").val();
+            axios.post('admin/admin/'+id, [])
+            .then(function(res){
+                if (res.data.success && res.data.success != '') {
+                    swal.fire({
+                    text: "Data anda berhasil disimpan",
+                    title:"Sukses",
+                    icon: "success",
+                    showConfirmButton:true,
+                    confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        dataRow.destroy();
+                        dataRow.init();
+                        Panel.action('hide');
+                        $("#creteForm")[0].reset();
+                    });
+                }
             });
-            KTDatatablesAdvancedRowGrouping.init();
-        });
+        })
+        $(document).on('click', ".button-delete", function(){
+            let id = $(this).data('id');
+            Swal.fire({
+                title: "Perhatian ",
+                text: "Yakin ingin meghapus data.?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Hapus",
+                cancelButtonText: "Batal",
+                customClass: {
+                    confirmButton: "btn btn-danger",
+                    cancelButton: "btn btn-light-danger",
+                    }
+            }).then(function(result){
+                if (result.value) {
+                    axios.delete('admin/admin/'+id)
+                    .then(function(res){
+                        var data = res.data;
+                        if(data.status){
+                            Swal.fire(
+                                "Deleted!",
+                                "Data terhapus",
+                                "success"
+                            );
+                            dataRow.destroy();
+                            dataRow.init();
+                        }else{
+                            Swal.fire(
+                                "Error",
+                                "Gagal Menghapus Data",
+                                "error"
+                            );
+                        }
+                    })
+                    .catch(function(err){
+                        swal.fire({
+                            text: "Terjadi Kesalahan Sistem",
+                            title:"Error",
+                            icon: "error",
+                            showConfirmButton:true,
+                            confirmButtonText: "OK",
+                        });
+                    });
+                }
+            })
+        })
+        
+        $(document).on('click', '.button-update', function(){
+            var key = $(this).data('id');
+            AxiosCall.show(`admin/master/faq/${key}`);
+        })
+            
+            
+        jQuery(document).ready(function() {
+            Panel.init('side_form');
+            dataRow.init();
+            $('#satker').select2({
+                placeholder: "Pilih Satuan Kerja"
+            });
+            $('#pegawai').select2({
+                placeholder: "Pilih Pegawai"
+            });
 
+            
+            $(document).on('click','.btn-cancel', function(){
+                Panel.action('hide');
+            });
+        });
     </script>
 @endsection

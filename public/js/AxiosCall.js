@@ -84,7 +84,6 @@ var AxiosCall = function() {
                     cancelButton: "btn btn-light-danger",
                     }
             }).then(function(result) {
-                console.log(result);
                 if (result.value) {
                     axios.delete(_url)
                     .then(function(res){

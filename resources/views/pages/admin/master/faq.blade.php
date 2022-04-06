@@ -209,15 +209,15 @@
         })
             
             
-jQuery(document).ready(function() {
-    Panel.init('side_form');
-    dataRow.init();
-    $('#kt_datepicker_3').datepicker({format:'dd-mm-yyyy'});
-    
-    
-    $(document).on('click','.btn-cancel', function(){
-        Panel.action('hide');
-    });
-});
+        jQuery(document).ready(function() {
+            Panel.init('side_form');
+            dataRow.init();
+            $('#kt_datepicker_3').datepicker({format:'dd-mm-yyyy'});
+            
+            
+            $(document).on('click','.btn-cancel', function(){
+                Panel.action('hide');
+            });
+        });
     </script>
 @endsection

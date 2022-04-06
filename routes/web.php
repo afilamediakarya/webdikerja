@@ -163,10 +163,13 @@ Route::middleware('Auth')->group(function(){
             
             Route::prefix('admin')->group(function(){
                 Route::get('/', [AdminController::class, 'index'])->name('admin');
+                Route::post('/{pegawai}', [AdminController::class, 'update'])->name('add-admin');
+                Route::delete('/{pegawai}', [AdminController::class, 'delete'])->name('delete-admin');
             });
 
             Route::prefix('axios')->group(function(){
                 Route::get('/atasan-jabatan/{id}/{satuan}', [AxiosController::class, 'atasan_jabatan']);
+                Route::get('/pegawai/{satuan}', [AdminController::class, 'getPegawai']);
                 Route::get('/jabatan/{id}', [AxiosController::class, 'jabatan']);
                 Route::get('/atasan/{id}', [AxiosController::class, 'getAtasan']);
 
