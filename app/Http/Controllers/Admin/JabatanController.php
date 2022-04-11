@@ -21,6 +21,7 @@ class JabatanController extends Controller
         $datadinas = Http::withToken($token)->get($url."/satuan_kerja/list");
         $dinas = $datadinas->collect('data');
         // return $request->session()->get('user_details.satuan_kerja');
+        $pegawai = Http::withToken($token)->get($url."/jabatan/pegawaiBySatuanKerja")->collect();
         // dd($dinas);
         if($request->session()->get('user.role') == 'admin_opd'){
             $collection = $dinas->map(function ($val) use($request) {
@@ -42,7 +43,7 @@ class JabatanController extends Controller
             }
         }
 
-        return view('pages.admin.jabatan.index', compact('page_title', 'page_description','breadcumb', 'kelas', 'dinas'));
+        return view('pages.admin.jabatan.index', compact('page_title', 'page_description','breadcumb', 'kelas', 'dinas', 'pegawai'));
     }
 
     public function store(Request $request)

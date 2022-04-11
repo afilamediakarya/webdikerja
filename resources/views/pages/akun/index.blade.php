@@ -13,10 +13,10 @@
         <!--begin::Container-->
         <div class="container">
             <!--begin::Card-->
-            <div class="card card-custom gutter-b example example-compact">
+            <div class="card card-custom gutter-b example example-compact d-none">
                 <div class="card-header">
                     <h3 class="card-title">Atasan</h3>
-                    <button type="button" id="update_atasan" class="btn btn-sm btn-primary align-self-center"><i class="flaticon2-pen"></i>update Atasan</button>
+                    <!-- <button type="button" id="update_atasan" class="btn btn-sm btn-primary align-self-center"><i class="flaticon2-pen"></i>update Atasan</button> -->
                 </div>
                 <div class="card-body">
                     <!--begin::Form-->
@@ -124,9 +124,10 @@
                                 <div class="form-group col-6">
                                     <label>Jenis Jabatan Pegawai</label>
                                     <select class="form-control form-control-solid" name="jenis_jabatan">
-                                        @foreach ($jabatan as $item)
-                                            <option value="{{$item['id']}}" {{ (Session::has('user_details.jenis_jabatan') ? (Session::get('user_details.jenis_jabatan') == $item['id'] ? "selected" : "") : "") }}>{{$item['nama_struktur']}}</option>
-                                        @endforeach
+                                            <option value="">Pilih Jenis Jabatan</option>
+                                            <option value="Struktural" {{(Session::get('user_details.jenis_jabatan') == "Struktural" ? "selected" : "")}}>Struktural</option>
+                                            <option value="Fungsional Umum" {{(Session::get('user_details.jenis_jabatan') == "Fungsional Umum" ? "selected" : "")}}>Fungsional Umum</option>
+                                            <option value="Fungsional Khusus" {{(Session::get('user_details.jenis_jabatan') == "Fungsional Khusus" ? "selected" : "")}}>Fungsional Khusus</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-6">
@@ -135,17 +136,6 @@
                                         <option value="Aktif">Aktif</option>
                                         <option value="Non Aktif">Non Aktif</option>
                                     </select>
-                                </div>
-                                <div class="form-group col-6">
-                                    <label>TMT Jabatan</label>
-                                    <div class="input-group date" >
-                                        <input type="text" class="form-control form-control-solid" readonly  value="{{(Session::get('user_details.tmt_jabatan'))}}" name="tmt_jabatan" id="tmt_jab"/>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="la la-calendar"></i>
-                                            </span>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="form-group col-6">
                                     <label>TMT Pegawai</label>
@@ -215,8 +205,8 @@
                             
                         </div>
                         <div class="card-footer border-0">
-                            <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <!-- <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button> -->
+                            <button type="submit" class="btn btn-primary">Update Data</button>
                         </div>
                     </form>
                     <!--end::Form-->
@@ -227,6 +217,17 @@
                 <div class="card-header">
                     <h3 class="card-title">Password</h3>
                     <button type="reset" class="btn btn-sm btn-primary align-self-center"><i class="flaticon2-pen"></i>Ganti Password</button>
+                </div>
+                <div class="card-body">
+                    <div class="form-group col-6">
+                        <label>Password Baru</label>
+                        <input type="text" class="form-control form-control-solid" name="old_password">
+                    </div>
+
+                    <div class="form-group col-6">
+                        <label>Kenformasi Password</label>
+                        <input type="text" class="form-control form-control-solid" name="old_password">
+                    </div>
                 </div>
             </div>
             <!--end::Card-->

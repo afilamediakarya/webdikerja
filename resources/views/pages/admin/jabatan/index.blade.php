@@ -90,14 +90,16 @@
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
-                    {{-- <div class="form-group">
+                    <div class="form-group">
                         <label>Pegawai</label>
-                        <select class="form-control form-control-solid" type="text" name="id_pegawai">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                        <select class="form-control form-control-solid" type="text" name="id_pegawai" id="pegawai">
+                            <option value="">Pilih Pegawai</option>
+                            @foreach($pegawai as $item)
+                                <option value="{{$item['id']}}">{{$item['value']}}</option>
+                            @endforeach
                         </select>
                         <div class="invalid-feedback"></div>
-                    </div> --}}
+                    </div>
                     <div class="form-group">
                         <label>Kelas Jabatan</label>
                         <select class="form-control form-control-solid" type="text" name="id_kelas_jabatan">
@@ -265,64 +267,13 @@
             Panel.init('side_form');
             dataRow.init();
             $('#jadwal_1, #jadwal_2').datepicker({format: 'dd-mm-yyyy'});
-
+            $('#pegawai').select2({
+                placeholder: "Pilih Pegawai"
+            });
 
             $(document).on('click','.btn-cancel', function(){
                 Panel.action('hide');
             });
-
-            // $(document).on('submit', '#createForm', function(e){
-            //     e.preventDefault();
-            //     var type = $(this).data('type');
-            //     var _url = '';
-            //     var _id = $("input[name='id']").val();
-            //     if(type == 'submit'){
-            //         _url = "{{route('post-jabatan')}}";
-            //     }else{
-            //         _url = "admin/jabatan/jabatan/"+_id
-            //     }
-
-            //     $.ajax({
-            //         url: _url,
-            //         method:"POST",
-            //         data: $(this).serialize(),
-            //         beforeSend: function(){
-            //             $("input[type='text']").removeClass('is-invalid');
-            //             $("select").removeClass('is-invalid');
-            //         },
-            //         success : function(data) {
-            //             if(data.fail){
-            //                 console.log(data);
-            //                 swal.fire({
-            //                     text: "Maaf Terjadi Kesalahan",
-            //                     title:"Error",
-            //                     timer: 2000,
-            //                     icon: "danger",
-            //                     showConfirmButton:false,
-            //                 });
-            //             }else if(data.invalid){
-            //                 $.each(data.invalid, function( key, value ) {
-            //                     console.log(key);
-            //                     $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
-            //                     $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
-            //                 });
-            //             }else if(data.success){
-            //                 swal.fire({
-            //                     text: "Data anda berhasil disimpan",
-            //                     title:"Sukses",
-            //                     icon: "success",
-            //                     showConfirmButton:true,
-            //                     confirmButtonText: "OK, Siip",
-            //                 }).then(function() {
-            //                     dataRow.destroy();
-            //                     dataRow.init();
-            //                     $("#createForm")[0].reset();
-            //                     Panel.action('hide');
-            //                 });
-            //             }
-            //         }
-            //     })
-            // });
 
             // edit
             $(document).on('click', '.button-update', function(){
@@ -344,45 +295,6 @@
                 });
             })
 
-        //     // delete
-        //     $(document).on('click', '.button-delete', function (e) {
-        //         e.preventDefault();
-        //         var key = $(this).data('id');
-        //         Swal.fire({
-        //             title: "Perhatian ",
-        //             text: "Yakin ingin meghapus data.?",
-        //             icon: "warning",
-        //             showCancelButton: true,
-        //             confirmButtonText: "Hapus",
-        //             cancelButtonText: "Batal",
-        //             customClass: {
-        //                 confirmButton: "btn btn-danger",
-        //                 cancelButton: "btn btn-light-danger",
-        //                }
-        //         }).then(function(result) {
-        //             console.log(result);
-        //             if (result.value) {
-        //                 $.ajax({
-        //                     method: 'delete',
-        //                     url: 'admin/jabatan/jabatan/'+key,
-        //                     data:{
-        //                         "_token": "{{ csrf_token() }}"
-        //                     }
-        //                 })
-        //                 .then(function(response){
-        //                     if(response.success){
-        //                         Swal.fire(
-        //                             "Deleted!",
-        //                             "Data terhapus",
-        //                             "success"
-        //                         );
-        //                         dataRow.destroy();
-        //                         dataRow.init();
-        //                     }
-        //                 });
-        //             }
-        //         });
-        //     })
         });
 
     </script>
