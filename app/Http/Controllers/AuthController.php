@@ -30,6 +30,7 @@ class AuthController extends Controller
                 $data = $response->json();
                 session(['user' => $response->json()]);
                 session(['user_details' => $response->json()['current']['pegawai']]);
+                session(['atasan' => $response->json()['check_atasan']]);
                 session(['tahun' => date("Y")]);
                 // dd($request->session('user_details'));
                 return redirect('/');

@@ -43,6 +43,8 @@ Route::middleware('Auth')->group(function(){
 
     Route::get('/', [PagesController::class, 'index'])->name('dashboard');
 
+    Route::get('atasan/update/{id}', [AkunController::class , 'update_atasan'])->name("update-atasan");
+
     Route::middleware('roles:pegawai|admin_opd|super_admin')->group(function(){
         Route::get('/skp', [SkpController::class, 'index'])->name('skp');
         Route::get('/skp/tambah', [SkpController::class, 'create'])->name('tambah-skp');
@@ -74,6 +76,7 @@ Route::middleware('Auth')->group(function(){
         Route::get('/', [AkunController::class, 'index'])->name('akun');
         Route::get('/edit', [AkunController::class, 'edit'])->name('edit-profil');
         Route::get('/ganti-password', [AkunController::class, 'index'])->name('ganti-password');
+        Route::post('/pegwai/{id}', [PegawaiController::class, 'update'])->name('update-profil');
     });
     Route::middleware('roles:super_admin|admin_opd')->group(function (){
         Route::prefix('admin')->group(function() {

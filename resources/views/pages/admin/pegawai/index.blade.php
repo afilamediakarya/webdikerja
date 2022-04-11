@@ -109,11 +109,9 @@
                             <div class="form-group col-6">
                                 <label>Eselon</label>
                                 <select class="form-control form-control-solid" name="eselon">
-                                    <option value="1">Eselon I</option>
-                                    <option value="2">Eselon II</option>
-                                    <option value="3">Eselon III</option>
-                                    <option value="4">Eselon IV</option>
-                                    <option value="5">Eselon V</option>
+                                    @foreach($eselon as $item)
+                                        <option value="{{$item['value']}}">{{$item['value']}}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -142,8 +140,9 @@
                             <div class="form-group col-6">
                                 <label>Jenis Jabatan Pegawai</label>
                                 <select class="form-control form-control-solid" name="jenis_jabatan">
-                                    <option value="Aktif">Aktif</option>
-                                    <option value="Non Aktif">Non Aktif</option>
+                                    @foreach ($jabatan as $item)
+                                        <option value="{{$item['id']}}">{{$item['nama_struktur']}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group col-6">
@@ -188,45 +187,34 @@
                             <div class="form-group col-6">
                                 <label>Jenis Kelamin</label>
                                 <select class="form-control form-control-solid" name="jenis_kelamin">
-                                    <option>1</option>
-                                    <option>2</option>
+                                    <option value="Laki-Laki">Laki-Laki</option>
+                                    <option value="Perempuan">Perempuan</option>
                                 </select>
                             </div>
 
                             <div class="form-group col-6">
                                 <label>Agama</label>
                                 <select name="agama" class="form-control form-control-solid">
-                                    <option value="Islam">Islam</option>
-                                    <option value="Khonghucu">Khonghucu</option>
-                                    <option value="Buddha">Buddha</option>
-                                    <option value="Hindu">Hindu</option>
-                                    <option value="Katolik">Katolik</option>
-                                    <option value="Protestan">Protestan</option>
+                                    @foreach($agama as $item)
+                                        <option value="{{$item['value']}}">{{$item['value']}}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <div class="form-group col-6">
                                 <label>Status Perkawinan</label>
                                 <select name="status_perkawinan" class="form-control form-control-solid">
-                                    <option value="Menikah">Menikah</option>
-                                    <option value="Belum Menikah">Belum Menikah</option>
-                                    <option value="Cerai Hidup">Cerai hidup</option>
-                                    <option value="Cerai Mati">Cerai Mati</option>
+                                    @foreach($status_kawin as $item)
+                                        <option value="{{$item['value']}}">{{$item['value']}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group col-6">
                                 <label>Pendidikan Terakhir</label>
                                 <select name="pendidikan" class="form-control form-control-solid">
-                                    <option value="SD (Sekolah Dasar)">SD (Sekolah Dasar)</option>
-                                    <option value="SMP (Sekolah Menengah Pertama)">SMP (Sekolah Menengah Pertama)</option>
-                                    <option value="SMA (Sekolah Menengah Atas)">SMA (Sekolah Menengah Atas)</option>
-                                    <option value="Diploma I / Akta I">Diploma I / Akta I</option>
-                                    <option value="Diploma II / Akta II">Diploma II / Akta II</option>
-                                    <option value="Diploma III / Akta III">Diploma III / Akta III</option>
-                                    <option value="Diploma IV / Akta IV">Diploma IV / Akta IV</option>
-                                    <option value="S1/Sarjana">S1/Sarjana</option>
-                                    <option value="S2/Pasca Sarjana">S2/Pasca Sarjana</option>
-                                    <option value="S3/Doktor/Ph.D">S3/Pasca Sarjana</option>
+                                    @foreach($pendidikan as $item)
+                                        <option value="{{$item['value']}}">{{$item['value']}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group col-6">

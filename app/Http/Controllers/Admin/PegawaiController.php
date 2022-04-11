@@ -25,6 +25,20 @@ class PegawaiController extends Controller
         $page_description = 'Daftar Aktivitas';
         $breadcumb = ['Daftar Aktivitas'];
         $pangkat = Http::withToken($token)->get($url."/pegawai/get-option-pangkat-golongan")->collect();
+        $agama = Http::withToken($token)->get($url."/pegawai/get-option-agama")->collect();
+        $status_kawin = Http::withToken($token)->get($url."/pegawai/get-option-status-kawin")->collect();
+        $pendidikan = Http::withToken($token)->get($url."/pegawai/get-option-pendidikan-terakhir")->collect();
+        $status_pegawai = Http::withToken($token)->get($url."/pegawai/get-option-status-pegawai")->collect();
+        $eselon = Http::withToken($token)->get($url."/pegawai/get-option-status-eselon")->collect();
+        $jabatan_data = Http::withToken($token)->get($url."/jabatan/list")->collect();
+        
+        $jabatan = collect($jabatan_data['data'])->filter(function($item) use($request){
+            // if($item['id'] == $request->session()->get('user_details.id_satuan_kerja')){
+            if($item['id_satuan_kerja'] == '1'){
+                return $item;
+            }
+        })->values();
+        // dd($jabatan);
 
         if ($request->session()->get('user.role') == 'super_admin') {
             $datadinas = Http::withToken($token)->get($url."/satuan_kerja/list");
@@ -35,7 +49,7 @@ class PegawaiController extends Controller
         }
 
         // return $dinas;
-        return view('pages.admin.pegawai.index', compact('page_title', 'page_description','breadcumb', 'dinas', 'pangkat'));
+        return view('pages.admin.pegawai.index', compact('page_title', 'page_description','breadcumb', 'dinas', 'pangkat', 'agama', 'status_kawin', 'pendidikan', 'status_pegawai', 'eselon', 'jabatan'));
     }
 
     public function store(Request $request)

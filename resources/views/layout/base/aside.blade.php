@@ -366,6 +366,7 @@
                         </ul>
                     </div>
                 </li>
+                @if (Session::get('user.role') == 'super_admin')
                 <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
                     <a href="javascript:;" class="menu-link menu-toggle">
                         <span class="svg-icon menu-icon">
@@ -429,6 +430,7 @@
                         <span class="menu-text text-capitalize">admin</span>
                     </a>
                 </li>
+                @endif
 
             @endif
             </ul>
