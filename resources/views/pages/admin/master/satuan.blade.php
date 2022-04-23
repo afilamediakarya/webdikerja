@@ -58,7 +58,7 @@
         <div id="side_form" class="offcanvas offcanvas-right p-10">
 			<!--begin::Header-->
 			<div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
-				<h3 class="font-weight-bold m-0">Tambah Satuan Kerja<h3>
+				<h3 class="font-weight-bold m-0">Tambah Satuan<h3>
 				<a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="side_form_close">
 					<i class="ki ki-close icon-xs text-muted"></i>
 				</a>
@@ -82,8 +82,8 @@
                     <div class="form-group">
                         <label>Status Satuan</label>
                         <select class="form-control form-control-solid" type="text" name="status">
-                            <option value="Aktif">Aktif</option>
-                            <option value="Tidak aktif">Tidak Aktif</option>
+                            <option value="active">Aktif</option>
+                            <option value="inactive">Tidak Aktif</option>
                         </select>
                     </div>
 
@@ -149,8 +149,8 @@
                         targets: 3,
                         render: function(data, type, full, meta) {
                             var status = {
-                                'Tidak aktif': {'title': 'tidak aktif', 'class': ' label-light-danger text-capitalize'},
-                                'Aktif': {'title': 'aktif', 'class': ' label-light-primary text-capitalize'},
+                                'Tidak aktif': {'title': 'inactive', 'class': ' label-light-danger text-capitalize'},
+                                'Aktif': {'title': 'active', 'class': ' label-light-primary text-capitalize'},
                             };
                             if (typeof status[data] === 'undefined') {
                                 return data;

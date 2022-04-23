@@ -13,7 +13,7 @@
                 <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000) " x="4" y="11" width="16" height="2" rx="1"/>
             </g>
         </svg><!--end::Svg Icon--></span>
-        Tambah FAQ
+        Tambah Admin
     </button>
 @endsection
 
@@ -57,7 +57,7 @@
         <div id="side_form" class="offcanvas offcanvas-right p-10">
 			<!--begin::Header-->
 			<div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
-				<h3 class="font-weight-bold m-0">Tambah FAQ<h3>
+				<h3 class="font-weight-bold m-0">Tambah Admin<h3>
 				<a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="side_form_close">
 					<i class="ki ki-close icon-xs text-muted"></i>
 				</a>
@@ -241,7 +241,7 @@
         
         $(document).on('click', '.button-update', function(){
             var key = $(this).data('id');
-            AxiosCall.show(`admin/master/faq/${key}`);
+            AxiosCall.show(`admin/master/admin/${key}`);
         })
             
             
