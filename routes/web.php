@@ -48,6 +48,8 @@ Route::middleware('Auth')->group(function(){
     Route::middleware('roles:pegawai|admin_opd|super_admin')->group(function(){
         Route::get('/skp', [SkpController::class, 'index'])->name('skp');
         Route::get('/skp/tambah', [SkpController::class, 'create'])->name('tambah-skp');
+        Route::post('/skp/store', [SkpController::class, 'store'])->name('store-skp');
+        Route::get('/skp/edit/{params}', [SkpController::class, 'edit'])->name('edit-skp');
     });
     
     
@@ -58,6 +60,7 @@ Route::middleware('Auth')->group(function(){
     
     Route::prefix('laporan')->group(function () {
         Route::get('/absen', [LaporanController::class, 'absen'])->name('laporan-absen');
+        Route::get('/export/rekapitulasi_pegawai/{param1}/{param2}/{type}', [LaporanController::class, 'exportRekapAbsen'])->name('laporan-absen-pegawai');
         Route::get('/skp', [LaporanController::class, 'skp'])->name('laporan-skp');
         Route::get('/aktivitas', [LaporanController::class, 'aktivitas'])->name('laporan-aktivitas');
         

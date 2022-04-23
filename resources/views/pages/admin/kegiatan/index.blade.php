@@ -201,13 +201,13 @@
                 method:"GET",
                 success: function(data){
                     if(data.success){
-                    console.log(data.success);
+                        console.log(data.success);
                     var res = data.success.data;
-                    $.each(res, function( key, value ) {
-                        $("input[name='"+key+"']").val(value);
-                        $("select[name='"+key+"']").val(value);
-                        $("textarea[name='"+key+"']").val(value);
-                    });
+                        $.each(res, function( key, value ) {
+                            $("input[name='"+key+"']").val(value);
+                            $("select[name='"+key+"']").val(value);
+                            $("textarea[name='"+key+"']").val(value);
+                        });
                     }
                 }
             });

@@ -15,7 +15,7 @@
             <!--begin::Card-->
             <div class="card card-custom gutter-b example example-compact">
                 <div class="card-header">
-                    <h3 class="card-title">Tambah SKP</h3>
+                    <h3 class="card-title">Update SKP</h3>
                 </div>
                 <div class="card-body">
                     <!--begin::Form-->
@@ -24,7 +24,7 @@
                             <label>Jenis Kinerja</label>
                             <div class="radio-inline">
                                 <label class="radio">
-                                <input type="radio" value="Utama" name="jenis_kinerja" />
+                                <input type="radio" value="Utama" @if($data['jenis'] == 'utama') checked @endif name="jenis_kinerja" />
                                 <span></span>Utama</label>
                                 <label class="radio">
                                 <input type="radio" value="Tambahan" name="jenis_kinerja" />
@@ -38,7 +38,7 @@
                             <select class="form-control" type="text" name="sasaran_kinerja" id="sasaran_kinerja">
                                 <option selected disabled>Pilih Sasaran Kerja</option>
                                 @foreach($sasaran_kinerja_atasan as $key => $value)
-                                    <option value="{{$value['id']}}">{{$value['value']}}</option>
+                                    <option value="{{$value['id']}}" @if($data['id_skp_atasan'] == $value['id']) selected @endif>{{$value['value']}}</option>
                                 @endforeach
                              </select>
                              <div class="invalid-feedback sasaran_kinerja_error"></div>
@@ -46,7 +46,7 @@
                         <div class="form-group">
                             <label for="rencana_kerja">Rencana Kerja 
                             <span class="text-danger">*</span></label>
-                            <textarea class="form-control" id="rencana_kerja" name="rencana_kerja" rows="3"></textarea>
+                            <textarea class="form-control" id="rencana_kerja" name="rencana_kerja" rows="3">{{$data['rencana_kerja']}}</textarea>
                             <div class="invalid-feedback rencana_kerja_error"></div>
                         </div>
 
@@ -57,7 +57,7 @@
 
                         <div class="form-group">
                             <label for="indikator_kerja_individu_0">Indikator Kerja Individu </label>
-                            <textarea class="form-control" name="indikator_kerja_individu[0]" id="indikator_kerja_individu_0" rows="3"></textarea>
+                            <textarea class="form-control" name="indikator_kerja_individu[0]" id="indikator_kerja_individu_0" rows="3">{{$data['aspek_skp'][0]['iki']}}</textarea>
                             <div class="invalid-feedback indikator_kerja_individu_0_error"></div>
                         </div>
                         <div class="form-group">
@@ -66,7 +66,7 @@
 
                             @for ($i = 0; $i < 12; $i++)
                                 <div class="col-1">
-                                    <input type="number" id="target_kuantitas_{{$i}}" name="target_kuantitas[{{$i}}]" class="form-control nilai_kinerja_kuantitas" placeholder="">
+                                    <input type="number" id="target_kuantitas_{{$i}}" value="{{$data['aspek_skp'][0]['target_skp'][$i]['target']}}" name="target_kuantitas[{{$i}}]" class="form-control nilai_kinerja_kuantitas" placeholder="">
                                     <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
                                     <div class="invalid-feedback target_kuantitas_{{$i}}_error"></div>
                                 </div>
@@ -96,7 +96,7 @@
 
                         <div class="form-group">
                             <label for="indikator_kerja_individu_1">Indikator Kerja Individu </label>
-                            <textarea class="form-control" name="indikator_kerja_individu[1]" id="indikator_kerja_individu_1" rows="3"></textarea>
+                            <textarea class="form-control" name="indikator_kerja_individu[1]" id="indikator_kerja_individu_1" rows="3">{{$data['aspek_skp'][1]['iki']}}</textarea>
                             <div class="invalid-feedback indikator_kerja_individu_1_error"></div>
                         </div>
                         <div class="form-group">
@@ -135,7 +135,7 @@
 
                         <div class="form-group">
                             <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
-                            <textarea class="form-control" name="indikator_kerja_individu[2]" id="indikator_kerja_individu_2" rows="3"></textarea>
+                            <textarea class="form-control" name="indikator_kerja_individu[2]" id="indikator_kerja_individu_2" rows="3">{{$data['aspek_skp'][2]['iki']}}</textarea>
                             <div class="invalid-feedback indikator_kerja_individu_2_error"></div>
                         </div>
                         <div class="form-group">
