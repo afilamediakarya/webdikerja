@@ -66,13 +66,20 @@ class SkpController extends Controller
         $breadcumb = ['Daftar Sasaran Kinerja Pegawai', 'update skp'];
         $sasaran_kinerja_atasan = $this->getSasaranKinerjaAtasan(); 
         $satuan = $this->getSatuan();
+        $total_sum = [];
 
         $url = env('API_URL');
         $token = session()->get('user.access_token');
         $dataById = Http::withToken($token)->get($url."/skp/show/".$params);
         $data = $dataById['data'];
-        // return $dataById;
-        return view('pages.skp.edit', compact('page_title', 'page_description','breadcumb','sasaran_kinerja_atasan','satuan','data'));
+        foreach($data['aspek_skp'] as $key => $value){
+            $nilai = 0;
+            foreach ($value['target_skp'] as $k => $v) {
+                $total_sum[$key] = $nilai+= $v['target'];
+            }
+        }
+        // return $data;
+        return view('pages.skp.edit', compact('page_title', 'page_description','breadcumb','sasaran_kinerja_atasan','satuan','data','total_sum'));
     }
 
     public function customValidate($params){
@@ -144,15 +151,7 @@ class SkpController extends Controller
     }   
 
     public function store(Request $request){
-        // return $request;
-
-        // $validated = $request->validate([
-        //     'rencana_kerja' => 'required',
-        //     'jenis_kinerja' => 'required',
-        //     'sasaran_kinerja' => 'required',
-        //     'iki'    => 'required|array',
-        // ]);
-
+      
        $validated = $this->customValidate($request);
 
         if (count($validated) > 0 ) {
@@ -244,5 +243,107 @@ class SkpController extends Controller
        }
 
         
+    }
+
+    public function update($params,Request $request){
+      
+        $validated = $this->customValidate($request);
+ 
+         if (count($validated) > 0 ) {
+             return response()->json($validated,422);   
+         }else{
+             $result = [];
+                 $aspek = [];
+                 $target_bulan = [$request->target_kualitas,$request->target_kuantitas,$request->target_waktu];
+                 $type_aspek = ['kuantitas','kualitas','waktu'];
+                 $current_user = session()->get('user.current');
+ 
+                 for ($i=0; $i < count($request->indikator_kerja_individu); $i++) { 
+                 
+                 $aspek[$i] = [
+                         'iki' => $request->indikator_kerja_individu[$i],
+                         'satuan' => $request->satuan[$i],
+                         'target' => $target_bulan[$i],
+                         'type_aspek' => $type_aspek[$i]
+                 ];
+                 }
+ 
+                 // 
+                 $result = [
+                     'id_satuan_kerja' =>$current_user['pegawai']['id_satuan_kerja'],
+                     'id_skp_atasan' => $request['sasaran_kinerja'],
+                     'jenis' => $request['jenis_kinerja'],
+                     'rencana_kerja' => $request['rencana_kerja'],
+                     'tahun' => date('Y'),
+                     'aspek' => $aspek
+                 ];
+ 
+                 // return $result;
+ 
+                 $url = env('API_URL');
+                 $token = session()->get('user.access_token');
+             
+                 $response = Http::withToken($token)->post($url."/skp/update/".$params, $result);
+                 return $response;
+                 if($response->successful()){
+                     return response()->json(['success'=> $response->json()]);
+                 }else{
+                     return response()->json(['failed'=> $response->json()]);
+                 }
+         }
+      
+        if ($validated == 'success') {
+         //    return 'ya';
+             // $result = [];
+             // $aspek = [];
+             // $target_bulan = [$request->target_kualitas,$request->target_kuantitas,$request->target_waktu];
+             // $type_aspek = ['kuantitas','kualitas','waktu'];
+             // $current_user = session()->get('user.current');
+ 
+             // for ($i=0; $i < count($request->iki); $i++) { 
+             
+             // $aspek[$i] = [
+             //         'iki' => $request->indikator_kerja_individu[$i],
+             //         'satuan' => $request->satuan[$i],
+             //         'target' => $target_bulan[$i],
+             //         'type_aspek' => $type_aspek[$i]
+             // ];
+             // }
+ 
+             // // 
+             // $result = [
+             //     'id_satuan_kerja' =>$current_user['pegawai']['id_satuan_kerja'],
+             //     'id_skp_atasan' => $request['sasaran_kinerja'],
+             //     'jenis' => $request['jenis_kinerja'],
+             //     'rencana_kerja' => $request['rencana_kerja'],
+             //     'tahun' => date('Y'),
+             //     'aspek' => $aspek
+             // ];
+ 
+             // // return $result;
+ 
+             // $url = env('API_URL');
+             // $token = session()->get('user.access_token');
+         
+             // $response = Http::withToken($token)->post($url."/skp/store", $result);
+             // return $response;
+             // if($response->successful()){
+             //     return response()->json(['success'=> $response->json()]);
+             // }else{
+             //     return response()->json(['failed'=> $response->json()]);
+             // } 
+        }elseif($validated !== 'success'){
+            return 'tidak';
+         //    return $validated;
+        }
+ 
+         
+    }
+
+    public function delete($params){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $response = Http::withToken($token)->delete($url."/skp/delete/".$params);
+        return $response;
     }
 }

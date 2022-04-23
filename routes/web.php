@@ -50,6 +50,8 @@ Route::middleware('Auth')->group(function(){
         Route::get('/skp/tambah', [SkpController::class, 'create'])->name('tambah-skp');
         Route::post('/skp/store', [SkpController::class, 'store'])->name('store-skp');
         Route::get('/skp/edit/{params}', [SkpController::class, 'edit'])->name('edit-skp');
+        Route::post('/skp/update/{params}', [SkpController::class, 'update'])->name('update-skp');
+        Route::delete('/skp/delete/{params}', [SkpController::class, 'delete'])->name('delete-skp');
     });
     
     

@@ -43,19 +43,25 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $inc_letter = 'A';
+                                $no = 0;
+                            @endphp
                             @foreach($data['data'] as $key => $value)
                                 <tr style="background:#f2f2f2">
-                                    <td></td>
+                                    <td>{{$inc_letter++}}.</td>
                                     <td colspan="6">{{$value['atasan']['rencana_kerja']}}</td>  
                                 <tr>
 
                                 @foreach($value['skp_child'] as $k => $v)
                                     @foreach($v['aspek_skp'] as $i => $l)
                                     <tr>
-                                        <td>-</td>
+                                      
                                         @if($i == 0)
+                                        <td>{{$no+1}}.</td>
                                         <td>{{$v['rencana_kerja']}}</td>
                                         @else
+                                        <td></td>
                                         <td></td>
                                         @endif
                                         <td>{{$l['aspek_skp']}}</td>
@@ -71,14 +77,16 @@
                                         @if($i == 0)
                                         <td nowrap="nowrap">
                                             <a role="button" href="{{url('/skp/edit/'.$v['id'])}}" class="btn btn-success btn-sm">Ubah</a>
-                                            <button type="button" class="btn btn-danger btn-sm">Hapus</button>
+                                            <button onclick="deleteRow('{{$v["id"]}}')" type="button" class="btn btn-danger btn-sm">Hapus</button>
                                         </td>
                                         @else
                                         <td></td>
                                         @endif
                                     </tr>
                                     @endforeach
-                                
+                                @php
+                                            $no++;
+                                @endphp
                                 @endforeach
                             @endforeach    
                         </tbody>
@@ -108,7 +116,40 @@
                 pageLength: 25,
                 ordering:false,
             });
+
+            
+            
         })
+
+        function deleteRow(params) {
+            Swal.fire({
+            title: 'Apakah kamu yakin akan menghapus data ini ?',
+            text: "Data akan di hapus permanen",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url  : '/skp/delete/'+ params,
+                        type : 'POST',
+                        data : {
+                            '_method' : 'DELETE',
+                            '_token' : $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (response) {
+                            Swal.fire('Deleted!', 'Your file has been deleted.','success')
+                            setTimeout(function () {
+                                window.location.href = '/skp';
+                            }, 1500); 
+                            
+                        }
+                    })
+                }
+            })
+        }
         // var KTDatatablesAdvancedRowGrouping = function() {
 
         //     var init = function() {
