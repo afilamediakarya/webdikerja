@@ -201,11 +201,30 @@
             e.preventDefault();
             var key = $(this).data('id');
             AxiosCall.delete(`admin/master/faq/${key}`);
+          
         })
         
         $(document).on('click', '.button-update', function(){
             var key = $(this).data('id');
-            AxiosCall.show(`admin/master/faq/${key}`);
+            // AxiosCall.show(`admin/master/faq/${key}`);
+            Panel.action('show','update');
+            $.ajax({
+                    url:"admin/master/faq/"+key,
+                    method:"GET",
+                    success: function(data){
+                        console.log(data);
+                      if(data.success){
+                        console.log(data.success);
+                        var res = data.success.data;
+                        $.each(res, function( key, value ) {
+                            console.log(key+' - '+value)
+                            $("textarea[name='"+key+"']").val(value);
+                            $("select[name='"+key+"']").val(value);
+                            $("input[name='"+key+"']").val(value);
+                        });
+                      }
+                    }
+                });
         })
             
             

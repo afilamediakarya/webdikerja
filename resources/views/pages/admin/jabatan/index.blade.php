@@ -35,7 +35,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Jabatan</th>
-                                <th>Nama Struktur</th>
+                                <th>Nama Pegawai</th>
                                 <th>Level</th>
                                 <th>Satuan Kerja</th>
                                 <th>Aksi</th>
@@ -93,7 +93,7 @@
                     <div class="form-group">
                         <label>Pegawai</label>
                         <select class="form-control form-control-solid" type="text" name="id_pegawai" id="pegawai">
-                            <option value="">Pilih Pegawai</option>
+                            <option selected disabled>Pilih Pegawai</option>
                             @foreach($pegawai as $item)
                                 <option value="{{$item['id']}}">{{$item['value']}}</option>
                             @endforeach
@@ -172,7 +172,7 @@
                     },{
                         data:'nama_jabatan'
                     },{
-                        data:'nama_struktur'
+                        data:null
                     },{
                         data:'level'
                     },{
@@ -182,6 +182,19 @@
                     }
                 ],
                 columnDefs: [
+                    {
+                        targets: 2,
+                        title: 'Nama Pegawai',
+                        orderable: false,
+                        render: function(data, type, full, meta) {
+                           if (data.pegawai != null) {
+                                 return data.pegawai['nama'];
+                           }else{
+                                return '-';
+                           }
+                           
+                        },
+                    },
                     {
                         targets: -1,
                         title: 'Actions',
@@ -287,8 +300,18 @@
                         console.log(data.success);
                         var res = data.success.data;
                         $.each(res, function( key, value ) {
-                            $("input[name='"+key+"']").val(value);
-                            $("select[name='"+key+"']").val(value);
+                            // console.log(key+ '_' +value);
+                            if(key == 'pegawai'){
+                                // $("select[name='"+key+"']").val(value.id);
+                                // $("#pegawai").select2(value.id).trigger('change');
+                                
+                                $('#pegawai').select2('data', {id: value.id, text: value.nama});
+                                $("#pegawai").trigger('change');
+                            }else{
+                                $("input[name='"+key+"']").val(value);
+                                $("select[name='"+key+"']").val(value);
+                            }
+                            
                         });
                       }
                     }
