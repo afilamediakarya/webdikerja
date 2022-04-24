@@ -283,6 +283,29 @@
                 })
             }
         });
+
+        $(document).on('submit', '#createForm', (e) => {
+            e.preventDefault();
+            // let formdata = new formData("#createForm")
+            // console.log(formdata);
+            // return;
+            const base_api = "{{env('API_URL')}}";
+            const token = "{{Session::get('access_token')}}" 
+            const Config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            let id = "{{Session::get('user_detalis.id')}}";
+            axios.post(`${base_api}/pegawai/update/${id}`, $("#createForm").serialize() ,config )
+            .then(res=>{
+                console.log(res);
+            })
+            .catch(err=>{
+                console.log(err);
+            });
+        })
+
         jQuery(document).ready(function() {
             $('#tmt_peg, #tmt_jab, #tmt_gol, #tgl_lahir').datepicker({format: 'yyyy-mm-dd'});
         });
