@@ -73,7 +73,7 @@
                 <form class="form" id="createForm" enctype="multipart/form-data">
                     <input type="hidden" name="id">
                     @csrf
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for=""> Satuan Kerja</label>
                         <div class="input-group">
                             <select name="id_satuan_kerja" class="form-control">
@@ -82,7 +82,7 @@
                             </select>
                         </div>
                         <div class="invalid-feedback"></div>
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <label>Nama Kegiatan</label>
                         <input class="form-control" type="text" name="nama_kegiatan"/>
@@ -93,7 +93,8 @@
                         <input class="form-control" type="text" name="kode_kegiatan"/>
                         <div class="invalid-feedback"></div>
                     </div>
-                    <div class="form-group">
+                    <input type="hidden" name="tahun" value="2022">
+                    <!-- <div class="form-group">
                         <label>Tahun</label>
                         <div class="input-group input-group-solid">
                             <select name="tahun" class="form-control form-control-solid">
@@ -103,7 +104,7 @@
                             </select>
                         </div>
                         <div class="invalid-feedback"></div>
-                    </div>
+                    </div> -->
                     <div class="separator separator-dashed mt-8 mb-5"></div>
                     <div class="">
                         <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
@@ -143,7 +144,7 @@
                     },{
                         data:'nama_kegiatan'
                     },{
-                        data:'tahun'
+                        data:'kode_kegiatan'
                     },{
                         data:'id',
                     }
