@@ -58,7 +58,7 @@
         <div id="side_form" class="offcanvas offcanvas-right p-10">
 			<!--begin::Header-->
 			<div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
-				<h3 class="font-weight-bold m-0">Tambah Satuan Kerja<h3>
+				<h3 class="font-weight-bold m-0" id="title">Tambah Satuan<h3>
 				<a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="side_form_close">
 					<i class="ki ki-close icon-xs text-muted"></i>
 				</a>
@@ -82,15 +82,15 @@
                     <div class="form-group">
                         <label>Status Satuan</label>
                         <select class="form-control form-control-solid" type="text" name="status">
-                            <option value="Aktif">Aktif</option>
-                            <option value="Tidak aktif">Tidak Aktif</option>
+                            <option value="active">Aktif</option>
+                            <option value="inactive">Tidak Aktif</option>
                         </select>
                     </div>
 
                     <div class="separator separator-dashed mt-8 mb-5"></div>
                     <div class="">
                         <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
-                        <button type="subbmit" class="btn btn-primary">Simpan</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
 
@@ -149,8 +149,8 @@
                         targets: 3,
                         render: function(data, type, full, meta) {
                             var status = {
-                                'Tidak aktif': {'title': 'tidak aktif', 'class': ' label-light-danger text-capitalize'},
-                                'Aktif': {'title': 'aktif', 'class': ' label-light-primary text-capitalize'},
+                                'Tidak aktif': {'title': 'inactive', 'class': ' label-light-danger text-capitalize'},
+                                'Aktif': {'title': 'active', 'class': ' label-light-primary text-capitalize'},
                             };
                             if (typeof status[data] === 'undefined') {
                                 return data;
@@ -193,13 +193,15 @@
 
             $(document).on('submit', '#createForm', function(e){
                 e.preventDefault();
-                var type = $(this).data('type');
+                var type = $(this).attr('data-type');
                 var _url = '';
                 var _id = $("input[name='id']").val();
                 if(type == 'submit'){
+                    console.log('ini tambah '+type)
                     _url = "{{route('post-satuan')}}";
                 }else{
-                    _url = "admin/master/satuan/"+_id
+                    console.log('ini update '+type)
+                    _url = "admin/master/satuan/"+_id;
                 }
 
                 $.ajax({
@@ -247,6 +249,7 @@
             // edit
             $(document).on('click', '.button-update', function(){
                 Panel.action('show','update');
+                // $('#title').html('Update Satuan');   
                 var key = $(this).data('id');
                 $.ajax({
                     url:"admin/master/satuan/"+key,

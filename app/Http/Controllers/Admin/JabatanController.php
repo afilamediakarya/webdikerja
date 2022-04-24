@@ -154,6 +154,7 @@ class JabatanController extends Controller
 
     public function store_kelas(Request $request)
     {
+        // return 'tambah';
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         $data = $request->all();
@@ -195,6 +196,7 @@ class JabatanController extends Controller
 
     public function update_kelas(Request $request, $id)
     {
+        // return 'update';
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         $data = $request->all();

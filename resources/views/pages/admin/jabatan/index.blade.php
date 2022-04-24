@@ -35,7 +35,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Jabatan</th>
-                                <th>Nama Struktur</th>
+                                <th>Nama Pegawai</th>
                                 <th>Level</th>
                                 <th>Satuan Kerja</th>
                                 <th>Aksi</th>
@@ -93,7 +93,7 @@
                     <div class="form-group">
                         <label>Pegawai</label>
                         <select class="form-control form-control-solid" type="text" name="id_pegawai" id="pegawai">
-                            <option value="">Pilih Pegawai</option>
+                            <option selected disabled>Pilih Pegawai</option>
                             @foreach($pegawai as $item)
                                 <option value="{{$item['id']}}">{{$item['value']}}</option>
                             @endforeach
@@ -115,6 +115,7 @@
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
+                            <option value="4">4</option>
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
@@ -172,7 +173,7 @@
                     },{
                         data:'nama_jabatan'
                     },{
-                        data:'nama_struktur'
+                        data:null
                     },{
                         data:'level'
                     },{
@@ -182,6 +183,19 @@
                     }
                 ],
                 columnDefs: [
+                    {
+                        targets: 2,
+                        title: 'Nama Pegawai',
+                        orderable: false,
+                        render: function(data, type, full, meta) {
+                           if (data.pegawai != null) {
+                                 return data.pegawai['nama'];
+                           }else{
+                                return '-';
+                           }
+                           
+                        },
+                    },
                     {
                         targets: -1,
                         title: 'Actions',
@@ -231,6 +245,40 @@
             var key = $(this).data('id');
             AxiosCall.delete(`admin/jabatan/jabatan/${key}`);
         })
+
+        // function levelChange() {
+        //     alert('sdsdf')
+        //     if ($("select[name='id_satuan_kerja']").val() == '') {
+        //         swal.fire({
+        //             text: "Pilih Satuan Kerja Terlebih Dahulu",
+        //             icon: "warning",
+        //             showConfirmButton:true,
+        //         })
+        //     }
+        //     let satuan_kerja = $("select[name='id_satuan_kerja']").val();
+        //     let level = $(this).val();
+        //     if (level != 1) {
+        //         axios.get(`admin/axios/atasan-jabatan/${level}/${satuan_kerja}`)
+        //         .then(function(res){
+        //             if (res.data.success && res.data.success != '') {
+        //                 var data = res.data.success;
+        //                 var opt = '';
+        //                 $.each(data, function(i, val){
+        //                     console.log(val.id);
+        //                     opt += '<option value="'+ val.id +'">'+ val.value +'</option>';
+        //                 });
+        //                 console.log(opt);
+        //                 $("select[name='parent_id']").html(opt);
+        //             }
+        //         }).catch(function(err){
+        //             console.log(err);
+        //         })
+        //     }else{
+        //         $("select[name='parent_id']").html('');
+        //     }
+        // }
+
+
 
         $(document).on('change', "select[name='level']", function(){
             if ($("select[name='id_satuan_kerja']").val() == '') {
@@ -287,8 +335,18 @@
                         console.log(data.success);
                         var res = data.success.data;
                         $.each(res, function( key, value ) {
-                            $("input[name='"+key+"']").val(value);
-                            $("select[name='"+key+"']").val(value);
+                            // console.log(key+ '_' +value);
+                            if(key == 'pegawai'){
+                                // $("select[name='"+key+"']").val(value.id);
+                                // $("#pegawai").select2(value.id).trigger('change');
+                                
+                                $('#pegawai').select2('data', {id: value.id, text: value.nama});
+                                $("#pegawai").trigger('change');
+                            }else{
+                                $("input[name='"+key+"']").val(value);
+                                $("select[name='"+key+"']").val(value);
+                            }
+                            
                         });
                       }
                     }

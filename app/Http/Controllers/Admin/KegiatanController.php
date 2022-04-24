@@ -34,6 +34,7 @@ class KegiatanController extends Controller
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         $data =$request->all();
+        $data['id_satuan_kerja'] = session()->get('user')['current']['pegawai']['id_satuan_kerja'];
         $response = Http::withToken($token)->post($url."/kegiatan/store", $data);
         if($response->successful()){
             $data = $response->object();
@@ -64,7 +65,9 @@ class KegiatanController extends Controller
     {
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
-        $response = Http::withToken($token)->post($url."/kegiatan/update/".$id, $request->all());
+        $data = $request->all();
+        $data['id_satuan_kerja'] = session()->get('user')['current']['pegawai']['id_satuan_kerja'];
+        $response = Http::withToken($token)->post($url."/kegiatan/update/".$id, $data);
         if($response->successful()){
             $data = $response->object();
             if (isset($data->status)) {

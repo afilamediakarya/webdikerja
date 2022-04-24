@@ -11,6 +11,7 @@
         {{-- Meta Data --}}
         <meta name="description" content="@yield('page_description', $page_description ?? '')"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<!--begin::Fonts-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 		<!--end::Fonts-->
@@ -190,6 +191,7 @@
 		<script src="{{asset('js/scripts.bundle.js')}}"></script>
 		<script src="{{asset('js/panel.js')}}"></script>
 		<script src="{{asset('js/AxiosCall.js')}}"></script>
+		<script src="{{ asset('js/pages/crud/forms/widgets/bootstrap-daterangepicker.js') }}"></script>
 		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 		<!--end::Global Theme Bundle-->
 		@if(Session::has('auth'))

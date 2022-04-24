@@ -31,38 +31,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @for ($i=1; $i<=15; $i++)
-                            <tr>
-                                <td>1</td>
-                                <td>Andi Puang Petta</td>
-                                <td>198609262015051001</td>
-                                <td>Kepala Dinas</td>
-                                <td>2</td>
-                                <td nowrap="nowrap">
-                                    <a href="{{route('tambah-penilaian', ['type' => $type, 'id'=> 192])}}" type="button" class="btn btn-primary">Review SKP</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Andi Petta Baji</td>
-                                <td>198609262015051001</td>
-                                <td>Kepala Dinas</td>
-                                <td>3</td>
-                                <td nowrap="nowrap">
-                                    <a href="{{route('tambah-penilaian', ['type' => $type, 'id'=> 192])}}" type="button" class="btn btn-primary">Review SKP</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Andi Puang Petta Baji</td>
-                                <td>198609262015051001</td>
-                                <td>Kepala Dinas</td>
-                                <td>1</td>
-                                <td nowrap="nowrap">
-                                    <a href="{{route('tambah-penilaian', ['type' => $type, 'id'=> 192])}}" type="button" class="btn btn-primary">Review SKP</a>
-                                </td>
-                            </tr>
-                            @endfor
+                            
                         </tbody>
                     </table>
                     <!--end: Datatable-->
@@ -80,114 +49,83 @@
 @section('script')
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
-        "use strict";
-        var KTDatatablesAdvancedRowGrouping = function() {
+          "use strict";
+        let type = {!! json_encode($type) !!};  
+        var dataRow = function() {
 
-            var init = function() {
-                var table = $('#kt_datatable');
+        var init = function() {
+            var table = $('#kt_datatable');
 
-                // begin first table
-                table.DataTable({
-                    responsive: true,
-                    pageLength: 15,
-                    // ordering:false,
-                    // rowGroup: {
-                    //     dataSrc: [ 2, 1 ]
-                    // },
-                    order: [[1, 'asc']],
-                    drawCallback: function(settings) {
-                        var api = this.api();
-                        var rows = api.rows({page: 'current'}).nodes();
-                        var last = null;
-
-                        api.column(1, {page: 'current'}).data().each(function(group, i) {
-                            if (last !== group) {
-                                $(rows).eq(i).before(
-                                    '<tr class="bg-white"><td colspan="6">' + group + '</td></tr>',
-                                );
-                                last = group;
-                            }
-                        });
-                    },
-                    columnDefs: [
-                        // {
-                        //     // hide columns by index number
-                        //     targets: [1, 2],
-                        //     visible: false,
-                        // },
-                        // {
-                        //     targets: -1,
-                        //     title: 'Actions',
-                        //     orderable: false,
-                        //     render: function(data, type, full, meta) {
-                        //         return '\
-                        //             <div class="dropdown dropdown-inline">\
-                        //                 <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
-                        //                     <i class="la la-cog"></i>\
-                        //                 </a>\
-                        //                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
-                        //                     <ul class="nav nav-hoverable flex-column">\
-                        //                         <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Edit Details</span></a></li>\
-                        //                         <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-leaf"></i><span class="nav-text">Update Status</span></a></li>\
-                        //                         <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-print"></i><span class="nav-text">Print</span></a></li>\
-                        //                     </ul>\
-                        //                 </div>\
-                        //             </div>\
-                        //             <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
-                        //                 Ubah\
-                        //             </a>\
-                        //             <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Delete">\
-                        //                 Hapus\
-                        //             </a>\
-                        //         ';
-                        //     },
-                        // },
-                        {
-                            targets: 4,
-                            render: function(data, type, full, meta) {
-                                var status = {
-                                    1: {'title': 'Belum Review', 'class': ' label-light-warning'},
-                                    2: {'title': 'Belum Selesai', 'class': ' label-light-danger'},
-                                    3: {'title': 'Selesai', 'class': ' label-light-success'},
-                                };
-                                if (typeof status[data] === 'undefined') {
-                                    return data;
-                                }
-                                return '<span class="label label-lg font-weight-bold' + status[data].class + ' label-inline">' + status[data].title + '</span>';
-                            },
+            // begin first table
+            table.DataTable({
+                responsive: true,
+                pageLength: 10,
+                order: [[0, 'asc']],
+                processing:true,
+                ajax: "/get_data/penilaian/"+type,
+                columns:[{ 
+                        data : null, 
+                        render: function (data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                        }  
+                    },{
+                        data:'nama'
+                    },{
+                        data:'nip'
+                    },{
+                        data:'jabatan'
+                    },{
+                        data:'status',
+                    },{
+                        data:'id_skp',
+                    }
+                ],
+                columnDefs: [
+                    {
+                        targets: -1,
+                        title: 'Actions',
+                        orderable: false,
+                        render: function(data) {
+                            return `
+                                <a href="/penilaian/${type}/${data}" role="button" class="btn btn-primary">Review Skp</a>\
+                            `;
                         },
-                        // {
-                        //     targets: 9,
-                        //     render: function(data, type, full, meta) {
-                        //         var status = {
-                        //             1: {'title': 'Online', 'state': 'danger'},
-                        //             2: {'title': 'Retail', 'state': 'primary'},
-                        //             3: {'title': 'Direct', 'state': 'success'},
-                        //         };
-                        //         if (typeof status[data] === 'undefined') {
-                        //             return data;
-                        //         }
-                        //         return '<span class="label label-' + status[data].state + ' label-dot mr-2"></span>' +
-                        //             '<span class="font-weight-bold text-' + status[data].state + '">' + status[data].title + '</span>';
-                        //     },
-                        // },
-                    ],
-                });
-            };
+                    }, {
+                        targets: 4,
+                        title: 'Status',
+                        orderable: false,
+                        render: function(data) {
+                            if (data == 'Belum Review') {
+                                return `<a href="javascript:;" class="btn btn-light-warning btn-sm">${data}</a>`;
+                            }else{
+                                return `<a href="javascript:;" class="btn btn-light-success btn-sm">${data}</a>`;
+                            }
+                        },
+                    }
+                ],
+            });
+        };
 
-            return {
+        var destroy = function(){
+            var table = $('#kt_datatable').DataTable();
+            table.destroy();
+        }
 
-                //main function to initiate the module
-                init: function() {
-                    init();
-                },
+        return {
+            init: function() {
+                init();
+            },
+            destroy:function(){
+                destroy();
+            }
 
-            };
+        };
 
         }();
 
         jQuery(document).ready(function() {
-            KTDatatablesAdvancedRowGrouping.init();
+            dataRow.init();
+            // KTDatatablesAdvancedRowGrouping.init();
         });
 
     </script>
