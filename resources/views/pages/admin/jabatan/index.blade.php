@@ -111,10 +111,11 @@
                     </div>
                     <div class="form-group">
                         <label>Level</label>
-                        <select class="form-control form-control-solid" type="text" name="level">
+                        <select class="form-control form-control-solid" onclick="levelChange()" type="text" name="level">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
+                            <option value="4">4</option>
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
@@ -245,7 +246,8 @@
             AxiosCall.delete(`admin/jabatan/jabatan/${key}`);
         })
 
-        $(document).on('change', "select[name='level']", function(){
+        function levelChange() {
+            alert('sdsdf')
             if ($("select[name='id_satuan_kerja']").val() == '') {
                 swal.fire({
                     text: "Pilih Satuan Kerja Terlebih Dahulu",
@@ -274,7 +276,40 @@
             }else{
                 $("select[name='parent_id']").html('');
             }
-        })
+        }
+
+
+
+        // $(document).on('change', "select[name='level']", function(){
+        //     if ($("select[name='id_satuan_kerja']").val() == '') {
+        //         swal.fire({
+        //             text: "Pilih Satuan Kerja Terlebih Dahulu",
+        //             icon: "warning",
+        //             showConfirmButton:true,
+        //         })
+        //     }
+        //     let satuan_kerja = $("select[name='id_satuan_kerja']").val();
+        //     let level = $(this).val();
+        //     if (level != 1) {
+        //         axios.get(`admin/axios/atasan-jabatan/${level}/${satuan_kerja}`)
+        //         .then(function(res){
+        //             if (res.data.success && res.data.success != '') {
+        //                 var data = res.data.success;
+        //                 var opt = '';
+        //                 $.each(data, function(i, val){
+        //                     console.log(val.id);
+        //                     opt += '<option value="'+ val.id +'">'+ val.value +'</option>';
+        //                 });
+        //                 console.log(opt);
+        //                 $("select[name='parent_id']").html(opt);
+        //             }
+        //         }).catch(function(err){
+        //             console.log(err);
+        //         })
+        //     }else{
+        //         $("select[name='parent_id']").html('');
+        //     }
+        // })
 
         jQuery(document).ready(function() {
             Panel.init('side_form');
