@@ -77,7 +77,7 @@
                     },{
                         data:'status',
                     },{
-                        data:'id',
+                        data:'id_skp',
                     }
                 ],
                 columnDefs: [
@@ -89,6 +89,13 @@
                             return `
                                 <a href="/penilaian/${type}/${data}" role="button" class="btn btn-primary">Review Skp</a>\
                             `;
+                        },
+                    }, {
+                        targets: 4,
+                        title: 'Status',
+                        orderable: false,
+                        render: function(data, type, full, meta) {
+                            return ``;
                         },
                     }
                 ],

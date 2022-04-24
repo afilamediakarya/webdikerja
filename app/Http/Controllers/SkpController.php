@@ -38,13 +38,15 @@ class SkpController extends Controller
         $url = env('API_URL');
         $token = session()->get('user.access_token');
         $data = Http::withToken($token)->get($url."/skp/get-option-sasaran-kinerja");
-        return $data->json();
+        // return $data->json();
+        return $data['data'];
     }
 
     public function getSatuan(){
         $url = env('API_URL');
         $token = session()->get('user.access_token');
         $data = Http::withToken($token)->get($url."/skp/get-option-satuan");
+
         return $data->json();
     }
 
@@ -53,6 +55,7 @@ class SkpController extends Controller
         $page_description = 'Daftar Sasaran Kinerja Pegawai';
         $breadcumb = ['Daftar Sasaran Kinerja Pegawai', 'tambah skp'];
         $sasaran_kinerja_atasan = $this->getSasaranKinerjaAtasan(); 
+        // return $this->getSasaranKinerjaAtasan();
         $satuan = $this->getSatuan();
 
         return view('pages.skp.add', compact('page_title', 'page_description','breadcumb','sasaran_kinerja_atasan','satuan'));
