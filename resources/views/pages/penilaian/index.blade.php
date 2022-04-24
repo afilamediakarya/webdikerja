@@ -85,7 +85,7 @@
                         targets: -1,
                         title: 'Actions',
                         orderable: false,
-                        render: function(data, type, full, meta) {
+                        render: function(data) {
                             return `
                                 <a href="/penilaian/${type}/${data}" role="button" class="btn btn-primary">Review Skp</a>\
                             `;
@@ -94,8 +94,12 @@
                         targets: 4,
                         title: 'Status',
                         orderable: false,
-                        render: function(data, type, full, meta) {
-                            return ``;
+                        render: function(data) {
+                            if (data == 'Belum Review') {
+                                return `<a href="javascript:;" class="btn btn-light-warning btn-sm">${data}</a>`;
+                            }else{
+                                return `<a href="javascript:;" class="btn btn-light-success btn-sm">${data}</a>`;
+                            }
                         },
                     }
                 ],
