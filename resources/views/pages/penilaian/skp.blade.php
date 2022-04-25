@@ -30,6 +30,8 @@
                 
                 <div class="card-body">
                     <!--begin: Datatable-->
+                    <form id="review_skp">
+
                     <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
@@ -75,21 +77,22 @@
                                             <td>{{$num}}</td>
                                             <td>{{$l['satuan']}}</td>
                                             @if($i == 0)
+                                            <input type="hidden" value="{{$v['id']}}" name="id_skp[{{$key}}]" />
                                             <td rowspan="3">
                                                         <div class="form-group">
                                                             <label>Kesesuaian Skp</label>
                                                             <div class="radio-inline">
                                                                 <label class="radio">
-                                                                <input type="radio" value="ya" name="kesesuaian[{{$key}}]" />
+                                                                <input type="radio" @if($v['review_skp']['kesesuaian'] == 'ya') checked @endif value="ya" name="kesesuaian[{{$key}}]" />
                                                                 <span></span>Sesuai</label>
                                                                 <label class="radio">
-                                                                <input type="radio" value="tidak" name="kesesuaian[{{$key}}]" />
+                                                                <input type="radio" @if($v['review_skp']['kesesuaian'] == 'tidak') checked @endif value="tidak" name="kesesuaian[{{$key}}]" />
                                                                 <span></span>Tidak</label>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="keterangan">Keterangan</label>
-                                                            <textarea name="keterangan[{{$key}}]" class="form-control form-control-solid" id="keterangan"  rows="5"></textarea>
+                                                            <textarea name="keterangan[{{$key}}]" class="form-control form-control-solid" id="keterangan"  rows="5">{{$v['review_skp']['keterangan']}}</textarea>
                                                         </div>
                                             </td>
                                             @else
@@ -104,12 +107,14 @@
                                 @endforeach    
                             </tbody>
                     </table>
+
+                    </form>
                     <!--end: Datatable-->
                 </div>
 
                 <div class="card-footer border-0">
                     <button type="reset" class="btn btn-outline-primary mr-2">Batal</button>
-                    <button type="reset" class="btn btn-primary">Simpan</button>
+                    <button id="submit_review_skp" type="button" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
             <!--end::Card-->
@@ -124,141 +129,41 @@
 @section('script')
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
-        "use strict";
-        var KTDatatablesAdvancedRowGrouping = function() {
-
-            var init = function() {
-                var table = $('#kt_datatable');
-
-                // begin first table
-                table.DataTable({
-                    responsive: true,
-                    pageLength: 25,
-                    ordering:false,
-                    // rowGroup: {
-                    //     dataSrc: [ 2, 1 ]
-                    // },
-                    // order: [[2, 'asc']],
-                    drawCallback: function(settings) {
-                        var api = this.api();
-                        var rows = api.rows({page: 'current'}).nodes();
-                        var last = null;
-
-                        api.column(1, {page: 'current'}).data().each(function(group, i) {
-                            if (last !== group) {
-                                $(rows).eq(i).before(
-                                    '<tr class="bg-white"><td>A</td><td colspan="7">' + group + '</td></tr>',
-                                );
-                                last = group;
-                            }
-                        });
-                        api.column(2, {page: 'current'}).data().each(function(group, i) {
-                            if (last !== group) {
-                                $(rows).eq(i).before(
-                                    '<tr class="bg-secondary"><td>A.1</td> <td colspan="7">' + group + '</td></tr>',
-                                );
-                                last = group;
-                            }
-                        });
-                        api.column(3, {page: 'current'}).data().each(function(group, i) {
-                            if (last !== group) {
-                                    $(rows).eq(i).children('td:eq(1)').addClass('align-baseline').attr('rowspan', '3')
-                                    $(rows).eq(i).children('td:eq(0)').attr('rowspan', '3')
-                                    $(rows).eq(i).children('td:last-child').attr('rowspan', '3')
-                                last = group;
-                            }else{
-                                $(rows).eq(i).children('td:eq(1)').remove()
-                                $(rows).eq(i).children('td:eq(0)').remove()
-                                $(rows).eq(i).children('td:last-child').remove()
-
-                            }
-                        });
-                    },
-                    columnDefs: [
-                        {
-                            // hide columns by index number
-                            targets: [1, 2],
-                            visible: false,
-                        },
-                        {
-                            targets: -1,
-                            title: 'Actions',
-                            orderable: false,
-                            render: function(data, type, full, meta) {
-                                return '\
-                                <div class="form">\
-                                    <div class="form-group">\
-                                        <label>Inline radios</label>\
-                                        <div class="radio-inline">\
-                                            <label class="radio">\
-                                            <input type="radio" name="radios2" />\
-                                            <span></span>Sesuai</label>\
-                                            <label class="radio">\
-                                            <input type="radio" name="radios2" />\
-                                            <span></span>Tidak</label>\
-                                        </div>\
-                                        <span class="form-text text-danger">Error Alert</span>\
-                                    </div>\
-                                    <div class="form-group">\
-                                        <label for="exampleTextarea">Rencana Kerja \
-                                        <span class="text-danger">*</span></label>\
-                                        <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>\
-                                    </div>\
-                                </div>\
-                                ';
-                            },
-                        },
-                        // {
-                        //     targets: 8,
-                        //     render: function(data, type, full, meta) {
-                        //         var status = {
-                        //             1: {'title': 'Pending', 'class': 'label-light-primary'},
-                        //             2: {'title': 'Delivered', 'class': ' label-light-danger'},
-                        //             3: {'title': 'Canceled', 'class': ' label-light-primary'},
-                        //             4: {'title': 'Success', 'class': ' label-light-success'},
-                        //             5: {'title': 'Info', 'class': ' label-light-info'},
-                        //             6: {'title': 'Danger', 'class': ' label-light-danger'},
-                        //             7: {'title': 'Warning', 'class': ' label-light-warning'},
-                        //         };
-                        //         if (typeof status[data] === 'undefined') {
-                        //             return data;
-                        //         }
-                        //         return '<span class="label label-lg font-weight-bold' + status[data].class + ' label-inline">' + status[data].title + '</span>';
-                        //     },
-                        // },
-                        // {
-                        //     targets: 9,
-                        //     render: function(data, type, full, meta) {
-                        //         var status = {
-                        //             1: {'title': 'Online', 'state': 'danger'},
-                        //             2: {'title': 'Retail', 'state': 'primary'},
-                        //             3: {'title': 'Direct', 'state': 'success'},
-                        //         };
-                        //         if (typeof status[data] === 'undefined') {
-                        //             return data;
-                        //         }
-                        //         return '<span class="label label-' + status[data].state + ' label-dot mr-2"></span>' +
-                        //             '<span class="font-weight-bold text-' + status[data].state + '">' + status[data].title + '</span>';
-                        //     },
-                        // },
-                    ],
-                });
-            };
-
-            return {
-
-                //main function to initiate the module
-                init: function() {
-                    init();
+       $(function(){
+        $('#submit_review_skp').on("click", function () {
+              
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
                 },
+            });
 
-            };
+            $.ajax({
+                type: "POST",
+                url: "/review_skp",
+                data: $('#review_skp').serialize(),
+                success: function (response) {
+                    console.log(response);
+                    swal.fire({
+                        text: "Skp berhasil di Review.",
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn font-weight-bold btn-light-primary"
+                        }
+                    }).then(function() {
+                        window.location.href = '/penilaian/skp';
+                    });
+                },
+                error : function (xhr) {
+                 
+                }
+            });
+                
+       })
 
-        }();
-
-        jQuery(document).ready(function() {
-            KTDatatablesAdvancedRowGrouping.init();
-        });
+    })
 
     </script>
 @endsection

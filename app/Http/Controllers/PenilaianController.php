@@ -42,6 +42,15 @@ class PenilaianController extends Controller
         $page_description = 'Daftar Pegawai yang dinilai';
         $breadcumb = ['Daftar Pegawai yang dinilai', 'tambah Realisasi'];
         $skp = $this->getSkpPegawai($id);
+        // return $skp;
         return view('pages.penilaian.'.$type, compact('page_title', 'page_description','breadcumb','skp'));
+    }
+
+    public function postReviewSkp(Request $request){
+        $data = $request->all();
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+        $response = Http::withToken($token)->post($url."/review_skp/store/", $data);
+        return $response;
     }
 }
