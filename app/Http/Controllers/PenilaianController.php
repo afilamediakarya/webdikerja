@@ -18,9 +18,11 @@ class PenilaianController extends Controller
     }
 
     public function getData($type){
+        $result = [];
         $url = env('API_URL');
         $token = session()->get('user.access_token');
         $response = Http::withToken($token)->get($url."/review_skp/list");
+   
         if ($response->successful()) {
             $data = $response->json();
             return $data;
@@ -48,6 +50,7 @@ class PenilaianController extends Controller
 
     public function postReviewSkp(Request $request){
         $data = $request->all();
+        // return $data;
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         $response = Http::withToken($token)->post($url."/review_skp/store/", $data);

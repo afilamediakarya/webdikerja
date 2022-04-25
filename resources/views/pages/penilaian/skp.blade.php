@@ -77,23 +77,24 @@
                                             <td>{{$num}}</td>
                                             <td>{{$l['satuan']}}</td>
                                             @if($i == 0)
-                                            <input type="hidden" value="{{$v['id']}}" name="id_skp[{{$key}}]" />
+                                            <input type="hidden" value="{{$v['id']}}" name="id_skp[{{$no}}]" />
                                             <td rowspan="3">
                                                         <div class="form-group">
                                                             <label>Kesesuaian Skp</label>
                                                             <div class="radio-inline">
-                                                                <label class="radio">
-                                                                <input type="radio" @if($v['review_skp']['kesesuaian'] == 'ya') checked @endif value="ya" name="kesesuaian[{{$key}}]" />
+                                                                <label for="{{$k}}_sesuai_{{$v['id']}}" class="radio {{$k}}_sesuai_{{$v['id']}}">
+                                                                <input type="radio" id="{{$k}}_sesuai_{{$v['id']}}" @if($v['review_skp']['kesesuaian'] == 'ya') checked @endif value="ya" name="kesesuaian[{{$no}}]" />
                                                                 <span></span>Sesuai</label>
-                                                                <label class="radio">
-                                                                <input type="radio" @if($v['review_skp']['kesesuaian'] == 'tidak') checked @endif value="tidak" name="kesesuaian[{{$key}}]" />
+                                                                <label for="{{$k}}_tidak_{{$v['id']}}" class="radio {{$k}}_tidak_{{$v['id']}}">
+                                                                <input type="radio" id="{{$k}}_tidak_{{$v['id']}}" @if($v['review_skp']['kesesuaian'] == 'tidak') checked @endif value="tidak" name="kesesuaian[{{$no}}]" />
                                                                 <span></span>Tidak</label>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="keterangan">Keterangan</label>
-                                                            <textarea name="keterangan[{{$key}}]" class="form-control form-control-solid" id="keterangan"  rows="5">{{$v['review_skp']['keterangan']}}</textarea>
+                                                            <textarea name="keterangan[{{$no}}]" class="form-control form-control-solid" id="keterangan"  rows="5">{{$v['review_skp']['keterangan']}}</textarea>
                                                         </div>
+                                                        
                                             </td>
                                             @else
                                             <td></td>
