@@ -57,9 +57,10 @@ class PegawaiController extends Controller
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         $data = $request->all();
-        // if ($request->tempat_lahir != null && $request->tgl_lahir != null) {
-        //     $data['tempat_tanggal_lahir'] = $request->tempat_lahir.','.$request->tgl_lahir;
-        // }
+        // return $data;
+        if ($request->tempat_lahir != null && $request->tgl_lahir != null) {
+            $data['tempat_tanggal_lahir'] = $request->tempat_lahir.','.$request->tgl_lahir;
+        }
         $filtered = array_filter(
             $data,
             function ($key){
@@ -101,7 +102,7 @@ class PegawaiController extends Controller
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         $data = $request->all();
-        $data['id_satuan_kerja'] = 1;
+        // return $data;
         // if ($request->tempat_lahir != null && $request->tgl_lahir != null) {
         //     $data['tempat_tanggal_lahir'] = $request->tempat_lahir.','.$request->tgl_lahir;
         // }
