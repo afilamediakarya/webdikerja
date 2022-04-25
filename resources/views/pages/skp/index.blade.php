@@ -46,7 +46,6 @@
                             @php
                                 $inc_letter = 'A';
                                 $no = 0;
-                             
                             @endphp
                             @foreach($data['data'] as $key => $value)
                                 <tr style="background:#f2f2f2">
@@ -68,9 +67,9 @@
                                         <td>{{$l['aspek_skp']}}</td>
                                         <td>{{$l['iki']}}</td>                                       
                                         @php
-                                        $num = 0;
+                                            $num = 0;
                                             foreach($l['target_skp'] as $f => $b){
-                                                $num += $b['target'];
+                                                $num =+ $b['target'];
                                             }
                                         @endphp
                                         <td>{{$num}}</td>
