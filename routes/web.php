@@ -72,6 +72,8 @@ Route::middleware('Auth')->group(function(){
     Route::get('/penilaian/{type}', [PenilaianController::class, 'index'])->name('penilaian');
     Route::get('/penilaian/{type}/{id}', [PenilaianController::class, 'create'])->name('tambah-penilaian');
     Route::get('/get_data/penilaian/{type}', [PenilaianController::class, 'getData'])->name('getdata_penilaian');
+    Route::get('/get_data/penilaian/{type}', [PenilaianController::class, 'getData'])->name('getdata_penilaian');
+    Route::post('/review_skp', [PenilaianController::class, 'postReviewSkp'])->name('postReviewSkp');
     
     Route::get('/aktivitas', [AktivitasController::class, 'index'])->name('aktivitas');
     Route::get('/aktivitas/show', [AktivitasController::class, 'aktivitas'])->name('get-aktivitas');

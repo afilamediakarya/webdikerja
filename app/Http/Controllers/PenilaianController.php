@@ -29,13 +29,25 @@ class PenilaianController extends Controller
         }
     }
 
+    public function getSkpPegawai($params){
+        // return $params;
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $response = Http::withToken($token)->get($url."/review_skp/skpbyId/".$params);
+        return $response['data'];
+    }
+
     public function create($type, $id){
+     
         $page_title = 'Penilaian';
         $page_description = 'Daftar Pegawai yang dinilai';
         $breadcumb = ['Daftar Pegawai yang dinilai', 'tambah Realisasi'];
+        $skp = $this->getSkpPegawai($id);
 
-        return view('pages.penilaian.'.$type, compact('page_title', 'page_description','breadcumb'));
+        return view('pages.penilaian.'.$type, compact('page_title', 'page_description','breadcumb','skp'));
+    }
 
-        
+    public function postReviewSkp(Request $request){
+        return $request->all();
     }
 }

@@ -77,7 +77,7 @@
                     },{
                         data:'status',
                     },{
-                        data:'id_skp',
+                        data:'id_pegawai',
                     }
                 ],
                 columnDefs: [
