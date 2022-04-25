@@ -33,86 +33,76 @@
                     <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                <th>No.</th>
-                                <th>Tipe Kinerja</th>
-                                <th>Tupoksi</th>
-                                <th>Rencana Kerja</th>
-                                <th>Aspek</th>
-                                <th nowrap="">Indikator Kinerja Individu</th>
-                                <th>Taget</th>
-                                <th>Satuan</th>
-                                <th>Aksi</th>
+                            <th>No.</th>
+                                    <th>Rencana Kerja</th>
+                                    <th>Aspek</th>
+                                    <th nowrap="nowrap">Indikator Kinerja Individu</th>
+                                    <th>Target</th>
+                                    <th>Satuan</th>
+                                    <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="align-baseline">A.1.1</td>
-                                <td>Kinerja Utama</td>
-                                <td>Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</td>
-                                <td class="align-baseline">Laporan fasilitasi kinerja terhadap kesesuaian NSPK  ASN di tiap instansi tersusun, reliable, tercatat lengkap dan dilaporkan</td>
-                                <td>Kuantitas</td>
-                                <td>Persentase penyelesaian laporan hasil pemantauan terkait kinerja ASN di Wilayah kerja Kantor regional IV  BKN</td>
-                                <td>30</td>
-                                <td>Data fasilitasi kinerja</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
-                            <tr>
-                                <td class="align-baseline">A.1.1</td>
-                                <td>Kinerja Utama</td>
-                                <td>Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</td>
-                                <td class="align-baseline">Laporan fasilitasi kinerja terhadap kesesuaian NSPK  ASN di tiap instansi tersusun, reliable, tercatat lengkap dan dilaporkan</td>
-                                <td>Kualitas</td>
-                                <td>Persentase penyelesaian laporan hasil pemantauan terkait kinerja ASN di Wilayah kerja Kantor regional IV  BKN</td>
-                                <td>30</td>
-                                <td>Data fasilitasi kinerja</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
-                            <tr>
-                                <td class="align-baseline">A.1.1</td>
-                                <td>Kinerja Utama</td>
-                                <td>Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</td>
-                                <td class="align-baseline">Laporan fasilitasi kinerja terhadap kesesuaian NSPK  ASN di tiap instansi tersusun, reliable, tercatat lengkap dan dilaporkan</td>
-                                <td>Waktu</td>
-                                <td>Persentase penyelesaian laporan hasil pemantauan terkait kinerja ASN di Wilayah kerja Kantor regional IV  BKN</td>
-                                <td>30</td>
-                                <td>Data fasilitasi kinerja</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
+                                @php
+                                    $inc_letter = 'A';
+                                    $no = 0;
+                                @endphp
+                                @foreach($skp as $key => $value)
+                                    <tr style="background:#f2f2f2">
+                                        <td>{{$inc_letter++}}.</td>
+                                        <td colspan="6">{{$value['atasan']['rencana_kerja']}}</td>  
+                                    <tr>
 
-                            <tr>
-                                <td class="align-baseline">A.1.2</td>
-                                <td>Kinerja Utama</td>
-                                <td>Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</td>
-                                <td class="align-baseline">fasilitasi kinerja terhadap kesesuaian NSPK  ASN di tiap instansi tersusun, reliable, tercatat lengkap dan dilaporkan</td>
-                                <td>Kuantitas</td>
-                                <td>Persentase penyelesaian laporan hasil pemantauan terkait kinerja ASN di Wilayah kerja Kantor regional IV  BKN</td>
-                                <td>30</td>
-                                <td>Data fasilitasi kinerja</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
-                            <tr>
-                                <td class="align-baseline">A.1.2</td>
-                                <td>Kinerja Utama</td>
-                                <td>Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</td>
-                                <td class="align-baseline">fasilitasi kinerja terhadap kesesuaian NSPK  ASN di tiap instansi tersusun, reliable, tercatat lengkap dan dilaporkan</td>
-                                <td>Kualitas</td>
-                                <td>Persentase penyelesaian laporan hasil pemantauan terkait kinerja ASN di Wilayah kerja Kantor regional IV  BKN</td>
-                                <td>30</td>
-                                <td>Data fasilitasi kinerja</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
-                            <tr>
-                                <td class="align-baseline">A.1.2</td>
-                                <td>Kinerja Utama</td>
-                                <td>Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</td>
-                                <td class="align-baseline">fasilitasi kinerja terhadap kesesuaian NSPK  ASN di tiap instansi tersusun, reliable, tercatat lengkap dan dilaporkan</td>
-                                <td>Waktu</td>
-                                <td>Persentase penyelesaian laporan hasil pemantauan terkait kinerja ASN di Wilayah kerja Kantor regional IV  BKN</td>
-                                <td>30</td>
-                                <td>Data fasilitasi kinerja</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
-                        </tbody>
+                                    @foreach($value['skp_child'] as $k => $v)
+                                        @foreach($v['aspek_skp'] as $i => $l)
+                                        <tr>
+                                        
+                                            @if($i == 0)
+                                            <td>{{$no+1}}.</td>
+                                            <td>{{$v['rencana_kerja']}}</td>
+                                            @else
+                                            <td></td>
+                                            <td></td>
+                                            @endif
+                                            <td>{{$l['aspek_skp']}}</td>
+                                            <td>{{$l['iki']}}</td>                                       
+                                            @php
+                                                $num = 0;
+                                                foreach($l['target_skp'] as $f => $b){
+                                                    $num =+ $b['target'];
+                                                }
+                                            @endphp
+                                            <td>{{$num}}</td>
+                                            <td>{{$l['satuan']}}</td>
+                                            @if($i == 0)
+                                            <td rowspan="3">
+                                                        <div class="form-group">
+                                                            <label>Kesesuaian Skp</label>
+                                                            <div class="radio-inline">
+                                                                <label class="radio">
+                                                                <input type="radio" value="ya" name="kesesuaian[{{$key}}]" />
+                                                                <span></span>Sesuai</label>
+                                                                <label class="radio">
+                                                                <input type="radio" value="tidak" name="kesesuaian[{{$key}}]" />
+                                                                <span></span>Tidak</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="keterangan">Keterangan</label>
+                                                            <textarea name="keterangan[{{$key}}]" class="form-control form-control-solid" id="keterangan"  rows="5"></textarea>
+                                                        </div>
+                                            </td>
+                                            @else
+                                            <td></td>
+                                            @endif
+                                        </tr>
+                                        @endforeach
+                                    @php
+                                                $no++;
+                                    @endphp
+                                    @endforeach
+                                @endforeach    
+                            </tbody>
                     </table>
                     <!--end: Datatable-->
                 </div>

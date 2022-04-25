@@ -6,6 +6,13 @@
         .ui-datepicker-calendar{
             display: none;
         }
+        #img_preview{
+            border:1px dashed #c7c7c7; 
+            width: 150px; 
+            height:150px;
+            border-radius:4px;
+            margin-bottom : 6px;
+        }
     </style>
 @endsection
 
@@ -74,16 +81,7 @@
                 <form class="form" id="createForm" enctype="multipart/form-data">
                     <input type="hidden" name="id">
                     @csrf
-                    <div class="form-group">
-                        <label for=""> Satuan Kerja</label>
-                        <div class="input-group">
-                            <select name="id_satuan_kerja" class="form-control">
-                                <option value="1">Satu</option>
-                                <option value="2">Dua</option>
-                            </select>
-                        </div>
-                        <div class="invalid-feedback"></div>
-                    </div>
+                    <input type="hidden" name="id_satuan_kerja" value="{{$satuan_kerja}}">
                     <div class="form-group">
                         <label>Judul</label>
                         <input class="form-control" type="text" name="judul"/>
@@ -96,20 +94,13 @@
                     </div>
                     <div class="form-group">
                         <label>Gambar</label>
-                        <input type="file" class="form-control" name="gambar"/>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Tahun</label>
-                        <div class="input-group input-group-solid">
-                            <select name="tahun" class="form-control form-control-solid">
-                                <option value="2001">Tahun Lama</option>
-                                <option value="2004">Tahun Dulu</option>
-                                <option value="2021">Tahun Lalu</option>
-                            </select>
+                        <div id="img_preview">
+
                         </div>
+                        <input type="file" onchange="changeFoto(this,'img_preview')" class="form-control" name="gambar"/>
                         <div class="invalid-feedback"></div>
                     </div>
+                    <input type="hidden" name="tahun" value="2022">
                     <div class="form-group">
                         <label>Status</label>
                         <div class="input-group input-group-solid">
@@ -209,7 +200,25 @@
         $(document).on('click', '.button-update', function(){
             Panel.action('show','update');
             var key = $(this).data('id');
-            AxiosCall.show(`admin/informasi/${key}`);
+            // AxiosCall.show(`admin/informasi/${key}`);
+            $.ajax({
+                    url:`admin/informasi/${key}`,
+                    method:"GET",
+                    success: function(data){
+                      if(data.success){
+                        // console.log(data.success);
+                        var res = data.success.data;
+                        console.log(res);
+                        $.each(res, function( key, value ) {
+                            $("input[name='"+key+"']").val(value);
+                            $("select[name='"+key+"']").val(value);
+                            if (key == 'gambar') {
+                                $(`#img_preview`).append('<img src="' + value +'" style="height: 100%; width: 100%;">');
+                            }
+                        });
+                      }
+                    }
+                });
         })
 
         $(document).on('submit', "#createForm[data-type='update']", function(e){
@@ -233,6 +242,32 @@
                 Panel.action('hide');
             });
         });
+
+        function changeFoto(params,area) {
+            var foto = $(params).prop('files')[0];
+            var check = 0;
+
+            var ext = ['image/jpeg', 'image/png', 'image/bmp'];
+
+            $.each(ext, function (key, val) {
+                if (foto.type == val) check = check + 1;
+            });
+
+            if (check == 1) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    // $('#text-upload').css('display', 'none');
+                    $(`#${area} img`).remove();
+                    $(`#${area}`).append('<img src="' + e.target.result +
+                        '" style="height: 100%; width: 100%;">');
+                }
+                reader.readAsDataURL(params.files[0]);
+            } else {
+                alert('Format file tidak dibolehkan, pilih file lain');
+                $(params).val('');
+                return;
+            }   
+        }
 
     </script>
 @endsection

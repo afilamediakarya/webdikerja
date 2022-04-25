@@ -15,7 +15,7 @@ class InformasiController extends Controller
         $page_title = 'Informasi';
         $page_description = 'Daftar Aktivitas';
         $breadcumb = ['Daftar Informasi'];
-
+        $satuan_kerja = session()->get('user.current.pegawai.id_satuan_kerja');
         if($request->ajax()){
             $url = env('API_URL');
             $token = $request->session()->get('user.access_token');
@@ -28,7 +28,7 @@ class InformasiController extends Controller
             }
         }
 
-        return view('pages.admin.informasi.index', compact('page_title', 'page_description','breadcumb'));
+        return view('pages.admin.informasi.index', compact('page_title', 'page_description','breadcumb','satuan_kerja'));
     }
 
     public function store(Request $request)

@@ -21,9 +21,9 @@ class PegawaiController extends Controller
             return $data;
         }
 
-        $page_title = 'Aktivitas';
-        $page_description = 'Daftar Aktivitas';
-        $breadcumb = ['Daftar Aktivitas'];
+        $page_title = 'Pegawai';
+        $page_description = 'Daftar Pegawai';
+        $breadcumb = ['Daftar Pegawai'];
         $pangkat = Http::withToken($token)->get($url."/pegawai/get-option-pangkat-golongan")->collect();
         $agama = Http::withToken($token)->get($url."/pegawai/get-option-agama")->collect();
         $status_kawin = Http::withToken($token)->get($url."/pegawai/get-option-status-kawin")->collect();
