@@ -130,8 +130,8 @@
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
         "use strict";
+        let url_ = {!! json_encode($url_img) !!};
         var dataRow = function() {
-
         var init = function() {
             var table = $('#kt_datatable');
 
@@ -210,11 +210,14 @@
                         var res = data.success.data;
                         console.log(res);
                         $.each(res, function( key, value ) {
+                            if (key == 'gambar') {
+                                $(`#img_preview img`).remove();
+                                console.log(`${url_}/storage/image/${value}`);
+                                $(`#img_preview`).append(`<img src="${url_}/storage/image/${value}" style="height: 100%; width: 100%;">`);
+                            }
                             $("input[name='"+key+"']").val(value);
                             $("select[name='"+key+"']").val(value);
-                            if (key == 'gambar') {
-                                $(`#img_preview`).append('<img src="' + value +'" style="height: 100%; width: 100%;">');
-                            }
+                           
                         });
                       }
                     }
