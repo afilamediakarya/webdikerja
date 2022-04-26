@@ -10,7 +10,6 @@ class PenilaianController extends Controller
 {
     public function index($type)
     {
-        // return $type;
         $page_title = 'Penilaian '.ucfirst($type);
         $page_description = 'Daftar Pegawai yang dinilai';
         $breadcumb = ['Daftar Pegawai yang dinilai'];

@@ -51,13 +51,16 @@
     <script>
           "use strict";
         let type = {!! json_encode($type) !!};  
+
         var dataRow = function() {
 
         var init = function() {
             var table = $('#kt_datatable');
 
             // begin first table
-            table.DataTable({
+           
+            if (type == 'skp') {
+                table.DataTable({
                 responsive: true,
                 pageLength: 10,
                 order: [[0, 'asc']],
@@ -109,6 +112,10 @@
                     }
                 ],
             });
+            } else {
+                
+            }
+
         };
 
         var destroy = function(){
