@@ -10,7 +10,6 @@ class PenilaianController extends Controller
 {
     public function index($type)
     {
-        // return $type;
         $page_title = 'Penilaian '.ucfirst($type);
         $page_description = 'Daftar Pegawai yang dinilai';
         $breadcumb = ['Daftar Pegawai yang dinilai'];
@@ -18,9 +17,11 @@ class PenilaianController extends Controller
     }
 
     public function getData($type){
+        $result = [];
         $url = env('API_URL');
         $token = session()->get('user.access_token');
         $response = Http::withToken($token)->get($url."/review_skp/list");
+   
         if ($response->successful()) {
             $data = $response->json();
             return $data;
@@ -29,13 +30,29 @@ class PenilaianController extends Controller
         }
     }
 
+    public function getSkpPegawai($params){
+        // return $params;
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $response = Http::withToken($token)->get($url."/review_skp/skpbyId/".$params);
+        return $response['data'];
+    }
+
     public function create($type, $id){
         $page_title = 'Penilaian';
         $page_description = 'Daftar Pegawai yang dinilai';
         $breadcumb = ['Daftar Pegawai yang dinilai', 'tambah Realisasi'];
+        $skp = $this->getSkpPegawai($id);
+        // return $skp;
+        return view('pages.penilaian.'.$type, compact('page_title', 'page_description','breadcumb','skp'));
+    }
 
-        return view('pages.penilaian.'.$type, compact('page_title', 'page_description','breadcumb'));
-
-        
+    public function postReviewSkp(Request $request){
+        $data = $request->all();
+        // return $data;
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+        $response = Http::withToken($token)->post($url."/review_skp/store/", $data);
+        return $response;
     }
 }

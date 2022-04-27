@@ -55,7 +55,7 @@
         <!--begin::Container-->
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 col-xxl-4">
+                <div class="col-lg-6 col-xxl-6">
                     <!--begin::Mixed Widget 1-->
                     <div class="card card-custom bg-gray-100 card-stretch gutter-b">
                         <!--begin::Header-->
@@ -155,7 +155,7 @@
                     <!--end::Mixed Widget 1-->
                 </div>
                 
-                <div class="col-lg-6 col-xxl-4 order-1 order-xxl-2">
+                <div class="col-lg-6 col-xxl-6 order-1 order-xxl-2">
                     <!--begin::List Widget 3-->
                     <div class="card card-custom card-stretch gutter-b">
                         <!--begin::Header-->
@@ -215,7 +215,7 @@
                     <!--end::List Widget 3-->
                 </div>
 
-                <div class="col-lg-6 col-xxl-4 order-1 order-xxl-2">
+                <div class="col-lg-6 col-xxl-6 order-1 order-xxl-2">
                     <!--begin::List Widget 3-->
                     <div class="card card-custom card-stretch gutter-b">
                         <!--begin::Header-->
@@ -230,8 +230,8 @@
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
                                     <span class="text-muted">Nama</span>
                                 </div>
-                                <div class="font-weight-bold max-w-50 text-righ">
-                                    <span class="text-dark">A.DARMAWATI, SE,M.Si</span>
+                                <div class="font-weight-bold max-w-70 text-righ">
+                                    <span class="text-dark">Wardian Marsudi Jaya, SE,M.SI</span>
                                 </div>
                             </div>
 
@@ -239,8 +239,8 @@
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
                                     <span class="text-muted">NIP</span>
                                 </div>
-                                <div class="font-weight-bold max-w-50 text-righ">
-                                    <span class="text-dark">Rp.5.000.0000</span>
+                                <div class="font-weight-bold max-w-70 text-righ">
+                                    <span class="text-dark">197611242002121005</span>
                                 </div>
                             </div>
 
@@ -248,16 +248,16 @@
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
                                     <span class="text-muted">Pangkat / Gol Ruang</span>
                                 </div>
-                                <div class="font-weight-bold max-w-50 text-righ">
-                                    <span class="text-dark">Rp.5.000.0000</span>
+                                <div class="font-weight-bold max-w-70 text-righ">
+                                    <span class="text-dark">Penata/IIIc</span>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center justify-content-between pb-5 mb-5 border-bottom">
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
                                     <span class="text-muted">Jabatan</span>
                                 </div>
-                                <div class="font-weight-bold max-w-50 text-righ">
-                                    <span class="text-dark">Rp.5.000.0000</span>
+                                <div class="font-weight-bold max-w-70 text-righ">
+                                    <span class="text-dark">Analis SDM Aparatur Ahli Muda</span>
                                 </div>
                             </div>
 
@@ -265,7 +265,7 @@
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
                                     <span class="text-muted">Instansi</span>
                                 </div>
-                                <div class="font-weight-bold max-w-50 text-right">
+                                <div class="font-weight-bold max-w-70 text-right">
                                     <span class="text-dark">Badan Kepegawaian dan Pengembangan SDM</span>
                                 </div>
                             </div>
@@ -275,7 +275,7 @@
                     <!--end::List Widget 3-->
                 </div>
 
-                <div class="col-lg-6 col-xxl-4 order-1 order-xxl-2">
+                <div class="col-lg-6 col-xxl-6 order-1 order-xxl-2">
                     <!--begin::List Widget 3-->
                     <div class="card card-custom card-stretch gutter-b">
                         <!--begin::Header-->
@@ -290,8 +290,8 @@
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
                                     <span class="text-muted">Nama</span>
                                 </div>
-                                <div class="font-weight-bold max-w-50 text-righ">
-                                    <span class="text-dark">A.DARMAWATI, SE,M.Si</span>
+                                <div class="font-weight-bold max-w-70 text-righ">
+                                    <span class="text-dark">Masyitha Rahmah Muhammad, SH. Msi</span>
                                 </div>
                             </div>
 
@@ -299,8 +299,8 @@
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
                                     <span class="text-muted">NIP</span>
                                 </div>
-                                <div class="font-weight-bold max-w-50 text-righ">
-                                    <span class="text-dark">Rp.5.000.0000</span>
+                                <div class="font-weight-bold max-w-70 text-righ">
+                                    <span class="text-dark">197907262006042011</span>
                                 </div>
                             </div>
 
@@ -308,16 +308,16 @@
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
                                     <span class="text-muted">Pangkat / Gol Ruang</span>
                                 </div>
-                                <div class="font-weight-bold max-w-50 text-righ">
-                                    <span class="text-dark">Rp.5.000.0000</span>
+                                <div class="font-weight-bold max-w-70 text-righ">
+                                    <span class="text-dark">Pembina Utama Muda/IVc</span>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center justify-content-between pb-5 mb-5 border-bottom">
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
                                     <span class="text-muted">Jabatan</span>
                                 </div>
-                                <div class="font-weight-bold max-w-50 text-righ">
-                                    <span class="text-dark">Rp.5.000.0000</span>
+                                <div class="font-weight-bold max-w-70 text-righ">
+                                    <span class="text-dark">Kabid Pengadaan Pemberhentian & Informasi Kepegawaian</span>
                                 </div>
                             </div>
 
@@ -325,7 +325,7 @@
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
                                     <span class="text-muted">Instansi</span>
                                 </div>
-                                <div class="font-weight-bold max-w-50 text-right">
+                                <div class="font-weight-bold max-w-70 text-right">
                                     <span class="text-dark">Badan Kepegawaian dan Pengembangan SDM</span>
                                 </div>
                             </div>
@@ -335,11 +335,11 @@
                     <!--end::List Widget 3-->
                 </div>
 
-                <div class="col-lg-12 col-xxl-4 order-1 order-xxl-2">
+                <div class="col-lg-12 col-xxl-12 order-1 order-xxl-2">
                     <div class="card card-custom card-stretch gutter-b">
                         <!--begin::Header-->
                         <div class="card-header border-0">
-                            <h3 class="card-title font-weight-bolder text-dark">Informasi Penilai</h3>
+                            <h3 class="card-title font-weight-bolder text-dark">Pegawai yang dinilai</h3>
                         </div>
                         <!--end::Header-->
                         <!--begin::Body-->
@@ -350,7 +350,7 @@
                                         <th>No.</th>
                                         <th>Nama</th>
                                         <th>Status Review SKP</th>
-                                        <th>Realisasi</th>
+                                        <th>Realsi</th>
                                         <th>Nilai Prilaku</th>
                                     </tr>
                                 </thead>
@@ -358,7 +358,7 @@
                                     <tr>
                                         <td>1.</td>
                                         <td>Nama</td>
-                                        <td>Status Review SKP</td>
+                                        <td><span class="label label-lg font-weight-bold label-light-warning label-inline">Belum Review</span></td>
                                         <td><span class="label label-lg font-weight-bold label-light-warning label-inline">Belum Review</span></td>
                                         <td>Nilai Prilaku</td>
                                     </tr>

@@ -30,96 +30,92 @@
                 
                 <div class="card-body">
                     <!--begin: Datatable-->
+                    <form id="review_skp">
+
                     <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                <th>No.</th>
-                                <th>Tipe Kinerja</th>
-                                <th>Tupoksi</th>
-                                <th>Rencana Kerja</th>
-                                <th>Aspek</th>
-                                <th nowrap="">Indikator Kinerja Individu</th>
-                                <th>Taget</th>
-                                <th>Satuan</th>
-                                <th>Aksi</th>
+                            <th>No.</th>
+                                    <th>Rencana Kerja</th>
+                                    <th>Aspek</th>
+                                    <th nowrap="nowrap">Indikator Kinerja Individu</th>
+                                    <th>Target</th>
+                                    <th>Satuan</th>
+                                    <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="align-baseline">A.1.1</td>
-                                <td>Kinerja Utama</td>
-                                <td>Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</td>
-                                <td class="align-baseline">Laporan fasilitasi kinerja terhadap kesesuaian NSPK  ASN di tiap instansi tersusun, reliable, tercatat lengkap dan dilaporkan</td>
-                                <td>Kuantitas</td>
-                                <td>Persentase penyelesaian laporan hasil pemantauan terkait kinerja ASN di Wilayah kerja Kantor regional IV  BKN</td>
-                                <td>30</td>
-                                <td>Data fasilitasi kinerja</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
-                            <tr>
-                                <td class="align-baseline">A.1.1</td>
-                                <td>Kinerja Utama</td>
-                                <td>Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</td>
-                                <td class="align-baseline">Laporan fasilitasi kinerja terhadap kesesuaian NSPK  ASN di tiap instansi tersusun, reliable, tercatat lengkap dan dilaporkan</td>
-                                <td>Kualitas</td>
-                                <td>Persentase penyelesaian laporan hasil pemantauan terkait kinerja ASN di Wilayah kerja Kantor regional IV  BKN</td>
-                                <td>30</td>
-                                <td>Data fasilitasi kinerja</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
-                            <tr>
-                                <td class="align-baseline">A.1.1</td>
-                                <td>Kinerja Utama</td>
-                                <td>Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</td>
-                                <td class="align-baseline">Laporan fasilitasi kinerja terhadap kesesuaian NSPK  ASN di tiap instansi tersusun, reliable, tercatat lengkap dan dilaporkan</td>
-                                <td>Waktu</td>
-                                <td>Persentase penyelesaian laporan hasil pemantauan terkait kinerja ASN di Wilayah kerja Kantor regional IV  BKN</td>
-                                <td>30</td>
-                                <td>Data fasilitasi kinerja</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
+                                @php
+                                    $inc_letter = 'A';
+                                    $no = 0;
+                                @endphp
+                                @foreach($skp as $key => $value)
+                                    <tr style="background:#f2f2f2">
+                                        <td>{{$inc_letter++}}.</td>
+                                        <td colspan="6">{{$value['atasan']['rencana_kerja']}}</td>  
+                                    <tr>
 
-                            <tr>
-                                <td class="align-baseline">A.1.2</td>
-                                <td>Kinerja Utama</td>
-                                <td>Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</td>
-                                <td class="align-baseline">fasilitasi kinerja terhadap kesesuaian NSPK  ASN di tiap instansi tersusun, reliable, tercatat lengkap dan dilaporkan</td>
-                                <td>Kuantitas</td>
-                                <td>Persentase penyelesaian laporan hasil pemantauan terkait kinerja ASN di Wilayah kerja Kantor regional IV  BKN</td>
-                                <td>30</td>
-                                <td>Data fasilitasi kinerja</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
-                            <tr>
-                                <td class="align-baseline">A.1.2</td>
-                                <td>Kinerja Utama</td>
-                                <td>Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</td>
-                                <td class="align-baseline">fasilitasi kinerja terhadap kesesuaian NSPK  ASN di tiap instansi tersusun, reliable, tercatat lengkap dan dilaporkan</td>
-                                <td>Kualitas</td>
-                                <td>Persentase penyelesaian laporan hasil pemantauan terkait kinerja ASN di Wilayah kerja Kantor regional IV  BKN</td>
-                                <td>30</td>
-                                <td>Data fasilitasi kinerja</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
-                            <tr>
-                                <td class="align-baseline">A.1.2</td>
-                                <td>Kinerja Utama</td>
-                                <td>Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</td>
-                                <td class="align-baseline">fasilitasi kinerja terhadap kesesuaian NSPK  ASN di tiap instansi tersusun, reliable, tercatat lengkap dan dilaporkan</td>
-                                <td>Waktu</td>
-                                <td>Persentase penyelesaian laporan hasil pemantauan terkait kinerja ASN di Wilayah kerja Kantor regional IV  BKN</td>
-                                <td>30</td>
-                                <td>Data fasilitasi kinerja</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
-                        </tbody>
+                                    @foreach($value['skp_child'] as $k => $v)
+                                        @foreach($v['aspek_skp'] as $i => $l)
+                                        <tr>
+                                        
+                                            @if($i == 0)
+                                            <td>{{$no+1}}.</td>
+                                            <td>{{$v['rencana_kerja']}}</td>
+                                            @else
+                                            <td></td>
+                                            <td></td>
+                                            @endif
+                                            <td>{{$l['aspek_skp']}}</td>
+                                            <td>{{$l['iki']}}</td>                                       
+                                            @php
+                                                $num = 0;
+                                                foreach($l['target_skp'] as $f => $b){
+                                                    $num =+ $b['target'];
+                                                }
+                                            @endphp
+                                            <td>{{$num}}</td>
+                                            <td>{{$l['satuan']}}</td>
+                                            @if($i == 0)
+                                            <input type="hidden" value="{{$v['id']}}" name="id_skp[{{$no}}]" />
+                                            <td rowspan="3">
+                                                        <div class="form-group">
+                                                            <label>Kesesuaian Skp</label>
+                                                            <div class="radio-inline">
+                                                                <label for="{{$k}}_sesuai_{{$v['id']}}" class="radio {{$k}}_sesuai_{{$v['id']}}">
+                                                                <input type="radio" id="{{$k}}_sesuai_{{$v['id']}}" @if($v['review_skp']['kesesuaian'] == 'ya') checked @endif value="ya" name="kesesuaian[{{$no}}]" />
+                                                                <span></span>Sesuai</label>
+                                                                <label for="{{$k}}_tidak_{{$v['id']}}" class="radio {{$k}}_tidak_{{$v['id']}}">
+                                                                <input type="radio" id="{{$k}}_tidak_{{$v['id']}}" @if($v['review_skp']['kesesuaian'] == 'tidak') checked @endif value="tidak" name="kesesuaian[{{$no}}]" />
+                                                                <span></span>Tidak</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="keterangan">Keterangan</label>
+                                                            <textarea name="keterangan[{{$no}}]" class="form-control form-control-solid" id="keterangan"  rows="5">{{$v['review_skp']['keterangan']}}</textarea>
+                                                        </div>
+                                                        
+                                            </td>
+                                            @else
+                                            <td></td>
+                                            @endif
+                                        </tr>
+                                        @endforeach
+                                    @php
+                                                $no++;
+                                    @endphp
+                                    @endforeach
+                                @endforeach    
+                            </tbody>
                     </table>
+
+                    </form>
                     <!--end: Datatable-->
                 </div>
 
                 <div class="card-footer border-0">
                     <button type="reset" class="btn btn-outline-primary mr-2">Batal</button>
-                    <button type="reset" class="btn btn-primary">Simpan</button>
+                    <button id="submit_review_skp" type="button" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
             <!--end::Card-->
@@ -134,141 +130,41 @@
 @section('script')
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
-        "use strict";
-        var KTDatatablesAdvancedRowGrouping = function() {
-
-            var init = function() {
-                var table = $('#kt_datatable');
-
-                // begin first table
-                table.DataTable({
-                    responsive: true,
-                    pageLength: 25,
-                    ordering:false,
-                    // rowGroup: {
-                    //     dataSrc: [ 2, 1 ]
-                    // },
-                    // order: [[2, 'asc']],
-                    drawCallback: function(settings) {
-                        var api = this.api();
-                        var rows = api.rows({page: 'current'}).nodes();
-                        var last = null;
-
-                        api.column(1, {page: 'current'}).data().each(function(group, i) {
-                            if (last !== group) {
-                                $(rows).eq(i).before(
-                                    '<tr class="bg-white"><td>A</td><td colspan="7">' + group + '</td></tr>',
-                                );
-                                last = group;
-                            }
-                        });
-                        api.column(2, {page: 'current'}).data().each(function(group, i) {
-                            if (last !== group) {
-                                $(rows).eq(i).before(
-                                    '<tr class="bg-secondary"><td>A.1</td> <td colspan="7">' + group + '</td></tr>',
-                                );
-                                last = group;
-                            }
-                        });
-                        api.column(3, {page: 'current'}).data().each(function(group, i) {
-                            if (last !== group) {
-                                    $(rows).eq(i).children('td:eq(1)').addClass('align-baseline').attr('rowspan', '3')
-                                    $(rows).eq(i).children('td:eq(0)').attr('rowspan', '3')
-                                    $(rows).eq(i).children('td:last-child').attr('rowspan', '3')
-                                last = group;
-                            }else{
-                                $(rows).eq(i).children('td:eq(1)').remove()
-                                $(rows).eq(i).children('td:eq(0)').remove()
-                                $(rows).eq(i).children('td:last-child').remove()
-
-                            }
-                        });
-                    },
-                    columnDefs: [
-                        {
-                            // hide columns by index number
-                            targets: [1, 2],
-                            visible: false,
-                        },
-                        {
-                            targets: -1,
-                            title: 'Actions',
-                            orderable: false,
-                            render: function(data, type, full, meta) {
-                                return '\
-                                <div class="form">\
-                                    <div class="form-group">\
-                                        <label>Inline radios</label>\
-                                        <div class="radio-inline">\
-                                            <label class="radio">\
-                                            <input type="radio" name="radios2" />\
-                                            <span></span>Sesuai</label>\
-                                            <label class="radio">\
-                                            <input type="radio" name="radios2" />\
-                                            <span></span>Tidak</label>\
-                                        </div>\
-                                        <span class="form-text text-danger">Error Alert</span>\
-                                    </div>\
-                                    <div class="form-group">\
-                                        <label for="exampleTextarea">Rencana Kerja \
-                                        <span class="text-danger">*</span></label>\
-                                        <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>\
-                                    </div>\
-                                </div>\
-                                ';
-                            },
-                        },
-                        // {
-                        //     targets: 8,
-                        //     render: function(data, type, full, meta) {
-                        //         var status = {
-                        //             1: {'title': 'Pending', 'class': 'label-light-primary'},
-                        //             2: {'title': 'Delivered', 'class': ' label-light-danger'},
-                        //             3: {'title': 'Canceled', 'class': ' label-light-primary'},
-                        //             4: {'title': 'Success', 'class': ' label-light-success'},
-                        //             5: {'title': 'Info', 'class': ' label-light-info'},
-                        //             6: {'title': 'Danger', 'class': ' label-light-danger'},
-                        //             7: {'title': 'Warning', 'class': ' label-light-warning'},
-                        //         };
-                        //         if (typeof status[data] === 'undefined') {
-                        //             return data;
-                        //         }
-                        //         return '<span class="label label-lg font-weight-bold' + status[data].class + ' label-inline">' + status[data].title + '</span>';
-                        //     },
-                        // },
-                        // {
-                        //     targets: 9,
-                        //     render: function(data, type, full, meta) {
-                        //         var status = {
-                        //             1: {'title': 'Online', 'state': 'danger'},
-                        //             2: {'title': 'Retail', 'state': 'primary'},
-                        //             3: {'title': 'Direct', 'state': 'success'},
-                        //         };
-                        //         if (typeof status[data] === 'undefined') {
-                        //             return data;
-                        //         }
-                        //         return '<span class="label label-' + status[data].state + ' label-dot mr-2"></span>' +
-                        //             '<span class="font-weight-bold text-' + status[data].state + '">' + status[data].title + '</span>';
-                        //     },
-                        // },
-                    ],
-                });
-            };
-
-            return {
-
-                //main function to initiate the module
-                init: function() {
-                    init();
+       $(function(){
+        $('#submit_review_skp').on("click", function () {
+              
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
                 },
+            });
 
-            };
+            $.ajax({
+                type: "POST",
+                url: "/review_skp",
+                data: $('#review_skp').serialize(),
+                success: function (response) {
+                    console.log(response);
+                    swal.fire({
+                        text: "Skp berhasil di Review.",
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn font-weight-bold btn-light-primary"
+                        }
+                    }).then(function() {
+                        window.location.href = '/penilaian/skp';
+                    });
+                },
+                error : function (xhr) {
+                 
+                }
+            });
+                
+       })
 
-        }();
-
-        jQuery(document).ready(function() {
-            KTDatatablesAdvancedRowGrouping.init();
-        });
+    })
 
     </script>
 @endsection

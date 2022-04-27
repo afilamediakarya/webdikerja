@@ -51,13 +51,16 @@
     <script>
           "use strict";
         let type = {!! json_encode($type) !!};  
+
         var dataRow = function() {
 
         var init = function() {
             var table = $('#kt_datatable');
 
             // begin first table
-            table.DataTable({
+           
+            if (type == 'skp') {
+                table.DataTable({
                 responsive: true,
                 pageLength: 10,
                 order: [[0, 'asc']],
@@ -77,7 +80,7 @@
                     },{
                         data:'status',
                     },{
-                        data:'id_skp',
+                        data:null,
                     }
                 ],
                 columnDefs: [
@@ -86,9 +89,12 @@
                         title: 'Actions',
                         orderable: false,
                         render: function(data) {
-                            return `
-                                <a href="/penilaian/${type}/${data}" role="button" class="btn btn-primary">Review Skp</a>\
-                            `;
+                            if (data.status == 'Selesai') {
+                                return `<button type="button" class="btn btn-secondary" disabled>Review Skp</button>`
+                            }else{
+                                return `<a href="/penilaian/${type}/${data.id_pegawai}" role="button" class="btn btn-primary">Review Skp</a>`;
+                            }
+                            
                         },
                     }, {
                         targets: 4,
@@ -96,14 +102,20 @@
                         orderable: false,
                         render: function(data) {
                             if (data == 'Belum Review') {
+                                return `<a href="javascript:;" class="btn btn-light-danger btn-sm">${data}</a>`;
+                            }else if(data == 'Belum Sesuai'){
                                 return `<a href="javascript:;" class="btn btn-light-warning btn-sm">${data}</a>`;
-                            }else{
+                            }else if(data == 'Selesai'){
                                 return `<a href="javascript:;" class="btn btn-light-success btn-sm">${data}</a>`;
                             }
                         },
                     }
                 ],
             });
+            } else {
+                
+            }
+
         };
 
         var destroy = function(){

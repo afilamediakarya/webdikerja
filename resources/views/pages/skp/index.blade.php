@@ -69,7 +69,7 @@
                                         @php
                                             $num = 0;
                                             foreach($l['target_skp'] as $f => $b){
-                                                $num =+ $b['target'];
+                                                $num += $b['target'];
                                             }
                                         @endphp
                                         <td>{{$num}}</td>
