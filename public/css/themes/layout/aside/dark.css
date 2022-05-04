@@ -57,6 +57,7 @@
 .aside-menu .menu-nav > .menu-item > .menu-heading .menu-icon.svg-icon svg:hover g [fill],
 .aside-menu .menu-nav > .menu-item > .menu-link .menu-icon.svg-icon svg:hover g [fill] {
   transition: fill 0.3s ease;
+  fill: #fff
 }
 .aside-menu .menu-nav > .menu-item > .menu-heading .menu-bullet.menu-bullet-dot > span,
 .aside-menu .menu-nav > .menu-item > .menu-link .menu-bullet.menu-bullet-dot > span {
@@ -80,6 +81,7 @@
 .aside-menu .menu-nav > .menu-item.menu-item-open > .menu-heading .menu-text,
 .aside-menu .menu-nav > .menu-item.menu-item-open > .menu-link .menu-text {
   color: #ffffff;
+  font-weight: 600;
 }
 .aside-menu .menu-nav > .menu-item.menu-item-open > .menu-heading .menu-icon,
 .aside-menu .menu-nav > .menu-item.menu-item-open > .menu-link .menu-icon {
@@ -116,6 +118,7 @@
 .aside-menu .menu-nav > .menu-item.menu-item-here > .menu-heading .menu-text,
 .aside-menu .menu-nav > .menu-item.menu-item-here > .menu-link .menu-text {
   color: #ffffff;
+  font-weight: 600;
 }
 .aside-menu .menu-nav > .menu-item.menu-item-here > .menu-heading .menu-icon,
 .aside-menu .menu-nav > .menu-item.menu-item-here > .menu-link .menu-icon {
@@ -152,6 +155,7 @@
 .aside-menu .menu-nav > .menu-item.menu-item-active > .menu-heading .menu-text,
 .aside-menu .menu-nav > .menu-item.menu-item-active > .menu-link .menu-text {
   color: #ffffff;
+  font-weight: 600;
 }
 .aside-menu .menu-nav > .menu-item.menu-item-active > .menu-heading .menu-icon,
 .aside-menu .menu-nav > .menu-item.menu-item-active > .menu-link .menu-icon {
@@ -188,6 +192,7 @@
 .aside-menu .menu-nav > .menu-item:not(.menu-item-parent):not(.menu-item-open):not(.menu-item-here):not(.menu-item-active):hover > .menu-heading .menu-text,
 .aside-menu .menu-nav > .menu-item:not(.menu-item-parent):not(.menu-item-open):not(.menu-item-here):not(.menu-item-active):hover > .menu-link .menu-text {
   color: #ffffff;
+  font-weight: 600;
 }
 .aside-menu .menu-nav > .menu-item:not(.menu-item-parent):not(.menu-item-open):not(.menu-item-here):not(.menu-item-active):hover > .menu-heading .menu-icon,
 .aside-menu .menu-nav > .menu-item:not(.menu-item-parent):not(.menu-item-open):not(.menu-item-here):not(.menu-item-active):hover > .menu-link .menu-icon {
@@ -229,6 +234,7 @@
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item > .menu-heading .menu-text,
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item > .menu-link .menu-text {
   color: #ffffff;
+  font-weight: 600;
 }
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item > .menu-heading .menu-icon,
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item > .menu-link .menu-icon {
@@ -265,6 +271,7 @@
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-open > .menu-heading .menu-text,
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-open > .menu-link .menu-text {
   color: #ffffff;
+  font-weight: 600;
 }
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-open > .menu-heading .menu-icon,
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-open > .menu-link .menu-icon {
@@ -333,6 +340,7 @@
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-active > .menu-heading .menu-text,
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-active > .menu-link .menu-text {
   color: #ffffff;
+  font-weight: 600;
 }
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-active > .menu-heading .menu-icon,
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-active > .menu-link .menu-icon {
@@ -369,6 +377,7 @@
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item:not(.menu-item-parent):not(.menu-item-open):not(.menu-item-here):not(.menu-item-active):hover > .menu-heading .menu-text,
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item:not(.menu-item-parent):not(.menu-item-open):not(.menu-item-here):not(.menu-item-active):hover > .menu-link .menu-text {
   color: #ffffff;
+  font-weight: 600;
 }
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item:not(.menu-item-parent):not(.menu-item-open):not(.menu-item-here):not(.menu-item-active):hover > .menu-heading .menu-icon,
 .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item:not(.menu-item-parent):not(.menu-item-open):not(.menu-item-here):not(.menu-item-active):hover > .menu-link .menu-icon {
