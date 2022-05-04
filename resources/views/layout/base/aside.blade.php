@@ -165,14 +165,26 @@
                     <div class="menu-submenu">
                         <i class="menu-arrow"></i>
                         <ul class="menu-subnav">
+                        @if (Session::get('user.role') == 'super_admin')
                             <li class="menu-item" aria-haspopup="true">
-                                <a href="{{route('laporan-absen')}}" class="menu-link">
+                                <a href="{{url('/laporan/absen/super_admin')}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
                                     <span class="menu-text text-capitalize">Absen</span>
                                 </a>
                             </li>
+                        @else
+                            <li class="menu-item" aria-haspopup="true">
+                                <a href="{{url('/laporan/absen/pegawai')}}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="menu-text text-capitalize">Absen</span>
+                                </a>
+                            </li>
+                        @endif
+                    
                             <li class="menu-item" aria-haspopup="true">
                                 <a href="{{route('laporan-skp')}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
@@ -284,7 +296,7 @@
                         <i class="menu-arrow"></i>
                         <ul class="menu-subnav">
                             <li class="menu-item" aria-haspopup="true">
-                                <a href="{{route('laporan-absen')}}" class="menu-link">
+                                <a href="{{url('/laporan/absen/admin')}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>

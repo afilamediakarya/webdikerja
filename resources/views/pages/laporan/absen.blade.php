@@ -22,17 +22,20 @@
                     <form class="form">
 
                     <div class="row">
-                        <div class="form-group col-6">
-                            <label>Tanggal</label>
-                            <!-- <div class="input-group date" >
-                                <input type="text" class="form-control form-control-solid" readonly  value="05/20/2017" id="kt_datepicker_3"/>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calendar"></i>
-                                    </span>
-                                </div>
-                            </div> -->
-                            
+                        <div class="col-lg-5">
+                            <div class="form-group">
+                            <label for="satuan_kerja">Pilih Satuan Kerja</label>
+                            <select class="form-control" id="satuan_kerja">
+                                <option disabled selected>Pilih Satuan Kerja</option>
+                               @foreach ($satuan_kerja as $key => $value)
+                                    <option value="{{$value['id']}}">{{$value['nama_satuan_kerja']}}</option>
+                               @endforeach
+                            </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="form-group">
+                                <label>Tanggal</label>       
                                 <div class='input-group' id='kt_daterangepicker_2'>
                                     <input type='text' class="form-control" readonly="readonly" placeholder="Select date range" />
                                     <div class="input-group-append">
@@ -41,17 +44,17 @@
                                         </span>
                                     </div>
                                 </div>
-                            
-                        </div>
-                        <div class="col-8 row">
-                            <div class="col">
-                                <button type="reset" class="btn btn-block btn-danger"><i class="flaticon2-pie-chart"></i>Cetak PDF</button>
                             </div>
-                            <div class="col">
-                                <button type="reset" id="export-excel"  class="btn btn-block btn-success"><i class="flaticon2-pie-chart"></i>Export Excel</button>
-                            </div>
-                            <div class="col">
-                                <button type="reset" id="preview-excel" class="btn btn-block btn-outline-primary"><i class="flaticon2-pie-chart"></i>Tampilkan Excel</button>
+                            <div class="col-12 row">
+                                <div class="col">
+                                    <button type="reset" class="btn btn-block btn-danger"><i class="flaticon2-pie-chart"></i>Cetak PDF</button>
+                                </div>
+                                <div class="col">
+                                    <button type="reset" id="export-excel"  class="btn btn-block btn-success"><i class="flaticon2-pie-chart"></i>Export Excel</button>
+                                </div>
+                                <div class="col">
+                                    <button type="reset" id="preview-excel" class="btn btn-block btn-outline-primary"><i class="flaticon2-pie-chart"></i>Tampilkan Excel</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -71,6 +74,10 @@
     <script>
         jQuery(document).ready(function() {
 
+            $('#satuan_kerja').select2();
+
+            let typeRole = {!! json_encode($TypeRole) !!};
+
             $('#kt_daterangepicker_2').daterangepicker({
             buttonClasses: ' btn',
             applyClass: 'btn-primary',
@@ -85,8 +92,16 @@
                 let val_range = $('#kt_daterangepicker_2 input').val();
                 if (val_range != '') {
                     let val = val_range.split('/');
-                    console.log();
-                    url = '/laporan/export/rekapitulasi_pegawai/'+val[0].trim()+'/'+val[1].trim()+'/pdf';
+                    let params = {
+                        'startDate' : val[0].trim(),
+                        'endDate' : val[1].trim(),
+                        'type' : 'pdf',
+                        'role' : typeRole,
+                        'satuanKerja' : $('#satuan_kerja').val()  
+                    };
+
+                    let dataParams = JSON.stringify(params);
+                    url = '/laporan/export/rekapitulasi_pegawai/'+dataParams;
                     window.open(url);     
                 }else{
                     Swal.fire(
@@ -101,8 +116,15 @@
                 let val_range = $('#kt_daterangepicker_2 input').val();
                 if (val_range != '') {
                     let val = val_range.split('/');
-                    console.log();
-                    url = '/laporan/export/rekapitulasi_pegawai/'+val[0].trim()+'/'+val[1].trim()+'/excel';
+                    let params = {
+                        'startDate' : val[0].trim(),
+                        'endDate' : val[1].trim(),
+                        'type' : 'pdf',
+                        'role' : typeRole,
+                        'satuanKerja' : $('#satuan_kerja').val()  
+                    };
+                    let dataParams = JSON.stringify(params);
+                    url = '/laporan/export/rekapitulasi_pegawai/'+dataParams;
                     window.open(url);     
                 }else{
                     Swal.fire(

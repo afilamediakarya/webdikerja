@@ -61,8 +61,8 @@ Route::middleware('Auth')->group(function(){
     });
     
     Route::prefix('laporan')->group(function () {
-        Route::get('/absen', [LaporanController::class, 'absen'])->name('laporan-absen');
-        Route::get('/export/rekapitulasi_pegawai/{param1}/{param2}/{type}', [LaporanController::class, 'exportRekapAbsen'])->name('laporan-absen-pegawai');
+        Route::get('/absen/{type}', [LaporanController::class, 'absen'])->name('laporan-absen');
+        Route::get('/export/rekapitulasi_pegawai/{params}', [LaporanController::class, 'exportRekapAbsen'])->name('laporan-absen-pegawai');
         Route::get('/skp', [LaporanController::class, 'skp'])->name('laporan-skp');
         Route::get('/aktivitas', [LaporanController::class, 'aktivitas'])->name('laporan-aktivitas');
         
@@ -71,9 +71,11 @@ Route::middleware('Auth')->group(function(){
     
     Route::get('/penilaian/{type}', [PenilaianController::class, 'index'])->name('penilaian');
     Route::get('/penilaian/{type}/{id}', [PenilaianController::class, 'create'])->name('tambah-penilaian');
+    Route::get('/penilaian/realisasi/{type}/{id}/{bulan}', [PenilaianController::class, 'createRealisasi'])->name('tambah-penilaian-realisasi');
     Route::get('/get_data/penilaian/{type}', [PenilaianController::class, 'getData'])->name('getdata_penilaian');
-    Route::get('/get_data/penilaian/{type}', [PenilaianController::class, 'getData'])->name('getdata_penilaian');
+    // Route::get('/get_data/penilaian/{type}', [PenilaianController::class, 'getData'])->name('getdata_penilaian');
     Route::post('/review_skp', [PenilaianController::class, 'postReviewSkp'])->name('postReviewSkp');
+    Route::post('/review_realisasi', [PenilaianController::class, 'postReviewRealisasiSkp'])->name('postReviewRealisasiSkp');
     Route::get('/aktivitas', [AktivitasController::class, 'index'])->name('aktivitas');
     Route::get('/aktivitas/show', [AktivitasController::class, 'aktivitas'])->name('get-aktivitas');
     

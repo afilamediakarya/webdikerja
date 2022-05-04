@@ -123,6 +123,9 @@
 								<!--begin::Toolbar-->
 								<div class="d-flex align-items-center">
 									<!--begin::Actions-->
+									<div id="month_select">
+
+									</div>
 									@yield('button')
 								</div>
 								<!--end::Toolbar-->

@@ -10,14 +10,21 @@ use Session;
 class LaporanController extends Controller
 {
     //
-    public function absen()
+    public function absen($TypeRole)
     {
         $page_title = 'Laporan';
         $page_description = 'Daftar Sasaran Kinerja Pegawai';
         $breadcumb = ['Absen'];
+        $satuan_kerja = '';
+        
+        if ($TypeRole == 'super_admin') {
+            $url = env('API_URL');
+            $token = session()->get('user.access_token');
+            $data = Http::withToken($token)->get($url."/satuan_kerja/list");
+            $satuan_kerja = $data['data'];
+        }
 
-
-        return view('pages.laporan.absen', compact('page_title', 'page_description','breadcumb'));
+        return view('pages.laporan.absen', compact('page_title', 'page_description','breadcumb','TypeRole','satuan_kerja'));
     }
 
     public function skp()
@@ -56,12 +63,19 @@ class LaporanController extends Controller
         
     }
 
-    public function getRekappegawaiByOpd($params1,$params2){
+    public function getRekappegawaiByOpd($params1,$params2,$satuan_kerja){
         // return $params1;
         $url = env('API_URL');
         $token = session()->get('user.access_token');
-      
-        $response = Http::withToken($token)->get($url."/laporan-rekapitulasi-absen/rekapByOpd/".$params1."/".$params2);
+        $response = '';
+
+        if(!is_null($satuan_kerja)){
+            $response = Http::withToken($token)->get($url."/laporan-rekapitulasi-absen/rekapByOpd/".$params1."/".$params2.'/'.$satuan_kerja);
+        }else{
+            $response = Http::withToken($token)->get($url."/laporan-rekapitulasi-absen/rekapByOpd/".$params1."/".$params2.'/0');
+        }
+
+
         if ($response->successful()) {
             return $response->json();
         }else{
@@ -70,21 +84,17 @@ class LaporanController extends Controller
     
 }
 
-    public function exportRekapAbsen($startDate,$endDate,$type){
-        
-        $session = Session::get('user');
-        // return $session['role'];
-        if ($session['role'] != 'admin_opd') {
-            $data = $this->getRekapPegawai($startDate,$endDate); 
-            $this->exportrekapPegawai($data,$type);  
-        }else{
-            $data = $this->getRekappegawaiByOpd($startDate,$endDate); 
-            $this->exportrekapOpd($data,$type,$startDate,$endDate);
+    public function exportRekapAbsen($params){
+        $val = json_decode($params);
 
+        // return $val->role;
+        if ($val->role == 'pegawai') {
+            $data = $this->getRekapPegawai($val->startDate,$val->endDate); 
+            $this->exportrekapPegawai($data,$val->type);  
+        }else if($val->role == 'admin' || $val->role == 'super_admin'){
+            $data = $this->getRekappegawaiByOpd($val->startDate,$val->endDate,$val->satuanKerja); 
+            $this->exportrekapOpd($data,$val->type,$val->startDate,$val->endDate);
         }
-        
-       
-
     }
 
     // public function tes($type){
