@@ -24,7 +24,7 @@
             style="background-image: url(image/login-icon.svg); height:314px; background-size:contain">
         </div>
         <div class="d-flex justify-content-center">
-            <a href="{{asset('storage/aplikasi/dikerja.apk')}}">
+            <a href="https://play.google.com/store/apps/details?id=com.afilamediakarya.dikerja" target="_blank">
                 <svg width="304" height="118" viewBox="0 0 304 118" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <rect width="304" height="118" fill="url(#pattern0)"/>
                     <defs>
