@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\SatkerController;
 use App\Http\Controllers\Admin\Master\FaqController;
 use App\Http\Controllers\Admin\Master\SatuanController;
 use App\Http\Controllers\Admin\Master\PerilakuController;
+use App\Http\Controllers\Admin\Master\MasterController;
 /*
 
 |--------------------------------------------------------------------------
@@ -133,6 +134,10 @@ Route::middleware('Auth')->group(function(){
                     Route::get('/data-satuan', [MasterController::class, 'get_satuan'])->name('data_master_satuan');
                     
                     Route::get('/perilaku', [MasterController::class, 'perilaku'])->name('master_perilaku');
+                    Route::get('/hari-libur', [MasterController::class, 'harilibur'])->name('master_harilibur');
+                    Route::post('/store/hari-libur', [MasterController::class, 'store_harilibur'])->name('store_master_harilibur');
+                    Route::get('/show/hari-libur/{params}', [MasterController::class, 'show_harilibur'])->name('show_master_harilibur');
+                    Route::post('/update/hari-libur/{params}', [MasterController::class, 'update_harilibur'])->name('update_master_harilibur');
                 });
         
             });
