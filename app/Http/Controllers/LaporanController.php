@@ -15,7 +15,7 @@ class LaporanController extends Controller
         $page_title = 'Laporan';
         $page_description = 'Daftar Sasaran Kinerja Pegawai';
         $breadcumb = ['Absen'];
-        $satuan_kerja = '';
+        $satuan_kerja = null;
         
         if ($TypeRole == 'super_admin') {
             $url = env('API_URL');
@@ -23,6 +23,8 @@ class LaporanController extends Controller
             $data = Http::withToken($token)->get($url."/satuan_kerja/list");
             $satuan_kerja = $data['data'];
         }
+
+        // return $satuan_kerja;
 
         return view('pages.laporan.absen', compact('page_title', 'page_description','breadcumb','TypeRole','satuan_kerja'));
     }

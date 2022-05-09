@@ -9,7 +9,7 @@ class AuthController extends Controller
 {
     public function index(Request $request){
 
-            // return 'hei';
+            
             if ($request->session()->has('user')) {
                 return redirect('/');
             }
@@ -32,8 +32,14 @@ class AuthController extends Controller
                 session(['user_details' => $response->json()['current']['pegawai']]);
                 session(['atasan' => $response->json()['check_atasan']]);
                 session(['tahun' => date("Y")]);
-                // dd($request->session('user_details'));
-                return redirect('/');
+                if ($data['role'] == 'admin_opd') {
+                    return redirect('/dashboard/admin');    
+                }elseif($data['role'] == 'pegawai'){
+                    return redirect('/dashboard/pegawai'); 
+                }else{
+                    return redirect('/dashboard/super_admin');
+                }
+                
             }else{
                 return redirect()->back()->with('error', 'data Salah');
             }
@@ -42,6 +48,6 @@ class AuthController extends Controller
 
     public function logout(Request $request){
         $request->session()->flush();
-        return redirect('/');
+        return redirect('/login');
     }
 }

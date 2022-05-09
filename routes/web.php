@@ -41,7 +41,8 @@ Route::get('/login', [AuthController::class, 'index'])->name('login');
 
 Route::middleware('Auth')->group(function(){
 
-    Route::get('/', [PagesController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/{type}', [PagesController::class, 'index'])->name('dashboard');
+    Route::get('/', [PagesController::class, 'index_'])->name('main');
 
     Route::get('atasan/update/{id}', [AkunController::class , 'update_atasan'])->name("update-atasan");
 

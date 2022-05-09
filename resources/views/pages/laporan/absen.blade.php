@@ -22,14 +22,16 @@
                     <form class="form">
 
                     <div class="row">
-                        <div class="col-lg-5">
+                        <div class="col-lg-5" id="satuan_kerja__">
                             <div class="form-group">
                             <label for="satuan_kerja">Pilih Satuan Kerja</label>
                             <select class="form-control" id="satuan_kerja">
                                 <option disabled selected>Pilih Satuan Kerja</option>
-                               @foreach ($satuan_kerja as $key => $value)
-                                    <option value="{{$value['id']}}">{{$value['nama_satuan_kerja']}}</option>
-                               @endforeach
+                                @if($satuan_kerja != null)
+                                    @foreach ($satuan_kerja as $key => $value)
+                                        <option value="{{$value['id']}}">{{$value['nama_satuan_kerja']}}</option>
+                                @endforeach
+                                @endif
                             </select>
                             </div>
                         </div>
@@ -77,6 +79,12 @@
             $('#satuan_kerja').select2();
 
             let typeRole = {!! json_encode($TypeRole) !!};
+
+            if (typeRole == 'super_admin') {
+                $('#satuan_kerja__').css('display','block');
+            } else{
+                $('#satuan_kerja__').css('display','none');
+            }
 
             $('#kt_daterangepicker_2').daterangepicker({
             buttonClasses: ' btn',

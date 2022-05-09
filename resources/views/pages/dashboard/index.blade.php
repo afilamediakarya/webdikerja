@@ -75,7 +75,7 @@
                                     <div class="col bg-white px-6 py-8 rounded-xl mr-3 mb-7">
                                         <a href="#" class="text-dark font-weight-bold font-size-lg">SKP</a>
                                         <div class="align-items-end d-flex h-100 justify-content-between w-100">
-                                            <p class="font-size-h1 mb-0"> 31 <small class="text-muted font-size-sm">Data</small> </p>
+                                            <p class="font-size-h1 mb-0"> {{$data['jumlah_skp']}} <small class="text-muted font-size-sm">Data</small> </p>
                                             <span class="align-items-end d-block svg-icon svg-icon-3x svg-icon-warning text-right">
                                                 <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Media/Equalizer.svg-->
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -94,7 +94,7 @@
                                     <div class="col bg-white px-6 py-8 rounded-xl ml-3 mb-7">
                                         <a href="#" class="text-dark font-weight-bold font-size-lg">SKP Terealisasi</a>
                                         <div class="align-items-end d-flex h-100 justify-content-between w-100">
-                                            <p class="font-size-h1 mb-0"> 31 <small class="text-muted font-size-sm">Data</small> </p>
+                                            <p class="font-size-h1 mb-0"> 0 <small class="text-muted font-size-sm">Data</small> </p>
                                             <span class="align-items-end d-block svg-icon svg-icon-3x svg-icon-warning text-right">
                                                 <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Media/Equalizer.svg-->
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -115,7 +115,7 @@
                                     <div class="col bg-white px-6 py-8 rounded-xl mr-3 mb-7">
                                         <a href="#" class="text-dark font-weight-bold font-size-lg">Aktivitas</a>
                                         <div class="align-items-end d-flex h-100 justify-content-between w-100">
-                                            <p class="font-size-h1 mb-0"> 31 <small class="text-muted font-size-sm">Data</small> </p>
+                                            <p class="font-size-h1 mb-0"> {{$data['aktivitas']}} <small class="text-muted font-size-sm">Data</small> </p>
                                             <span class="align-items-end d-block svg-icon svg-icon-3x svg-icon-warning text-right">
                                                 <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Media/Equalizer.svg-->
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -132,7 +132,7 @@
                                     <div class="col bg-white px-6 py-8 rounded-xl ml-3 mb-7">
                                         <a href="#" class="text-dark font-weight-bold font-size-lg">Pegawai yang Dinilai</a>
                                         <div class="align-items-end d-flex h-100 justify-content-between w-100">
-                                            <p class="font-size-h1 mb-0"> 31 <small class="text-muted font-size-sm">Data</small> </p>
+                                            <p class="font-size-h1 mb-0"> {{$data['pegawai_diniai']}} <small class="text-muted font-size-sm">Data</small> </p>
                                             <span class="align-items-end d-block svg-icon svg-icon-3x svg-icon-warning text-right">
                                                 <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Media/Equalizer.svg-->
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -171,7 +171,7 @@
                                     <span class="text-muted">Besaran TPP</span>
                                 </div>
                                 <div class="font-weight-bold">
-                                    <span class="text-dark">Rp.5.000.0000</span>
+                                    <span class="text-dark">Rp. {{$data['informasi_tpp']['besaran_tpp']}}</span>
                                 </div>
                             </div>
 
@@ -180,7 +180,7 @@
                                     <span class="text-muted">Tunjangan Prestasi Kerja (60%)</span>
                                 </div>
                                 <div class="font-weight-bold">
-                                    <span class="text-dark">Rp.5.000.0000</span>
+                                    <span class="text-dark">Rp.0</span>
                                 </div>
                             </div>
 
@@ -189,7 +189,7 @@
                                     <span class="text-muted">Tunjangan Kehadiran Kerja (40%)</span>
                                 </div>
                                 <div class="font-weight-bold">
-                                    <span class="text-dark">Rp.5.000.0000</span>
+                                    <span class="text-dark">Rp.0</span>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center justify-content-between pb-5 mb-5 border-bottom">
@@ -197,7 +197,7 @@
                                     <span class="text-muted">Potongan (JKN + Pph21)</span>
                                 </div>
                                 <div class="font-weight-bold">
-                                    <span class="text-dark">Rp.5.000.0000</span>
+                                    <span class="text-dark">Rp.0</span>
                                 </div>
                             </div>
 
@@ -206,7 +206,7 @@
                                     <span class="text-muted">Total TPP yang diterima</span>
                                 </div>
                                 <div class="font-weight-bolder">
-                                    <span class="text-dark">Rp.5.000.0000</span>
+                                    <span class="text-dark">Rp.0</span>
                                 </div>
                             </div>
                         </div>
@@ -231,7 +231,7 @@
                                     <span class="text-muted">Nama</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">Wardian Marsudi Jaya, SE,M.SI</span>
+                                    <span class="text-dark">{{$data['informasi_pegawai']['nama']}}</span>
                                 </div>
                             </div>
 
@@ -240,7 +240,7 @@
                                     <span class="text-muted">NIP</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">197611242002121005</span>
+                                    <span class="text-dark">{{$data['informasi_pegawai']['nip']}}</span>
                                 </div>
                             </div>
 
@@ -249,7 +249,13 @@
                                     <span class="text-muted">Pangkat / Gol Ruang</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">Penata/IIIc</span>
+                                    <span class="text-dark">
+                                        @if($data['informasi_pegawai']['pangkat'] != null)
+                                            {{$data['informasi_pegawai']['pangkat']}}
+                                        @else
+                                            -
+                                        @endif
+                                    </span>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center justify-content-between pb-5 mb-5 border-bottom">
@@ -257,7 +263,13 @@
                                     <span class="text-muted">Jabatan</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">Analis SDM Aparatur Ahli Muda</span>
+                                    <span class="text-dark">
+                                        @if($data['informasi_pegawai']['jabatan'] != null)
+                                            {{$data['informasi_pegawai']['jabatan']}}
+                                        @else
+                                            -
+                                        @endif
+                                    </span>
                                 </div>
                             </div>
 
@@ -266,7 +278,7 @@
                                     <span class="text-muted">Instansi</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-right">
-                                    <span class="text-dark">Badan Kepegawaian dan Pengembangan SDM</span>
+                                    <span class="text-dark">{{$data['informasi_pegawai']['Instansi']}}</span>
                                 </div>
                             </div>
                         </div>
@@ -291,7 +303,7 @@
                                     <span class="text-muted">Nama</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">Masyitha Rahmah Muhammad, SH. Msi</span>
+                                    <span class="text-dark">{{$data['informasi_penilai']['nama']}}</span>
                                 </div>
                             </div>
 
@@ -300,7 +312,7 @@
                                     <span class="text-muted">NIP</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">197907262006042011</span>
+                                    <span class="text-dark">{{$data['informasi_penilai']['nip']}}</span>
                                 </div>
                             </div>
 
@@ -309,7 +321,13 @@
                                     <span class="text-muted">Pangkat / Gol Ruang</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">Pembina Utama Muda/IVc</span>
+                                    <span class="text-dark">
+                                         @if($data['informasi_penilai']['pangkat'] != null)
+                                            {{$data['informasi_penilai']['pangkat']}}
+                                        @else
+                                            -
+                                        @endif
+                                    </span>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center justify-content-between pb-5 mb-5 border-bottom">
@@ -317,7 +335,13 @@
                                     <span class="text-muted">Jabatan</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">Kabid Pengadaan Pemberhentian & Informasi Kepegawaian</span>
+                                    <span class="text-dark">
+                                        @if($data['informasi_penilai']['jabatan'] != null)
+                                            {{$data['informasi_penilai']['jabatan']}}
+                                        @else
+                                            -
+                                        @endif
+                                    </span>
                                 </div>
                             </div>
 
@@ -326,7 +350,9 @@
                                     <span class="text-muted">Instansi</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-right">
-                                    <span class="text-dark">Badan Kepegawaian dan Pengembangan SDM</span>
+                                    <span class="text-dark">
+                                        {{$data['informasi_penilai']['Instansi']}}
+                                    </span>
                                 </div>
                             </div>
                         </div>
