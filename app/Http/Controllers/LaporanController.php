@@ -89,9 +89,19 @@ class LaporanController extends Controller
     public function exportRekapAbsen($params){
         $val = json_decode($params);
 
-        // return $val->role;
         if ($val->role == 'pegawai') {
             $data = $this->getRekapPegawai($val->startDate,$val->endDate); 
+            // return $data;
+            // foreach ( $data['data']['data_absen'] as $index => $value ){
+            //     if (isset($value['data_tanggal'][0])) {
+            //         // return $value['data_tanggal']['status_absen'];
+            //         // $value['data_tanggal'][0]['status_absen'];
+                  
+                    
+            //    }else{
+            //         return $value['data_tanggal'];
+            //    }
+            // }
             $this->exportrekapPegawai($data,$val->type);  
         }else if($val->role == 'admin' || $val->role == 'super_admin'){
             $data = $this->getRekappegawaiByOpd($val->startDate,$val->endDate,$val->satuanKerja); 
@@ -140,46 +150,77 @@ class LaporanController extends Controller
         
         $sheet->getStyle('A1')->getFont()->setSize(14);
 
-        $sheet->setCellValue('A5', 'No')->mergeCells('A5:A6');
+        $sheet->setCellValue('A4', 'Jumlah hari kerja : '.$data['data']['jml_hari_kerja'])->mergeCells('A4:B4');
+        $sheet->setCellValue('A5', 'Kehadiran kerja : '.$data['data']['kehadiran'])->mergeCells('A5:B5');
+        $sheet->setCellValue('A6', 'Tanpa keterangan : '.$data['data']['tanpa_keterangan'])->mergeCells('A6:B6');
+        $sheet->setCellValue('A7', 'Jumlah potongan kehadiran : '.$data['data']['potongan_kehadiran'])->mergeCells('A7:B7');
+        $sheet->setCellValue('A8', 'Persentase pemotongan : '.$data['data']['persentase_pemotongan'])->mergeCells('A8:B8');
+
+        $sheet->setCellValue('A10', 'No')->mergeCells('A10:A11');
         $sheet->getColumnDimension('A')->setWidth(5);
-        $sheet->setCellValue('B5', 'Tanggal')->mergeCells('B5:B6');
+        $sheet->setCellValue('B10', 'Tanggal')->mergeCells('B10:B11');
         $sheet->getColumnDimension('B')->setWidth(32);
-        $sheet->setCellValue('C5', 'Status Absen')->mergeCells('C5:C6');
+        $sheet->setCellValue('C10', 'Status Absen')->mergeCells('C10:C11');
         $sheet->getColumnDimension('C')->setWidth(32);
-        $sheet->setCellValue('D5', 'Masuk')->mergeCells('D5:E5');
-        $sheet->setCellValue('D6', 'Waktu');
+        $sheet->setCellValue('D10', 'Masuk')->mergeCells('D10:E10');
+        $sheet->setCellValue('D10', 'Waktu');
         $sheet->getColumnDimension('D')->setWidth(32);
-        $sheet->setCellValue('E6', 'Keterangan');
+        $sheet->setCellValue('E11', 'Keterangan');
         $sheet->getColumnDimension('E')->setWidth(32);
-        $sheet->setCellValue('F5', 'Keluar')->mergeCells('F5:G5');
-        $sheet->setCellValue('F6', 'Waktu');
+        $sheet->setCellValue('F10', 'Keluar')->mergeCells('F10:G10');
+        $sheet->setCellValue('F11', 'Waktu');
         $sheet->getColumnDimension('F')->setWidth(32);
-        $sheet->setCellValue('G6', 'Keterangan');
+        $sheet->setCellValue('G11', 'Keterangan');
         $sheet->getColumnDimension('G')->setWidth(32);
 
         $sheet->getStyle('A:G')->getAlignment()->setWrapText(true);
-        $sheet->getStyle('A1:G6')->getFont()->setBold(true);
-        $cell = 7;
+        $sheet->getStyle('A10:G11')->getFont()->setBold(true);
+        $cell = 12;
 
 
         foreach ( $data['data']['data_absen'] as $index => $value ){
             $sheet->setCellValue('A' . $cell, $index+1);
             $sheet->setCellValue('B' . $cell, $value['tanggal']);
+        
            if (isset($value['data_tanggal'])) {
-                $sheet->setCellValue('C' . $cell, $value['data_tanggal'][0]['status_absen']);
-                foreach ($value['data_tanggal'] as $k => $v) {
-                    if ($v['jenis'] == 'checkin') {
-                        $sheet->setCellValue('D' . $cell, $value['data_tanggal'][$k]['waktu_absen']);
-                        $sheet->setCellValue('E' . $cell, $value['data_tanggal'][$k]['keterangan']);         
-                    }else{
-                        $sheet->setCellValue('F' . $cell, $value['data_tanggal'][$k]['waktu_absen']);
-                        $sheet->setCellValue('G' . $cell, $value['data_tanggal'][$k]['keterangan']);
+                if (isset($value['data_tanggal'][0])) {
+                    $sheet->setCellValue('C' . $cell, $value['data_tanggal'][0]['status_absen']);
+
+                    foreach ($value['data_tanggal'] as $k => $v) {
+                        if ($v['jenis'] == 'checkin') {
+                            $sheet->setCellValue('D' . $cell, $value['data_tanggal'][$k]['waktu_absen']);
+                            $sheet->setCellValue('E' . $cell, $value['data_tanggal'][$k]['keterangan']);         
+                        }else{
+                            $sheet->setCellValue('F' . $cell, $value['data_tanggal'][$k]['waktu_absen']);
+                            $sheet->setCellValue('G' . $cell, $value['data_tanggal'][$k]['keterangan']);
+                        }
                     }
+
+                }else{
+                    
+                    if(isset($value['data_tanggal']['status_absen'])){
+                        $sheet->setCellValue('C' . $cell, $value['data_tanggal']['status_absen']);
+                    }else{
+                        $sheet->setCellValue('C' . $cell, '-');
+                    }
+                    
+                    $sheet->setCellValue('D' . $cell, '-');
+                    $sheet->setCellValue('E' . $cell, '-');  
+                    $sheet->setCellValue('F' . $cell, '-');
+                    $sheet->setCellValue('G' . $cell, '-');   
                 }
+
+                // foreach ($value['data_tanggal'] as $k => $v) {
+                //     if ($v['jenis'] == 'checkin') {
+                //         $sheet->setCellValue('D' . $cell, $value['data_tanggal'][$k]['waktu_absen']);
+                //         $sheet->setCellValue('E' . $cell, $value['data_tanggal'][$k]['keterangan']);         
+                //     }else{
+                //         $sheet->setCellValue('F' . $cell, $value['data_tanggal'][$k]['waktu_absen']);
+                //         $sheet->setCellValue('G' . $cell, $value['data_tanggal'][$k]['keterangan']);
+                //     }
+                // }
+                
            }
-           
-            // $sheet->setCellValue('F' . $cell, $value['data_tanggal'][1]['keterangan']);
-            // $sheet->setCellValue('G' . $cell, $value['data_tanggal'][1]['keterangan']);
 
             $cell++;
         }
@@ -193,7 +234,7 @@ class LaporanController extends Controller
             ],
         ];
        
-        $sheet->getStyle('A5:G' . $cell)->applyFromArray($border);
+        $sheet->getStyle('A10:G' . $cell)->applyFromArray($border);
 
 
 
@@ -201,14 +242,15 @@ class LaporanController extends Controller
         $sheet->getStyle('A2:G2')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A3:G3')->getAlignment()->setHorizontal('center');
 
-        $sheet->getStyle('A5:A6')->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('B5:B6')->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('C5:C6')->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('D5:E5')->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('F5:G5')->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('D6:G6')->getAlignment()->setHorizontal('center');
+        // $sheet->getStyle('A5:A6')->getAlignment()->setVertical('center')->setHorizontal('center');
+        // $sheet->getStyle('B5:B6')->getAlignment()->setVertical('center')->setHorizontal('center');
+        // $sheet->getStyle('C5:C6')->getAlignment()->setVertical('center')->setHorizontal('center');
+        // $sheet->getStyle('D5:E5')->getAlignment()->setVertical('center')->setHorizontal('center');
+        // $sheet->getStyle('F5:G5')->getAlignment()->setVertical('center')->setHorizontal('center');
+        // $sheet->getStyle('D6:G6')->getAlignment()->setHorizontal('center');
 
-                // $sheet->getStyle('A' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A10:G'.$cell)->getAlignment()->setVertical('center')->setHorizontal('center');
+
    
         if ($type == 'excel') {
             // Untuk download 
@@ -223,7 +265,6 @@ class LaporanController extends Controller
             $class = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class;
             \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', $class);
             header('Content-Type: application/pdf');
-            // header('Content-Disposition: attachment;filename="EVALUASI RENJA '.$dinas.'.pdf"');
             header('Cache-Control: max-age=0');
             $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Pdf');
         }
@@ -372,36 +413,38 @@ class LaporanController extends Controller
             $sheet->setCellValue('C' . $cell, $val[0]['pegawai']['nama'].' / '.$val[0]['pegawai']['nip']);
             $sheet->setCellValue('D' . $cell, $data['hari_kerja']);
             foreach($val as $t => $v){
-                if ($v['status'] == 'hadir') {
-                    $jml_hari_kerja[] = $v['id'];
-                    if($v['jenis'] == 'checkin'){
-                        $selisih_waktu = $this->konvertWaktu('checkin',$v['waktu_absen']);
-                    
-                        if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
-                            $kmk_30[] = $selisih_waktu;
-                        }elseif($selisih_waktu >= 31 && $selisih_waktu <= 60){
-                            $kmk_60[] =  $selisih_waktu;
-                        }elseif($selisih_waktu >= 61 && $selisih_waktu <= 90){
-                            $kmk_90[] =  $selisih_waktu;
-                        }elseif($selisih_waktu >= 91){
-                            $kmk_90_keatas[] =  $selisih_waktu;
+                if (isset($v['status'])) {
+                    if ($v['status'] == 'hadir') {
+                        $jml_hari_kerja[] = $v['id'];
+                        if($v['jenis'] == 'checkin'){
+                            $selisih_waktu = $this->konvertWaktu('checkin',$v['waktu_absen']);
+                        
+                            if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
+                                $kmk_30[] = $selisih_waktu;
+                            }elseif($selisih_waktu >= 31 && $selisih_waktu <= 60){
+                                $kmk_60[] =  $selisih_waktu;
+                            }elseif($selisih_waktu >= 61 && $selisih_waktu <= 90){
+                                $kmk_90[] =  $selisih_waktu;
+                            }elseif($selisih_waktu >= 91){
+                                $kmk_90_keatas[] =  $selisih_waktu;
+                            }
+                        }else{
+                            $selisih_waktu = $this->konvertWaktu('checkout',$v['waktu_absen']);
+                        
+                            if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
+                                $cpk_30[] = $selisih_waktu;
+                            }elseif($selisih_waktu >= 31 && $selisih_waktu <= 60){
+                                $cpk_60[] =  $selisih_waktu;
+                            }elseif($selisih_waktu >= 61 && $selisih_waktu <= 90){
+                                $cpk_90[] =  $selisih_waktu;
+                            }elseif($selisih_waktu >= 91){
+                                $cpk_90_keatas[] =  $selisih_waktu;
+                            }
                         }
+                   
                     }else{
-                        $selisih_waktu = $this->konvertWaktu('checkout',$v['waktu_absen']);
-                    
-                        if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
-                            $cpk_30[] = $selisih_waktu;
-                        }elseif($selisih_waktu >= 31 && $selisih_waktu <= 60){
-                            $cpk_60[] =  $selisih_waktu;
-                        }elseif($selisih_waktu >= 61 && $selisih_waktu <= 90){
-                            $cpk_90[] =  $selisih_waktu;
-                        }elseif($selisih_waktu >= 91){
-                            $cpk_90_keatas[] =  $selisih_waktu;
-                        }
+                        $jml_tanpa_keterangan[] = $v['id'];
                     }
-               
-                }else{
-                    $jml_tanpa_keterangan[] = $v['id'];
                 }
             }
 
@@ -429,7 +472,7 @@ class LaporanController extends Controller
             $sheet->setCellValue('Z' . $cell, 0); 
             $sheet->setCellValue('X' . $cell, count($cpk_90_keatas) * 1.5); 
 
-            $jml_potongan_kehadiran = (count($jml_tanpa_keterangan) * 3) + (count($kmk_30)) + (count($kmk_60)) + (count($kmk_90)) + (count($kmk_90_keatas)) + (count($cpk_30)) + (count($cpk_60)) + (count($cpk_90)) + count($cpk_90_keatas) + (count($cpk_90_keatas) * 1.5);
+            $jml_potongan_kehadiran = (count($jml_tanpa_keterangan) * 3) + (count($kmk_30)) + (count($kmk_60)) + (count($kmk_90)) + (count($kmk_90_keatas)) + (count($cpk_30)) + (count($cpk_60)) + (count($cpk_90)) + count($cpk_90_keatas) * 1.5;
 
             $persentase_pemotongan_tunjangan = ($jml_potongan_kehadiran / 100) * 0.4;
 
