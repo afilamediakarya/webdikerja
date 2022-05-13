@@ -59,7 +59,8 @@ Route::middleware('Auth')->group(function(){
     
     Route::prefix('realisasi')->group(function () {
         Route::get('/', [RealisasiController::class, 'index'])->name('realisasi');
-        Route::get('/tambah', [RealisasiController::class, 'create'])->name('tambah-realisasi');
+        Route::get('/tambah/{params}/{rencana_kerja}/{bulan}', [RealisasiController::class, 'create'])->name('tambah-realisasi');
+        Route::post('/store', [RealisasiController::class, 'store'])->name('store-realisasi');
     });
     
     Route::prefix('laporan')->group(function () {

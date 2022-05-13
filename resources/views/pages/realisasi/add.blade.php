@@ -30,7 +30,7 @@
                                 class="form-control bg-secondary" 
                                 readonly="readonly" 
                                 id="exampleTextarea" 
-                                rows="4">Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</textarea>
+                                rows="4">{{$rencana}}</textarea>
                         </div>
                         <div class="form-group col-6">
                             <label for="exampleTextarea">Rencana Kinerja Pegawai
@@ -39,44 +39,71 @@
                                 class="form-control bg-secondary" 
                                 readonly="readonly" 
                                 id="exampleTextarea" 
-                                rows="4">Terselenggaranya Instansi Pemerintah yang profesional dalam menerapkan manajemen, Pembinaan dan Pelayanan Kepegawaian ASN yang berkualitas prima sesuai NSPK</textarea>
+                                rows="4">{{$data['rencana_kerja']}}</textarea>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <p class="text-dark font-weight-bolder">Kuantitas</p>
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="exampleTextarea">Rencana Kinerja Pegawai
-                            <span class="text-danger">*</span></label>
-                            <textarea 
-                                class="form-control" 
-                                id="exampleTextarea" 
-                                rows="6"></textarea>
-                        </div>
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="form-group col-6">
-                                    <label>Target </label>
-                                    <input type="email" class="form-control" placeholder="">
-                                </div>
-                                <div class="form-group col-6">
-                                    <label>Satuan </label>
-                                    <input type="email" class="form-control" placeholder="">
-                                </div>
-                                <div class="form-group col-6">
-                                    <label>Realisasi </label>
-                                    <input type="email" class="form-control" placeholder="">
+
+                    <form class="form" id="realisasi_form">
+
+                    <input type="hidden" name="bulan" value="{{$bulan}}">
+
+                    @foreach($data['aspek_skp'] as $key => $value)
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="text-dark font-weight-bolder">{{ $value['aspek_skp'] }}</p>
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="exampleTextarea">Indikator Kinerja Individu
+                                <span class="text-danger">*</span></label>
+                                <textarea 
+                                    class="form-control" 
+                                    id="exampleTextarea" 
+                                    rows="6" readonly>{{$value['iki']}}</textarea>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="form-group col-6">
+                                            @php
+                                                $num = 0;
+                                                foreach($value['target_skp'] as $f => $b){
+                                                    $num += $b['target'];
+                                                }
+                                            @endphp
+                                        <label>Target </label>
+                                        <input type="text" readonly value="{{$num}}" class="form-control" placeholder="">
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label>Satuan </label>
+                                        <input type="text" readonly value="{{$value['satuan']}}" class="form-control" placeholder="">
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label>Realisasi </label>
+                                        @if($value['realisasi_skp'] != [])
+                                            @for ($i=0; $i < count($value['realisasi_skp']); $i++)
+                                                @if($value['realisasi_skp'][$i]['bulan'] == $bulan)
+                                                <input type="text" id="tes" class="form-control" name="realisasi[{{$key}}]" value="{{$value['realisasi_skp'][$i]['realisasi_bulanan']}}" placeholder="">
+                                                @endif
+                                            @endfor
+                                        @else
+                                        <input type="text" id="tes" class="form-control" name="realisasi[{{$key}}]" placeholder="">    
+                                        @endif
+                                        
+                                        <input type="hidden" name="id_aspek_skp[{{$key}}]" value="{{$value['id']}}">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
+                        @endforeach
+                    
+                  
+
+                    </form>
+                    <!-- <div class="row">
                         <div class="col-12">
                             <p class="text-dark font-weight-bolder">Kualitas</p>
                         </div>
                         <div class="form-group col-6">
-                            <label for="exampleTextarea">Rencana Kinerja Pegawai
+                            <label for="exampleTextarea">Indikator Kinerja Individu
                             <span class="text-danger">*</span></label>
                             <textarea 
                                 class="form-control" 
@@ -99,13 +126,13 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
+                    </div> -->
+                    <!-- <div class="row">
                         <div class="col-12">
                             <p class="text-dark font-weight-bolder">Waktu</p>
                         </div>
                         <div class="form-group col-6">
-                            <label for="exampleTextarea">Rencana Kinerja Pegawai
+                            <label for="exampleTextarea">Indikator Kinerja Individu
                             <span class="text-danger">*</span></label>
                             <textarea 
                                 class="form-control" 
@@ -128,14 +155,13 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                        
-                    </form>
+                    </div> -->
+                    
                     <!--end::Form-->
                 </div>
                 <div class="card-footer border-0">
                     <button type="reset" class="btn btn-outline-primary mr-2">Batal</button>
-                    <button type="reset" class="btn btn-primary">Simpan</button>
+                    <button type="button" onclick="submit()" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
             <!--end::Card-->
@@ -146,5 +172,46 @@
 @endsection
 
 @section('script')
-    
+    <script>
+        $(function () {
+
+        submit = () =>{
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/realisasi/store",
+                data: $('.form').serialize(),
+                success: function (response) {
+                    console.log(response);
+                    swal.fire({
+                        text: "Skp berhasil di tambahkan.",
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn font-weight-bold btn-light-primary"
+                        }
+                    }).then(function() {
+                        window.location.href = '/skp';
+                    });
+                },
+                error : function (xhr) {
+                    $('.invalid-feedback').html('');
+                    $('.form-control').removeClass('is-invalid');
+                    $.each(xhr.responseJSON,function (key, value) {
+                        console.log(key+' - '+value)
+                        $(`.${key}_error`).html(value);
+                        $(`#${key}`).addClass('is-invalid');
+                    })
+                }
+            });
+        }
+
+        })
+    </script>
 @endsection
