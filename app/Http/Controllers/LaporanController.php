@@ -84,7 +84,7 @@ class LaporanController extends Controller
             return 'err';
         }
     
-}
+    }
 
     public function exportRekapAbsen($params){
         $val = json_decode($params);
@@ -408,15 +408,16 @@ class LaporanController extends Controller
             $cpk_60 = [];
             $cpk_90 = [];
             $cpk_90_keatas = [];
-            $jml_tanpa_keterangan = [];
+            $jml_tanpa_keterangan = 0;
             $sheet->setCellValue('B' . $cell, $i+1);
             $sheet->setCellValue('C' . $cell, $val[0]['pegawai']['nama'].' / '.$val[0]['pegawai']['nip']);
             $sheet->setCellValue('D' . $cell, $data['hari_kerja']);
             foreach($val as $t => $v){
                 if (isset($v['status'])) {
                     if ($v['status'] == 'hadir') {
-                        $jml_hari_kerja[] = $v['id'];
+                      
                         if($v['jenis'] == 'checkin'){
+                            
                             $selisih_waktu = $this->konvertWaktu('checkin',$v['waktu_absen']);
                         
                             if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
@@ -429,6 +430,7 @@ class LaporanController extends Controller
                                 $kmk_90_keatas[] =  $selisih_waktu;
                             }
                         }else{
+                            $jml_hari_kerja[] = $v['id'];
                             $selisih_waktu = $this->konvertWaktu('checkout',$v['waktu_absen']);
                         
                             if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
@@ -442,16 +444,16 @@ class LaporanController extends Controller
                             }
                         }
                    
-                    }else{
-                        $jml_tanpa_keterangan[] = $v['id'];
                     }
                 }
             }
 
+            $jml_tanpa_keterangan = $data['hari_kerja'] - count($jml_hari_kerja);
+
         
             $sheet->setCellValue('E' . $cell, count($jml_hari_kerja));
-            $sheet->setCellValue('F' . $cell, count($jml_tanpa_keterangan));
-            $sheet->setCellValue('G' . $cell, count($jml_tanpa_keterangan) * 3); 
+            $sheet->setCellValue('F' . $cell, $jml_tanpa_keterangan);
+            $sheet->setCellValue('G' . $cell, $jml_tanpa_keterangan * 3); 
             $sheet->setCellValue('H' . $cell, '%');
             $sheet->setCellValue('I' . $cell, count($kmk_30)); 
             $sheet->setCellValue('J' . $cell, count($kmk_30) * 0.5);
@@ -472,7 +474,7 @@ class LaporanController extends Controller
             $sheet->setCellValue('Z' . $cell, 0); 
             $sheet->setCellValue('X' . $cell, count($cpk_90_keatas) * 1.5); 
 
-            $jml_potongan_kehadiran = (count($jml_tanpa_keterangan) * 3) + (count($kmk_30)) + (count($kmk_60)) + (count($kmk_90)) + (count($kmk_90_keatas)) + (count($cpk_30)) + (count($cpk_60)) + (count($cpk_90)) + count($cpk_90_keatas) * 1.5;
+            $jml_potongan_kehadiran = ($jml_tanpa_keterangan * 3) + (count($kmk_30)) + (count($kmk_60)) + (count($kmk_90)) + (count($kmk_90_keatas)) + (count($cpk_30)) + (count($cpk_60)) + (count($cpk_90)) + count($cpk_90_keatas) * 1.5;
 
             $persentase_pemotongan_tunjangan = ($jml_potongan_kehadiran / 100) * 0.4;
 
