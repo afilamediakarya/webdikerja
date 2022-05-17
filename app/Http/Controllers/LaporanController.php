@@ -90,18 +90,8 @@ class LaporanController extends Controller
         $val = json_decode($params);
 
         if ($val->role == 'pegawai') {
+
             $data = $this->getRekapPegawai($val->startDate,$val->endDate); 
-            // return $data;
-            // foreach ( $data['data']['data_absen'] as $index => $value ){
-            //     if (isset($value['data_tanggal'][0])) {
-            //         // return $value['data_tanggal']['status_absen'];
-            //         // $value['data_tanggal'][0]['status_absen'];
-                  
-                    
-            //    }else{
-            //         return $value['data_tanggal'];
-            //    }
-            // }
             $this->exportrekapPegawai($data,$val->type);  
         }else if($val->role == 'admin' || $val->role == 'super_admin'){
             $data = $this->getRekappegawaiByOpd($val->startDate,$val->endDate,$val->satuanKerja); 
@@ -109,9 +99,24 @@ class LaporanController extends Controller
         }
     }
 
-    // public function tes($type){
-    //     return $type;
-    // }
+    public function viewexportRekapAbsen($params1,$params2, $idpegawai){
+        
+        // return $params1;
+
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+      
+        $response = Http::withToken($token)->get($url."/"."view-rekapByUser/".$params1."/".$params2."/".$idpegawai);
+
+        if ($response->successful() && isset($response->object()->data)) {
+            $data = $response->json();
+            $this->exportrekapPegawai($data,'pdf');
+        }else{
+            return 'err';
+        }
+        // $data = $this->getRekapPegawai($val->startDate,$val->endDate); 
+          
+    }
 
     public function exportrekapPegawai($data,$type){
         $spreadsheet = new Spreadsheet();

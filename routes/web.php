@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\Master\MasterController;
 Route::post('/login', [AuthController::class, 'setLogin'])->name('do-Login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::get('/laporan/viewexport/rekapitulasi_pegawai/{params1}/{params2}/{params3}', [LaporanController::class, 'viewexportRekapAbsen'])->name('laporan-view-absen-pegawai');
 
 Route::middleware('Auth')->group(function(){
 
@@ -65,12 +66,10 @@ Route::middleware('Auth')->group(function(){
     
     Route::prefix('laporan')->group(function () {
         Route::get('/absen/{type}', [LaporanController::class, 'absen'])->name('laporan-absen');
-        Route::get('/export/rekapitulasi_pegawai/{params}', [LaporanController::class, 'exportRekapAbsen'])->name('laporan-absen-pegawai');
         Route::get('/skp', [LaporanController::class, 'skp'])->name('laporan-skp');
         Route::get('/aktivitas', [LaporanController::class, 'aktivitas'])->name('laporan-aktivitas');
-        
+        Route::get('/export/rekapitulasi_pegawai/{params}', [LaporanController::class, 'exportRekapAbsen'])->name('laporan-absen-pegawai');
     });
-    
     
     Route::get('/penilaian/{type}', [PenilaianController::class, 'index'])->name('penilaian');
     Route::get('/penilaian/{type}/{id}', [PenilaianController::class, 'create'])->name('tambah-penilaian');
