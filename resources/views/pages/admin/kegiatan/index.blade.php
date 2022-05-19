@@ -155,10 +155,7 @@
                         title: 'Actions',
                         orderable: false,
                         render: function(data, type, full, meta) {
-                            return '\
-                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
-                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>\
-                            ';
+                            return `<a href="javascript:;" type="button" data-id="${data}" class="btn btn-secondary button-update">ubah</a>`;
                         },
                     }
                 ],
