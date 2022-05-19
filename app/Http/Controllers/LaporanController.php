@@ -92,7 +92,7 @@ class LaporanController extends Controller
         if ($val->role == 'pegawai') {
 
             $data = $this->getRekapPegawai($val->startDate,$val->endDate); 
-            $this->exportrekapPegawai($data,$val->type);  
+            $this->exportrekapPegawai($data,$val->type,'desktop');  
         }else if($val->role == 'admin' || $val->role == 'super_admin'){
             $data = $this->getRekappegawaiByOpd($val->startDate,$val->endDate,$val->satuanKerja); 
             $this->exportrekapOpd($data,$val->type,$val->startDate,$val->endDate);
@@ -110,7 +110,7 @@ class LaporanController extends Controller
 
         if ($response->successful() && isset($response->object()->data)) {
             $data = $response->json();
-            $this->exportrekapPegawai($data,'pdf');
+            $this->exportrekapPegawai($data,'pdf','mobile');
         }else{
             return 'err';
         }
@@ -118,7 +118,7 @@ class LaporanController extends Controller
           
     }
 
-    public function exportrekapPegawai($data,$type){
+    public function exportrekapPegawai($data,$type,$orientation){
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->getProperties()->setCreator('AFILA')
@@ -129,7 +129,12 @@ class LaporanController extends Controller
             ->setKeywords('pdf php')
             ->setCategory('LAPORAN ABSEN');
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        if ($orientation == 'mobile') {
+            $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        }else{
+            $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
+        }
+
         $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
         $sheet->getRowDimension(5)->setRowHeight(25);
         $sheet->getRowDimension(1)->setRowHeight(17);
