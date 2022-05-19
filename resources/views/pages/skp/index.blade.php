@@ -50,44 +50,51 @@
                             @foreach($data['data'] as $key => $value)
                                 <tr style="background:#f2f2f2">
                                     <td>{{$inc_letter++}}.</td>
-                                    <td colspan="6">{{$value['atasan']['rencana_kerja']}}</td>  
+                                    @if($value['atasan'] != [])
+                                    <td colspan="6">{{$value['atasan']['rencana_kerja']}}</td> 
+                                    @else
+                                    <td colspan="6">-</td>
+                                    @endif
                                 <tr>
 
-                                @foreach($value['skp_child'] as $k => $v)
-                                    @foreach($v['aspek_skp'] as $i => $l)
-                                    <tr>
-                                      
-                                        @if($i == 0)
-                                        <td>{{$no+1}}.</td>
-                                        <td>{{$v['rencana_kerja']}}</td>
-                                        @else
-                                        <td></td>
-                                        <td></td>
-                                        @endif
-                                        <td>{{$l['aspek_skp']}}</td>
-                                        <td>{{$l['iki']}}</td>                                       
-                                        @php
-                                            $num = 0;
-                                            foreach($l['target_skp'] as $f => $b){
-                                                $num += $b['target'];
-                                            }
-                                        @endphp
-                                        <td>{{$num}}</td>
-                                        <td>{{$l['satuan']}}</td>
-                                        @if($i == 0)
-                                        <td nowrap="nowrap">
-                                            <a role="button" href="{{url('/skp/edit/'.$v['id'])}}" class="btn btn-success btn-sm">Ubah</a>
-                                            <button onclick="deleteRow('{{$v["id"]}}')" type="button" class="btn btn-danger btn-sm">Hapus</button>
-                                        </td>
-                                        @else
-                                        <td></td>
-                                        @endif
-                                    </tr>
+                                @if($value['skp_child'] != [])
+                                    @foreach($value['skp_child'] as $k => $v)
+                                        @foreach($v['aspek_skp'] as $i => $l)
+                                        <tr>
+                                        
+                                            @if($i == 0)
+                                            <td>{{$no+1}}.</td>
+                                            <td>{{$v['rencana_kerja']}}</td>
+                                            @else
+                                            <td></td>
+                                            <td></td>
+                                            @endif
+                                            <td>{{$l['aspek_skp']}}</td>
+                                            <td>{{$l['iki']}}</td>                                       
+                                            @php
+                                                $num = 0;
+                                                foreach($l['target_skp'] as $f => $b){
+                                                    $num += $b['target'];
+                                                }
+                                            @endphp
+                                            <td>{{$num}}</td>
+                                            <td>{{$l['satuan']}}</td>
+                                            @if($i == 0)
+                                            <td nowrap="nowrap">
+                                                <a role="button" href="{{url('/skp/edit/'.$v['id'])}}" class="btn btn-success btn-sm">Ubah</a>
+                                                <button onclick="deleteRow('{{$v["id"]}}')" type="button" class="btn btn-danger btn-sm">Hapus</button>
+                                            </td>
+                                            @else
+                                            <td></td>
+                                            @endif
+                                        </tr>
+                                        @endforeach
+                                    @php
+                                                $no++;
+                                    @endphp
                                     @endforeach
-                                @php
-                                            $no++;
-                                @endphp
-                                @endforeach
+                                @endif
+                                
                             @endforeach    
                         </tbody>
                           
