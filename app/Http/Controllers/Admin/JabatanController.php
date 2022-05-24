@@ -20,7 +20,10 @@ class JabatanController extends Controller
         $kelas = $datakelas->json();
         $datadinas = Http::withToken($token)->get($url."/satuan_kerja/list");
         $dinas = $datadinas->collect('data');
-        // return $request->session()->get('user_details.satuan_kerja');
+
+        $dataJenisJabatan = Http::withToken($token)->get($url."/jabatan/get-option-jenis-jabatan");
+        $jenisJabatan = $dataJenisJabatan->json();
+
         $pegawai = Http::withToken($token)->get($url."/jabatan/pegawaiBySatuanKerja")->collect();
         // dd($dinas);
         if($request->session()->get('user.role') == 'admin_opd'){
@@ -43,9 +46,18 @@ class JabatanController extends Controller
             }
         }
 
-        return view('pages.admin.jabatan.index', compact('page_title', 'page_description','breadcumb', 'kelas', 'dinas', 'pegawai'));
+        return view('pages.admin.jabatan.index', compact('page_title', 'page_description','breadcumb', 'kelas', 'dinas', 'pegawai','jenisJabatan'));
     }
 
+    public function getParent($params){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $parent = Http::withToken($token)->get($url."/jabatan/get-option-parent/".$params);
+        $dataParent = $parent->json();
+        return $dataParent;
+    }
+
+    
     public function store(Request $request)
     {
         $url = env('API_URL');
@@ -60,6 +72,8 @@ class JabatanController extends Controller
             },
             ARRAY_FILTER_USE_KEY
         );
+
+        // return $filtered;
 
         $response = Http::withToken($token)->post($url."/jabatan/store", $filtered);
         if($response->successful()){

@@ -32,6 +32,7 @@
                             </div>
                             <div class="invalid-feedback jenis_kinerja_error"></div>
                         </div>
+                        <input type="hidden" value="pegawai" name="type_skp">
                         <div class="form-group">
                             <label for="sasaran_kinerja">Sasaran Kerja </label>
                             <!-- <input type="email" class="form-control" placeholder=""> -->
@@ -61,7 +62,7 @@
                             <div class="invalid-feedback indikator_kerja_individu_0_error"></div>
                         </div>
                         <div class="form-group">
-                            <label>Nilai Kinerja </label>
+                            <label>Target </label>
                             <div class="row">
 
                             @for ($i = 0; $i < 12; $i++)
@@ -100,7 +101,7 @@
                             <div class="invalid-feedback indikator_kerja_individu_1_error"></div>
                         </div>
                         <div class="form-group">
-                            <label>Nilai Kinerja </label>
+                            <label>Target </label>
                             <div class="row">
 
                             @for ($i = 0; $i < 12; $i++)
@@ -139,7 +140,7 @@
                             <div class="invalid-feedback indikator_kerja_individu_2_error"></div>
                         </div>
                         <div class="form-group">
-                            <label>Nilai Kinerja </label>
+                            <label>Target </label>
                             <div class="row">
 
                             @for ($i = 0; $i < 12; $i++)

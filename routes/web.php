@@ -52,8 +52,10 @@ Route::middleware('Auth')->group(function(){
         Route::get('/skp', [SkpController::class, 'index'])->name('skp');
         Route::get('/skp/tambah', [SkpController::class, 'create'])->name('tambah-skp');
         Route::post('/skp/store', [SkpController::class, 'store'])->name('store-skp');
+        Route::post('/skp/store/kepala', [SkpController::class, 'store_kepala'])->name('store-skp-kepala');
         Route::get('/skp/edit/{params}', [SkpController::class, 'edit'])->name('edit-skp');
         Route::post('/skp/update/{params}', [SkpController::class, 'update'])->name('update-skp');
+        Route::post('/skp/update/kepala/{params}', [SkpController::class, 'update_kepala'])->name('update_kepala');
         Route::delete('/skp/delete/{params}', [SkpController::class, 'delete'])->name('delete-skp');
     });
     
@@ -69,6 +71,7 @@ Route::middleware('Auth')->group(function(){
         Route::get('/skp', [LaporanController::class, 'skp'])->name('laporan-skp');
         Route::get('/aktivitas', [LaporanController::class, 'aktivitas'])->name('laporan-aktivitas');
         Route::get('/export/rekapitulasi_pegawai/{params}', [LaporanController::class, 'exportRekapAbsen'])->name('laporan-absen-pegawai');
+        Route::get('/export/laporanSkp/{jenis}/{type}/{bulan}', [LaporanController::class, 'exportLaporanSkp'])->name('laporan-skp-pegawai');
     });
     
     Route::get('/penilaian/{type}', [PenilaianController::class, 'index'])->name('penilaian');
@@ -164,7 +167,7 @@ Route::middleware('Auth')->group(function(){
                 Route::get('/kelas/{id}', [JabatanController::class, 'show_kelas'])->name('show-kelas');
                 Route::post('/kelas/{id}', [JabatanController::class, 'update_kelas'])->name('update-kelas');
                 Route::delete('/kelas/{id}', [JabatanController::class, 'delete_kelas'])->name('delete-kelas');
-    
+                Route::get('/getParent/{params}', [JabatanController::class, 'getParent'])->name('getParent');
             });
     
         

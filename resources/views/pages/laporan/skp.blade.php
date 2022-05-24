@@ -24,14 +24,17 @@
                         <div class="row">
                             <div class="form-group col-3">
                                 <label>Jenis SKP</label>
-                                <select class="form-control form-control-solid">
-                                    <option disabled>Realisasi</option>
-                                    <option value="skp">Skp</option>
+                                <select id="jenis-skp-select" class="form-control form-control-solid">
+                                    <option disabled selected>Pilih Jenis Laporan</option>    
+                                    <option value="realisasi">Realisasi</option>
+                                    <option value="skp">SKP</option>
                                 </select>
                             </div>
                             <div class="form-group col-3">
                                 <label>Bulan</label>
-                                <select class="form-control form-control-solid">
+                                <select id="bulan" class="form-control form-control-solid">
+                                <option disabled selected>Pilih Bulan</option>
+                                <option value="0">Semua</option>    
                                 <option value="1">Januari</option>
                                 <option value="2">Februari</option>
                                 <option value="3">Maret</option>
@@ -51,10 +54,10 @@
                                     <button type="reset" class="btn btn-block btn-danger"><i class="flaticon2-pie-chart"></i>Cetak PDF</button>
                                 </div>
                                 <div class="col">
-                                    <button type="reset" class="btn btn-block btn-success"><i class="flaticon2-pie-chart"></i>Export Excel</button>
+                                    <button type="reset" id="export-excel"  class="btn btn-block btn-success"><i class="flaticon2-pie-chart"></i>Export Excel</button>
                                 </div>
                                 <div class="col">
-                                    <button type="reset" class="btn btn-block btn-outline-primary"><i class="flaticon2-pie-chart"></i>Tampilkan Excel</button>
+                                    <button type="reset" id="preview-excel" class="btn btn-block btn-outline-primary"><i class="flaticon2-pie-chart"></i>Tampilkan Excel</button>
                                 </div>
                             </div>
                         </div>
@@ -80,6 +83,37 @@
                 todayHighlight: true,
 
             });
+
+            $('#preview-excel').on('click',function () {
+                let jenis_skp = $('#jenis-skp-select').val();
+                let bulan = $('#bulan').val();
+                if (jenis_skp !== null && bulan !== null) {
+                    url = `/laporan/export/laporanSkp/${jenis_skp}/pdf/${bulan}`;
+                    window.open(url);      
+                }else{
+                    Swal.fire(
+                        "Perhatian",
+                        "Lengkapi form terlebih dahulu",
+                        "warning"
+                    );
+                }
+            })
+
+            $('#export-excel').on('click',function () {
+                let jenis_skp = $('#jenis-skp-select').val();
+                let bulan = $('#bulan').val();
+                if (jenis_skp !== null && bulan !== null) {
+                    url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}`;
+                    window.open(url);     
+                }else{
+                    Swal.fire(
+                        "Perhatian",
+                        "Lengkapi form terlebih dahulu",
+                        "warning"
+                    );
+                }
+            })
+
         });
     </script>
 @endsection

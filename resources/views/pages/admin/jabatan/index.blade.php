@@ -36,7 +36,6 @@
                                 <th>No</th>
                                 <th>Nama Jabatan</th>
                                 <th>Nama Pegawai</th>
-                                <th>Level</th>
                                 <th>Satuan Kerja</th>
                                 <th>Aksi</th>
                             </tr>
@@ -70,6 +69,17 @@
                 <form class="form" id="createForm">
                     @csrf
                     <input type="hidden" name="id"/>
+                   
+                    <div class="form-group">
+                        <label>Satuan Kerja</label>
+                        <select class="form-control form-control-solid" type="text" name="id_satuan_kerja">
+                            @foreach ($dinas as $key => $value)
+                                <option value="{{$value['id']}}">{{$value['nama_satuan_kerja']}}</option>
+                            @endforeach
+                        </select>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                   
                     <div class="form-group">
                         <label>Nama Jabatan</label>
                         <input class="form-control form-control-solid" type="text" name="nama_jabatan"/>
@@ -77,21 +87,37 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>Nama Struktur</label>
-                        <input class="form-control form-control-solid" type="text" name="nama_struktur"/>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Satuan Kerja</label>
-                        <select class="form-control form-control-solid" type="text" name="id_satuan_kerja">
-                            @foreach ($dinas as $item)
-                                <option value="{{$item['id']}}">{{$item['nama_satuan_kerja']}}</option>
+                        <label>Jenis Jabatan</label>
+                        <select class="form-control form-control-solid" type="text" name="id_jenis_jabatan" id="id_jenis_jabatan">
+                            <option disabled selected>Pilih Jenis Jabatan</option>
+                            @foreach ($jenisJabatan as $item)
+                                <option value="{{$item['id']}}">{{$item['value']}}</option>
                             @endforeach
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
+
                     <div class="form-group">
-                        <label>Pegawai</label>
+                        <label>Nilai Jabatan</label>
+                        <input type="text" class="form-control form-control-solid price" name="pembayaran_tpp">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                   
+                    <div class="form-group">
+                        <label>Status Jabatan</label>
+                        <div class="radio-inline">
+                            <label class="radio">
+                            <input type="radio" value="Definitif" name="status_jabatan">
+                            <span></span>Definitif</label>
+                            <label class="radio">
+                            <input type="radio" value="PLT/PLS" name="status_jabatan">
+                            <span></span>PLT/PLS</label>
+                        </div>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nama Pejabat</label>
                         <select class="form-control form-control-solid" type="text" name="id_pegawai" id="pegawai">
                             <option selected disabled>Pilih Pegawai</option>
                             @foreach($pegawai as $item)
@@ -100,36 +126,27 @@
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
+
                     <div class="form-group">
-                        <label>Kelas Jabatan</label>
-                        <select class="form-control form-control-solid" type="text" name="id_kelas_jabatan">
-                            @foreach ($kelas as $item)
-                            <option value="{{$item['id']}}">{{$item['value']}}</option>
-                            @endforeach
-                        </select>
+                        <label>Pembayaran TPP</label>
+                        <div class="radio-inline">
+                            <label class="radio">
+                            <input type="radio" value="100" name="pembayaran_tpp">
+                            <span></span>100%</label>
+                            <label class="radio">
+                            <input type="radio" value="20" name="pembayaran_tpp">
+                            <span></span>20%</label>
+                            <label class="radio">
+                            <input type="radio" value="0" name="pembayaran_tpp">
+                            <span></span>0%</label>
+                        </div>
                         <div class="invalid-feedback"></div>
                     </div>
+
                     <div class="form-group">
-                        <label>Level</label>
-                        <select class="form-control form-control-solid" type="text" name="level">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Jabatan Atasan</label>
-                        <select class="form-control form-control-solid" type="text" name="parent_id">
-                        </select>
-                        <div class="invalid-feedback"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Status Jabatan</label>
-                        <select class="form-control form-control-solid" type="text" name="status_jabatan">
-                            <option value="tetap">Tetap</option>
-                            <option value="fana">Tidak Tetap</option>
+                        <label>Atasan langsung</label>
+                        <select class="form-control form-control-solid" type="text" name="parent_id" id="parent">
+                           
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
@@ -151,9 +168,16 @@
 
 @section('script')
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
+      <script src="{{asset('plugins/custom/price-format/jquery.priceformat.min.js')}}"></script>
     <script>
         "use strict";
         var dataRow = function() {
+
+            $('.price').priceFormat({
+                prefix: '',
+                centsLimit:0,
+                allowNegative: true
+            });
 
         var init = function() {
             var table = $('#kt_datatable');
@@ -174,8 +198,6 @@
                         data:'nama_jabatan'
                     },{
                         data:null
-                    },{
-                        data:'level'
                     },{
                         data:'satuan_kerja.nama_satuan_kerja'
                     },{
@@ -280,36 +302,36 @@
 
 
 
-        $(document).on('change', "select[name='level']", function(){
-            if ($("select[name='id_satuan_kerja']").val() == '') {
-                swal.fire({
-                    text: "Pilih Satuan Kerja Terlebih Dahulu",
-                    icon: "warning",
-                    showConfirmButton:true,
-                })
-            }
-            let satuan_kerja = $("select[name='id_satuan_kerja']").val();
-            let level = $(this).val();
-            if (level != 1) {
-                axios.get(`admin/axios/atasan-jabatan/${level}/${satuan_kerja}`)
-                .then(function(res){
-                    if (res.data.success && res.data.success != '') {
-                        var data = res.data.success;
-                        var opt = '';
-                        $.each(data, function(i, val){
-                            console.log(val.id);
-                            opt += '<option value="'+ val.id +'">'+ val.value +'</option>';
-                        });
-                        console.log(opt);
-                        $("select[name='parent_id']").html(opt);
-                    }
-                }).catch(function(err){
-                    console.log(err);
-                })
-            }else{
-                $("select[name='parent_id']").html('');
-            }
-        })
+        // $(document).on('change', "select[name='level']", function(){
+        //     if ($("select[name='id_satuan_kerja']").val() == '') {
+        //         swal.fire({
+        //             text: "Pilih Satuan Kerja Terlebih Dahulu",
+        //             icon: "warning",
+        //             showConfirmButton:true,
+        //         })
+        //     }
+        //     let satuan_kerja = $("select[name='id_satuan_kerja']").val();
+        //     let level = $(this).val();
+        //     if (level != 1) {
+        //         axios.get(`admin/axios/atasan-jabatan/${level}/${satuan_kerja}`)
+        //         .then(function(res){
+        //             if (res.data.success && res.data.success != '') {
+        //                 var data = res.data.success;
+        //                 var opt = '';
+        //                 $.each(data, function(i, val){
+        //                     console.log(val.id);
+        //                     opt += '<option value="'+ val.id +'">'+ val.value +'</option>';
+        //                 });
+        //                 console.log(opt);
+        //                 $("select[name='parent_id']").html(opt);
+        //             }
+        //         }).catch(function(err){
+        //             console.log(err);
+        //         })
+        //     }else{
+        //         $("select[name='parent_id']").html('');
+        //     }
+        // })
 
         jQuery(document).ready(function() {
             Panel.init('side_form');
@@ -317,6 +339,10 @@
             $('#jadwal_1, #jadwal_2').datepicker({format: 'dd-mm-yyyy'});
             $('#pegawai').select2({
                 placeholder: "Pilih Pegawai"
+            });
+
+            $('#parent').select2({
+                placeholder: "Pilih Atasan"
             });
 
             $(document).on('click','.btn-cancel', function(){
@@ -335,23 +361,61 @@
                         console.log(data.success);
                         var res = data.success.data;
                         $.each(res, function( key, value ) {
-                            // console.log(key+ '_' +value);
-                            if(key == 'pegawai'){
-                                // $("select[name='"+key+"']").val(value.id);
-                                // $("#pegawai").select2(value.id).trigger('change');
-                                
-                                $('#pegawai').select2('data', {id: value.id, text: value.nama});
-                                $("#pegawai").trigger('change');
-                            }else{
-                                $("input[name='"+key+"']").val(value);
-                                $("select[name='"+key+"']").val(value);
-                            }
+                        
+
+                            console.log(key)
+                                if (key == 'pegawai') {
+                                        $('#pegawai').select2('data', {id: value.id, text: value.nama});
+                                        $("#pegawai").trigger('change');
+                                } else if (key == 'status_jabatan') {
+                                    $("input[value='"+value+"']").prop("checked", true);          
+                                }else if(key == 'pembayaran_tpp'){
+                                    $("input[value='"+value+"']").prop("checked", true); 
+                                }else if(key == 'id_jenis_jabatan'){
+                                    $("select[name='"+key+"']").val(value); 
+                                    jenis_jabatan(value);
+                                } else if(key == 'parent_id'){
+                                    $('#parent').val(value)
+                                        // $('#parent').select2('data', {id: value.id, text: value.nama});
+                                        $("#parent").trigger('change');
+                                } else {
+                                    $("input[name='"+key+"']").val(value);
+                                    $("select[name='"+key+"']").val(value);    
+                                }
                             
                         });
                       }
                     }
                 });
             })
+
+            $(document).on('change','#id_jenis_jabatan', function () {
+                let val = $(this).val();
+                jenis_jabatan(val);
+            })
+
+            function jenis_jabatan(val) {
+                $.ajax({
+                    type: "GET",
+                    url: "/admin/jabatan/getParent/"+val,
+                    success: function (response) {
+                        // $('#parent').val(null).trigger('change');
+                        $('#parent').empty();
+                        if (response != '') {
+                            console.log(response);
+                            $.each(response, function (indexInArray, valueOfElement) { 
+                                var newOption = new Option(valueOfElement.value, valueOfElement.id, false, false);
+                                $('#parent').append(newOption).trigger('change');
+                                
+                            });
+                        }
+                    }
+                });     
+            }
+
+            // jenis_jabatan = (val) =>{
+             
+            // }
 
         });
 

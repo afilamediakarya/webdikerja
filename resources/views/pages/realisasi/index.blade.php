@@ -62,7 +62,7 @@
                                         <td>{{$l['satuan']}}</td>
                                         @if($i == 0)
                                         <td nowrap="nowrap">
-                                            <a role="button" onclick="realisasi('{{$v['id']}}','{{$value['atasan']['rencana_kerja']}}')" class="btn btn-secondary btn-sm">Realisasi</a>
+                                            <a role="button" onclick="realisasi('{{$v['id']}}','{{stripslashes($value['atasan']['rencana_kerja'])}}')" class="btn btn-secondary btn-sm">Realisasi</a>
                                         </td>
                                         @else
                                         <td></td>
