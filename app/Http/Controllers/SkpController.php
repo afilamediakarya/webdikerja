@@ -349,17 +349,26 @@ class SkpController extends Controller
     public function update_kepala($params,Request $request){
         // return $request;
         $result = [];
+        $indikator_kerja_individu = [];
+        $satuan = [];
+        $target_ = [];
+        foreach($request->indikator_kerja_individu as $iki => $iki_){
+            $indikator_kerja_individu[] = $iki_;
+            $satuan[] = $request->satuan[$iki];
+            $target_[] = $request->target_[$iki];
+        }
         $current_user = session()->get('user.current');
         $result = [
             'id_satuan_kerja' =>$current_user['pegawai']['id_satuan_kerja'],
-            'indikator_kerja_individu' => $request->indikator_kerja_individu,
+            'indikator_kerja_individu' => $indikator_kerja_individu,
             'jenis_kinerja' => $request->jenis_kinerja,
             'rencana_kerja' => $request->rencana_kerja,
-            'satuan' => $request->satuan,
-            'target_' => $request->target_,
+            'satuan' => $satuan,
+            'target_' => $target_,
             'type_skp' => $request->type_skp,
             'tahun' => date('Y'),
         ];
+        // return $result;
         $url = env('API_URL');
         $token = session()->get('user.access_token');
     

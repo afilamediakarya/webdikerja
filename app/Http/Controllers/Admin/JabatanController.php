@@ -116,6 +116,8 @@ class JabatanController extends Controller
             ARRAY_FILTER_USE_KEY
         );
 
+        // return $filtered;
+
         $response = Http::withToken($token)->post($url."/jabatan/update/".$id, $filtered);
         if($response->successful()){
             $data = $response->object();

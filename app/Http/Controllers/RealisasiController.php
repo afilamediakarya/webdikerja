@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 class RealisasiController extends Controller
 {
+
+    public function checkLevel(){
+        $level = session()->get('user.level_jabatan');
+        return $level;
+    }
+
     public function index()
     {
         $page_title = 'Realisasi';
@@ -14,9 +20,18 @@ class RealisasiController extends Controller
 
         $url = env('API_URL');
         $token = session()->get('user.access_token');
-        $data = Http::withToken($token)->get($url."/skp/list");
+        
 
-        return view('pages.realisasi.index', compact('page_title', 'page_description','breadcumb','data'));
+        $level = $this->checkLevel();
+        if ($level == 1 || $level == 2) {
+           $level = 'kepala';   
+        } else {
+            $level = 'pegawai';
+        }
+
+        $data = Http::withToken($token)->get($url."/skp/list/".$level);
+
+        return view('pages.realisasi.index', compact('page_title', 'page_description','breadcumb','data','level'));
     }
 
 

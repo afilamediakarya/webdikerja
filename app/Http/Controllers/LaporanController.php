@@ -94,25 +94,38 @@ class LaporanController extends Controller
         }
     }
 
-    public function getSkp(){
+    public function checkLevel(){
+        $level = session()->get('user.level_jabatan');
+        return $level;
+    }
+
+    public function getSkp($level){
       
         $url = env('API_URL');
         $token = session()->get('user.access_token');
-        $data = Http::withToken($token)->get($url."/laporan/skp");
+        $data = Http::withToken($token)->get($url."/laporan/skp/".$level);
         return $data['data'];
     }
 
     public function exportLaporanSkp($jenis,$type,$bulan){
-        if ($jenis == 'skp') {
+        $level = $this->checkLevel();
 
-            $data = $this->getSkp(); 
-            return $this->exportSkp($data,$bulan,$type);  
+        if ($level == 1 || $level == 2) {
+            $level = 'kepala';
         }else{
-            return 'realisasi';
+            $level = 'pegawai';
+        }
+
+        $data = $this->getSkp($level); 
+        if ($jenis == 'skp') {
+             return 'skp';
+        }else{
+            // return $data;
+            return $this->exportRealisasi($data,$bulan,$type,$level);
         }
     }
 
-    public function exportSkp($data,$bulan,$type){
+    public function exportRealisasi($data,$bulan,$type,$level){
      
         $spreadsheet = new Spreadsheet();
 
@@ -221,51 +234,117 @@ class LaporanController extends Controller
         $sheet->getStyle('A:L')->getAlignment()->setWrapText(true);
         // $sheet->getStyle('A10:G11')->getFont()->setBold(true);
         $cell = 14;
-        $sum_capaian = 0;
-        foreach ( $data['skp'] as $index => $value ){
-            $sheet->setCellValue('A' . $cell, $index+1);
-            $sheet->setCellValue('B' . $cell, $value['atasan']['rencana_kerja']);
-            foreach ($value['skp_child'] as $key => $res) {
-                $sheet->setCellValue('C' . $cell, $res['rencana_kerja']);
-                foreach ($res['aspek_skp'] as $k => $v) {
-                   
-                    $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
-                    $sheet->setCellValue('E' . $cell, $v['iki']);
-                   
-                    foreach ($v['target_skp'] as $mk => $rr) {
-                        if ($rr['bulan'] ==  $bulan) {
-                            $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                            $sum_capaian += $capaian_iki;
+       
 
-                            $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);
-                            $sheet->setCellValue('G' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'].' '.$v['satuan']);
-                            $sheet->setCellValue('H' . $cell, round($capaian_iki,0) .' %');
-                            if ($capaian_iki > 100) {
-                                $sheet->setCellValue('I' . $cell, 'Sangat baik');
-                            }elseif($capaian_iki == 100){
-                                $sheet->setCellValue('I' . $cell, 'Baik');
-                            }elseif($capaian_iki > 80 && $capaian_iki < 90){
-                                $sheet->setCellValue('I' . $cell, 'Cukup');
-                            }elseif($capaian_iki > 60 && $capaian_iki < 79){
-                                $sheet->setCellValue('I' . $cell, 'Kurang');
-                            }else{
-                                $sheet->setCellValue('I' . $cell, 'Sangat kurang');
+        $data_column = '';
+
+        if($level == 'kepala'){
+            $data_column = $data['skp'];
+        }else{
+            $data_column = $data['skp'];
+        }
+
+        foreach ( $data_column as $index => $value ){
+            
+            if($level == 'kepala'){
+                $sheet->setCellValue('C' . $cell, $value['rencana_kerja']);
+                    foreach ($value['aspek_skp'] as $k => $v) {
+                       
+                        $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
+                        $sheet->setCellValue('E' . $cell, $v['iki']);
+                       
+                        foreach ($v['target_skp'] as $mk => $rr) {
+                            if ($rr['bulan'] ==  $bulan) {
+                                $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                $sum_capaian += $capaian_iki;
+    
+                                $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);
+                                $sheet->setCellValue('G' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'].' '.$v['satuan']);
+                                $sheet->setCellValue('H' . $cell, round($capaian_iki,0) .' %');
+                                if ($capaian_iki > 100) {
+                                    $sheet->setCellValue('I' . $cell, 'Sangat baik');
+                                }elseif($capaian_iki == 100){
+                                    $sheet->setCellValue('I' . $cell, 'Baik');
+                                }elseif($capaian_iki > 80 && $capaian_iki < 90){
+                                    $sheet->setCellValue('I' . $cell, 'Cukup');
+                                }elseif($capaian_iki > 60 && $capaian_iki < 79){
+                                    $sheet->setCellValue('I' . $cell, 'Kurang');
+                                }else{
+                                    $sheet->setCellValue('I' . $cell, 'Sangat kurang');
+                                }
+    
+                                
                             }
-
-                            
                         }
                         
-                        // if ($v['realisasi_skp'][$mk]['bulan'] ==  $bulan) {
-                            
-                        //     $sheet->setCellValue('H' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'].' '.$v['satuan']);
-                        // }
+    
+                        $cell++;  
                     }
-                    
-
-                    $cell++;  
+            }else{
+                $sheet->setCellValue('A' . $cell, $index+1);
+                if(isset($value['atasan']['rencana_kerja'])){
+                    $sheet->setCellValue('B' . $cell, $value['atasan']['rencana_kerja']);
+                }else{
+                    $sheet->setCellValue('B' . $cell, '');
                 }
+                foreach ($value['skp_child'] as $key => $res) {
+                    $sheet->setCellValue('C' . $cell, $res['rencana_kerja']);
+                    foreach ($res['aspek_skp'] as $k => $v) {
+                       
+                        $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
+                        $sheet->setCellValue('E' . $cell, $v['iki']);
+                       
+                        foreach ($v['target_skp'] as $mk => $rr) {
+                            $sum_capaian = 0;
+                            $kategori_ = '';
+                            if ($rr['bulan'] ==  $bulan) {
+                                $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                $sum_capaian += $capaian_iki;
+    
+                                $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);
+                                $sheet->setCellValue('G' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'].' '.$v['satuan']);
+                                $sheet->setCellValue('H' . $cell, round($capaian_iki,0) .' %');
+                                if ($capaian_iki > 100) {
+                                    $sheet->setCellValue('I' . $cell, 'Sangat baik');
+                                }elseif($capaian_iki == 100){
+                                    $sheet->setCellValue('I' . $cell, 'Baik');
+                                }elseif($capaian_iki > 80 && $capaian_iki < 90){
+                                    $sheet->setCellValue('I' . $cell, 'Cukup');
+                                }elseif($capaian_iki > 60 && $capaian_iki < 79){
+                                    $sheet->setCellValue('I' . $cell, 'Kurang');
+                                }else{
+                                    $sheet->setCellValue('I' . $cell, 'Sangat kurang');
+                                }
+
+                                if ($capaian_iki > 100) {
+                                    $kategori_ = 'Sangat baik';
+                                }elseif($capaian_iki == 100){
+                                    $kategori_ = 'Baik'; 
+                                }elseif($capaian_iki > 80 && $capaian_iki < 90){
+                                    $kategori_ = 'Cukup'; 
+                                }elseif($capaian_iki > 60 && $capaian_iki < 79){
+                                    $kategori_ = 'Kurang';
+                                }else{
+                                    $kategori_ = 'Sangat kurang'; 
+                                }
+
+                                $sheet->setCellValue('J' . $cell, $kategori_);
+
+                                
+
+
+                                $sheet->setCellValue('K' . $cell, round($sum_capaian,2));
+                                
+                            }
+                        }
+                        
+    
+                        $cell++;  
+                    }
+                }
+               
             }
-            $sheet->setCellValue('K' . $cell, $sum_capaian);
+            
         }
         
 

@@ -123,7 +123,9 @@
 
         let id = {!! json_encode($data['id']) !!};
         let satuan = {!! json_encode($satuan) !!};
-        let i = 1;
+        let aspek = {!! json_encode($data['aspek_skp']) !!};
+        // console.log(aspek);
+        let i = aspek.length+1;
         $('#add_content_iki').on('click', function () {
             let html = '';
             console.log(satuan);

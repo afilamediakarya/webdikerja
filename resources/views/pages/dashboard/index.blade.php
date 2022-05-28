@@ -303,7 +303,11 @@
                                     <span class="text-muted">Nama</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">{{$data['informasi_penilai']['nama']}}</span>
+                                    @if($data['informasi_penilai'] !== NULL)
+                                         <span class="text-dark">{{$data['informasi_penilai']['nama']}}</span>
+                                    @else
+                                        <span class="text-dark">-</span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -312,7 +316,11 @@
                                     <span class="text-muted">NIP</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">{{$data['informasi_penilai']['nip']}}</span>
+                                   @if($data['informasi_penilai'] !== null)
+                                   <span class="text-dark">{{$data['informasi_penilai']['nip']}}</span>
+                                   @else
+                                   <span class="text-dark">-</span>
+                                   @endif
                                 </div>
                             </div>
 
@@ -322,11 +330,13 @@
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
                                     <span class="text-dark">
+                                         @if($data['informasi_penilai'] !== NULL)
                                          @if($data['informasi_penilai']['pangkat'] != null)
                                             {{$data['informasi_penilai']['pangkat']}}
                                         @else
                                             -
                                         @endif
+                                         @endif
                                     </span>
                                 </div>
                             </div>
@@ -336,10 +346,12 @@
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
                                     <span class="text-dark">
+                                        @if($data['informasi_penilai'] != null)
                                         @if($data['informasi_penilai']['jabatan'] != null)
                                             {{$data['informasi_penilai']['jabatan']}}
                                         @else
                                             -
+                                        @endif
                                         @endif
                                     </span>
                                 </div>
@@ -351,7 +363,9 @@
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-right">
                                     <span class="text-dark">
-                                        {{$data['informasi_penilai']['Instansi']}}
+                                        @if($data['informasi_penilai'] !== null)
+                                            {{$data['informasi_penilai']['Instansi']}}
+                                        @endif
                                     </span>
                                 </div>
                             </div>

@@ -99,7 +99,7 @@
 
                     <div class="form-group">
                         <label>Nilai Jabatan</label>
-                        <input type="text" class="form-control form-control-solid price" name="pembayaran_tpp">
+                        <input type="text" class="form-control form-control-solid price" name="nilai_jabatan">
                         <div class="invalid-feedback"></div>
                     </div>
                    
@@ -268,71 +268,6 @@
             AxiosCall.delete(`admin/jabatan/jabatan/${key}`);
         })
 
-        // function levelChange() {
-        //     alert('sdsdf')
-        //     if ($("select[name='id_satuan_kerja']").val() == '') {
-        //         swal.fire({
-        //             text: "Pilih Satuan Kerja Terlebih Dahulu",
-        //             icon: "warning",
-        //             showConfirmButton:true,
-        //         })
-        //     }
-        //     let satuan_kerja = $("select[name='id_satuan_kerja']").val();
-        //     let level = $(this).val();
-        //     if (level != 1) {
-        //         axios.get(`admin/axios/atasan-jabatan/${level}/${satuan_kerja}`)
-        //         .then(function(res){
-        //             if (res.data.success && res.data.success != '') {
-        //                 var data = res.data.success;
-        //                 var opt = '';
-        //                 $.each(data, function(i, val){
-        //                     console.log(val.id);
-        //                     opt += '<option value="'+ val.id +'">'+ val.value +'</option>';
-        //                 });
-        //                 console.log(opt);
-        //                 $("select[name='parent_id']").html(opt);
-        //             }
-        //         }).catch(function(err){
-        //             console.log(err);
-        //         })
-        //     }else{
-        //         $("select[name='parent_id']").html('');
-        //     }
-        // }
-
-
-
-        // $(document).on('change', "select[name='level']", function(){
-        //     if ($("select[name='id_satuan_kerja']").val() == '') {
-        //         swal.fire({
-        //             text: "Pilih Satuan Kerja Terlebih Dahulu",
-        //             icon: "warning",
-        //             showConfirmButton:true,
-        //         })
-        //     }
-        //     let satuan_kerja = $("select[name='id_satuan_kerja']").val();
-        //     let level = $(this).val();
-        //     if (level != 1) {
-        //         axios.get(`admin/axios/atasan-jabatan/${level}/${satuan_kerja}`)
-        //         .then(function(res){
-        //             if (res.data.success && res.data.success != '') {
-        //                 var data = res.data.success;
-        //                 var opt = '';
-        //                 $.each(data, function(i, val){
-        //                     console.log(val.id);
-        //                     opt += '<option value="'+ val.id +'">'+ val.value +'</option>';
-        //                 });
-        //                 console.log(opt);
-        //                 $("select[name='parent_id']").html(opt);
-        //             }
-        //         }).catch(function(err){
-        //             console.log(err);
-        //         })
-        //     }else{
-        //         $("select[name='parent_id']").html('');
-        //     }
-        // })
-
         jQuery(document).ready(function() {
             Panel.init('side_form');
             dataRow.init();
@@ -351,6 +286,8 @@
 
             // edit
             $(document).on('click', '.button-update', function(){
+                $('#pegawai').val(null).trigger('change');
+                $('#parent').val(null).trigger('change');
                 Panel.action('show','update');
                 var key = $(this).data('id');
                 $.ajax({
@@ -361,27 +298,37 @@
                         console.log(data.success);
                         var res = data.success.data;
                         $.each(res, function( key, value ) {
-                        
-
+                   
                             console.log(key)
                                 if (key == 'pegawai') {
-                                        $('#pegawai').select2('data', {id: value.id, text: value.nama});
-                                        $("#pegawai").trigger('change');
+                                    // console.log('ID : '+value.id+' Nama : '+value.nama);
+                                        // $('#pegawai').select2('data', {id: value.id, text: value.nama});
+                                       if (typeof value !== undefined) {
+                                        if (typeof value.id !== undefined) {
+                                            $('#pegawai').val(value.id)
+                                            $("#pegawai").trigger('change');    
+                                        }
+                                       }
+                                        
                                 } else if (key == 'status_jabatan') {
                                     $("input[value='"+value+"']").prop("checked", true);          
                                 }else if(key == 'pembayaran_tpp'){
                                     $("input[value='"+value+"']").prop("checked", true); 
                                 }else if(key == 'id_jenis_jabatan'){
-                                    $("select[name='"+key+"']").val(value); 
-                                    jenis_jabatan(value);
-                                } else if(key == 'parent_id'){
-                                    $('#parent').val(value)
-                                        // $('#parent').select2('data', {id: value.id, text: value.nama});
-                                        $("#parent").trigger('change');
+                                    $("select[name='"+key+"']").val(value);
+                                }else if(key == 'parent_id'){
+                                    console.log(value);
+                                    jenis_jabatan(value.jenis_jabatan,value.parent_id);
+                                }else if(key == 'nilai_jabatan'){
+                                    
+                                    $("input[name='"+key+"']").val(value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                                    $("input[name='"+key+"']").trigger('change');
                                 } else {
                                     $("input[name='"+key+"']").val(value);
                                     $("select[name='"+key+"']").val(value);    
                                 }
+
+                                
                             
                         });
                       }
@@ -391,10 +338,10 @@
 
             $(document).on('change','#id_jenis_jabatan', function () {
                 let val = $(this).val();
-                jenis_jabatan(val);
+                jenis_jabatan(val,'');
             })
 
-            function jenis_jabatan(val) {
+            function jenis_jabatan(val,parent) {
                 $.ajax({
                     type: "GET",
                     url: "/admin/jabatan/getParent/"+val,
@@ -406,7 +353,11 @@
                             $.each(response, function (indexInArray, valueOfElement) { 
                                 var newOption = new Option(valueOfElement.value, valueOfElement.id, false, false);
                                 $('#parent').append(newOption).trigger('change');
-                                
+                                if (parent !== '') {
+                                    $('#parent').val(parent);
+                                    $("#parent").trigger('change');
+                                }
+                                    
                             });
                         }
                     }
