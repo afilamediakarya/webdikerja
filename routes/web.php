@@ -40,11 +40,12 @@ Route::post('/login', [AuthController::class, 'setLogin'])->name('do-Login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::get('/laporan/viewexport/rekapitulasi_pegawai/{params1}/{params2}/{params3}', [LaporanController::class, 'viewexportRekapAbsen'])->name('laporan-view-absen-pegawai');
+Route::get('/', [AuthController::class, 'indexes'])->name('indexes');
 
 Route::middleware('Auth')->group(function(){
 
     Route::get('/dashboard/{type}', [PagesController::class, 'index'])->name('dashboard');
-    Route::get('/', [PagesController::class, 'index_'])->name('main');
+    // Route::get('/', [PagesController::class, 'index_'])->name('main');
 
     Route::get('atasan/update/{id}', [AkunController::class , 'update_atasan'])->name("update-atasan");
 

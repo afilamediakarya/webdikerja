@@ -43,7 +43,9 @@ class RealisasiController extends Controller
         $url = env('API_URL');
         $token = session()->get('user.access_token');
         $dataById = Http::withToken($token)->get($url."/skp/show/".$params);
+        // return $dataById;
         $data = $dataById['data'];
+        // return $data;
         return view('pages.realisasi.add', compact('page_title', 'page_description','breadcumb','data','rencana','bulan'));
     }
 

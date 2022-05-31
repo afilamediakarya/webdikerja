@@ -33,47 +33,89 @@
                                 $inc_letter = 'A';
                                 $no = 0;
                             @endphp
-                            @foreach($data['data'] as $key => $value)
-                                <tr style="background:#f2f2f2">
-                                    <td>{{$inc_letter++}}.</td>
-                                    <td colspan="6">{{$value['atasan']['rencana_kerja']}}</td>  
-                                <tr>
 
-                                @foreach($value['skp_child'] as $k => $v)
-                                    @foreach($v['aspek_skp'] as $i => $l)
+                            @if($level == 'pegawai')
+                                @foreach($data['data'] as $key => $value)
+                                    <tr style="background:#f2f2f2">
+                                        <td>{{$inc_letter++}}.</td>
+                                        <td colspan="6">{{$value['atasan']['rencana_kerja']}}</td>  
                                     <tr>
-                                      
-                                        @if($i == 0)
-                                        <td>{{$no+1}}.</td>
-                                        <td>{{$v['rencana_kerja']}}</td>
-                                        @else
-                                        <td></td>
-                                        <td></td>
-                                        @endif
-                                        <td>{{$l['aspek_skp']}}</td>
-                                        <td>{{$l['iki']}}</td>                                       
-                                        @php
-                                            $num = 0;
-                                            foreach($l['target_skp'] as $f => $b){
-                                                $num += $b['target'];
-                                            }
-                                        @endphp
-                                        <td>{{$num}}</td>
-                                        <td>{{$l['satuan']}}</td>
-                                        @if($i == 0)
-                                        <td nowrap="nowrap">
-                                            <a role="button" onclick="realisasi('{{$v['id']}}','{{stripslashes($value['atasan']['rencana_kerja'])}}')" class="btn btn-secondary btn-sm">Realisasi</a>
-                                        </td>
-                                        @else
-                                        <td></td>
-                                        @endif
-                                    </tr>
+
+                                    @foreach($value['skp_child'] as $k => $v)
+                                        @foreach($v['aspek_skp'] as $i => $l)
+                                        <tr>
+                                        
+                                            @if($i == 0)
+                                            <td>{{$no+1}}.</td>
+                                            <td>{{$v['rencana_kerja']}}</td>
+                                            @else
+                                            <td></td>
+                                            <td></td>
+                                            @endif
+                                            <td>{{$l['aspek_skp']}}</td>
+                                            <td>{{$l['iki']}}</td>                                       
+                                            @php
+                                                $num = 0;
+                                                foreach($l['target_skp'] as $f => $b){
+                                                    $num += $b['target'];
+                                                }
+                                            @endphp
+                                            <td>{{$num}}</td>
+                                            <td>{{$l['satuan']}}</td>
+                                            @if($i == 0)
+                                            <td nowrap="nowrap">
+                                                <a role="button" onclick="realisasi('{{$v['id']}}','{{stripslashes($value['atasan']['rencana_kerja'])}}')" class="btn btn-secondary btn-sm">Realisasi</a>
+                                            </td>
+                                            @else
+                                            <td></td>
+                                            @endif
+                                        </tr>
+                                        @endforeach
+                                    @php
+                                                $no++;
+                                    @endphp
                                     @endforeach
-                                @php
-                                            $no++;
-                                @endphp
                                 @endforeach
-                            @endforeach    
+                            @else
+                                @foreach($data['data'] as $key => $value)
+                                    
+                                    @foreach($value['aspek_skp'] as $i => $l)
+                                        <tr>
+                                        
+                                            @if($i == 0)
+                                            <td>{{$no+1}}.</td>
+                                            <td>{{$value['rencana_kerja']}}</td>
+                                            @else
+                                            <td></td>
+                                            <td></td>
+                                            @endif
+                                            <td>-</td>
+                                            <td>{{$l['iki']}}</td>                                       
+                                            @php
+                                                $num = 0;
+                                                foreach($l['target_skp'] as $f => $b){
+                                                    $num += $b['target'];
+                                                }
+                                            @endphp
+                                            <td>{{$num}}</td>
+                                            <td>{{$l['satuan']}}</td>
+                                            @if($i == 0)
+                                            <td nowrap="nowrap">
+                                                <a role="button" onclick="realisasi('{{$value['id']}}','-')" class="btn btn-secondary btn-sm">Realisasi</a>
+                                            </td>
+                                            @else
+                                            <td></td>
+                                            @endif
+                                        </tr>
+                                        @endforeach
+                                    @php
+                                                $no++;
+                                    @endphp
+                             
+                                @endforeach      
+                            @endif
+
+                                
                         </tbody>
                           
                         </tbody>

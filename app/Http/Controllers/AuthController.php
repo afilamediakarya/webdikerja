@@ -18,6 +18,23 @@ class AuthController extends Controller
             return view('pages.auth.login', compact('page_title', 'page_description'));
     }
 
+    public function indexes(){
+        
+        $current_user = session()->has('user');
+       
+        if ($current_user > 0) {
+           $role = session()->get('user.role');
+           if ($role == 'admin_opd') {
+               return redirect('/dashboard/admin');
+           }else{
+            return redirect('/dashboard/pegawai');
+           }
+            // return redirect('/');
+        }else{
+            return redirect('/login');
+        }
+    }
+
     public function setLogin(Request $request){
         $url = env('API_URL');
             $response = Http::post($url."/login", [

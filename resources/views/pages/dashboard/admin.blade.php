@@ -149,26 +149,26 @@
                         <!--end::Header-->
                         <!--begin::Body-->
                         <div class="card-body pt-2">
-                            <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Nama</th>
-                                        <th>Status Review SKP</th>
-                                        <th>Realsi</th>
-                                        <th>Nilai Prilaku</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1.</td>
-                                        <td>Nama</td>
-                                        <td><span class="label label-lg font-weight-bold label-light-warning label-inline">Belum Review</span></td>
-                                        <td><span class="label label-lg font-weight-bold label-light-warning label-inline">Belum Review</span></td>
-                                        <td>Nilai Prilaku</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            
+                        <div class="col-md-2 mb-2">
+                            <div id="bulan_selectt"></div>
+                        </div>
+                        
+                        <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Nama</th>
+                                    <th>NIP</th>
+                                    <th>Jabatan</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
                         </div>
                         <!--end::Body-->
                     </div>
@@ -183,79 +183,124 @@
 @section('script')
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
-        "use strict";
-        var dataRow = function() {
-            var init = function() {
-                var table = $('#kt_datatable');
-    
-                // begin first table
-                table.DataTable({
-                    responsive: true,
-                    pageLength: 25,
-                    order: [[0, 'asc']],
-                    // processing:true,
-                    // ajax: "{{ route('admin') }}",
-                    columns:[{ 
-                            data : null, 
-                            render: function (data, type, row, meta) {
-                                    return meta.row + meta.settings._iDisplayStart + 1;
-                            }  
-                        },{
-                            data:'nama'
-                        },{
-                            data:'satuan_kerja.nama_satuan_kerja'
-                        },
-                        {
-                            field: 'Realisasi',
-                            title: 'Status Review Realisasi',
-                            // callback function support for column rendering
-                            template: function(row) {
-                                var status = {
-                                    1: {'title': 'Pending', 'class': 'label-light-primary'},
-                                    2: {'title': 'Delivered', 'class': ' label-light-danger'},
-                                    3: {'title': 'Canceled', 'class': ' label-light-primary'},
-                                    4: {'title': 'Success', 'class': ' label-light-success'},
-                                    5: {'title': 'Info', 'class': ' label-light-info'},
-                                    6: {'title': 'Danger', 'class': ' label-light-danger'},
-                                    7: {'title': 'Warning', 'class': ' label-light-warning'},
-                                };
-                                return '<span class="label label-lg font-weight-bold' + status[row.Status].class + ' label-inline">' + status[row.Status].title + '</span>';
-                            },
-                        },{
-                            data:'id',
-                        }
-                    ],
-                    columnDefs: [
-                        {
-                            targets: -1,
-                            title: 'Actions',
-                            orderable: false,
-                            render: function(data, type, full, meta) {
-                                return '<a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>';
-                            },
-                        }
-                    ],
+      "use strict";  
+        let bulan = '';
+
+        $('#bulan_selectt').html(`<select id="bulan_select" class="form-control">
+                <option selected disabled>Pilih Bulan</option>
+                <option value="1">Januari</option>
+                <option value="2">Februari</option>
+                <option value="3">Maret</option>
+                <option value="4">April</option>
+                <option value="5">Mei</option>
+                <option value="6">Juni</option>
+                <option value="7">Juli</option>
+                <option value="8">Agustus</option>
+                <option value="9">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+            </select>`);
+
+            $('#bulan_select').on('change',function () {
+                bulan = $(this).val();
+            })
+
+        function reviewSkp(type,id_pegawai) {
+            if (bulan !== '') {
+                window.location.href = `/penilaian/realisasi/realisasi/${id_pegawai}/${bulan}`;    
+            }else{
+                swal.fire({
+                    text: "Silahkan pilih bulan terlebih dahulu.",
+                    icon: "warning",
                 });
-            };
-    
-            var destroy = function(){
-                var table = $('#kt_datatable').DataTable();
-                table.destroy();
             }
-    
-            return {
-                init: function() {
-                    init();
-                },
-                destroy:function(){
-                    destroy();
-                }
-    
-            };
-        }();
             
+        }
+        // reviewSkp = () =>{
+        //     alert('dsfsdf');
+        // }
+
+        var dataRow = function() {
+
+        var init = function() {
+            var table = $('#kt_datatable');
+
+            table.DataTable({
+                responsive: true,
+                pageLength: 10,
+                order: [[0, 'asc']],
+                processing:true,
+                ajax: "/get_data/penilaian/realisasi",
+                columns:[{ 
+                        data : null, 
+                        render: function (data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                        }  
+                    },{
+                        data:'nama'
+                    },{
+                        data:'nip'
+                    },{
+                        data:'jenis_jabatan'
+                    },{
+                        data:'status',
+                    },{
+                        data:null,
+                    }
+                ],
+                columnDefs: [
+                    {
+                        targets: -1,
+                        title: 'Actions',
+                        orderable: false,
+                        render: function(data) {
+                            if (data.status == 'Selesai') {
+                                return `<button type="button" class="btn btn-secondary" disabled>Review Skp</button>`
+                            }else{
+                                return `<a href="javascript:;" onClick="reviewSkp('realisasi','${data.id_pegawai}')" role="button" class="btn btn-primary">Review Skp</a>`;
+                            }
+                            
+                        },
+                    }, {
+                        targets: 4,
+                        title: 'Status',
+                        orderable: false,
+                        render: function(data) {
+                            if (data == 'Belum Review') {
+                                return `<a href="javascript:;" class="btn btn-light-danger btn-sm">${data}</a>`;
+                            }else if(data == 'Belum Sesuai'){
+                                return `<a href="javascript:;" class="btn btn-light-warning btn-sm">${data}</a>`;
+                            }else if(data == 'Selesai'){
+                                return `<a href="javascript:;" class="btn btn-light-success btn-sm">${data}</a>`;
+                            }
+                        },
+                    }
+                ],
+            });
+
+        };
+
+        var destroy = function(){
+            var table = $('#kt_datatable').DataTable();
+            table.destroy();
+        }
+
+        return {
+            init: function() {
+                init();
+            },
+            destroy:function(){
+                destroy();
+            }
+
+        };
+
+        }();
+
         jQuery(document).ready(function() {
             dataRow.init();
+            // KTDatatablesAdvancedRowGrouping.init();
         });
     </script>
 @endsection
