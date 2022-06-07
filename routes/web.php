@@ -82,8 +82,14 @@ Route::middleware('Auth')->group(function(){
     // Route::get('/get_data/penilaian/{type}', [PenilaianController::class, 'getData'])->name('getdata_penilaian');
     Route::post('/review_skp', [PenilaianController::class, 'postReviewSkp'])->name('postReviewSkp');
     Route::post('/review_realisasi', [PenilaianController::class, 'postReviewRealisasiSkp'])->name('postReviewRealisasiSkp');
-    Route::get('/aktivitas', [AktivitasController::class, 'index'])->name('aktivitas');
-    Route::get('/aktivitas/show', [AktivitasController::class, 'aktivitas'])->name('get-aktivitas');
+
+    Route::prefix('aktivitas')->group(function(){
+        Route::get('/', [AktivitasController::class, 'index'])->name('aktivitas');
+        Route::get('/show', [AktivitasController::class, 'aktivitas'])->name('get-aktivitas');
+        Route::post('/store', [AktivitasController::class, 'store'])->name('store-aktivitas');
+        Route::get('/detail/{params}', [AktivitasController::class, 'detail'])->name('detail-aktivitas');
+        Route::post('/update/{params}', [AktivitasController::class, 'update'])->name('update-aktivitas');
+    });
     
     
     Route::prefix('akun')->group(function () {

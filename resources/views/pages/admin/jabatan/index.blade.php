@@ -286,6 +286,7 @@
 
             // edit
             $(document).on('click', '.button-update', function(){
+               
                 $('#pegawai').val(null).trigger('change');
                 $('#parent').val(null).trigger('change');
                 Panel.action('show','update');
@@ -293,10 +294,11 @@
                 $.ajax({
                     url:"admin/jabatan/jabatan/"+key,
                     method:"GET",
-                    success: function(data){
-                      if(data.success){
-                        console.log(data.success);
-                        var res = data.success.data;
+                    success: function(response){
+                    let data = JSON.parse(response);
+                    //   if(data.success){
+                        console.log(data.data);
+                        var res = data.data;
                         $.each(res, function( key, value ) {
                    
                             console.log(key)
@@ -331,7 +333,7 @@
                                 
                             
                         });
-                      }
+                    //   }
                     }
                 });
             })

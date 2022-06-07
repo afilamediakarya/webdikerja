@@ -93,6 +93,7 @@ class JabatanController extends Controller
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         $response = Http::withToken($token)->get($url."/jabatan/show/".$id);
+        return $response;
         if($response->successful()){
             return response()->json(['success'=> $response->json()]);
         }else{

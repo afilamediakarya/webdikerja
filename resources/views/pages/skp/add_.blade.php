@@ -193,17 +193,17 @@
                 data: $('#skp-form').serialize(),
                 success: function (response) {
                     console.log(response);
-                    swal.fire({
-                        text: "Skp berhasil di tambahkan.",
-                        icon: "success",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn font-weight-bold btn-light-primary"
-                        }
-                    }).then(function() {
-                        window.location.href = '/skp';
-                    });
+                    // swal.fire({
+                    //     text: "Skp berhasil di tambahkan.",
+                    //     icon: "success",
+                    //     buttonsStyling: false,
+                    //     confirmButtonText: "Ok, got it!",
+                    //     customClass: {
+                    //         confirmButton: "btn font-weight-bold btn-light-primary"
+                    //     }
+                    // }).then(function() {
+                    //     window.location.href = '/skp';
+                    // });
                 },
                 error : function (xhr) {
                     $('.invalid-feedback').html('');

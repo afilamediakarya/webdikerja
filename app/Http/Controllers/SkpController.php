@@ -56,10 +56,7 @@ class SkpController extends Controller
         $page_description = 'Daftar Sasaran Kinerja Pegawai';
         $breadcumb = ['Daftar Sasaran Kinerja Pegawai', 'tambah skp'];
         $sasaran_kinerja_atasan = $this->getSasaranKinerjaAtasan();
-        // return $this->getSasaranKinerjaAtasan();
         $satuan = $this->getSatuan();
-        // return $satuan;
-
         $level = $this->checkLevel();
 
         if ($level == 1 || $level == 2) {
