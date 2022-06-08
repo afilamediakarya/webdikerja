@@ -25,6 +25,8 @@
                                 <th nowrap="nowrap">Indikator Kinerja Individu</th>
                                 <th>Target</th>
                                 <th>Satuan</th>
+                                <th>Realisasi</th>
+                                <th>Review</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -38,7 +40,7 @@
                                 @foreach($data['data'] as $key => $value)
                                     <tr style="background:#f2f2f2">
                                         <td>{{$inc_letter++}}.</td>
-                                        <td colspan="6">{{$value['atasan']['rencana_kerja']}}</td>  
+                                        <td colspan="8">{{$value['atasan']['rencana_kerja']}}</td>  
                                     <tr>
 
                                     @foreach($value['skp_child'] as $k => $v)
@@ -62,10 +64,20 @@
                                             @endphp
                                             <td>{{$num}}</td>
                                             <td>{{$l['satuan']}}</td>
+                                            @php
+                                                $total_realisasi = 0;
+                                                foreach($l['realisasi_skp'] as $n => $m){
+                                                    $total_realisasi += $m['realisasi_bulanan'];
+                                                }
+                                            @endphp
+                                            <td>{{$total_realisasi}}</td>
                                             @if($i == 0)
+                                            <td>    <a href="javascript:;" disabled class="btn btn-light-danger btn-sm">{{$v['status_review']}}</a></td>
                                             <td nowrap="nowrap">
                                                 <a role="button" onclick="realisasi('{{$v['id']}}','{{stripslashes($value['atasan']['rencana_kerja'])}}')" class="btn btn-secondary btn-sm">Realisasi</a>
+                                               
                                             </td>
+                                            
                                             @else
                                             <td></td>
                                             @endif
@@ -81,7 +93,6 @@
                                     
                                     @foreach($value['aspek_skp'] as $i => $l)
                                         <tr>
-                                        
                                             @if($i == 0)
                                             <td>{{$no+1}}.</td>
                                             <td>{{$value['rencana_kerja']}}</td>
@@ -99,16 +110,25 @@
                                             @endphp
                                             <td>{{$num}}</td>
                                             <td>{{$l['satuan']}}</td>
+                                            @php
+                                                $total_realisasi = 0;
+                                                foreach($l['realisasi_skp'] as $n => $m){
+                                                    $total_realisasi += $m['realisasi_bulanan'];
+                                                }
+                                            @endphp
+                                            <td>{{$total_realisasi}}</td>
                                             @if($i == 0)
+                                            <td>    <a href="javascript:;" disabled class="btn btn-light-danger btn-sm">{{$value['status_review']}}</a></td>
                                             <td nowrap="nowrap">
                                                 <a role="button" onclick="realisasi('{{$value['id']}}','-')" class="btn btn-secondary btn-sm">Realisasi</a>
+                                            
                                             </td>
                                             @else
                                             <td></td>
                                             @endif
                                         </tr>
                                         @endforeach
-                                    @php
+                                         @php
                                                 $no++;
                                     @endphp
                              
@@ -149,6 +169,7 @@
 
         $('#month_select').html(`<select id="bulan_select" class="form-control">
                 <option selected disabled>Pilih Bulan</option>
+                <option value="0">Semua</option>
                 <option value="1">Januari</option>
                 <option value="2">Februari</option>
                 <option value="3">Maret</option>

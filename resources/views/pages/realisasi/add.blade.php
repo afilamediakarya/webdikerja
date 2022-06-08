@@ -77,11 +77,20 @@
                                         <input type="text" readonly value="{{$value['satuan']}}" class="form-control" placeholder="">
                                     </div>
                                     <div class="form-group col-6">
-                                        <label>Realisasi </label>
+                                        
                                         @if($value['realisasi_skp'] != [])
                                             @for ($i=0; $i < count($value['realisasi_skp']); $i++)
-                                                @if($value['realisasi_skp'][$i]['bulan'] == $bulan)
-                                                <input type="text" id="tes" class="form-control" name="realisasi[{{$key}}]" value="{{$value['realisasi_skp'][$i]['realisasi_bulanan']}}" placeholder="">
+                                                @if($bulan != 0)
+                                                    @if($value['realisasi_skp'][$i]['bulan'] == $bulan)
+                                                    <label>Realisasi </label>
+                                                    <input type="text" id="tes" class="form-control" name="realisasi[{{$key}}]" value="{{$value['realisasi_skp'][$i]['realisasi_bulanan']}}" placeholder="">
+                                                    @endif
+                                                @else
+                                                <div class="mb-10">
+														<label class="form-label">Realisasi bulan ke {{$i+1}}</label>
+														<input type="text" id="tes" class="form-control" name="realisasi[{{$key}}][{{$i}}]" value="{{$value['realisasi_skp'][$i]['realisasi_bulanan']}}" placeholder="">
+													</div>
+                                                
                                                 @endif
                                             @endfor
                                         @else
@@ -188,17 +197,17 @@
                 data: $('.form').serialize(),
                 success: function (response) {
                     console.log(response);
-                    swal.fire({
-                        text: "Skp berhasil di tambahkan.",
-                        icon: "success",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn font-weight-bold btn-light-primary"
-                        }
-                    }).then(function() {
-                        window.location.href = '/realisasi';
-                    });
+                        // swal.fire({
+                        //     text: "Skp berhasil di tambahkan.",
+                        //     icon: "success",
+                        //     buttonsStyling: false,
+                        //     confirmButtonText: "Ok, got it!",
+                        //     customClass: {
+                        //         confirmButton: "btn font-weight-bold btn-light-primary"
+                        //     }
+                        // }).then(function() {
+                        //     window.location.href = '/realisasi';
+                        // });
                 },
                 error : function (xhr) {
                     $('.invalid-feedback').html('');

@@ -29,7 +29,18 @@ class RealisasiController extends Controller
             $level = 'pegawai';
         }
 
-        $data = Http::withToken($token)->get($url."/skp/list/".$level);
+        $data = Http::withToken($token)->get($url."/realisasi_skp/list/".$level);
+        // // $data_ = json_encode($data);
+        // foreach ($data as $value) {
+        //     return $value;
+        //     // foreach ($value['aspek_skp'] as $i => $l) {
+        //     //     return $l;
+        //     // }
+        // }
+
+        // return $data;
+
+
 
         return view('pages.realisasi.index', compact('page_title', 'page_description','breadcumb','data','level'));
     }

@@ -140,9 +140,11 @@
                             <div class="form-group col-6">
                                 <label>Jenis Jabatan Pegawai</label>
                                 <select class="form-control form-control-solid" name="jenis_jabatan">
+                                   
                                     @foreach ($jabatan as $item)
-                                        <option value="{{$item['id']}}">{{$item['nama_struktur']}}</option>
+                                        <option value="{{$item['id']}}">{{$item['nama_jabatan']}}</option>
                                     @endforeach
+                               
                                 </select>
                             </div>
                             <div class="form-group col-6">

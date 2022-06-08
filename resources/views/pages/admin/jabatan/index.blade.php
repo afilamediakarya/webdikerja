@@ -117,14 +117,18 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Nama Pejabat</label>
-                        <select class="form-control form-control-solid" type="text" name="id_pegawai" id="pegawai">
-                            <option selected disabled>Pilih Pegawai</option>
-                            @foreach($pegawai as $item)
-                                <option value="{{$item['id']}}">{{$item['value']}}</option>
-                            @endforeach
-                        </select>
-                        <div class="invalid-feedback"></div>
+                     
+                            <label>Nama Pejabat</label>
+                            <select class="form-control form-control-solid" type="text" name="id_pegawai" id="pegawai">
+                            <option selected disabled>Pilih pegawai</option>    
+                            <option>-</option>
+                                <!-- <option value="">Kosong</option> -->
+                                @foreach($pegawai as $item)
+                                    <option value="{{$item['id']}}">{{$item['value']}}</option>
+                                @endforeach
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        
                     </div>
 
                     <div class="form-group">
@@ -146,7 +150,7 @@
                     <div class="form-group">
                         <label>Atasan langsung</label>
                         <select class="form-control form-control-solid" type="text" name="parent_id" id="parent">
-                           
+                    
                         </select>
                         <div class="invalid-feedback"></div>
                     </div>
@@ -303,12 +307,13 @@
                    
                             console.log(key)
                                 if (key == 'pegawai') {
-                                    // console.log('ID : '+value.id+' Nama : '+value.nama);
-                                        // $('#pegawai').select2('data', {id: value.id, text: value.nama});
-                                       if (typeof value !== undefined) {
-                                        if (typeof value.id !== undefined) {
-                                            $('#pegawai').val(value.id)
-                                            $("#pegawai").trigger('change');    
+                                        // console.log(value);
+                                       if (value != null) {
+                                        if (typeof value !== undefined) {
+                                            if (typeof value.id !== undefined) {
+                                                $('#pegawai').val(value.id)
+                                                $("#pegawai").trigger('change');    
+                                            }
                                         }
                                        }
                                         
@@ -344,6 +349,9 @@
             })
 
             function jenis_jabatan(val,parent) {
+                // let newOption = '';
+                let newOption = '<option selected disabled>Pilih atasan langsung</option><option>-</option>';    
+                // $('#parent').append(fist_element).trigger('change');
                 $.ajax({
                     type: "GET",
                     url: "/admin/jabatan/getParent/"+val,
@@ -352,19 +360,26 @@
                         $('#parent').empty();
                         if (response != '') {
                             console.log(response);
+                            
                             $.each(response, function (indexInArray, valueOfElement) { 
-                                var newOption = new Option(valueOfElement.value, valueOfElement.id, false, false);
-                                $('#parent').append(newOption).trigger('change');
+                                // var newOption = new Option(valueOfElement.value, valueOfElement.id, false, false);
+                                // console.log(newOption);
+                                 newOption += `<option value="${valueOfElement.id}">${valueOfElement.value}</option>`;
+                                
+                                    
+                            });
+
+                            $('#parent').append(newOption).trigger('change');
                                 if (parent !== '') {
                                     $('#parent').val(parent);
                                     $("#parent").trigger('change');
                                 }
-                                    
-                            });
                         }
                     }
                 });     
             }
+
+         
 
             // jenis_jabatan = (val) =>{
              
