@@ -97,7 +97,7 @@ Route::middleware('Auth')->group(function(){
         Route::get('/', [AkunController::class, 'index'])->name('akun');
         Route::get('/edit', [AkunController::class, 'edit'])->name('edit-profil');
         Route::get('/ganti-password', [AkunController::class, 'index'])->name('ganti-password');
-        Route::post('/pegwai/{id}', [PegawaiController::class, 'update'])->name('update-profil');
+        Route::post('/pegawai/{id}', [PegawaiController::class, 'update'])->name('update-profil');
     });
     Route::middleware('roles:super_admin|admin_opd')->group(function (){
         Route::prefix('admin')->group(function() {
@@ -106,7 +106,7 @@ Route::middleware('Auth')->group(function(){
                 Route::get('/', [PegawaiController::class, 'index'])->name('pegawai');
                 Route::post('/', [PegawaiController::class, 'store'])->name('store-pegawai');
                 Route::get('/{id}', [PegawaiController::class, 'show'])->name('show-pegawai');
-                Route::post('/{id}', [PegawaiController::class, 'update'])->name('update-pegawai');
+                Route::post('/update/{id}', [PegawaiController::class, 'update'])->name('update-pegawai');
                 Route::delete('/{id}', [PegawaiController::class, 'delete'])->name('delete-pegawai');
             });
     
@@ -166,6 +166,7 @@ Route::middleware('Auth')->group(function(){
             Route::prefix('jabatan')->group(function(){
                 Route::get('/jabatan', [JabatanController::class, 'index'])->name('jabatan');
                 Route::post('/jabatan', [JabatanController::class, 'store'])->name('post-jabatan');
+                Route::get('/pegawaiBySatuankerja/{params}', [JabatanController::class, 'pegawaiBySatuankerja'])->name('pegawaiBySatuankerja');
                 Route::get('/jabatan/{id}', [JabatanController::class, 'show'])->name('show-jabatan');
                 Route::post('/jabatan/{id}', [JabatanController::class, 'update'])->name('update-jabatan');
                 Route::delete('/jabatan/{id}', [JabatanController::class, 'delete'])->name('delete-jabatan');    

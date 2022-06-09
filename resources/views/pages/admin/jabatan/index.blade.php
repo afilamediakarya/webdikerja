@@ -32,13 +32,17 @@
                     <!--begin: Datatable-->
                     <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
+                            
                             <tr>
                                 <th>No</th>
                                 <th>Nama Jabatan</th>
                                 <th>Nama Pegawai</th>
+                                @if($role !== 'admin_opd')
                                 <th>Satuan Kerja</th>
+                                @endif
                                 <th>Aksi</th>
                             </tr>
+                            
                         </thead>
                         <tbody>
                             
@@ -72,7 +76,8 @@
                    
                     <div class="form-group">
                         <label>Satuan Kerja</label>
-                        <select class="form-control form-control-solid" type="text" name="id_satuan_kerja">
+                        <select class="form-control form-control-solid" type="text" id="id_satuan_kerja" name="id_satuan_kerja">
+                            <option disabled selected> Pilih Satuan Kerja </option>
                             @foreach ($dinas as $key => $value)
                                 <option value="{{$value['id']}}">{{$value['nama_satuan_kerja']}}</option>
                             @endforeach
@@ -175,6 +180,8 @@
       <script src="{{asset('plugins/custom/price-format/jquery.priceformat.min.js')}}"></script>
     <script>
         "use strict";
+        let role = {!! json_encode($role) !!};
+        console.log(role);
         var dataRow = function() {
 
             $('.price').priceFormat({
@@ -186,42 +193,28 @@
         var init = function() {
             var table = $('#kt_datatable');
 
-            // begin first table
-            table.DataTable({
-                responsive: true,
-                pageLength: 10,
-                order: [[0, 'asc']],
-                processing:true,
-                ajax: "{{ route('jabatan') }}",
-                columns:[{ 
-                        data : null, 
+            let columns = [];
+            let columnDefs = [];
+
+            if (role !== 'admin_opd') {
+                columns = [
+                    { 
+                    data : null, 
                         render: function (data, type, row, meta) {
                                 return meta.row + meta.settings._iDisplayStart + 1;
                         }  
                     },{
                         data:'nama_jabatan'
                     },{
-                        data:null
+                        data:'nama'
                     },{
-                        data:'satuan_kerja.nama_satuan_kerja'
+                        data:'nama_satuan_kerja'
                     },{
                         data:'id',
                     }
-                ],
-                columnDefs: [
-                    {
-                        targets: 2,
-                        title: 'Nama Pegawai',
-                        orderable: false,
-                        render: function(data, type, full, meta) {
-                           if (data.pegawai != null) {
-                                 return data.pegawai['nama'];
-                           }else{
-                                return '-';
-                           }
-                           
-                        },
-                    },
+                ];
+
+                columnDefs = [
                     {
                         targets: -1,
                         title: 'Actions',
@@ -233,7 +226,48 @@
                             ';
                         },
                     }
-                ],
+                ];
+            }else{
+                columns = [
+                    { 
+                    data : null, 
+                        render: function (data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                        }  
+                    },{
+                        data:'nama_jabatan'
+                    },{
+                        data:'nama'
+                    },{
+                        data:'id',
+                    }
+                ];
+
+                columnDefs = [
+                    {
+                        targets: -1,
+                        title: 'Actions',
+                        orderable: false,
+                        render: function(data, type, full, meta) {
+                            return '\
+                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
+                            ';
+                        },
+                    }
+                ];
+            }
+
+            console.log(columns);
+
+            // begin first table
+            table.DataTable({
+                responsive: true,
+                pageLength: 10,
+                order: [[0, 'asc']],
+                processing:true,
+                ajax: "{{ route('jabatan') }}",
+                columns:columns,
+                columnDefs:columnDefs,
             });
         };
 
@@ -258,6 +292,11 @@
             e.preventDefault();
             AxiosCall.post("{{route('post-jabatan')}}", $(this).serialize(), "#createForm");
         });
+
+        $(document).on('change','#id_satuan_kerja', function () {
+            let val = $(this).val();
+            pegawaiBysatuanKerja(val);
+        })
         
         
         $(document).on('submit', "#createForm[data-type='update']", function(e){
@@ -305,12 +344,17 @@
                         var res = data.data;
                         $.each(res, function( key, value ) {
                    
-                            console.log(key)
-                                if (key == 'pegawai') {
-                                        // console.log(value);
+                                if (key == 'id_satuan_kerja') {
+                                    $("select[name='"+key+"']").val(value); 
+                                    if (role == 'super_admin') {
+                                        pegawaiBysatuanKerja(value);
+                                    } 
+                                }else if (key == 'pegawai') {
+                                        console.log(value);
                                        if (value != null) {
                                         if (typeof value !== undefined) {
                                             if (typeof value.id !== undefined) {
+                                            
                                                 $('#pegawai').val(value.id)
                                                 $("#pegawai").trigger('change');    
                                             }
@@ -324,7 +368,7 @@
                                 }else if(key == 'id_jenis_jabatan'){
                                     $("select[name='"+key+"']").val(value);
                                 }else if(key == 'parent_id'){
-                                    console.log(value);
+                                   
                                     jenis_jabatan(value.jenis_jabatan,value.parent_id);
                                 }else if(key == 'nilai_jabatan'){
                                     
@@ -336,11 +380,14 @@
                                 }
 
                                 
-                            
+                               
                         });
+
+                        
                     //   }
                     }
                 });
+         
             })
 
             $(document).on('change','#id_jenis_jabatan', function () {
@@ -356,10 +403,11 @@
                     type: "GET",
                     url: "/admin/jabatan/getParent/"+val,
                     success: function (response) {
+                        console.log(response);
                         // $('#parent').val(null).trigger('change');
                         $('#parent').empty();
                         if (response != '') {
-                            console.log(response);
+                         
                             
                             $.each(response, function (indexInArray, valueOfElement) { 
                                 // var newOption = new Option(valueOfElement.value, valueOfElement.id, false, false);
@@ -379,6 +427,8 @@
                 });     
             }
 
+           
+
          
 
             // jenis_jabatan = (val) =>{
@@ -386,6 +436,36 @@
             // }
 
         });
+
+        function pegawaiBysatuanKerja(params) {
+                let newOption = '<option selected disabled>Pilih Pegawai</option><option>-</option>';    
+                $.ajax({
+                    type: "GET",
+                    url: "/admin/jabatan/pegawaiBySatuankerja/"+params,
+                    success: function (response) {
+                        console.log(response);
+                        // $('#parent').val(null).trigger('change');
+                        $('#pegawai').empty();
+                        if (response != '') {
+                         
+                            
+                            $.each(response, function (indexInArray, valueOfElement) { 
+                                // var newOption = new Option(valueOfElement.value, valueOfElement.id, false, false);
+                                // console.log(newOption);
+                                 newOption += `<option value="${valueOfElement.id}">${valueOfElement.value}</option>`;
+                                
+                                    
+                            });
+
+                            $('#pegawai').append(newOption).trigger('change');
+                                // if (parent !== '') {
+                                //     $('#parent').val(parent);
+                                //     $("#parent").trigger('change');
+                                // }
+                        }
+                    }
+                });
+            }
 
     </script>
 @endsection

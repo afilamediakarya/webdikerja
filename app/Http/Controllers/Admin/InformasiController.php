@@ -16,11 +16,20 @@ class InformasiController extends Controller
         $page_description = 'Daftar Aktivitas';
         $breadcumb = ['Daftar Informasi'];
         $url_img = env('IMG_URL');
+        $satuan_kerja_list = '';
+        $role = session()->get('user.role');
+
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
      
+        if ($role == 'super_admin') {
+            $satuan_kerja_list = Http::withToken($token)->get($url."/satuan_kerja/list")['data'];
+        }
+
+        // return $satuan_kerja_list;
+
         $satuan_kerja = session()->get('user.current.pegawai.id_satuan_kerja');
         if($request->ajax()){
-            $url = env('API_URL');
-            $token = $request->session()->get('user.access_token');
             $response = Http::withToken($token)->get($url."/informasi/list");
             if ($response->successful()) {
                 $data = $response->json();
@@ -30,7 +39,7 @@ class InformasiController extends Controller
             }
         }
 
-        return view('pages.admin.informasi.index', compact('page_title', 'page_description','breadcumb','satuan_kerja','url_img'));
+        return view('pages.admin.informasi.index', compact('page_title', 'page_description','breadcumb','satuan_kerja','url_img','role','satuan_kerja_list'));
     }
 
     public function store(Request $request)

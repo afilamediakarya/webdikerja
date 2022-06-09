@@ -19,7 +19,14 @@ class AkunController extends Controller
         $status_pegawai = Http::withToken($token)->get($url."/pegawai/get-option-status-pegawai")->collect();
         $eselon = Http::withToken($token)->get($url."/pegawai/get-option-status-eselon")->collect();
         $jabatan_data = Http::withToken($token)->get($url."/jabatan/list")->collect();
+
+        $pegawai_id = session()->get('user.current.id_pegawai');
+
+
+        $data_ = Http::withToken($token)->get($url."/pegawai/show/".$pegawai_id)['data'];
+
         $jabatan = collect($jabatan_data['data'])->filter(function($item) use($request){
+
             // if($item['id'] == $request->session()->get('user_details.id_satuan_kerja')){
             if($item['id_satuan_kerja'] == '1'){
                 return $item;
@@ -37,7 +44,7 @@ class AkunController extends Controller
                     'page_description',
                     'breadcumb', 
                     'atasan', 
-                    'pangkat', 'agama', 'status_kawin', 'pendidikan', 'status_pegawai', 'eselon', 'jabatan', 'dinas'));
+                    'pangkat', 'agama', 'status_kawin', 'pendidikan', 'status_pegawai', 'eselon', 'jabatan', 'dinas','data_'));
     }
 
     public function update_atasan(Request $request, $id)

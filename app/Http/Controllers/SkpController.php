@@ -110,7 +110,7 @@ class SkpController extends Controller
         }
 
         if (is_null($params->sasaran_kinerja)) {
-            $result['sasaran_kinerja'][] = 'Jenis Kinerja is field required';
+            $result['sasaran_kinerja'][] = 'Sasaran Kinerja is field required';
         }
 
         foreach ($params->indikator_kerja_individu as $key => $ikis) {
@@ -136,30 +136,31 @@ class SkpController extends Controller
                 $result['target_waktu_'.$key][] = 'Nilai Kinerja is field required';
              }
          }
-        // return empty($params->satuan);
+
+        // return $params->satuan;
 
         if (empty($params->satuan)) {
+            return 'kosong';
             for ($i=0; $i < 3; $i++) { 
                 $result['satuan_'.$i][] = 'Satuan is field required';
             }
         }else{
-            // return $params->satuan;
+           
+           if (count($params->satuan) < 3) {
             foreach ($params->satuan as $k => $v) {
                 for ($i=0; $i < 3; $i++) { 
                     if ($i !== $k) {
-                        $cek[$i] = $i;
+                        // $cek[$i] = $i;
+                        $result['satuan_'.$i][] = 'Satuan is field required';
                     }
                 }
             }
+           }
         }
 
-        return $result;
+        // return $cek;
 
-        // if (count($result) > 0 ) {
-        //     return response()->json($result,422);   
-        // }else{
-        //     return response()->json('success',200);
-        // }
+        return $result;
 
         
     }   
@@ -167,6 +168,7 @@ class SkpController extends Controller
     public function store(Request $request){
       
        $validated = $this->customValidate($request);
+
 
         if (count($validated) > 0 ) {
             return response()->json($validated,422);   
@@ -223,28 +225,75 @@ class SkpController extends Controller
         
     }
 
-    public function store_kepala(Request $request){
-        // return $request;
+    public function validate_skp_kepala($params){
+
         $result = [];
-        $current_user = session()->get('user.current');
-        $result = [
-            'id_satuan_kerja' =>$current_user['pegawai']['id_satuan_kerja'],
-            'indikator_kerja_individu' => $request->indikator_kerja_individu,
-            'jenis_kinerja' => $request->jenis_kinerja,
-            'rencana_kerja' => $request->rencana_kerja,
-            'satuan' => $request->satuan,
-            'target_' => $request->target_,
-            'type_skp' => $request->type_skp,
-            'tahun' => date('Y'),
-        ];
 
-        // return $result;
+        if (is_null($params->jenis_kinerja)) {
+            $result['jenis_kinerja'][] = 'Jenis kinerja is field required';
+        }
 
-        $url = env('API_URL');
-        $token = session()->get('user.access_token');
+        if (is_null($params->sasaran_kinerja)) {
+            $result['rencana_kerja'][] = 'rencana kerja is field required';
+        }
+
+        $row_count = count($params->indikator_kerja_individu);
+
+        for ($i=0; $i < $row_count; $i++) { 
+            if (is_null($params->indikator_kerja_individu[$i])) {
+                $result['indikator_kerja_individu_'.$i][] = 'Indikator Kerja Individu is field required';
+            }
+
+            if (!empty($params->satuan)) {
+                if (!isset($params->satuan[$i])) {
+                    $result['satuan_'.$i][] = 'Satuan is field required';
+                }
+            }else{
+                $result['satuan_'.$i][] = 'Satuan is field required';
+            }
     
-        $response = Http::withToken($token)->post($url."/skp/store",$result);
-        return $response;
+        }
+
+        // return $row_count;
+
+
+        return $result;
+    }
+
+
+    public function store_kepala(Request $request){
+        // return $request->all();
+
+        $validated = $this->validate_skp_kepala($request);
+
+        // return $validated;
+
+        if (count($validated) > 0 ) {
+            return response()->json($validated,422);   
+        }else{
+            $result = [];
+            $current_user = session()->get('user.current');
+            $result = [
+                'id_satuan_kerja' =>$current_user['pegawai']['id_satuan_kerja'],
+                'indikator_kerja_individu' => $request->indikator_kerja_individu,
+                'jenis_kinerja' => $request->jenis_kinerja,
+                'rencana_kerja' => $request->rencana_kerja,
+                'satuan' => $request->satuan,
+                'target_' => $request->target_,
+                'type_skp' => $request->type_skp,
+                'tahun' => date('Y'),
+            ];
+    
+            // return $result;
+    
+            $url = env('API_URL');
+            $token = session()->get('user.access_token');
+        
+            $response = Http::withToken($token)->post($url."/skp/store",$result);
+            return $response;
+        }    
+
+      
     }
 
     public function update($params,Request $request){

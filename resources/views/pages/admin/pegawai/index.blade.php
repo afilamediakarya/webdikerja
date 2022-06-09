@@ -234,6 +234,8 @@
                                 <input type="text" class="form-control form-control-solid" name="lulus_pendidikan_struktural">
                             </div>
 
+                            <input type="hidden" value="pegawai" name="type">
+
                             <div class="form-group col-6">
                                 <label>Jurusan</label>
                                 <input type="text" class="form-control form-control-solid" name="jurusan">
@@ -260,10 +262,44 @@
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
         "use strict";
+        let role = {!! json_encode($role) !!}
+        console.log(role);
         var dataRow = function() {
+            let columnDefs = [];
+            if (role == 'admin_opd') {
+                columnDefs = [
+                    {
+                            targets: -1,
+                            title: 'Actions',
+                            orderable: false,
+                            render: function(data, type, full, meta) {
+                                return '\
+                                    <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
+                                ';
+                            }
+                        }
+                ];
+            } else {
+                columnDefs = [
+                    {
+                            targets: -1,
+                            title: 'Actions',
+                            orderable: false,
+                            render: function(data, type, full, meta) {
+                                return '\
+                                    <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
+                                    <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>\
+                                ';
+                            }
+                        }
+                ];
+            }
+
+            console.log(columnDefs);
+
             var init = function() {
                 var table = $('#kt_datatable');
-                // begin first table
+                
                 table.DataTable({
                     responsive: true,
                     pageLength: 25,
@@ -278,7 +314,7 @@
                         },
                         {data:'nama'},
                         {data:'nip'},
-                        {data:'jenis_jabatan'},
+                        {data:'nama_jabatan'},
                         {
                             data:'id',
                         }
@@ -286,19 +322,7 @@
                     filter: function (data) {
                         console.log(data);
                     },
-                    columnDefs: [
-                        {
-                            targets: -1,
-                            title: 'Actions',
-                            orderable: false,
-                            render: function(data, type, full, meta) {
-                                return '\
-                                    <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
-                                    <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>\
-                                ';
-                            }
-                        }
-                    ],
+                    columnDefs: columnDefs
                 });
             };
 
@@ -386,7 +410,7 @@
         $(document).on('submit', "#createForm[data-type='update']", function(e){
             e.preventDefault();
             var _id = $("input[name='id']").val();
-            axios.post( `admin/pegawai/${_id}`,  $(this).serialize())
+            axios.post( `admin/pegawai/${_id}/pegawai`,  $(this).serialize())
             .then(function(res){
                 var data = res.data;
                 if(data.fail){

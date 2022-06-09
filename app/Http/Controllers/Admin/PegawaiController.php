@@ -31,6 +31,7 @@ class PegawaiController extends Controller
         $status_pegawai = Http::withToken($token)->get($url."/pegawai/get-option-status-pegawai")->collect();
         $eselon = Http::withToken($token)->get($url."/pegawai/get-option-status-eselon")->collect();
         $jabatan_data = Http::withToken($token)->get($url."/jabatan/list")->collect();
+        $role = session()->get('user.role');
         
         $jabatan = collect($jabatan_data['data'])->filter(function($item) use($request){
             // if($item['id'] == $request->session()->get('user_details.id_satuan_kerja')){
@@ -49,7 +50,7 @@ class PegawaiController extends Controller
         }
 
         // return $dinas;
-        return view('pages.admin.pegawai.index', compact('page_title', 'page_description','breadcumb', 'dinas', 'pangkat', 'agama', 'status_kawin', 'pendidikan', 'status_pegawai', 'eselon', 'jabatan'));
+        return view('pages.admin.pegawai.index', compact('page_title', 'page_description','breadcumb', 'dinas', 'pangkat', 'agama', 'status_kawin', 'pendidikan', 'status_pegawai', 'eselon', 'jabatan','role'));
     }
 
     public function store(Request $request)
@@ -86,6 +87,7 @@ class PegawaiController extends Controller
     }
 
     public function show(Request $request, $id){
+        return $id;
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         $response = Http::withToken($token)->get($url."/pegawai/show/".$id);
@@ -99,6 +101,7 @@ class PegawaiController extends Controller
 
     public function update(Request $request, $id)
     {
+        // return $id;
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         $data = $request->all();
@@ -115,6 +118,8 @@ class PegawaiController extends Controller
             },
             ARRAY_FILTER_USE_KEY
         );
+
+        // $d
 
         $response = Http::withToken($token)->post($url."/pegawai/update/".$id, $filtered);
         if($response->successful()){

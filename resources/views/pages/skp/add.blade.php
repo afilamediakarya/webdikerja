@@ -30,7 +30,7 @@
                                 <input type="radio" value="Tambahan" name="jenis_kinerja" />
                                 <span></span>Tambahan</label>
                             </div>
-                            <div class="invalid-feedback jenis_kinerja_error"></div>
+                            <div class="text-danger jenis_kinerja_error"></div>
                         </div>
 
                         <input type="hidden" value="pegawai" name="type_skp">
@@ -44,13 +44,13 @@
                                     <option value="{{$value['id']}}">{{$value['value']}}</option>
                                 @endforeach
                              </select>
-                             <div class="invalid-feedback sasaran_kinerja_error"></div>
+                             <div class="text-danger sasaran_kinerja_error"></div>
                         </div>
                         <div class="form-group">
                             <label for="rencana_kerja">Rencana Kerja 
                             <span class="text-danger">*</span></label>
                             <textarea class="form-control" id="rencana_kerja" name="rencana_kerja" rows="3"></textarea>
-                            <div class="invalid-feedback rencana_kerja_error"></div>
+                            <div class="text-danger rencana_kerja_error"></div>
                         </div>
 
                         <div class="form-group">
@@ -61,7 +61,7 @@
                         <div class="form-group">
                             <label for="indikator_kerja_individu_0">Indikator Kerja Individu </label>
                             <textarea class="form-control" name="indikator_kerja_individu[0]" id="indikator_kerja_individu_0" rows="3"></textarea>
-                            <div class="invalid-feedback indikator_kerja_individu_0_error"></div>
+                            <div class="text-danger indikator_kerja_individu_0_error"></div>
                         </div>
                         <div class="form-group">
                             <label>Target </label>
@@ -71,7 +71,7 @@
                                 <div class="col-1">
                                     <input type="number" id="target_kuantitas_{{$i}}" name="target_kuantitas[{{$i}}]" class="form-control nilai_kinerja_kuantitas" placeholder="">
                                     <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
-                                    <div class="invalid-feedback target_kuantitas_{{$i}}_error"></div>
+                                    <div class="text-danger target_kuantitas_{{$i}}_error"></div>
                                 </div>
                             @endfor
                             </div>
@@ -85,7 +85,7 @@
                                     <option value="{{$v['value']}}">{{$v['value']}}</option>
                                    @endforeach
                                 </select>
-                                <div class="invalid-feedback satuan_0_error"></div>
+                                <div class="text-danger satuan_0_error"></div>
                             </div>
                             <div class="form-group col-6">
                                 <label>Total</label>
@@ -100,7 +100,7 @@
                         <div class="form-group">
                             <label for="indikator_kerja_individu_1">Indikator Kerja Individu </label>
                             <textarea class="form-control" name="indikator_kerja_individu[1]" id="indikator_kerja_individu_1" rows="3"></textarea>
-                            <div class="invalid-feedback indikator_kerja_individu_1_error"></div>
+                            <div class="text-danger indikator_kerja_individu_1_error"></div>
                         </div>
                         <div class="form-group">
                             <label>Target </label>
@@ -110,7 +110,7 @@
                                 <div class="col-1">
                                     <input type="number" id="target_kualitas_{{$i}}" name="target_kualitas[{{$i}}]" class="form-control nilai_kinerja_kualitas" placeholder="">
                                     <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
-                                    <div class="invalid-feedback target_kualitas_{{$i}}_error"></div>
+                                    <div class="text-danger target_kualitas_{{$i}}_error"></div>
                                 </div>
                             @endfor
                             </div>
@@ -124,7 +124,7 @@
                                    <option value="{{$v['value']}}">{{$v['value']}}</option>
                                    @endforeach
                                 </select>
-                                <div class="invalid-feedback satuan_1_error"></div>
+                                <div class="text-danger satuan_1_error"></div>
                             </div>
                             <div class="form-group col-6">
                                 <label>Total</label>
@@ -139,7 +139,7 @@
                         <div class="form-group">
                             <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
                             <textarea class="form-control" name="indikator_kerja_individu[2]" id="indikator_kerja_individu_2" rows="3"></textarea>
-                            <div class="invalid-feedback indikator_kerja_individu_2_error"></div>
+                            <div class="text-danger indikator_kerja_individu_2_error"></div>
                         </div>
                         <div class="form-group">
                             <label>Target </label>
@@ -149,7 +149,7 @@
                                 <div class="col-1">
                                     <input type="number" id="target_waktu_{{$i}}" name="target_waktu[{{$i}}]" class="form-control nilai_kinerja_waktu" placeholder="">
                                     <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
-                                    <div class="invalid-feedback target_waktu_{{$i}}_error"></div>
+                                    <div class="text-danger target_waktu_{{$i}}_error"></div>
                                 </div>
                             @endfor
                             </div>
@@ -163,7 +163,7 @@
                                    <option value="{{$v['value']}}">{{$v['value']}}</option>
                                    @endforeach
                                 </select>
-                                <div class="invalid-feedback satuan_2_error"></div>
+                                <div class="text-danger satuan_2_error"></div>
                             </div>
                             <div class="form-group col-6">
                                 <label>Total</label>
@@ -219,11 +219,11 @@
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
                     }).then(function() {
-                        window.location.href = '/skp';
+                        // window.location.href = '/skp';
                     });
                 },
                 error : function (xhr) {
-                    $('.invalid-feedback').html('');
+                    $('.text-danger').html('');
                     $('.form-control').removeClass('is-invalid');
                     $.each(xhr.responseJSON,function (key, value) {
                         console.log(key+' - '+value)

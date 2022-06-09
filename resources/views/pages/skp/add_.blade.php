@@ -30,16 +30,16 @@
                                 <input type="radio" value="Tambahan" name="jenis_kinerja" />
                                 <span></span>Tambahan</label>
                             </div>
-                            <div class="invalid-feedback jenis_kinerja_error"></div>
+                            <small class="text-danger jenis_kinerja_error"></small>
                         </div>
-
+                   
                         <input type="hidden" value="kepala" name="type_skp">
                 
                         <div class="form-group">
                             <label for="rencana_kerja">Rencana Kerja 
                             <span class="text-danger">*</span></label>
                             <textarea class="form-control" id="rencana_kerja" name="rencana_kerja" rows="3"></textarea>
-                            <div class="invalid-feedback rencana_kerja_error"></div>
+                            <small class="text-danger rencana_kerja_error"></small>
                         </div>
 
                         <button type="button" id="add_content_iki" class="btn btn-info btn-sm"> <i class="far fa-plus-square"></i> Tambah Indikator</button>
@@ -50,7 +50,7 @@
                                     <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
                                     <textarea class="form-control" name="indikator_kerja_individu[0]" id="indikator_kerja_individu_0" rows="3"></textarea>
                             
-                                    <div class="invalid-feedback indikator_kerja_individu_0_error"></div>
+                                    <div class="text-danger indikator_kerja_individu_0_error"></div>
                                 </div>
                                 <div class="col-md-3">
                                     <label>Volume Satuan</label>
@@ -64,7 +64,7 @@
                                     <option value="{{$v['value']}}">{{$v['value']}}</option>
                                     @endforeach
                                     </select>
-                                    <div class="invalid-feedback satuan_0_error"></div>
+                                    <div class="text-danger satuan_0_error"></div>
                                 </div>    
                             </div>
 
@@ -76,7 +76,7 @@
                                     <div class="col-1">
                                         <input type="number" name="target_[0][{{$i}}]" class="form-control nilai_target_0 nilai_kinerja" data-id="0" placeholder="">
                                         <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
-                                        <div class="invalid-feedback target_waktu_{{$i}}_error"></div>
+                                        <div class="text-danger target_waktu_{{$i}}_error"></div>
                                     </div>
                                 @endfor
                                 </div>
@@ -127,7 +127,7 @@
                             <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
                             <textarea class="form-control" name="indikator_kerja_individu[${i}]" id="indikator_kerja_individu_${i}" rows="3"></textarea>
                         
-                            <div class="invalid-feedback indikator_kerja_individu_${i}_error"></div>
+                            <div class="text-danger indikator_kerja_individu_${i}_error"></div>
                         </div>
                         <div class="col-md-3">
                             <label>Volume satuan</label>
@@ -143,7 +143,7 @@
             });
                             
             html += `</select>`;                
-            html += `<div class="invalid-feedback satuan_${i}_error"></div>
+            html += `<div class="text-danger satuan_${i}_error"></div>
                         </div>  
                         <div class="col-md-1">
                         <a href="javascript:;" data-id=${i} class="btn btn-icon btn-light-danger btn-circle btn-lg mr-4 delete_iki" style="position:relative;top:16px;">
@@ -160,7 +160,7 @@
                 html += `<div class="col-1">
                             <input type="number" name="target_[${i}][${index}]" class="form-control nilai_target_${i} nilai_kinerja" data-id=${i} placeholder="">
                             <span class="form-text text-muted text-center">Bulan ${index+1}</span>
-                            <div class="invalid-feedback target_waktu_${index}_error"></div>
+                            <div class="text-danger target_waktu_${index}_error"></div>
                         </div>`;
             }
             html += `</div></div>`;
@@ -202,11 +202,11 @@
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
                     }).then(function() {
-                        window.location.href = '/skp';
+                        // window.location.href = '/skp';
                     });
                 },
                 error : function (xhr) {
-                    $('.invalid-feedback').html('');
+                    $('.text-danger').html('');
                     $('.form-control').removeClass('is-invalid');
                     $.each(xhr.responseJSON,function (key, value) {
                         console.log(key+' - '+value)

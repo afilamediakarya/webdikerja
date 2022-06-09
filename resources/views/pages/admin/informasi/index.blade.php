@@ -18,7 +18,7 @@
 
 
 @section('button')
-    <button onclick="Panel.action('show','submit')" class="btn btn-primary font-weight-bolder" id="side_form_toggle">
+    <button onclick="Panel.action('show','submit')"  class="btn btn-primary font-weight-bolder" id="side_form_toggle">
         <span class="svg-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                 <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1"/>
@@ -81,7 +81,22 @@
                 <form class="form" id="createForm" enctype="multipart/form-data">
                     <input type="hidden" name="id">
                     @csrf
+                    @if($role !== 'super_admin')
                     <input type="hidden" name="id_satuan_kerja" value="{{$satuan_kerja}}">
+                    @else
+                    
+                    <div class="form-group">
+                    <label>Satuan Kerja</label>
+                    <select class="form-control form-control-solid" type="text" name="id_satuan_kerja" id="id_satuan_kerja">
+                            <option disabled selected> Pilih Satuan Kerja</option>
+                            @foreach($satuan_kerja_list as $key => $value)
+                                <option value="{{$value['id']}}">{{$value['nama_satuan_kerja']}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- <input type="text" name="id_satuan_kerja" > -->
+                    @endif
                     <div class="form-group">
                         <label>Judul</label>
                         <input class="form-control" type="text" name="judul"/>
@@ -131,6 +146,12 @@
     <script>
         "use strict";
         let url_ = {!! json_encode($url_img) !!};
+        let role = {!! json_encode($role) !!}
+        
+        if (role == 'super_admin') {
+            $('#id_satuan_kerja').select2();
+        }
+
         var dataRow = function() {
         var init = function() {
             var table = $('#kt_datatable');
@@ -195,7 +216,12 @@
             e.preventDefault();
             var formdata = new FormData(this);
             AxiosCall.post("{{route('post-informasi')}}", formdata, "#createForm");
+            $(`#img_preview img`).remove();
         });
+
+        $(document).on('click','#side_form_toggle', function () {
+            $(`#img_preview img`).remove();
+        })
         
         $(document).on('click', '.button-update', function(){
             Panel.action('show','update');
@@ -229,6 +255,7 @@
             var formdata = new FormData(this);
             var _id = $("input[name='id']").val();
             AxiosCall.post(`admin/informasi/${_id}`, formdata, "#createForm");
+            $(`#img_preview img`).remove();
         });
 
         $(document).on('click', '.button-delete', function (e) {

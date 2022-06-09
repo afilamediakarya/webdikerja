@@ -42,36 +42,38 @@
             <div class="card card-custom gutter-b example example-compact">
                 <div class="card-header">
                     <h3 class="card-title">Profil Pegawai</h3>
-                    <a href="{{route('edit-profil')}}" type="reset" class="btn btn-sm btn-primary align-self-center"><i class="flaticon2-pen"></i> Edit Profil</a>
+                    <!-- <a href="{{route('edit-profil')}}" type="reset" class="btn btn-sm btn-primary align-self-center"><i class="flaticon2-pen"></i> Edit Profil</a> -->
                 </div>
                 <div class="card-body">
                     <!--begin::Form-->
-                    <form class="form" id="createForm" data-type="submit">
-                        <input type="hidden" name="id">
-                        @csrf
+                    <form class="form" id="createForm">
+                
                         <div class="card-body">
                             <div class="row">
                                 <div class="form-group col-6">
                                     <label>Nama</label>
-                                    <input type="text" class="form-control form-control-solid" value="{{(Session::get('user_details.nama'))}}" name="nama">
+                                    <input type="text" class="form-control form-control-solid" value="{{$data_['nama']}}" name="nama">
                                     <span class="invalid-feedback"></span>
                                 </div>
+
+                                <input type="hidden" name="id" value="{{$data_['id']}}">
+
     
                                 <div class="form-group col-6">
                                     <label>NIP</label>
-                                    <input type="text" class="form-control form-control-solid" value="{{(Session::get('user_details.nip'))}}" name="nip">
+                                    <input type="text" class="form-control form-control-solid" value="{{ $data_['nip'] }}" name="nip">
                                     <span class="invalid-feedback"></span>
                                 </div>
     
                                 <div class="form-group col-6">
                                     <label>Tempat Lahir</label>
-                                    <input type="text" class="form-control form-control-solid" value="{{(Session::get('user_details.tempat_lahir'))}}" name="tempat_lahir">
+                                    <input type="text" class="form-control form-control-solid" value="{{ $data_['tempat_lahir'] }}" name="tempat_lahir">
                                     <span class="invalid-feedback"></span>
                                 </div>
                                 <div class="form-group col-6">
                                     <label>Tanggal Lahir</label>
                                     <div class="input-group date" >
-                                        <input type="text" class="form-control form-control-solid" readonly name="tanggal_lahir" value="{{(Session::get('user_details.tanggal_lahir'))}}" id="tgl_lahir"/>
+                                        <input type="text" class="form-control form-control-solid" readonly name="tanggal_lahir" value="{{ $data_['tanggal_lahir'] }}" id="tgl_lahir"/>
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="la la-calendar"></i>
@@ -85,25 +87,18 @@
                                     <select name="id_satuan_kerja" class="form-control form-control-solid">
                                         <option value="">Pilih Satuan Kerja</option>
                                         @foreach ($dinas as $item)
-                                            <option value="{{$item['id']}}" {{ (Session::has('user_details.id_satuan_kerja') == $item['id'] ? "selected" : "") }}>{{$item['nama_satuan_kerja']}}</option>
+                                            <option value="{{$item['id']}}" {{ ($data_['id_satuan_kerja'] == $item['id'] ? "selected" : "") }}>{{$item['nama_satuan_kerja']}}</option>
                                         @endforeach
                                     </select>
                                     <span class="invalid-feedback"></span>
-                                </div>
-                                <div class="form-group col-6">
-                                    <label>Eselon</label>
-                                    <select class="form-control form-control-solid" name="eselon">
-                                        @foreach($eselon as $item)
-                                            <option value="{{$item['value']}}" {{ (Session::has('user_details.eselon') ? (Session::get('user_details.eselon') == $item['value'] ? "selected" : "") : "") }}>{{$item['value']}}</option>
-                                        @endforeach
-                                    </select>
                                 </div>
     
                                 <div class="form-group col-6">
                                     <label>Golongan Pangkat</label>
                                     <select name="golongan" class="form-control form-control-solid">
+                                        <option selected disabled>Pilih Golongan Pangkat</option>
                                         @foreach ($pangkat as $item)
-                                            <option value="{{$item['value']}}" {{ (Session::has('user_details.pangkat') ? (Session::get('user_details.pangkat') == $item['value'] ? "selected" : "") : "") }} >{{$item['value']}}</option>
+                                            <option value="{{$item['value']}}" {{ ($data_['golongan'] ? ($data_['golongan'] == $item['value'] ? "selected" : "") : "") }} >{{$item['value']}}</option>
                                         @endforeach
                                     </select>
                                     <span class="invalid-feedback"></span>
@@ -111,7 +106,7 @@
                                 <div class="form-group col-6">
                                     <label>TMT Golongan</label>
                                     <div class="input-group date" >
-                                        <input type="text" class="form-control form-control-solid" readonly  value="{{(Session::get('user_details.tmt_golongan'))}}" id="tmt_gol" name="tmt_golongan"/>
+                                        <input type="text" class="form-control form-control-solid" readonly  value="{{$data_['tmt_golongan']}}" id="tmt_gol" name="tmt_golongan"/>
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="la la-calendar"></i>
@@ -120,40 +115,27 @@
                                     </div>
                                     <span class="invalid-feedback"></span>
                                 </div>
-    
+
+                                <input type="hidden" name="eselon" value="{{ $data_['eselon'] }}">
+                                <input type="hidden" name="tmt_pegawai" value="{{ $data_['tmt_pegawai'] }}">
+
                                 <div class="form-group col-6">
-                                    <label>Jenis Jabatan Pegawai</label>
-                                    <select class="form-control form-control-solid" name="jenis_jabatan">
-                                            <option value="">Pilih Jenis Jabatan</option>
-                                            <option value="Struktural" {{(Session::get('user_details.jenis_jabatan') == "Struktural" ? "selected" : "")}}>Struktural</option>
-                                            <option value="Fungsional Umum" {{(Session::get('user_details.jenis_jabatan') == "Fungsional Umum" ? "selected" : "")}}>Fungsional Umum</option>
-                                            <option value="Fungsional Khusus" {{(Session::get('user_details.jenis_jabatan') == "Fungsional Khusus" ? "selected" : "")}}>Fungsional Khusus</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-6">
-                                    <label>Jabatan Pegawai</label>
-                                    <select class="form-control form-control-solid" name="jabatan">
-                                        <option value="Aktif">Aktif</option>
-                                        <option value="Non Aktif">Non Aktif</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-6">
-                                    <label>TMT Pegawai</label>
-                                    <div class="input-group date" >
-                                        <input type="text" class="form-control form-control-solid" readonly value="{{(Session::get('user_details.tmt_pegawai'))}}" name="tmt_pegawai" id="tmt_peg"/>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="la la-calendar"></i>
-                                            </span>
-                                        </div>
+                                <label>TMT Pegawai</label>
+                                <div class="input-group date" >
+                                    <input type="text" class="form-control form-control-solid" readonly  value="{{ $data_['tmt_pegawai'] }}" name="tmt_pegawai" id="tmt_peg"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
                                     </div>
                                 </div>
-                                
+                            </div>
+
                                 <div class="form-group col-6">
                                     <label>Jenis Kelamin</label>
                                     <select class="form-control form-control-solid" name="jenis_kelamin">
-                                        <option value="Laki-Laki" {{ (Session::has('user_details.jenis_kelamin') ? (Session::get('user_details.jenis_kelamin') == "Laki-Laki" ? "selected" : "") : "") }} >Laki-Laki</option>
-                                        <option value="Perempuan" {{ (Session::has('user_details.jenis_kelamin') ? (Session::get('user_details.jenis_kelamin') == "Perempuan" ? "selected" : "") : "") }}>Perempuan</option>
+                                        <option value="Laki-Laki" {{ ($data_['jenis_kelamin'] ? ($data_['jenis_kelamin'] == "Laki-Laki" ? "selected" : "") : "") }} >Laki-Laki</option>
+                                        <option value="Perempuan" {{ ($data_['jenis_kelamin'] ? ($data_['jenis_kelamin'] == "Perempuan" ? "selected" : "") : "") }}>Perempuan</option>
                                     </select>
                                 </div>
     
@@ -161,7 +143,7 @@
                                     <label>Agama</label>
                                     <select name="agama" class="form-control form-control-solid">
                                         @foreach($agama as $item)
-                                            <option value="{{$item['value']}}" {{ (Session::has('user_details.agama') ? (Session::get('user_details.agama') == $item['value'] ? "selected" : "") : "") }}>{{$item['value']}}</option>
+                                            <option value="{{$item['value']}}" {{ ($data_['agama'] ? ($data_['agama'] == $item['value'] ? "selected" : "") : "") }}>{{$item['value']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -170,7 +152,7 @@
                                     <label>Status Perkawinan</label>
                                     <select name="status_perkawinan" class="form-control form-control-solid">
                                         @foreach($status_kawin as $item)
-                                            <option value="{{$item['value']}} {{ (Session::has('user_details.status_perkawinan') ? (Session::get('user_details.status_perkawinan') == $item['value'] ? "selected" : "") : "") }}">{{$item['value']}}</option>
+                                            <option value="{{$item['value']}} {{ ($data_['status_perkawinan'] ? ($data_['status_perkawinan'] == $item['value'] ? "selected" : "") : "") }}">{{$item['value']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -178,35 +160,37 @@
                                     <label>Pendidikan Terakhir</label>
                                     <select name="pendidikan" class="form-control form-control-solid">
                                         @foreach($pendidikan as $item)
-                                            <option value="{{$item['value']}}" {{ (Session::has('user_details.pendidikan') ? (Session::get('user_details.pendidikan') == $item['value'] ? "selected" : "") : "") }}>{{$item['value']}}</option>
+                                            <option value="{{$item['value']}}" {{ ($data_['pendidikan'] ? ($data_['pendidikan'] == $item['value'] ? "selected" : "") : "") }}>{{$item['value']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group col-6">
                                     <label>Tahun Lulus</label>
-                                    <input type="text" class="form-control form-control-solid" value="{{(Session::get('user_details.lulus_pendidikan'))}}" name="lulus_pendidikan">
+                                    <input type="text" class="form-control form-control-solid" value="{{ $data_['lulus_pendidikan'] }}" name="lulus_pendidikan">
                                 </div>
     
     
                                 <div class="form-group col-6">
                                     <label>Pendidikan Struktural</label>
-                                    <input type="text" class="form-control form-control-solid" value="{{(Session::get('user_details.pendidikan_struktural'))}}" name="pendidikan_struktural">
+                                    <input type="text" class="form-control form-control-solid" value="{{ $data_['pendidikan_struktural'] }}" name="pendidikan_struktural">
                                 </div>
                                 <div class="form-group col-6">
                                     <label>Tahun Lulus Pendidikan Struktural</label>
-                                    <input type="text" class="form-control form-control-solid" value="{{(Session::get('user_details.lulus_pendidikan_struktural'))}}" name="lulus_pendidikan_struktural">
+                                    <input type="text" class="form-control form-control-solid" value="{{ $data_['lulus_pendidikan_struktural'] }}" name="lulus_pendidikan_struktural">
                                 </div>
+
+                                <input type="hidden" value="profil" name="type">
     
                                 <div class="form-group col-6">
                                     <label>Jurusan</label>
-                                    <input type="text" class="form-control form-control-solid" value="{{(Session::get('user_details.jurusan'))}}" name="jurusan">
+                                    <input type="text" class="form-control form-control-solid" value="{{ $data_['jurusan'] }}" name="jurusan">
                                 </div>
                             </div>
                             
                         </div>
                         <div class="card-footer border-0">
                             <!-- <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button> -->
-                            <button type="submit" class="btn btn-primary">Update Data</button>
+                            <button type="button" id="update_profile" class="btn btn-primary">Update Data</button>
                         </div>
                     </form>
                     <!--end::Form-->
@@ -284,25 +268,72 @@
             }
         });
 
-        $(document).on('submit', '#createForm', (e) => {
-            e.preventDefault();
-            // let formdata = new formData("#createForm")
-            // console.log(formdata);
-            // return;
-            const base_api = "{{env('API_URL')}}";
-            const token = "{{Session::get('access_token')}}" 
-            const Config = {
+        $(document).on('click','#update_profile', function () {
+ 
+            $.ajaxSetup({
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            let _id = $("input[name='id']").val();
+            // alert(`/admin/pegawai/${_id}    `)
+            // $.ajax({
+            //     url:`/admin/pegawai/update/${_id}`,
+            //     method:"POST",
+            //     data : $('#createForm').serialize(),
+            //     success: function(data){
+            //         swal.fire({
+            //             text: "Profil berhasil di update.",
+            //             icon: "success",
+            //             buttonsStyling: false,
+            //             confirmButtonText: "Ok, got it!",
+            //             customClass: {
+            //                 confirmButton: "btn font-weight-bold btn-light-primary"
+            //             }
+            //         }).then(function() {
+            //             // window.location.href = '/akun';
+            //         });   
+            //     }
+            // });
+            
+            axios.post( `/admin/pegawai/update/${_id}`,  $('#createForm').serialize())
+            .then(function(res){
+                var data = res.data;
+                if(data.fail){
+                    swal.fire({
+                        text: "Maaf Terjadi Kesalahan",
+                        title:"Error",
+                        timer: 2000,
+                        icon: "danger",
+                        showConfirmButton:false,
+                    });
+                }else if(data.invalid){
+                    $.each(data.invalid, function( key, value ) {
+                        console.log(key);
+                        $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                        $("textarea[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                        $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                    });
+                }else if(data.success){
+                    swal.fire({
+                        text: "Data anda berhasil disimpan",
+                        title:"Sukses",
+                        icon: "success",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        window.location.href = '/akun';    
+                    });
                 }
-            }
-            let id = "{{Session::get('user_detalis.id')}}";
-            axios.post(`${base_api}/pegawai/update/${id}`, $("#createForm").serialize() ,config )
-            .then(res=>{
-                console.log(res);
-            })
-            .catch(err=>{
-                console.log(err);
+            }).catch(function(){
+                swal.fire({
+                    text: "Terjadi Kesalahan Sistem",
+                    title:"Error",
+                    icon: "error",
+                    showConfirmButton:true,
+                    confirmButtonText: "OK",
+                })
             });
         })
 
