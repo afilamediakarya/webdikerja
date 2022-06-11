@@ -43,7 +43,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($data as $key => $value)
+                          
+                            @if($data['utama'] != [])
+                            <tr>
+                                <td colspan="7"><b>A. Kinerja Utama</b></td>
+                            </tr>
+                            @foreach($data['utama'] as $key => $value)
                                 @foreach($value['aspek_skp'] as $x => $vb)
                                 <tr>
                                     
@@ -76,6 +81,52 @@
                                 </tr>
                                 @endforeach
                             @endforeach
+                            @else
+                            <tr>
+                                <td colspan=7>Belum ada data</td>
+                            </tr>
+                            @endif    
+                            
+                            
+                            @if($data['tambahan'] != [])   
+                            <tr>
+                                <td colspan="7"><b>B. Kinerja Tambahan</b></td>
+                            </tr>
+                            @foreach($data['tambahan'] as $key => $value)
+                                @foreach($value['aspek_skp'] as $x => $vb)
+                                <tr>
+                                    
+                                    @if($x == 0)
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>{{$value['rencana_kerja']}}</td>
+                                    @else
+                                        <td></td>
+                                        <td></td>
+                                    @endif
+                                    <td>{{$vb['aspek_skp']}}</td>
+                                    <td>{{$vb['iki']}}</td>
+                                    @php
+                                        $num = 0;
+                                        foreach($vb['target_skp'] as $f => $b){
+                                            $num += $b['target'];
+                                        }
+                                    @endphp
+                                    <td>{{$num}}</td>
+                                    <td>{{$vb['satuan']}}</td>
+                                    @if($x == 0)
+                                            <td nowrap="nowrap">
+                                                <a role="button" href="{{url('/skp/edit/'.$value['id'])}}" class="btn btn-success btn-sm">Ubah</a>
+                                                <button onclick="deleteRow('{{$value["id"]}}')" type="button" class="btn btn-danger btn-sm">Hapus</button>
+                                            </td>
+                                    @else
+                                        <td></td>
+                                    @endif
+                                 
+                                </tr>
+                                @endforeach
+                            @endforeach
+                          
+                            @endif
                         </tbody>
                           
                         </tbody>

@@ -196,6 +196,8 @@
 		<script src="{{asset('js/AxiosCall.js')}}"></script>
 		<script src="{{ asset('js/pages/crud/forms/widgets/bootstrap-daterangepicker.js') }}"></script>
 		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<!-- <script src="assets/plugins/global/plugins.bundle.js"></script> -->
+
 		<!--end::Global Theme Bundle-->
 		@if(Session::has('auth'))
 			<script>

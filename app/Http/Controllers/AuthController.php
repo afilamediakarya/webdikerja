@@ -67,4 +67,8 @@ class AuthController extends Controller
         $request->session()->flush();
         return redirect('/login');
     }
+
+    public function aborts(){
+        return abort(404);
+    }
 }

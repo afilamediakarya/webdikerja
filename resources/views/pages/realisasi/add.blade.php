@@ -19,7 +19,7 @@
                 </div>
                 <div class="card-body">
                     <!--begin::Form-->
-                    <p class="text-dark ">A. Kinerja Utama</p>
+                    <p class="text-dark ">A. Kinerja {{$data['jenis']}}</p>
                     <form class="form">
 
                     <div class="row">

@@ -27,7 +27,7 @@
                                 <input type="radio" value="Utama" @if($data['jenis'] == 'utama') checked @endif name="jenis_kinerja" />
                                 <span></span>Utama</label>
                                 <label class="radio">
-                                <input type="radio" value="Tambahan" name="jenis_kinerja" />
+                                <input type="radio" value="Tambahan" @if($data['jenis'] == 'tambahan') checked @endif name="jenis_kinerja" />
                                 <span></span>Tambahan</label>
                             </div>
                             <div class="invalid-feedback jenis_kinerja_error"></div>

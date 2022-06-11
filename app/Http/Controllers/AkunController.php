@@ -62,4 +62,11 @@ class AkunController extends Controller
         }
     }
 
+    public function bantuan(){
+        $page_title = 'Bantuan';
+        $page_description = 'Bantuan, FAQ & Kontak';
+        $breadcumb = ['Faq & Kontak'];
+        return view('pages.akun.bantuan', compact('page_title', 'page_description','breadcumb'));
+    }
+
 }

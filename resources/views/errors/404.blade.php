@@ -40,11 +40,16 @@
 				<div class="d-flex flex-column flex-row-fluid text-center">
 					<h1 class="error-title font-weight-boldest text-white mb-12" style="margin-top: 12rem;">Oops...</h1>
 					<p class="display-4 font-weight-bold text-white">Sepertinya Anda Berlayar Kearah yang Salah.</p>
+					
+					<a href="{{route('indexes')}}" class="btn btn-secondary" style="width: 12%;position: absolute;top: 18%;left: 44%;">Dashboard</a>
+
 				</div>
+						
 				<!--end::Content-->
 			</div>
 			<!--end::Error-->
 		</div>
+		
 		<!--end::Main-->
 		<!--begin::Global Theme Bundle(used by all pages)-->
 		<script src="{{asset('plugins/global/plugins.bundle.js')}}"></script>

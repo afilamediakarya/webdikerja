@@ -40,6 +40,7 @@ Route::post('/login', [AuthController::class, 'setLogin'])->name('do-Login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::get('/laporan/viewexport/rekapitulasi_pegawai/{params1}/{params2}/{params3}', [LaporanController::class, 'viewexportRekapAbsen'])->name('laporan-view-absen-pegawai');
+Route::get('/maintanence', [AuthController::class, 'aborts'])->name('aborts');
 Route::get('/', [AuthController::class, 'indexes'])->name('indexes');
 
 Route::middleware('Auth')->group(function(){
@@ -98,6 +99,7 @@ Route::middleware('Auth')->group(function(){
         Route::get('/edit', [AkunController::class, 'edit'])->name('edit-profil');
         Route::get('/ganti-password', [AkunController::class, 'index'])->name('ganti-password');
         Route::post('/pegawai/{id}', [PegawaiController::class, 'update'])->name('update-profil');
+        Route::get('/bantuan', [AkunController::class, 'bantuan'])->name('bantuan');
     });
     Route::middleware('roles:super_admin|admin_opd')->group(function (){
         Route::prefix('admin')->group(function() {

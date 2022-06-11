@@ -23,13 +23,15 @@ class SkpController extends Controller
         $token = session()->get('user.access_token');
 
         $level = $this->checkLevel();
+       
         if ($level == 1 || $level == 2) {
             $data = Http::withToken($token)->get($url."/skp/list/kepala")['data'];
        
+            // return $data;
             return view('pages.skp.index2', compact('page_title', 'page_description','breadcumb','data'));   
         } else {
             $data = Http::withToken($token)->get($url."/skp/list/pegawai");
-            
+             
             return view('pages.skp.index', compact('page_title', 'page_description','breadcumb','data'));
         }
 
@@ -228,12 +230,13 @@ class SkpController extends Controller
     public function validate_skp_kepala($params){
 
         $result = [];
+        $tes = [];
 
         if (is_null($params->jenis_kinerja)) {
             $result['jenis_kinerja'][] = 'Jenis kinerja is field required';
         }
 
-        if (is_null($params->sasaran_kinerja)) {
+        if (is_null($params->rencana_kerja)) {
             $result['rencana_kerja'][] = 'rencana kerja is field required';
         }
 
@@ -251,10 +254,24 @@ class SkpController extends Controller
             }else{
                 $result['satuan_'.$i][] = 'Satuan is field required';
             }
+
+           if (!empty($params->target_)) {
+            foreach ($params->target_ as $key => $value) {
+                // return $value;
+                foreach ($value as $x => $v) {
+                    if (is_null($v)) {
+                        // $tes[] =  'row ='.$i.' nilai ='.$x;
+                        $result['target_'.$i.'_'.$x] = 'Target is field required';
+                    }
+                }
+                
+            }
+                
+           }
     
         }
 
-        // return $row_count;
+        // return $tes;
 
 
         return $result;
@@ -394,32 +411,43 @@ class SkpController extends Controller
     
     public function update_kepala($params,Request $request){
         // return $request;
-        $result = [];
-        $indikator_kerja_individu = [];
-        $satuan = [];
-        $target_ = [];
-        foreach($request->indikator_kerja_individu as $iki => $iki_){
-            $indikator_kerja_individu[] = $iki_;
-            $satuan[] = $request->satuan[$iki];
-            $target_[] = $request->target_[$iki];
+
+        $validated = $this->validate_skp_kepala($request);
+
+        // return $validated;
+
+        if (count($validated) > 0 ) {
+            return response()->json($validated,422);   
+        }else{
+            $result = [];
+            $indikator_kerja_individu = [];
+            $satuan = [];
+            $target_ = [];
+            foreach($request->indikator_kerja_individu as $iki => $iki_){
+                $indikator_kerja_individu[] = $iki_;
+                $satuan[] = $request->satuan[$iki];
+                $target_[] = $request->target_[$iki];
+            }
+            $current_user = session()->get('user.current');
+            $result = [
+                'id_satuan_kerja' =>$current_user['pegawai']['id_satuan_kerja'],
+                'indikator_kerja_individu' => $indikator_kerja_individu,
+                'jenis_kinerja' => $request->jenis_kinerja,
+                'rencana_kerja' => $request->rencana_kerja,
+                'satuan' => $satuan,
+                'target_' => $target_,
+                'type_skp' => $request->type_skp,
+                'tahun' => date('Y'),
+            ];
+            // return $result;
+            $url = env('API_URL');
+            $token = session()->get('user.access_token');
+        
+            $response = Http::withToken($token)->post($url."/skp/update/".$params, $result);
+            return $response;
         }
-        $current_user = session()->get('user.current');
-        $result = [
-            'id_satuan_kerja' =>$current_user['pegawai']['id_satuan_kerja'],
-            'indikator_kerja_individu' => $indikator_kerja_individu,
-            'jenis_kinerja' => $request->jenis_kinerja,
-            'rencana_kerja' => $request->rencana_kerja,
-            'satuan' => $satuan,
-            'target_' => $target_,
-            'type_skp' => $request->type_skp,
-            'tahun' => date('Y'),
-        ];
-        // return $result;
-        $url = env('API_URL');
-        $token = session()->get('user.access_token');
-    
-        $response = Http::withToken($token)->post($url."/skp/update/".$params, $result);
-        return $response;
+
+        
     }
 
     public function delete($params){

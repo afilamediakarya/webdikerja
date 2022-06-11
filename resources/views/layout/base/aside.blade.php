@@ -264,7 +264,7 @@
                     </a>
                 </li>
                 @if (Session::get('user.role') == 'super_admin')
-                <li class="menu-item{{str_contains(Request::path(), 'jadwal') ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                <li class="menu-item {{str_contains(Request::path(), 'jadwal') ? 'menu-item-active' : '' }}" aria-haspopup="true">
                     <a href="{{route('jadwal')}}" class="menu-link">
                         <span class="svg-icon menu-icon">
                            
@@ -440,7 +440,7 @@
                             </li>
 
                             <li class="menu-item" aria-haspopup="true">
-                                <a href="{{route('master_perilaku')}}" class="menu-link">
+                                <a href="{{route('aborts')}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>

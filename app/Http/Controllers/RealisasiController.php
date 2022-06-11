@@ -36,9 +36,7 @@ class RealisasiController extends Controller
         //     // foreach ($value['aspek_skp'] as $i => $l) {
         //     //     return $l;
         //     // }
-        // }
-
-        // return $data;
+        // 
 
 
 

@@ -50,7 +50,7 @@
                                     <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
                                     <textarea class="form-control" name="indikator_kerja_individu[0]" id="indikator_kerja_individu_0" rows="3"></textarea>
                             
-                                    <div class="text-danger indikator_kerja_individu_0_error"></div>
+                                    <small class="text-danger indikator_kerja_individu_0_error"></small>
                                 </div>
                                 <div class="col-md-3">
                                     <label>Volume Satuan</label>
@@ -64,7 +64,7 @@
                                     <option value="{{$v['value']}}">{{$v['value']}}</option>
                                     @endforeach
                                     </select>
-                                    <div class="text-danger satuan_0_error"></div>
+                                    <small class="text-danger satuan_0_error"></small>
                                 </div>    
                             </div>
 
@@ -76,7 +76,7 @@
                                     <div class="col-1">
                                         <input type="number" name="target_[0][{{$i}}]" class="form-control nilai_target_0 nilai_kinerja" data-id="0" placeholder="">
                                         <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
-                                        <div class="text-danger target_waktu_{{$i}}_error"></div>
+                                        <small class="text-danger target_0_{{$i}}_error"></small>
                                     </div>
                                 @endfor
                                 </div>
@@ -127,7 +127,7 @@
                             <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
                             <textarea class="form-control" name="indikator_kerja_individu[${i}]" id="indikator_kerja_individu_${i}" rows="3"></textarea>
                         
-                            <div class="text-danger indikator_kerja_individu_${i}_error"></div>
+                            <small class="text-danger indikator_kerja_individu_${i}_error"></small>
                         </div>
                         <div class="col-md-3">
                             <label>Volume satuan</label>
@@ -160,7 +160,7 @@
                 html += `<div class="col-1">
                             <input type="number" name="target_[${i}][${index}]" class="form-control nilai_target_${i} nilai_kinerja" data-id=${i} placeholder="">
                             <span class="form-text text-muted text-center">Bulan ${index+1}</span>
-                            <div class="text-danger target_waktu_${index}_error"></div>
+                            <small class="text-danger target_${i}_${index}_error"></small>
                         </div>`;
             }
             html += `</div></div>`;

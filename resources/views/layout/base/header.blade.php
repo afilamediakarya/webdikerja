@@ -764,7 +764,7 @@
                                                 </a>
                                                 <!--end:Item-->
                                                 <!--begin::Item-->
-                                                <a href="custom/apps/user/profile-2.html" class="navi-item">
+                                                <a href="{{route('bantuan')}}" class="navi-item">
                                                     <div class="navi-link">
                                                         <div class="symbol symbol-40 bg-light mr-3">
                                                             <div class="symbol-label">
