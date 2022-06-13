@@ -204,11 +204,20 @@
                             '_token' : $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function (response) {
-                            Swal.fire('Deleted!', 'Your file has been deleted.','success')
-                            setTimeout(function () {
-                                window.location.href = '/skp';
-                            }, 1500); 
-                            
+                            let res = JSON.parse(response);
+                            console.log(res.status);
+                            if (res.status !== false) {
+                                Swal.fire('Deleted!', 'Your file has been deleted.','success');
+                                  setTimeout(function () {
+                                    window.location.href = '/skp';
+                                }, 1500);     
+                            }else{
+                                swal.fire({
+                                    title : "SKP tidak dapat di hapus. ",
+                                    text: "SKP digunakan oleh bawahaan. ",
+                                    icon: "warning",
+                                });
+                            }
                         }
                     })
                 }
