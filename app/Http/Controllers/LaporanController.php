@@ -636,11 +636,9 @@ class LaporanController extends Controller
             ->setKeywords('pdf php')
             ->setCategory('LAPORAN ABSEN');
         $sheet = $spreadsheet->getActiveSheet();
-        if ($orientation == 'mobile') {
-            $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
-        }else{
-            $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
-        }
+        
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
+        
 
         $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
         $sheet->getRowDimension(5)->setRowHeight(25);
@@ -658,41 +656,46 @@ class LaporanController extends Controller
         $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.5);
         $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
 
-        $sheet->setCellValue('A1', 'Laporan Rekapitulasi Absen Pegawai');
-        $sheet->setCellValue('A2', ''.$data['data']['pegawai']['satuan_kerja']['nama_satuan_kerja']);
-        $sheet->setCellValue('A3',  $data['data']['pegawai']['nama'].'/ '.$data['data']['pegawai']['nip']);
-        $sheet->mergeCells('A1:G1');
-        $sheet->mergeCells('A2:G2');
-        $sheet->mergeCells('A3:G3');
+        $sheet->setCellValue('A1', 'Laporan Rekapitulasi Absen Pegawai')->mergeCells('A1:G1');
+        $sheet->setCellValue('A2', ''.$data['data']['pegawai']['satuan_kerja']['nama_satuan_kerja'])->mergeCells('A2:G2');
+        $sheet->setCellValue('A3',  $data['data']['pegawai']['nama'].'/ '.$data['data']['pegawai']['nip'])->mergeCells('A3:G3');
+        $sheet->getStyle('A1:G3')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('A1:G3')->getFont()->setSize(14);
+
+        $sheet->setCellValue('A5', 'Jumlah hari kerja')->mergeCells('A5:B5');
+        $sheet->setCellValue('C5', ': '.$data['data']['jml_hari_kerja'])->mergeCells('C5:G5');
+        $sheet->setCellValue('A6', 'Kehadiran kerja')->mergeCells('A6:B6');
+        $sheet->setCellValue('C6', ': '.$data['data']['kehadiran'])->mergeCells('C6:G6');
+        $sheet->setCellValue('A7', 'Tanpa keterangan')->mergeCells('A7:B7');
+        $sheet->setCellValue('C7', ': '.$data['data']['tanpa_keterangan'])->mergeCells('C7:G7');
+        $sheet->setCellValue('A8', 'Jumlah potongan kehadiran')->mergeCells('A8:B8');
+        $sheet->setCellValue('C8', ': '.$data['data']['potongan_kehadiran'])->mergeCells('C8:G8');
+        $sheet->setCellValue('A9', 'Persentase pemotongan')->mergeCells('A9:B9');
+        $sheet->setCellValue('C9', ': '.$data['data']['persentase_pemotongan'])->mergeCells('C9:G9');
+        $sheet->getStyle('A5:G9')->getFont()->setSize(12);
         
-        $sheet->getStyle('A1')->getFont()->setSize(14);
-
-        $sheet->setCellValue('A4', 'Jumlah hari kerja : '.$data['data']['jml_hari_kerja'])->mergeCells('A4:B4');
-        $sheet->setCellValue('A5', 'Kehadiran kerja : '.$data['data']['kehadiran'])->mergeCells('A5:B5');
-        $sheet->setCellValue('A6', 'Tanpa keterangan : '.$data['data']['tanpa_keterangan'])->mergeCells('A6:B6');
-        $sheet->setCellValue('A7', 'Jumlah potongan kehadiran : '.$data['data']['potongan_kehadiran'])->mergeCells('A7:B7');
-        $sheet->setCellValue('A8', 'Persentase pemotongan : '.$data['data']['persentase_pemotongan'])->mergeCells('A8:B8');
-
-        $sheet->setCellValue('A10', 'No')->mergeCells('A10:A11');
+        $sheet->setCellValue('A10',' ')->mergeCells('A10:G10');
+        
+        $sheet->setCellValue('A11', 'No')->mergeCells('A11:A12');
         $sheet->getColumnDimension('A')->setWidth(5);
-        $sheet->setCellValue('B10', 'Tanggal')->mergeCells('B10:B11');
+        $sheet->setCellValue('B11', 'Tanggal')->mergeCells('B11:B12');
         $sheet->getColumnDimension('B')->setWidth(32);
-        $sheet->setCellValue('C10', 'Status Absen')->mergeCells('C10:C11');
+        $sheet->setCellValue('C11', 'Status Absen')->mergeCells('C11:C12');
         $sheet->getColumnDimension('C')->setWidth(32);
-        $sheet->setCellValue('D10', 'Masuk')->mergeCells('D10:E10');
-        $sheet->setCellValue('D10', 'Waktu');
+        $sheet->setCellValue('D11', 'Masuk')->mergeCells('D11:E11');
+        $sheet->setCellValue('D11', 'Waktu');
         $sheet->getColumnDimension('D')->setWidth(32);
-        $sheet->setCellValue('E11', 'Keterangan');
+        $sheet->setCellValue('E12', 'Keterangan');
         $sheet->getColumnDimension('E')->setWidth(32);
-        $sheet->setCellValue('F10', 'Keluar')->mergeCells('F10:G10');
-        $sheet->setCellValue('F11', 'Waktu');
+        $sheet->setCellValue('F11', 'Keluar')->mergeCells('F11:G11');
+        $sheet->setCellValue('F12', 'Waktu');
         $sheet->getColumnDimension('F')->setWidth(32);
-        $sheet->setCellValue('G11', 'Keterangan');
+        $sheet->setCellValue('G12', 'Keterangan');
         $sheet->getColumnDimension('G')->setWidth(32);
 
         $sheet->getStyle('A:G')->getAlignment()->setWrapText(true);
-        $sheet->getStyle('A10:G11')->getFont()->setBold(true);
-        $cell = 12;
+        $sheet->getStyle('A11:G12')->getFont()->setBold(true);
+        $cell = 13;
 
 
         foreach ( $data['data']['data_absen'] as $index => $value ){
@@ -751,22 +754,13 @@ class LaporanController extends Controller
             ],
         ];
        
-        $sheet->getStyle('A10:G' . $cell)->applyFromArray($border);
+        $sheet->getStyle('A11:G' . $cell)->applyFromArray($border);
 
 
 
-        $sheet->getStyle('A1:G1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A2:G2')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A3:G3')->getAlignment()->setHorizontal('center');
+       
 
-        $sheet->getStyle('A5:A6')->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('B5:B6')->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('C5:C6')->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('D5:E5')->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('F5:G5')->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('D6:G6')->getAlignment()->setHorizontal('center');
-
-        $sheet->getStyle('A10:G'.$cell)->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('A11:G'.$cell)->getAlignment()->setVertical('center')->setHorizontal('center');
 
    
         if ($type == 'excel') {
