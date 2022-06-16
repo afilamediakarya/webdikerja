@@ -37,16 +37,17 @@
                             @endphp
 
                             @if($level == 'pegawai')
-                                @foreach($data['data'] as $key => $value)
-                                    <tr>
+                                     <tr>
                                         <td colspan="7"><b>A. Kinerja Utama</b></td>
                                     </tr>
+                                @foreach($data['data']['utama'] as $key => $value)
+                                    
                                     <tr style="background:#f2f2f2">
                                         <td>{{$inc_letter++}}.</td>
                                         <td colspan="8">{{$value['atasan']['rencana_kerja']}}</td>  
                                     <tr>
 
-                                    @foreach($value['skp_utama'] as $k => $v)
+                                    @foreach($value['skp'] as $k => $v)
                                         @foreach($v['aspek_skp'] as $i => $l)
                                         <tr>
                                         
@@ -90,16 +91,13 @@
                                                 $no++;
                                     @endphp
                                     @endforeach
-
+                                    @endforeach
                                     <tr>
                                         <td colspan="7"><b>B. Kinerja Tambahan</b></td>
                                     </tr>
-                                    <tr style="background:#f2f2f2">
-                                        <td>{{$inc_letter++}}.</td>
-                                        <td colspan="8">{{$value['atasan']['rencana_kerja']}}</td>  
-                                    <tr>
+                                    
 
-                                    @foreach($value['skp_tambahan'] as $k => $v)
+                                    @foreach($data['data']['tambahan'] as $k => $v)
                                         @foreach($v['aspek_skp'] as $i => $l)
                                         <tr>
                                         
@@ -144,7 +142,7 @@
                                     @endphp
                                     @endforeach
 
-                                @endforeach
+                                
                             @else
                                 @foreach($data['data'] as $key => $value)
                                     

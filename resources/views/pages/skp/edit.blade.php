@@ -59,6 +59,8 @@
                             <p class="text-dark font-weight-bolder">Kuantitas</p>
                         </div>
 
+                        <input type="hidden" name="id_aspek[0]" value="{{$data['aspek_skp'][0]['id']}}">
+
                         <div class="form-group">
                             <label for="indikator_kerja_individu_0">Indikator Kerja Individu </label>
                             <textarea class="form-control" name="indikator_kerja_individu[0]" id="indikator_kerja_individu_0" rows="3">{{$data['aspek_skp'][0]['iki']}}</textarea>
@@ -74,6 +76,7 @@
                                     <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
                                     <div class="invalid-feedback target_kuantitas_{{$i}}_error"></div>
                                 </div>
+                                <input type="hidden" name="id_target_kuantitas[{{$i}}]" value="{{$data['aspek_skp'][0]['target_skp'][$i]['id']}}">
                             @endfor
                             </div>
                         </div>
@@ -98,6 +101,8 @@
                         <p class="text-dark font-weight-bolder">Kualitas</p>
                         </div>
 
+                        <input type="hidden" name="id_aspek[1]" value="{{$data['aspek_skp'][1]['id']}}">
+
                         <div class="form-group">
                             <label for="indikator_kerja_individu_1">Indikator Kerja Individu </label>
                             <textarea class="form-control" name="indikator_kerja_individu[1]" id="indikator_kerja_individu_1" rows="3">{{$data['aspek_skp'][1]['iki']}}</textarea>
@@ -113,6 +118,7 @@
                                     <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
                                     <div class="invalid-feedback target_kualitas_{{$i}}_error"></div>
                                 </div>
+                                <input type="hidden" name="id_target_kualitas[{{$i}}]" value="{{$data['aspek_skp'][1]['target_skp'][$i]['id']}}">
                             @endfor
                             </div>
                         </div>
@@ -136,7 +142,7 @@
                         <div class="form-group">
                             <p class="text-dark font-weight-bolder">Waktu</p>
                         </div>
-
+                        <input type="hidden" name="id_aspek[2]" value="{{$data['aspek_skp'][2]['id']}}">
                         <div class="form-group">
                             <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
                             <textarea class="form-control" name="indikator_kerja_individu[2]" id="indikator_kerja_individu_2" rows="3">{{$data['aspek_skp'][2]['iki']}}</textarea>
@@ -152,6 +158,7 @@
                                     <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
                                     <div class="invalid-feedback target_waktu_{{$i}}_error"></div>
                                 </div>
+                                <input type="hidden" name="id_target_waktu[{{$i}}]" value="{{$data['aspek_skp'][2]['target_skp'][$i]['id']}}">
                             @endfor
                             </div>
                         </div>

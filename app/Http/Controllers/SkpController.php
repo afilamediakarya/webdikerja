@@ -320,7 +320,6 @@ class SkpController extends Controller
     }
 
     public function update($params,Request $request){
-
        
         $validated = $this->customValidate($request);
  
@@ -330,6 +329,7 @@ class SkpController extends Controller
              $result = [];
                  $aspek = [];
                  $target_bulan = [$request->target_kuantitas,$request->target_kualitas,$request->target_waktu];
+                 $target_id = [$request->id_target_kuantitas,$request->id_target_kualitas,$request->id_target_waktu];
                  $type_aspek = ['kuantitas','kualitas','waktu'];
                  $current_user = session()->get('user.current');
  
@@ -339,7 +339,9 @@ class SkpController extends Controller
                          'iki' => $request->indikator_kerja_individu[$i],
                          'satuan' => $request->satuan[$i],
                          'target' => $target_bulan[$i],
-                         'type_aspek' => $type_aspek[$i]
+                         'id_target' => $target_id[$i],
+                         'type_aspek' => $type_aspek[$i],
+                         'id' => $request->id_aspek[$i]
                  ];
                  }
  
@@ -353,8 +355,6 @@ class SkpController extends Controller
                      'aspek' => $aspek,
                      'type_skp' => $request['type_skp'],
                  ];
- 
-                //  return $result;
  
                  $url = env('API_URL');
                  $token = session()->get('user.access_token');

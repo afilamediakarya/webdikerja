@@ -47,6 +47,7 @@
                         @foreach($data['aspek_skp'] as $key => $value)
                         <div class="mt-3" id="iki_{{$key}}">
                             <div class="row">
+                                
                                 <div class="col-md-5">
                                     <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
                                     <textarea class="form-control" name="indikator_kerja_individu[{{$key}}]" id="indikator_kerja_individu_{{$key}}" rows="3">{{$value['iki']}}</textarea>

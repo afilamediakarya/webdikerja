@@ -35,7 +35,6 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Rencana Kerja</th>
-                                <th>Aspek</th>
                                 <th nowrap="nowrap">Indikator Kinerja Individu</th>
                                 <th>Target</th>
                                 <th>Satuan</th>
@@ -59,7 +58,7 @@
                                         <td></td>
                                         <td></td>
                                     @endif
-                                    <td>{{$vb['aspek_skp']}}</td>
+                              
                                     <td>{{$vb['iki']}}</td>
                                     @php
                                         $num = 0;
@@ -103,7 +102,7 @@
                                         <td></td>
                                         <td></td>
                                     @endif
-                                    <td>{{$vb['aspek_skp']}}</td>
+                                 
                                     <td>{{$vb['iki']}}</td>
                                     @php
                                         $num = 0;
