@@ -42,7 +42,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                          
+                             @php
+                              
+                                $no = 0;
+                            @endphp
                             @if($data['utama'] != [])
                             <tr>
                                 <td colspan="7"><b>A. Kinerja Utama</b></td>
@@ -52,7 +55,7 @@
                                 <tr>
                                     
                                     @if($x == 0)
-                                        <td>{{ $key + 1 }}</td>
+                                        <td>{{ $no+1 }}</td>
                                         <td>{{$value['rencana_kerja']}}</td>
                                     @else
                                         <td></td>
@@ -78,6 +81,9 @@
                                     @endif
                                  
                                 </tr>
+                                @php
+                                                $no++;
+                                    @endphp
                                 @endforeach
                             @endforeach
                             @else
