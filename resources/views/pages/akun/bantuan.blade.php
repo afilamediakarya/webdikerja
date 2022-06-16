@@ -889,6 +889,10 @@
 @endsection
 
 @section('script')
+		<script src="{{ asset('js/custom/widgets.js') }}"></script>
+		<script src="{{ asset('js/custom/apps/chat/chat.js') }}"></script>
+		<script src="{{ asset('js/custom/modals/create-app.js') }}"></script>
+		<script src="{{ asset('js/custom/modals/upgrade-plan.js') }}"></script>
     
     <!-- <script>
         $(document).ready(function () {

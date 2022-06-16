@@ -24,18 +24,19 @@
                             <label>Jenis Kinerja</label>
                             <div class="radio-inline">
                                 <label class="radio">
-                                <input type="radio" value="Utama" @if($data['jenis'] == 'utama') checked @endif name="jenis_kinerja" />
+                                <input type="radio" value="utama" @if($data['jenis'] == 'utama') checked @endif name="jenis_kinerja" />
                                 <span></span>Utama</label>
                                 <label class="radio">
-                                <input type="radio" value="Tambahan" @if($data['jenis'] == 'tambahan') checked @endif name="jenis_kinerja" />
+                                <input type="radio" value="tambahan" @if($data['jenis'] == 'tambahan') checked @endif name="jenis_kinerja" />
                                 <span></span>Tambahan</label>
                             </div>
                             <div class="invalid-feedback jenis_kinerja_error"></div>
                         </div>
                         <input type="hidden" value="pegawai" name="type_skp">
+                     
+                        <div id="sasaran_">
                         <div class="form-group">
                             <label for="sasaran_kinerja">Sasaran Kerja </label>
-                            <!-- <input type="email" class="form-control" placeholder=""> -->
                             <select class="form-control" type="text" name="sasaran_kinerja" id="sasaran_kinerja">
                                 <option selected disabled>Pilih Sasaran Kerja</option>
                                 @foreach($sasaran_kinerja_atasan as $key => $value)
@@ -44,6 +45,8 @@
                              </select>
                              <div class="invalid-feedback sasaran_kinerja_error"></div>
                         </div>
+                        </div>
+
                         <div class="form-group">
                             <label for="rencana_kerja">Rencana Kerja 
                             <span class="text-danger">*</span></label>
@@ -79,8 +82,8 @@
                                 <label for="satuan_0">Jenis Satuan</label>
                                 <select class="form-control form-control-solid satuan_" id="satuan_0" name="satuan[0]">
                                 <option selected disabled>Pilih Satuan</option>
-                                   @foreach($satuan as $i => $v)
-                                    <option value="{{$v['value']}}" @if($v['value'] = $data['aspek_skp'][0]['satuan']) selected @endif >{{$v['value']}}</option>
+                                   @foreach($satuan as $indexes => $vals)
+                                    <option value="{{$vals['value']}}" @if($vals['value'] == $data['aspek_skp'][0]['satuan']) selected @endif >{{$vals['value']}}</option>
                                    @endforeach
                                 </select>
                                 <div class="invalid-feedback satuan_0_error"></div>
@@ -92,7 +95,7 @@
                         </div>
 
                         <div class="form-group">
-                            <p class="text-dark font-weight-bolder">Kualitas</p>
+                        <p class="text-dark font-weight-bolder">Kualitas</p>
                         </div>
 
                         <div class="form-group">
@@ -118,8 +121,8 @@
                                  <label for="satuan_1">Jenis Satuan</label>
                                 <select class="form-control form-control-solid satuan_" id="satuan_1" name="satuan[1]">
                                 <option selected disabled>Pilih Satuan</option>
-                                   @foreach($satuan as $i => $v)
-                                   <option value="{{$v['value']}}" @if($v['value'] = $data['aspek_skp'][1]['satuan']) selected @endif>{{$v['value']}}</option>
+                                    @foreach($satuan as $indexes => $vals)
+                                    <option value="{{$vals['value']}}" @if($vals['value'] == $data['aspek_skp'][1]['satuan']) selected @endif >{{$vals['value']}}</option>
                                    @endforeach
                                 </select>
                                 <div class="invalid-feedback satuan_1_error"></div>
@@ -157,8 +160,8 @@
                                 <label for="satuan_2">Jenis Satuan</label>
                                 <select class="form-control form-control-solid satuan_" id="satuan_2" name="satuan[2]">
                                 <option selected disabled>Pilih Satuan</option>
-                                   @foreach($satuan as $i => $v)
-                                   <option value="{{$v['value']}}" @if($v['value'] = $data['aspek_skp'][2]['satuan']) selected @endif>{{$v['value']}}</option>
+                                  @foreach($satuan as $indexes => $vals)
+                                    <option value="{{$vals['value']}}" @if($vals['value'] == $data['aspek_skp'][2]['satuan']) selected @endif >{{$vals['value']}}</option>
                                    @endforeach
                                 </select>
                                 <div class="invalid-feedback satuan_2_error"></div>
@@ -189,7 +192,15 @@
 
 <script>
     $(function () {
-        let id = {!! json_encode($data['id']) !!}
+        let id = {!! json_encode($data['id']) !!};
+        let jenis_ = {!! json_encode($data['jenis']) !!};
+
+        console.log(jenis_);
+
+        if (jenis_ == 'tambahan') {
+            $('#sasaran_').hide();
+        }
+
         $('#sasaran_kinerja').select2({
             placeholder: "Pilih Sasaran Kerja"
         });
@@ -264,6 +275,15 @@
             
         })
     
+        $('input[type=radio][name=jenis_kinerja]').change(function() {
+            let val = $(this).val();
+            if (val == 'utama') {
+                $('#sasaran_').show();
+            }
+            else if (val == 'tambahan') {
+                $('#sasaran_').hide();
+            }
+        });
 
     })
 </script>

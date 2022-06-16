@@ -24,10 +24,10 @@
                             <label>Jenis Kinerja</label>
                             <div class="radio-inline">
                                 <label class="radio">
-                                <input type="radio" value="Utama" name="jenis_kinerja" />
+                                <input type="radio" value="utama" name="jenis_kinerja" />
                                 <span></span>Utama</label>
                                 <label class="radio">
-                                <input type="radio" value="Tambahan" name="jenis_kinerja" />
+                                <input type="radio" value="tambahan" name="jenis_kinerja" />
                                 <span></span>Tambahan</label>
                             </div>
                             <div class="text-danger jenis_kinerja_error"></div>
@@ -35,6 +35,7 @@
 
                         <input type="hidden" value="pegawai" name="type_skp">
 
+                        <div id="sasaran_">
                         <div class="form-group">
                             <label for="sasaran_kinerja">Sasaran Kerja </label>
                             <!-- <input type="email" class="form-control" placeholder=""> -->
@@ -46,6 +47,8 @@
                              </select>
                              <div class="text-danger sasaran_kinerja_error"></div>
                         </div>
+                        </div>
+                       
                         <div class="form-group">
                             <label for="rencana_kerja">Rencana Kerja 
                             <span class="text-danger">*</span></label>
@@ -81,8 +84,8 @@
                                 <label for="satuan_0">Jenis Satuan</label>
                                 <select class="form-control form-control-solid satuan_" id="satuan_0" name="satuan[0]">
                                 <option selected disabled>Pilih Satuan</option>
-                                   @foreach($satuan as $i => $v)
-                                    <option value="{{$v['value']}}">{{$v['value']}}</option>
+                                   @foreach($satuan as $indexes => $vals)
+                                    <option value="{{$vals['value']}}">{{$vals['value']}}</option>
                                    @endforeach
                                 </select>
                                 <div class="text-danger satuan_0_error"></div>
@@ -120,8 +123,8 @@
                                  <label for="satuan_1">Jenis Satuan</label>
                                 <select class="form-control form-control-solid satuan_" id="satuan_1" name="satuan[1]">
                                 <option selected disabled>Pilih Satuan</option>
-                                   @foreach($satuan as $i => $v)
-                                   <option value="{{$v['value']}}">{{$v['value']}}</option>
+                                @foreach($satuan as $indexes => $vals)
+                                    <option value="{{$vals['value']}}">{{$vals['value']}}</option>
                                    @endforeach
                                 </select>
                                 <div class="text-danger satuan_1_error"></div>
@@ -159,8 +162,8 @@
                                 <label for="satuan_2">Jenis Satuan</label>
                                 <select class="form-control form-control-solid satuan_" id="satuan_2" name="satuan[2]">
                                 <option selected disabled>Pilih Satuan</option>
-                                   @foreach($satuan as $i => $v)
-                                   <option value="{{$v['value']}}">{{$v['value']}}</option>
+                                    @foreach($satuan as $indexes => $vals)
+                                    <option value="{{$vals['value']}}">{{$vals['value']}}</option>
                                    @endforeach
                                 </select>
                                 <div class="text-danger satuan_2_error"></div>
@@ -264,6 +267,17 @@
             $('#total_target_waktu').val(sum);
             
         })
+
+        $('input[type=radio][name=jenis_kinerja]').change(function() {
+            let val = $(this).val();
+            if (val == 'utama') {
+                $('#sasaran_').show();
+            }
+            else if (val == 'tambahan') {
+                $('#sasaran_').hide();
+                $('#sasaran_kinerja').val(null).trigger('change');
+            }
+        });
     
 
     })

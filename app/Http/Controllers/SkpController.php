@@ -109,11 +109,17 @@ class SkpController extends Controller
 
         if (is_null($params->jenis_kinerja)) {
             $result['jenis_kinerja'][] = 'Jenis Kinerja is field required';
+
+            if ($params->jenis_kinerja == 'utama') {
+                if (is_null($params->sasaran_kinerja)) {
+                    $result['sasaran_kinerja'][] = 'Sasaran Kinerja is field required';
+                }
+           }
+
         }
 
-        if (is_null($params->sasaran_kinerja)) {
-            $result['sasaran_kinerja'][] = 'Sasaran Kinerja is field required';
-        }
+       
+       
 
         foreach ($params->indikator_kerja_individu as $key => $ikis) {
            if (is_null($ikis)) {
@@ -314,7 +320,8 @@ class SkpController extends Controller
     }
 
     public function update($params,Request $request){
-      
+
+       
         $validated = $this->customValidate($request);
  
          if (count($validated) > 0 ) {
@@ -322,7 +329,7 @@ class SkpController extends Controller
          }else{
              $result = [];
                  $aspek = [];
-                 $target_bulan = [$request->target_kualitas,$request->target_kuantitas,$request->target_waktu];
+                 $target_bulan = [$request->target_kuantitas,$request->target_kualitas,$request->target_waktu];
                  $type_aspek = ['kuantitas','kualitas','waktu'];
                  $current_user = session()->get('user.current');
  
@@ -347,7 +354,7 @@ class SkpController extends Controller
                      'type_skp' => $request['type_skp'],
                  ];
  
-                 // return $result;
+                //  return $result;
  
                  $url = env('API_URL');
                  $token = session()->get('user.access_token');

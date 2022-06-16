@@ -60,9 +60,9 @@
                                     <label for="satuan_2">Jenis Satuan</label>
                                     <select class="form-control form-control-solid satuan_" id="satuan_0" name="satuan[0]">
                                     <option selected disabled>Pilih Satuan</option>
-                                    @foreach($satuan as $i => $v)
-                                    <option value="{{$v['value']}}">{{$v['value']}}</option>
-                                    @endforeach
+                                    @foreach($satuan as $indexes => $vals)
+                                    <option value="{{$vals['value']}}">{{$vals['value']}}</option>
+                                   @endforeach
                                     </select>
                                     <small class="text-danger satuan_0_error"></small>
                                 </div>    
