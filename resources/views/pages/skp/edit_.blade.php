@@ -62,7 +62,7 @@
                                     <select class="form-control form-control-solid satuan_" id="satuan_{{$key}}" name="satuan[{{$key}}]">
                                     <option selected disabled>Pilih Satuan</option>
                                     @foreach($satuan as $i => $v)
-                                    <option value="{{$v['value']}}" @if($v['value'] = $value['satuan']) selected @endif >{{$v['value']}}</option>
+                                    <option value="{{$v['value']}}" @if($v['value'] == $value['satuan']) selected @endif >{{$v['value']}}</option>
                                     @endforeach
                                     </select>
                                     <div class="invalid-feedback satuan_0_error"></div>
