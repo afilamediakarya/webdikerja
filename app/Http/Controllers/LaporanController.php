@@ -425,7 +425,7 @@ class LaporanController extends Controller
         $cell = 15;
 
         $data_column = $data['skp']['utama'];
-        $data_tambahan = $data['skp']['tambahan'];
+     
 
         foreach ( $data_column as $index => $value ){
             $sheet->setCellValue('A' . $cell, $index+1);
@@ -459,15 +459,14 @@ class LaporanController extends Controller
                 }         
         }
 
-       
-
-        if(isset($data_tambahan)){
+    
+        if(isset($data['skp']['tambahan'])){
              // TAMBAHAN
         $sheet->setCellValue('A'.$cell, 'B. KINERJA TAMBAHAN')->mergeCells('A'.$cell.':F'.$cell);
         $sheet->getStyle('A'.$cell.':F'.$cell)->getAlignment()->setVertical('left')->setHorizontal('left');
         $sheet->getStyle('A'.$cell.':F'.$cell)->getFont()->setBold(true);
         $cell++;
-            foreach ($data_tambahan as $keyy => $values) {
+            foreach ($data['skp']['tambahan'] as $keyy => $values) {
                 $sheet->setCellValue('A' . $cell, $index+1);
                 $sheet->setCellValue('B' . $cell, '-');
                 $sheet->setCellValue('C' . $cell, $values['rencana_kerja']);
