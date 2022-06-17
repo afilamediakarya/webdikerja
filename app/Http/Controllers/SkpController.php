@@ -184,7 +184,7 @@ class SkpController extends Controller
         }else{
             $result = [];
                 $aspek = [];
-                $target_bulan = [$request->target_kualitas,$request->target_kuantitas,$request->target_waktu];
+                $target_bulan = [$request->target_kuantitas,$request->target_kualitas,$request->target_waktu];
                 $type_aspek = ['kuantitas','kualitas','waktu'];
                 $current_user = session()->get('user.current');
 
