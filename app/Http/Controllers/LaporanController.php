@@ -844,14 +844,10 @@ class LaporanController extends Controller
         $sheet->getStyle('A:L')->getAlignment()->setWrapText(true);
         // $sheet->getStyle('A10:G11')->getFont()->setBold(true);
         $cell = 14;
-       
+    
 
-        $data_column = '';
-
-        $data_column = $data['skp']['utama'];
-        $data_tambahan = $data['skp']['tambahan'];
-
-        foreach ( $data_column as $index => $value ){
+       if (isset($data['skp']['utama'])) {
+        foreach ( $data['skp']['utama'] as $index => $value ){
             
             $sheet->setCellValue('A' . $cell, $index);
             if(isset($value['atasan']['rencana_kerja'])){
@@ -913,6 +909,7 @@ class LaporanController extends Controller
                 }
             }
         }
+       }
         
 
         $border = [
