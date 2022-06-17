@@ -1027,6 +1027,7 @@ class LaporanController extends Controller
     public function konvertWaktu($params,$waktu){
         $diff = '';
         $selisih_waktu = '';
+        $menit = 0;
         if ($params == 'checkin') {
             $waktu_tetap_absen = strtotime('08:00:00');
             $waktu_absen = strtotime($waktu); 
