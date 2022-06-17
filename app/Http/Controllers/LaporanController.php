@@ -158,7 +158,7 @@ class LaporanController extends Controller
         $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.5);
         $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
 
-        $sheet->setCellValue('A2', 'PENILAIAN PEJABAT ADMINISTRATOR')->mergeCells('A2:L2');
+        $sheet->setCellValue('A2', 'SASARAN KINIRJA PEGAWAI (SKP')->mergeCells('A2:L2');
         $sheet->setCellValue('A6', 'PEGAWAI YANG DINILAI')->mergeCells('A6:C6');
         // $sheet->getColumnDimension('A')->setWidth(20);
         $sheet->setCellValue('D6', 'PEJABAT PENILAI PEKERJA')->mergeCells('D6:F6');
@@ -645,12 +645,13 @@ class LaporanController extends Controller
         
 
         $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
-        $sheet->getRowDimension(5)->setRowHeight(25);
-        $sheet->getRowDimension(1)->setRowHeight(17);
-        $sheet->getRowDimension(2)->setRowHeight(17);
-        $sheet->getRowDimension(3)->setRowHeight(17);
+        $sheet->getRowDimension(1)->setRowHeight(20);
+        $sheet->getRowDimension(2)->setRowHeight(20);
+        $sheet->getRowDimension(3)->setRowHeight(20);
+
+        
         $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
-        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(12);
         $spreadsheet->getActiveSheet()->getPageSetup()->setHorizontalCentered(true);
         $spreadsheet->getActiveSheet()->getPageSetup()->setVerticalCentered(false);
 
@@ -687,7 +688,7 @@ class LaporanController extends Controller
         $sheet->setCellValue('C11', 'Status Absen')->mergeCells('C11:C12');
         $sheet->getColumnDimension('C')->setWidth(32);
         $sheet->setCellValue('D11', 'Masuk')->mergeCells('D11:E11');
-        $sheet->setCellValue('D11', 'Waktu');
+        $sheet->setCellValue('D12', 'Waktu');
         $sheet->getColumnDimension('D')->setWidth(32);
         $sheet->setCellValue('E12', 'Keterangan');
         $sheet->getColumnDimension('E')->setWidth(32);
@@ -699,10 +700,13 @@ class LaporanController extends Controller
 
         $sheet->getStyle('A:G')->getAlignment()->setWrapText(true);
         $sheet->getStyle('A11:G12')->getFont()->setBold(true);
+        $sheet->getRowDimension(11)->setRowHeight(30);
+        $sheet->getRowDimension(12)->setRowHeight(30);
         $cell = 13;
-
+        
 
         foreach ( $data['data']['data_absen'] as $index => $value ){
+            $sheet->getRowDimension($cell)->setRowHeight(30);
             $sheet->setCellValue('A' . $cell, $index+1);
             $sheet->setCellValue('B' . $cell, $value['tanggal']);
         
@@ -892,6 +896,7 @@ class LaporanController extends Controller
 
         // $jml_hari_kerja = [];
         foreach($data['pegawai'] as $i => $val){
+            $sheet->getRowDimension($cell)->setRowHeight(30);
             $selisih_waktu = 0;
             $jml_hari_kerja = [];
             $kmk_30 = [];
