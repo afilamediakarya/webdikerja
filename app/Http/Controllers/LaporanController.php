@@ -105,13 +105,12 @@ class LaporanController extends Controller
         $token = session()->get('user.access_token');
         $data = Http::withToken($token)->get($url."/laporan/skp/".$level);
         return $data;
-        return $data['data'];
     }
 
     public function exportLaporanSkp($jenis,$type,$bulan){
         // return 'cek';
         $level = $this->checkLevel();
-
+        $res = [];
 
         if ($level == 1 || $level == 2) {
             $level = 'kepala';
@@ -119,14 +118,199 @@ class LaporanController extends Controller
             $level = 'pegawai';
         }
 
+
+
         $data = $this->getSkp($level); 
-        // return $data;
-        if ($jenis == 'skp') {
-             return $this->exportSkp($data,$bulan,$type,$level);
-        }else{
-            // return $data;
-            return $this->exportRealisasi($data,$bulan,$type,$level);
+        
+        if ($data['status'] == true) {
+            $res = $data['data'];
         }
+
+        if ($jenis == 'skp') {
+
+            if ($level == 'pegawai') {
+                return $this->exportSkp($res,$bulan,$type,$level);
+            }else{
+                return $this->exportKepala($res,$bulan,$type,$level);
+            }
+
+             
+        }else{
+            if ($level == 'pegawai') {
+                return $this->exportRealisasi($res,$bulan,$type,$level);
+            }else{
+                return $this->exportRealisasiKepala($res,$bulan,$type,$level);
+            }
+            
+        }
+    }
+
+    public function exportKepala($data,$bulan,$type,$level){
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
+            ->setLastModifiedBy('BKPSDM BULUKUMBA')
+            ->setTitle('Laporan SKP Pejabat administrator')
+            ->setSubject('Laporan SKP Pejabat administrator')
+            ->setDescription('Laporan SKP Pejabat administrator')
+            ->setKeywords('pdf php')
+            ->setCategory('LAPORAN SKP');
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+
+        $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
+        $sheet->getRowDimension(5)->setRowHeight(25);
+        $sheet->getRowDimension(1)->setRowHeight(17);
+        $sheet->getRowDimension(2)->setRowHeight(17);
+        $sheet->getRowDimension(3)->setRowHeight(17);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setHorizontalCentered(true);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setVerticalCentered(false);
+
+        // //Margin PDF
+        $spreadsheet->getActiveSheet()->getPageMargins()->setTop(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setRight(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.5);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
+
+        $sheet->setCellValue('A2', 'SASARAN KINIRJA PEGAWAI (SKP')->mergeCells('A2:L2');
+        $sheet->setCellValue('A6', 'PEGAWAI YANG DINILAI')->mergeCells('A6:C6');
+        // $sheet->getColumnDimension('A')->setWidth(20);
+        $sheet->setCellValue('D6', 'PEJABAT PENILAI PEKERJA')->mergeCells('D6:F6');
+        // $sheet->getColumnDimension('D')->setWidth(10);
+       
+
+        $sheet->setCellValue('A7', 'Nama')->mergeCells('A7:B7');
+        $sheet->setCellValue('C7', $data['pegawai_dinilai']['nama']);
+        $sheet->setCellValue('A8', 'NIP')->mergeCells('A8:B8');
+        $sheet->setCellValue('C8', $data['pegawai_dinilai']['nip']);
+        $sheet->setCellValue('A9', 'Pangkat / Gol Ruang')->mergeCells('A9:B9');
+        $sheet->setCellValue('C9', $data['pegawai_dinilai']['golongan']);
+        $sheet->setCellValue('A10', 'Jabatan')->mergeCells('A10:B10');
+        $sheet->setCellValue('C10', $data['pegawai_dinilai']['nama_jabatan']);
+        $sheet->setCellValue('A11', 'Unit kerja')->mergeCells('A11:B11');
+        $sheet->setCellValue('C11', $data['pegawai_dinilai']['nama_satuan_kerja']);
+
+        
+        $sheet->getColumnDimension('C')->setWidth(60);
+        $sheet->getColumnDimension('D')->setWidth(90);
+        $sheet->getColumnDimension('E')->setWidth(60);
+        $sheet->getColumnDimension('F')->setWidth(40);
+
+        $sheet->setCellValue('D7', 'Nama');
+        if ($data['atasan'] != "") {
+            $sheet->setCellValue('E7', $data['atasan']['nama'])->mergeCells('E7:F7');
+        } else {
+            $sheet->setCellValue('E7', '-')->mergeCells('E7:F7');
+        }
+        $sheet->setCellValue('D8', 'NIP');
+        if ($data['atasan'] != "") {
+            $sheet->setCellValue('E8', $data['atasan']['nip'])->mergeCells('E8:F8');
+        } else {
+            $sheet->setCellValue('E8', '-')->mergeCells('E8:F8');
+        }
+  
+        $sheet->setCellValue('D9', 'Pangkat / Gol Ruang');
+        if ($data['atasan'] != "") {
+            $sheet->setCellValue('E9', $data['atasan']['golongan'])->mergeCells('E9:F9');
+        } else {
+            $sheet->setCellValue('E9', '-')->mergeCells('E9:F9');
+        } 
+       
+        $sheet->setCellValue('D10', 'Jabatan');
+        if ($data['atasan'] != "") {
+            $sheet->setCellValue('E10', $data['atasan']['nama_jabatan'])->mergeCells('E10:F10');
+        } else {
+            $sheet->setCellValue('E10', '-')->mergeCells('E10:F10');
+        } 
+        $sheet->setCellValue('D11', 'Unit kerja');
+        if ($data['atasan'] != "") {
+            $sheet->setCellValue('E11', $data['atasan']['nama_satuan_kerja'])->mergeCells('E11:F11');
+        } else {
+            $sheet->setCellValue('E11', '-')->mergeCells('E11:F11');
+        } 
+        $sheet->getColumnDimension('E')->setWidth(20);
+
+        $sheet->setCellValue('A12', 'No')->mergeCells('A12:A13');
+        $sheet->getColumnDimension('A')->setWidth(5);
+        $sheet->setCellValue('B12', 'RENCANA KINERJA ATASAN LANGSUNG')->mergeCells('B12:B13');
+        $sheet->getColumnDimension('B')->setWidth(40);
+        $sheet->setCellValue('C12', 'RENCANA KINERJA')->mergeCells('C12:C13');
+        $sheet->getColumnDimension('C')->setWidth(40);
+        $sheet->setCellValue('D12', 'ASPEK')->mergeCells('D12:D13');
+        $sheet->getColumnDimension('D')->setWidth(25);
+        $sheet->setCellValue('E12', 'INDIKATOR KINERJA INDIVIDU')->mergeCells('E12:E13');
+        $sheet->getColumnDimension('E')->setWidth(40);
+
+        $sheet->setCellValue('F12', 'TARGET')->mergeCells('F12:F13');
+        $sheet->getColumnDimension('F')->setWidth(30);
+        $sheet->getStyle('A:F')->getAlignment()->setWrapText(true);
+
+        $sheet->setCellValue('A14', 'A. KINERJA UTAMA')->mergeCells('A14:F14');
+        // $sheet->getStyle('A10:G11')->getFont()->setBold(true);
+        $cell = 15;
+
+
+        foreach ( $data['skp'] as $index => $value ){
+            $sheet->setCellValue('C' . $cell, $value['rencana_kerja']);
+            foreach ($value['aspek_skp'] as $k => $v) {
+                
+                $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
+                $sheet->setCellValue('E' . $cell, $v['iki']);
+                
+                foreach ($v['target_skp'] as $mk => $rr) {
+                    $sum_capaian = 0;
+                    $kategori_ = '';
+                    if ($rr['bulan'] ==  $bulan) {
+                        $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                        $sum_capaian += $capaian_iki;
+                        $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);                                
+                    }
+                }
+                
+
+                $cell++;  
+            }
+            
+        }
+ 
+
+        $border = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '0000000'],
+                ],
+            ],
+        ];
+       
+        $sheet->getStyle('A6:F' . $cell)->applyFromArray($border);
+
+        // $sheet->getStyle('A12:F' . $cell)->getAlignment()->setVertical('center')->setHorizontal('center');
+        // $sheet->getStyle('A6:F6')->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('A14:F14')->getAlignment()->setVertical('left')->setHorizontal('left');
+         $sheet->getStyle('A14:F14')->getFont()->setBold(true);
+
+   
+        if ($type == 'excel') {
+            // Untuk download 
+            $writer = new Xlsx($spreadsheet);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="Laporan_absensi_.xlsx"');
+        }else{
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+            ->setOddHeader('&C&H' . url()->current());
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+                ->setOddFooter('&L&B &RPage &P of &N');
+            $class = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class;
+            \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', $class);
+            header('Content-Type: application/pdf');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Pdf');
+        }
+
+        $writer->save('php://output');
     }
 
     public function exportSkp($data,$bulan,$type,$level){
@@ -177,10 +361,10 @@ class LaporanController extends Controller
         $sheet->setCellValue('C11', $data['pegawai_dinilai']['nama_satuan_kerja']);
 
         
-        // $sheet->getColumnDimension('C')->setWidth(60);
-        // $sheet->getColumnDimension('D')->setWidth(90);
-        // $sheet->getColumnDimension('E')->setWidth(60);
-        // $sheet->getColumnDimension('F')->setWidth(40);
+        $sheet->getColumnDimension('C')->setWidth(60);
+        $sheet->getColumnDimension('D')->setWidth(90);
+        $sheet->getColumnDimension('E')->setWidth(60);
+        $sheet->getColumnDimension('F')->setWidth(40);
 
         $sheet->setCellValue('D7', 'Nama');
         if ($data['atasan'] != "") {
@@ -230,39 +414,16 @@ class LaporanController extends Controller
         $sheet->setCellValue('F12', 'TARGET')->mergeCells('F12:F13');
         $sheet->getColumnDimension('F')->setWidth(30);
         $sheet->getStyle('A:F')->getAlignment()->setWrapText(true);
-        // $sheet->getStyle('A10:G11')->getFont()->setBold(true);
-        $cell = 14;
 
-        if($level == 'kepala'){
-            $data_column = $data['skp'];
-        }else{
-            $data_column = $data['skp'];
-        }
+        $sheet->setCellValue('A14', 'A. KINERJA UTAMA')->mergeCells('A14:F14');
+        // $sheet->getStyle('A10:G11')->getFont()->setBold(true);
+        $cell = 15;
+
+        $data_column = $data['skp']['utama'];
+        $data_tambahan = $data['skp']['tambahan'];
 
         foreach ( $data_column as $index => $value ){
-            
-            if($level == 'kepala'){
-                $sheet->setCellValue('C' . $cell, $value['rencana_kerja']);
-                    foreach ($value['aspek_skp'] as $k => $v) {
-                       
-                        $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
-                        $sheet->setCellValue('E' . $cell, $v['iki']);
-                       
-                        foreach ($v['target_skp'] as $mk => $rr) {
-                            $sum_capaian = 0;
-                            $kategori_ = '';
-                            if ($rr['bulan'] ==  $bulan) {
-                                $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                                $sum_capaian += $capaian_iki;
-                                $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);                                
-                            }
-                        }
-                        
-    
-                        $cell++;  
-                    }
-            }else{
-                $sheet->setCellValue('A' . $cell, $index+1);
+            $sheet->setCellValue('A' . $cell, $index+1);
                 if(isset($value['atasan']['rencana_kerja'])){
                     $sheet->setCellValue('B' . $cell, $value['atasan']['rencana_kerja']);
                 }else{
@@ -290,11 +451,43 @@ class LaporanController extends Controller
     
                         $cell++;  
                     }
-                }
-               
-            }
-            
+                }         
         }
+
+        // TAMBAHAN
+        $sheet->setCellValue('A'.$cell, 'B. KINERJA TAMBAHAN')->mergeCells('A'.$cell.':F'.$cell);
+        $sheet->getStyle('A'.$cell.':F'.$cell)->getAlignment()->setVertical('left')->setHorizontal('left');
+        $sheet->getStyle('A'.$cell.':F'.$cell)->getFont()->setBold(true);
+        $cell++;
+
+        foreach ($data_tambahan as $keyy => $values) {
+            $sheet->setCellValue('A' . $cell, $index+1);
+            $sheet->setCellValue('B' . $cell, '-');
+            $sheet->setCellValue('C' . $cell, $values['rencana_kerja']);
+            foreach ($values['aspek_skp'] as $k => $v) {
+                
+                $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
+                $sheet->setCellValue('E' . $cell, $v['iki']);
+                
+                foreach ($v['target_skp'] as $mk => $rr) {
+                    $sum_capaian = 0;
+                    $kategori_ = '';
+                    if ($rr['bulan'] ==  $bulan) {
+                        $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                        $sum_capaian += $capaian_iki;
+
+                        $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);
+                        
+                    }
+                }
+                
+
+                $cell++;  
+            }
+        }
+        
+
+        
 
         $border = [
             'borders' => [
@@ -307,8 +500,10 @@ class LaporanController extends Controller
        
         $sheet->getStyle('A6:F' . $cell)->applyFromArray($border);
 
-        $sheet->getStyle('A12:F' . $cell)->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('A6:F6')->getAlignment()->setVertical('center')->setHorizontal('center');
+        // $sheet->getStyle('A12:F' . $cell)->getAlignment()->setVertical('center')->setHorizontal('center');
+        // $sheet->getStyle('A6:F6')->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('A14:F14')->getAlignment()->setVertical('left')->setHorizontal('left');
+         $sheet->getStyle('A14:F14')->getFont()->setBold(true);
 
    
         if ($type == 'excel') {
@@ -330,6 +525,207 @@ class LaporanController extends Controller
 
         $writer->save('php://output');
 
+    }
+
+    public function exportRealisasiKepala($data,$bulan,$type,$level){
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
+            ->setLastModifiedBy('BKPSDM BULUKUMBA')
+            ->setTitle('Laporan SKP Pejabat administrator')
+            ->setSubject('Laporan SKP Pejabat administrator')
+            ->setDescription('Laporan SKP Pejabat administrator')
+            ->setKeywords('pdf php')
+            ->setCategory('LAPORAN SKP');
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+
+        $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
+        $sheet->getRowDimension(5)->setRowHeight(25);
+        $sheet->getRowDimension(1)->setRowHeight(17);
+        $sheet->getRowDimension(2)->setRowHeight(17);
+        $sheet->getRowDimension(3)->setRowHeight(17);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setHorizontalCentered(true);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setVerticalCentered(false);
+
+        // //Margin PDF
+        $spreadsheet->getActiveSheet()->getPageMargins()->setTop(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setRight(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.5);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
+
+        $sheet->setCellValue('A2', 'PENILAIAN PEJABAT ADMINISTRATOR')->mergeCells('A2:L2');
+        $sheet->setCellValue('A6', 'PEGAWAI YANG DINILAI')->mergeCells('A6:E6');
+        $sheet->setCellValue('F6', 'PEJABAT PENILAI PEKERJA')->mergeCells('F6:L6');
+
+        $sheet->setCellValue('A7', 'Nama')->mergeCells('A7:B7');
+        $sheet->setCellValue('C7', $data['pegawai_dinilai']['nama'])->mergeCells('C7:E7');
+        $sheet->setCellValue('A8', 'NIP')->mergeCells('A8:B8');
+        $sheet->setCellValue('C8', $data['pegawai_dinilai']['nip'])->mergeCells('C8:E8');
+        $sheet->setCellValue('A9', 'Pangkat / Gol Ruang')->mergeCells('A9:B9');
+        $sheet->setCellValue('C9', $data['pegawai_dinilai']['golongan'])->mergeCells('C9:E9');
+        $sheet->setCellValue('A10', 'Jabatan')->mergeCells('A10:B10');
+        $sheet->setCellValue('C10', $data['pegawai_dinilai']['nama_jabatan'])->mergeCells('C10:E10');
+        $sheet->setCellValue('A11', 'Unit kerja')->mergeCells('A11:B11');
+        $sheet->setCellValue('C11', $data['pegawai_dinilai']['nama_satuan_kerja'])->mergeCells('C11:E11');
+
+        $sheet->setCellValue('F7', 'Nama');
+        if ($data['atasan'] != "") {
+            $sheet->setCellValue('G7', $data['atasan']['nama'])->mergeCells('G7:L7');
+        } else {
+            $sheet->setCellValue('G7', '-')->mergeCells('G7:L7');
+        }
+        $sheet->setCellValue('F8', 'NIP');
+        if ($data['atasan'] != "") {
+            $sheet->setCellValue('G8', $data['atasan']['nip'])->mergeCells('G8:L8');
+        } else {
+            $sheet->setCellValue('G8', '-')->mergeCells('G8:L8');
+        }
+  
+        $sheet->setCellValue('F9', 'Pangkat / Gol Ruang');
+        if ($data['atasan'] != "") {
+            $sheet->setCellValue('G9', $data['atasan']['golongan'])->mergeCells('G9:L9');
+        } else {
+            $sheet->setCellValue('G9', '-')->mergeCells('G9:L9');
+        } 
+       
+        $sheet->setCellValue('F10', 'Jabatan');
+        if ($data['atasan'] != "") {
+            $sheet->setCellValue('G10', $data['atasan']['nama_jabatan'])->mergeCells('G10:L10');
+        } else {
+            $sheet->setCellValue('G10', '-')->mergeCells('G10:L10');
+        } 
+        $sheet->setCellValue('F11', 'Unit kerja');
+        if ($data['atasan'] != "") {
+            $sheet->setCellValue('G11', $data['atasan']['nama_satuan_kerja'])->mergeCells('G11:L11');
+        } else {
+            $sheet->setCellValue('G11', '-')->mergeCells('G11:L11');
+        } 
+        $sheet->getColumnDimension('F')->setWidth(20);
+
+        $sheet->setCellValue('A12', 'No')->mergeCells('A12:A13');
+        $sheet->getColumnDimension('A')->setWidth(5);
+        $sheet->setCellValue('B12', 'RENCANA KINERJA ATASAN LANGSUNG')->mergeCells('B12:B13');
+        $sheet->getColumnDimension('B')->setWidth(25);
+        $sheet->setCellValue('C12', 'RENCANA KINERJA')->mergeCells('C12:C13');
+        $sheet->getColumnDimension('C')->setWidth(25);
+        $sheet->setCellValue('D12', 'ASPEK')->mergeCells('D12:D13');
+        $sheet->getColumnDimension('D')->setWidth(15);
+        $sheet->setCellValue('E12', 'INDIKATOR KINERJA INDIVIDU')->mergeCells('E12:E13');
+        $sheet->getColumnDimension('E')->setWidth(25);
+
+        $sheet->setCellValue('F12', 'TARGET')->mergeCells('F12:F13');
+        $sheet->getColumnDimension('F')->setWidth(18);
+        $sheet->setCellValue('G12', 'REALISASI')->mergeCells('G12:G13');
+        $sheet->getColumnDimension('G')->setWidth(18);
+        $sheet->setCellValue('H12', 'CAPAIAN IKI')->mergeCells('H12:H13');
+        $sheet->getColumnDimension('H')->setWidth(18);
+        $sheet->setCellValue('I12', 'KATEGORI PENCAPAIAN IKI')->mergeCells('I12:I13');
+        $sheet->getColumnDimension('I')->setWidth(15);
+        $sheet->setCellValue('J12', 'CAPAIAN RENCANA KINERJA')->mergeCells('J12:K12');
+        $sheet->setCellValue('J13', 'KATEGORI');
+        $sheet->getColumnDimension('J')->setWidth(20);
+        $sheet->setCellValue('K13', 'NILAI');
+        $sheet->getColumnDimension('K')->setWidth(15);
+        $sheet->setCellValue('L12', 'NILAI TERTIMBANG')->mergeCells('L12:L13');
+        $sheet->getColumnDimension('L')->setWidth(20);
+
+        $sheet->getStyle('A:L')->getAlignment()->setWrapText(true);
+        // $sheet->getStyle('A10:G11')->getFont()->setBold(true);
+        $cell = 14;
+
+        foreach ( $data['skp'] as $index => $value ){
+            
+            $sheet->setCellValue('C' . $cell, $value['rencana_kerja']);
+                    foreach ($value['aspek_skp'] as $k => $v) {
+                       
+                        $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
+                        $sheet->setCellValue('E' . $cell, $v['iki']);
+                       
+                        foreach ($v['target_skp'] as $mk => $rr) {
+                            $sum_capaian = 0;
+                            $kategori_ = '';
+                            if ($rr['bulan'] ==  $bulan) {
+                                $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                $sum_capaian += $capaian_iki;
+    
+                                $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);
+                                $sheet->setCellValue('G' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'].' '.$v['satuan']);
+                                $sheet->setCellValue('H' . $cell, round($capaian_iki,0) .' %');
+                                if ($capaian_iki > 100) {
+                                    $sheet->setCellValue('I' . $cell, 'Sangat baik');
+                                }elseif($capaian_iki == 100){
+                                    $sheet->setCellValue('I' . $cell, 'Baik');
+                                }elseif($capaian_iki > 80 && $capaian_iki < 90){
+                                    $sheet->setCellValue('I' . $cell, 'Cukup');
+                                }elseif($capaian_iki > 60 && $capaian_iki < 79){
+                                    $sheet->setCellValue('I' . $cell, 'Kurang');
+                                }else{
+                                    $sheet->setCellValue('I' . $cell, 'Sangat kurang');
+                                }
+
+                                if ($sum_capaian > 110) {
+                                    $kategori_ = 'Sangat baik';
+                                }elseif($sum_capaian >= 90 && $sum_capaian <= 109){
+                                    $kategori_ = 'Baik'; 
+                                }elseif($sum_capaian >= 70 && $sum_capaian <= 89){
+                                    $kategori_ = 'Cukup'; 
+                                }elseif($sum_capaian >= 50 && $sum_capaian <= 69){
+                                    $kategori_ = 'Kurang';
+                                }elseif($sum_capaian >= 0 && $sum_capaian <= 49){
+                                    $kategori_ = 'Sangat kurang'; 
+                                }else{
+                                    $kategori_ = '-';
+                                }
+
+                                $sheet->setCellValue('J' . $cell, $kategori_);
+                                $sheet->setCellValue('K' . $cell, round($sum_capaian,2));
+    
+                                
+                            }
+                        }
+                        
+    
+                        $cell++;  
+                    }
+        }
+        
+
+        $border = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '0000000'],
+                ],
+            ],
+        ];
+       
+        $sheet->getStyle('A6:L' . $cell)->applyFromArray($border);
+
+        $sheet->getStyle('A12:L' . $cell)->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('A6:F6')->getAlignment()->setVertical('center')->setHorizontal('center');
+
+   
+        if ($type == 'excel') {
+            // Untuk download 
+            $writer = new Xlsx($spreadsheet);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="Laporan_absensi_.xlsx"');
+        }else{
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+            ->setOddHeader('&C&H' . url()->current());
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+                ->setOddFooter('&L&B &RPage &P of &N');
+            $class = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class;
+            \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', $class);
+            header('Content-Type: application/pdf');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Pdf');
+        }
+
+        $writer->save('php://output');
     }
 
     public function exportRealisasi($data,$bulan,$type,$level){
@@ -445,130 +841,70 @@ class LaporanController extends Controller
 
         $data_column = '';
 
-        if($level == 'kepala'){
-            $data_column = $data['skp'];
-        }else{
-            $data_column = $data['skp'];
-        }
+        $data_column = $data['skp']['utama'];
+        $data_tambahan = $data['skp']['tambahan'];
 
         foreach ( $data_column as $index => $value ){
             
-            if($level == 'kepala'){
-                $sheet->setCellValue('C' . $cell, $value['rencana_kerja']);
-                    foreach ($value['aspek_skp'] as $k => $v) {
-                       
-                        $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
-                        $sheet->setCellValue('E' . $cell, $v['iki']);
-                       
-                        foreach ($v['target_skp'] as $mk => $rr) {
-                            $sum_capaian = 0;
-                            $kategori_ = '';
-                            if ($rr['bulan'] ==  $bulan) {
-                                $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                                $sum_capaian += $capaian_iki;
-    
-                                $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);
-                                $sheet->setCellValue('G' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'].' '.$v['satuan']);
-                                $sheet->setCellValue('H' . $cell, round($capaian_iki,0) .' %');
-                                if ($capaian_iki > 100) {
-                                    $sheet->setCellValue('I' . $cell, 'Sangat baik');
-                                }elseif($capaian_iki == 100){
-                                    $sheet->setCellValue('I' . $cell, 'Baik');
-                                }elseif($capaian_iki > 80 && $capaian_iki < 90){
-                                    $sheet->setCellValue('I' . $cell, 'Cukup');
-                                }elseif($capaian_iki > 60 && $capaian_iki < 79){
-                                    $sheet->setCellValue('I' . $cell, 'Kurang');
-                                }else{
-                                    $sheet->setCellValue('I' . $cell, 'Sangat kurang');
-                                }
-
-                                if ($sum_capaian > 110) {
-                                    $kategori_ = 'Sangat baik';
-                                }elseif($sum_capaian >= 90 && $sum_capaian <= 109){
-                                    $kategori_ = 'Baik'; 
-                                }elseif($sum_capaian >= 70 && $sum_capaian <= 89){
-                                    $kategori_ = 'Cukup'; 
-                                }elseif($sum_capaian >= 50 && $sum_capaian <= 69){
-                                    $kategori_ = 'Kurang';
-                                }elseif($sum_capaian >= 0 && $sum_capaian <= 49){
-                                    $kategori_ = 'Sangat kurang'; 
-                                }else{
-                                    $kategori_ = '-';
-                                }
-
-                                $sheet->setCellValue('J' . $cell, $kategori_);
-                                $sheet->setCellValue('K' . $cell, round($sum_capaian,2));
-    
-                                
-                            }
-                        }
-                        
-    
-                        $cell++;  
-                    }
+            $sheet->setCellValue('A' . $cell, $index);
+            if(isset($value['atasan']['rencana_kerja'])){
+                $sheet->setCellValue('B' . $cell, $value['atasan']['rencana_kerja']);
             }else{
-                $sheet->setCellValue('A' . $cell, $index+1);
-                if(isset($value['atasan']['rencana_kerja'])){
-                    $sheet->setCellValue('B' . $cell, $value['atasan']['rencana_kerja']);
-                }else{
-                    $sheet->setCellValue('B' . $cell, '');
-                }
-                foreach ($value['skp_child'] as $key => $res) {
-                    $sheet->setCellValue('C' . $cell, $res['rencana_kerja']);
-                    foreach ($res['aspek_skp'] as $k => $v) {
-                       
-                        $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
-                        $sheet->setCellValue('E' . $cell, $v['iki']);
-                       
-                        foreach ($v['target_skp'] as $mk => $rr) {
-                            $sum_capaian = 0;
-                            $kategori_ = '';
-                            if ($rr['bulan'] ==  $bulan) {
-                                $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                                $sum_capaian += $capaian_iki;
-    
-                                $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);
-                                $sheet->setCellValue('G' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'].' '.$v['satuan']);
-                                $sheet->setCellValue('H' . $cell, round($capaian_iki,0) .' %');
-                                if ($capaian_iki > 100) {
-                                    $sheet->setCellValue('I' . $cell, 'Sangat baik');
-                                }elseif($capaian_iki == 100){
-                                    $sheet->setCellValue('I' . $cell, 'Baik');
-                                }elseif($capaian_iki >= 80 && $capaian_iki <= 90){
-                                    $sheet->setCellValue('I' . $cell, 'Cukup');
-                                }elseif($capaian_iki >= 60 && $capaian_iki <= 79){
-                                    $sheet->setCellValue('I' . $cell, 'Kurang');
-                                }else{
-                                    $sheet->setCellValue('I' . $cell, 'Sangat kurang');
-                                }
-
-                                if ($sum_capaian > 110) {
-                                    $kategori_ = 'Sangat baik';
-                                }elseif($sum_capaian >= 90 && $sum_capaian <= 109){
-                                    $kategori_ = 'Baik'; 
-                                }elseif($sum_capaian >= 70 && $sum_capaian <= 89){
-                                    $kategori_ = 'Cukup'; 
-                                }elseif($sum_capaian >= 50 && $sum_capaian <= 69){
-                                    $kategori_ = 'Kurang';
-                                }elseif($sum_capaian >= 0 && $sum_capaian <= 49){
-                                    $kategori_ = 'Sangat kurang'; 
-                                }else{
-                                    $kategori_ = '-';
-                                }
-
-                                $sheet->setCellValue('J' . $cell, $kategori_);
-                                $sheet->setCellValue('K' . $cell, round($sum_capaian,2));
-                                
-                            }
-                        }
-                        
-    
-                        $cell++;  
-                    }
-                }
-               
+                $sheet->setCellValue('B' . $cell, '');
             }
-            
+            foreach ($value['skp_child'] as $key => $res) {
+                $sheet->setCellValue('C' . $cell, $res['rencana_kerja']);
+                foreach ($res['aspek_skp'] as $k => $v) {
+                   
+                    $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
+                    $sheet->setCellValue('E' . $cell, $v['iki']);
+                   
+                    foreach ($v['target_skp'] as $mk => $rr) {
+                        $sum_capaian = 0;
+                        $kategori_ = '';
+                        if ($rr['bulan'] ==  $bulan) {
+                            $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                            $sum_capaian += $capaian_iki;
+
+                            $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);
+                            $sheet->setCellValue('G' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'].' '.$v['satuan']);
+                            $sheet->setCellValue('H' . $cell, round($capaian_iki,0) .' %');
+                            if ($capaian_iki > 100) {
+                                $sheet->setCellValue('I' . $cell, 'Sangat baik');
+                            }elseif($capaian_iki == 100){
+                                $sheet->setCellValue('I' . $cell, 'Baik');
+                            }elseif($capaian_iki >= 80 && $capaian_iki <= 90){
+                                $sheet->setCellValue('I' . $cell, 'Cukup');
+                            }elseif($capaian_iki >= 60 && $capaian_iki <= 79){
+                                $sheet->setCellValue('I' . $cell, 'Kurang');
+                            }else{
+                                $sheet->setCellValue('I' . $cell, 'Sangat kurang');
+                            }
+
+                            if ($sum_capaian > 110) {
+                                $kategori_ = 'Sangat baik';
+                            }elseif($sum_capaian >= 90 && $sum_capaian <= 109){
+                                $kategori_ = 'Baik'; 
+                            }elseif($sum_capaian >= 70 && $sum_capaian <= 89){
+                                $kategori_ = 'Cukup'; 
+                            }elseif($sum_capaian >= 50 && $sum_capaian <= 69){
+                                $kategori_ = 'Kurang';
+                            }elseif($sum_capaian >= 0 && $sum_capaian <= 49){
+                                $kategori_ = 'Sangat kurang'; 
+                            }else{
+                                $kategori_ = '-';
+                            }
+
+                            $sheet->setCellValue('J' . $cell, $kategori_);
+                            $sheet->setCellValue('K' . $cell, round($sum_capaian,2));
+                            
+                        }
+                    }
+                    
+
+                    $cell++;  
+                }
+            }
         }
         
 
