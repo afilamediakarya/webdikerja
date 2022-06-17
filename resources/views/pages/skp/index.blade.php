@@ -47,6 +47,9 @@
                                 $inc_letter = 'A';
                                 $no = 0;
                             @endphp
+                            
+                            @if(isset($data['data']['utama']))
+
                             <tr>
                                 <td colspan="7"><b>A. Kinerja Utama</b></td>
                             </tr>
@@ -99,6 +102,17 @@
                                     @endforeach
                                 @endif           
                             @endforeach
+
+                            @endif
+
+
+                            @if(isset($data['data']['tambahan']))
+
+                            @php
+                                $nox = 0;
+                            @endphp
+
+
                             <tr>
                                <td colspan="7"><b>B. Kinerja Tambahan</b></td>
                             </tr>    
@@ -107,7 +121,7 @@
                                 <tr>
                                 
                                     @if($i == 0)
-                                    <td>{{$no+1}}.</td>
+                                    <td>{{$nox+1}}.</td>
                                     <td>{{$v['rencana_kerja']}}</td>
                                     @else
                                     <td></td>
@@ -133,10 +147,13 @@
                                     @endif
                                 </tr>
                                 @endforeach
-                            @php
-                                        $no++;
-                            @endphp
+                                @php
+                                        $nox++;
+                                @endphp
                             @endforeach
+
+                            @endif
+                            
                         </tbody>
                           
                         </tbody>

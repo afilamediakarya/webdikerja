@@ -59,7 +59,7 @@
                         <div class="col bg-white px-6 py-8 rounded-xl ml-3 mb-7">
                             <a href="#" class="text-dark font-weight-bold font-size-lg">Jumlah SKP</a>
                             <div class="align-items-end d-flex h-100 justify-content-between w-100">
-                                <p class="font-size-h1 mb-0"> 31 <small class="text-muted font-size-sm">Data</small> </p>
+                                <p class="font-size-h1 mb-0"> {{$data['jumlah_skp']}} <small class="text-muted font-size-sm">Data</small> </p>
                                 <span class="align-items-end d-block svg-icon svg-icon-3x svg-icon-warning text-right">
                                     <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Media/Equalizer.svg-->
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -99,7 +99,7 @@
                         <div class="col bg-white px-6 py-8 rounded-xl ml-3 mb-7">
                             <a href="#" class="text-dark font-weight-bold font-size-lg">Jumlah Aktifitas</a>
                             <div class="align-items-end d-flex h-100 justify-content-between w-100">
-                                <p class="font-size-h1 mb-0"> 31 <small class="text-muted font-size-sm">Data</small> </p>
+                                <p class="font-size-h1 mb-0"> {{$data['jumlah_aktifitas']}} <small class="text-muted font-size-sm">Data</small> </p>
                                 <span class="align-items-end d-block svg-icon svg-icon-3x svg-icon-warning text-right">
                                     <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Media/Equalizer.svg-->
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -119,7 +119,7 @@
                         <div class="col bg-white px-6 py-8 rounded-xl ml-3 mb-7">
                             <a href="#" class="text-dark font-weight-bold font-size-lg">Jumlah Pegawai</a>
                             <div class="align-items-end d-flex h-100 justify-content-between w-100">
-                                <p class="font-size-h1 mb-0"> 31 <small class="text-muted font-size-sm">Data</small> </p>
+                                <p class="font-size-h1 mb-0"> {{$data['jumlah_pegawai']}} <small class="text-muted font-size-sm">Data</small> </p>
                                 <span class="align-items-end d-block svg-icon svg-icon-3x svg-icon-warning text-right">
                                     <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Media/Equalizer.svg-->
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">

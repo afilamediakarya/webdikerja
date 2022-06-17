@@ -104,11 +104,14 @@ class LaporanController extends Controller
         $url = env('API_URL');
         $token = session()->get('user.access_token');
         $data = Http::withToken($token)->get($url."/laporan/skp/".$level);
+        return $data;
         return $data['data'];
     }
 
     public function exportLaporanSkp($jenis,$type,$bulan){
+        // return 'cek';
         $level = $this->checkLevel();
+
 
         if ($level == 1 || $level == 2) {
             $level = 'kepala';
@@ -117,6 +120,7 @@ class LaporanController extends Controller
         }
 
         $data = $this->getSkp($level); 
+        // return $data;
         if ($jenis == 'skp') {
              return $this->exportSkp($data,$bulan,$type,$level);
         }else{

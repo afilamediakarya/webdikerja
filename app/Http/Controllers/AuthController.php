@@ -45,6 +45,7 @@ class AuthController extends Controller
 
             if($response->status() == 200){
                 $data = $response->json();
+                // return $data;
                 session(['user' => $response->json()]);
                 session(['user_details' => $response->json()['current']['pegawai']]);
                 session(['atasan' => $response->json()['check_atasan']]);

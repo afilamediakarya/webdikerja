@@ -43,6 +43,7 @@ class PenilaianController extends Controller
 
         if ($type == 'realisasi') {
             $response = Http::withToken($token)->get($url."/review_realisasi/skpbyId/".$params."/".$bulan);
+            return $response;
         }else{
             $response = Http::withToken($token)->get($url."/review_skp/skpbyId/".$params);
         }
@@ -63,7 +64,7 @@ class PenilaianController extends Controller
         $page_description = 'Daftar Pegawai yang dinilai';
         $breadcumb = ['Daftar Pegawai yang dinilai', 'tambah Realisasi'];
         $skp = $this->getSkpPegawai($id,$type,$bulan);
-        // return $skp;
+        return $skp;
         return view('pages.penilaian.'.$type, compact('page_title', 'page_description','breadcumb','skp','bulan'));
     }
 

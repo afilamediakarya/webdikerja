@@ -37,9 +37,11 @@
                             @endphp
 
                             @if($level == 'pegawai')
-                                     <tr>
-                                        <td colspan="7"><b>A. Kinerja Utama</b></td>
-                                    </tr>
+                                
+                                @if(isset($data['data']['utama']))
+                                    <tr>
+                                    <td colspan="7"><b>A. Kinerja Utama</b></td>
+                                </tr>
                                 @foreach($data['data']['utama'] as $key => $value)
                                     
                                     <tr style="background:#f2f2f2">
@@ -92,17 +94,24 @@
                                     @endphp
                                     @endforeach
                                     @endforeach
-                                    <tr>
+                                    @endif
+
+                                   @if(isset($data['data']['tambahan']))
+                                   <tr>
                                         <td colspan="7"><b>B. Kinerja Tambahan</b></td>
                                     </tr>
                                     
+                                    @php
+                                        $nox = 0;
+                                    @endphp
+
 
                                     @foreach($data['data']['tambahan'] as $k => $v)
                                         @foreach($v['aspek_skp'] as $i => $l)
                                         <tr>
                                         
                                             @if($i == 0)
-                                            <td>{{$no+1}}.</td>
+                                            <td>{{$k+1}}.</td>
                                             <td>{{$v['rencana_kerja']}}</td>
                                             @else
                                             <td></td>
@@ -128,7 +137,7 @@
                                             @if($i == 0)
                                             <td>    <a href="javascript:;" disabled class="btn btn-light-danger btn-sm">{{$v['status_review']}}</a></td>
                                             <td nowrap="nowrap">
-                                                <a role="button" onclick="realisasi('{{$v['id']}}','{{stripslashes($value['atasan']['rencana_kerja'])}}')" class="btn btn-secondary btn-sm">Realisasi</a>
+                                                <a role="button" onclick="realisasi('{{$v['id']}}','{{stripslashes($value['atasan']['rencana_kerja'])}}')" class="btn btn-secondary btn-sm">Realisasi </a>
                                                
                                             </td>
                                             
@@ -136,20 +145,26 @@
                                             <td></td>
                                             @endif
                                         </tr>
+                                        @php
+                                                $nox++;
+                                        @endphp
                                         @endforeach
-                                    @php
-                                                $no++;
-                                    @endphp
+                                  
                                     @endforeach
+
+                                   @endif
 
                                 
                             @else
+                            @php
+                                        $nox = 0;
+                                    @endphp
                                 @foreach($data['data'] as $key => $value)
                                     
                                     @foreach($value['aspek_skp'] as $i => $l)
                                         <tr>
                                             @if($i == 0)
-                                            <td>{{$no+1}}.</td>
+                                            <td>{{$nox+1}}.</td>
                                             <td>{{$value['rencana_kerja']}}</td>
                                             @else
                                             <td></td>
@@ -175,17 +190,18 @@
                                             @if($i == 0)
                                             <td>    <a href="javascript:;" disabled class="btn btn-light-danger btn-sm">{{$value['status_review']}}</a></td>
                                             <td nowrap="nowrap">
-                                                <a role="button" onclick="realisasi('{{$value['id']}}','-')" class="btn btn-secondary btn-sm">Realisasi</a>
+                                                <a role="button" onclick="realisasi('{{$value['id']}}','-')" class="btn btn-secondary btn-sm">Realisasi {{$value['status_review']}}</a>
                                             
                                             </td>
                                             @else
                                             <td></td>
                                             @endif
                                         </tr>
-                                        @endforeach
-                                         @php
-                                                $no++;
+                                        @php
+                                                $nox++;
                                     @endphp
+                                        @endforeach
+                                         
                              
                                 @endforeach      
                             @endif
