@@ -51,13 +51,10 @@
                             </div>
                             <div class="col-8 row">
                                 <div class="col">
-                                    <button type="reset" class="btn btn-block btn-danger"><i class="flaticon2-pie-chart"></i>Cetak PDF</button>
-                                </div>
-                                <div class="col">
                                     <button type="reset" id="export-excel"  class="btn btn-block btn-success"><i class="flaticon2-pie-chart"></i>Export Excel</button>
                                 </div>
                                 <div class="col">
-                                    <button type="reset" id="preview-excel" class="btn btn-block btn-outline-primary"><i class="flaticon2-pie-chart"></i>Tampilkan Excel</button>
+                                    <button type="reset" id="preview-excel" class="btn btn-block btn-danger"><i class="flaticon2-pie-chart"></i>Tampilkan Data</button>
                                 </div>
                             </div>
                         </div>
