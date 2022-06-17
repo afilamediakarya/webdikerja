@@ -1026,21 +1026,29 @@ class LaporanController extends Controller
 
     public function konvertWaktu($params,$waktu){
         $diff = '';
+        $selisih_waktu = '';
         if ($params == 'checkin') {
             $waktu_tetap_absen = strtotime('08:00:00');
             $waktu_absen = strtotime($waktu); 
             $diff = $waktu_absen - $waktu_tetap_absen;
         }else{
-            $waktu_tetap_absen = strtotime('17:00:00');
+            $waktu_tetap_absen = strtotime('16:00:00');
             $waktu_absen = strtotime($waktu); 
             $diff = $waktu_tetap_absen - $waktu_absen;
+            // return $diff;
         }
 
-        $jam = floor($diff/(60*60));
-        $menit = $diff - $jam * (60*60);
-        $selisih_waktu = floor($menit/60);
+        if ($diff > 0) {
+            // $jam = floor($diff/3600);
+            // $selisih_waktu = $diff%3600;
+            $menit = floor($diff/60);
+        }else{
+            $diff = 0;
+        }
 
-        return $selisih_waktu;
+        
+
+        return $menit;
     }
 
 }
