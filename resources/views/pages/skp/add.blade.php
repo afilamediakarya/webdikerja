@@ -82,12 +82,13 @@
                         <div class="row">
                             <div class="form-group col-6">
                                 <label for="satuan_0">Jenis Satuan</label>
-                                <select class="form-control form-control-solid satuan_" id="satuan_0" name="satuan[0]">
+                                <!-- <select class="form-control form-control-solid satuan_" id="satuan_0" name="satuan[0]">
                                 <option selected disabled>Pilih Satuan</option>
                                    @foreach($satuan as $indexes => $vals)
                                     <option value="{{$vals['value']}}">{{$vals['value']}}</option>
                                    @endforeach
-                                </select>
+                                </select> -->
+                                <input type="text" class="form-control" name="satuan[0]">
                                 <div class="text-danger satuan_0_error"></div>
                             </div>
                             <div class="form-group col-6">
@@ -121,12 +122,13 @@
                         <div class="row">
                             <div class="form-group col-6">
                                  <label for="satuan_1">Jenis Satuan</label>
-                                <select class="form-control form-control-solid satuan_" id="satuan_1" name="satuan[1]">
+                                <!-- <select class="form-control form-control-solid satuan_" id="satuan_1" name="satuan[1]">
                                 <option selected disabled>Pilih Satuan</option>
                                 @foreach($satuan as $indexes => $vals)
                                     <option value="{{$vals['value']}}">{{$vals['value']}}</option>
                                    @endforeach
-                                </select>
+                                </select> -->
+                                <input type="text" class="form-control" name="satuan[1]">
                                 <div class="text-danger satuan_1_error"></div>
                             </div>
                             <div class="form-group col-6">
@@ -160,12 +162,13 @@
                         <div class="row">
                             <div class="form-group col-6">
                                 <label for="satuan_2">Jenis Satuan</label>
-                                <select class="form-control form-control-solid satuan_" id="satuan_2" name="satuan[2]">
+                                <!-- <select class="form-control form-control-solid satuan_" id="satuan_2" name="satuan[2]">
                                 <option selected disabled>Pilih Satuan</option>
                                     @foreach($satuan as $indexes => $vals)
                                     <option value="{{$vals['value']}}">{{$vals['value']}}</option>
                                    @endforeach
-                                </select>
+                                </select> -->
+                                <input type="text" class="form-control" name="satuan[2]">
                                 <div class="text-danger satuan_2_error"></div>
                             </div>
                             <div class="form-group col-6">

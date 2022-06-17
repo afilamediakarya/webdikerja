@@ -127,6 +127,13 @@ class SkpController extends Controller
             }
         }
 
+        foreach ($params->satuan as $key => $satuans) {
+            if (is_null($satuans)) {
+                $result['satuan_'.$key][] = 'Satuan is field required';
+             }
+         }
+ 
+
         foreach ($params->target_kualitas as $key => $targetKualitas) {
             if (is_null($targetKualitas)) {
                 $result['target_kualitas_'.$key][] = 'Nilai Kinerja is field required';
@@ -147,24 +154,25 @@ class SkpController extends Controller
 
         // return $params->satuan;
 
-        if (empty($params->satuan)) {
-            return 'kosong';
-            for ($i=0; $i < 3; $i++) { 
-                $result['satuan_'.$i][] = 'Satuan is field required';
-            }
-        }else{
+        // VALIDASI SELECT SATUAN
+        // if (empty($params->satuan)) {
+        //     return 'kosong';
+        //     for ($i=0; $i < 3; $i++) { 
+        //         $result['satuan_'.$i][] = 'Satuan is field required';
+        //     }
+        // }else{
            
-           if (count($params->satuan) < 3) {
-            foreach ($params->satuan as $k => $v) {
-                for ($i=0; $i < 3; $i++) { 
-                    if ($i !== $k) {
-                        // $cek[$i] = $i;
-                        $result['satuan_'.$i][] = 'Satuan is field required';
-                    }
-                }
-            }
-           }
-        }
+        //    if (count($params->satuan) < 3) {
+        //     foreach ($params->satuan as $k => $v) {
+        //         for ($i=0; $i < 3; $i++) { 
+        //             if ($i !== $k) {
+        //                 // $cek[$i] = $i;
+        //                 $result['satuan_'.$i][] = 'Satuan is field required';
+        //             }
+        //         }
+        //     }
+        //    }
+        // }
 
         // return $cek;
 
@@ -174,10 +182,7 @@ class SkpController extends Controller
     }   
 
     public function store(Request $request){
-        // return $request->all();
-      
        $validated = $this->customValidate($request);
-
 
         if (count($validated) > 0 ) {
             return response()->json($validated,422);   
