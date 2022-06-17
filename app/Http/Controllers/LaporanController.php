@@ -350,15 +350,14 @@ class LaporanController extends Controller
        
 
         $sheet->setCellValue('A7', 'Nama')->mergeCells('A7:B7');
-        if (isset($data['pegawai_dinilai'])) {
+        
             $sheet->setCellValue('C7', $data['pegawai_dinilai']['nama']);
-        }else{
-            $sheet->setCellValue('C7', '-');
-        }
+        
+        
         $sheet->setCellValue('A8', 'NIP')->mergeCells('A8:B8');
-        if (condition) {
-            $sheet->setCellValue('C8', $data['pegawai_dinilai']['nip']);
-        }
+        
+        $sheet->setCellValue('C8', $data['pegawai_dinilai']['nip']);
+        
         $sheet->setCellValue('A9', 'Pangkat / Gol Ruang')->mergeCells('A9:B9');
         $sheet->setCellValue('C9', $data['pegawai_dinilai']['golongan']);
         $sheet->setCellValue('A10', 'Jabatan')->mergeCells('A10:B10');
