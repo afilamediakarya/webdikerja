@@ -118,10 +118,10 @@ class LaporanController extends Controller
             $level = 'pegawai';
         }
 
-
+       
 
         $data = $this->getSkp($level); 
-        
+  
         if ($data['status'] == true) {
             $res = $data['data'];
         }
@@ -350,9 +350,15 @@ class LaporanController extends Controller
        
 
         $sheet->setCellValue('A7', 'Nama')->mergeCells('A7:B7');
-        $sheet->setCellValue('C7', $data['pegawai_dinilai']['nama']);
+        if (isset($data['pegawai_dinilai'])) {
+            $sheet->setCellValue('C7', $data['pegawai_dinilai']['nama']);
+        }else{
+            $sheet->setCellValue('C7', '-');
+        }
         $sheet->setCellValue('A8', 'NIP')->mergeCells('A8:B8');
-        $sheet->setCellValue('C8', $data['pegawai_dinilai']['nip']);
+        if (condition) {
+            $sheet->setCellValue('C8', $data['pegawai_dinilai']['nip']);
+        }
         $sheet->setCellValue('A9', 'Pangkat / Gol Ruang')->mergeCells('A9:B9');
         $sheet->setCellValue('C9', $data['pegawai_dinilai']['golongan']);
         $sheet->setCellValue('A10', 'Jabatan')->mergeCells('A10:B10');
@@ -454,35 +460,38 @@ class LaporanController extends Controller
                 }         
         }
 
-        // TAMBAHAN
+       
+
+        if(isset($data_tambahan)){
+             // TAMBAHAN
         $sheet->setCellValue('A'.$cell, 'B. KINERJA TAMBAHAN')->mergeCells('A'.$cell.':F'.$cell);
         $sheet->getStyle('A'.$cell.':F'.$cell)->getAlignment()->setVertical('left')->setHorizontal('left');
         $sheet->getStyle('A'.$cell.':F'.$cell)->getFont()->setBold(true);
         $cell++;
-
-        foreach ($data_tambahan as $keyy => $values) {
-            $sheet->setCellValue('A' . $cell, $index+1);
-            $sheet->setCellValue('B' . $cell, '-');
-            $sheet->setCellValue('C' . $cell, $values['rencana_kerja']);
-            foreach ($values['aspek_skp'] as $k => $v) {
-                
-                $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
-                $sheet->setCellValue('E' . $cell, $v['iki']);
-                
-                foreach ($v['target_skp'] as $mk => $rr) {
-                    $sum_capaian = 0;
-                    $kategori_ = '';
-                    if ($rr['bulan'] ==  $bulan) {
-                        $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                        $sum_capaian += $capaian_iki;
-
-                        $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);
-                        
+            foreach ($data_tambahan as $keyy => $values) {
+                $sheet->setCellValue('A' . $cell, $index+1);
+                $sheet->setCellValue('B' . $cell, '-');
+                $sheet->setCellValue('C' . $cell, $values['rencana_kerja']);
+                foreach ($values['aspek_skp'] as $k => $v) {
+                    
+                    $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
+                    $sheet->setCellValue('E' . $cell, $v['iki']);
+                    
+                    foreach ($v['target_skp'] as $mk => $rr) {
+                        $sum_capaian = 0;
+                        $kategori_ = '';
+                        if ($rr['bulan'] ==  $bulan) {
+                            $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                            $sum_capaian += $capaian_iki;
+    
+                            $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);
+                            
+                        }
                     }
+                    
+    
+                    $cell++;  
                 }
-                
-
-                $cell++;  
             }
         }
         
