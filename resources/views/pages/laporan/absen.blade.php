@@ -74,6 +74,8 @@
 
 @section('script')
     <script>
+           
+
         jQuery(document).ready(function() {
 
             $('#satuan_kerja').select2();
@@ -93,7 +95,6 @@
             }, function(start, end, label) {
                 $('#kt_daterangepicker_2 .form-control').val( start.format('YYYY-MM-DD') + ' / ' + end.format('YYYY-MM-DD'));
             });
-
             
 
             $('#preview-excel').on('click',function () {
