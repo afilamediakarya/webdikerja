@@ -11,6 +11,7 @@ use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\RealisasiController;
 use App\Http\Controllers\SkpController;
 use App\Http\Controllers\AxiosController;
+use App\Http\Controllers\bankomController;
 
 
 use App\Http\Controllers\Admin\AdminController;
@@ -90,6 +91,14 @@ Route::middleware('Auth')->group(function(){
         Route::post('/store', [AktivitasController::class, 'store'])->name('store-aktivitas');
         Route::get('/detail/{params}', [AktivitasController::class, 'detail'])->name('detail-aktivitas');
         Route::post('/update/{params}', [AktivitasController::class, 'update'])->name('update-aktivitas');
+    });
+
+    Route::prefix('bankom')->group(function(){
+        Route::get('/', [bankomController::class, 'index'])->name('bankom');
+        Route::post('/', [bankomController::class, 'store'])->name('post-bankom');
+        Route::get('/{id}', [bankomController::class, 'show'])->name('show-bankom');
+        Route::post('/{id}', [bankomController::class, 'update'])->name('update-bankom');
+        Route::delete('/{id}', [bankomController::class, 'delete'])->name('delete-bankom');
     });
     
     
