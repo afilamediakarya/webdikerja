@@ -49,6 +49,7 @@
                                 <th>Nama Pelatihan</th>
                                 <th>Jenis Pelatihan</th>
                                 <th>Waktu Pelaksanaan</th>
+                                <th>Sertifikat</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -70,7 +71,7 @@
         <div id="side_form" class="offcanvas offcanvas-right p-10">
 			<!--begin::Header-->
 			<div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
-				<h3 class="font-weight-bold m-0">Tambah Bankom<h3>
+				<h3 class="font-weight-bold m-0">Form Bankom<h3>
 				<a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="side_form_close">
 					<i class="ki ki-close icon-xs text-muted"></i>
 				</a>
@@ -84,8 +85,9 @@
                     <div class="form-group">
                         <label>Nama Pelatihan</label>
                         <input class="form-control" type="text" name="nama_pelatihan"/>
-                        <div class="invalid-feedback"></div>
+                        <small class="text-danger nama_pelatihan_error"></small>
                     </div>
+                    <input type="hidden" name="id">
                     <div class="form-group">
                         <label>Jenis Pelatihan</label>
                         <select name="jenis_pelatihan" class="form-control" >
@@ -94,22 +96,23 @@
                             <option value="Teknis Fungsional">Teknis Fungsional</option>
                             <option value="Lainnya">Lainnya</option>
                         </select>
-                        <div class="invalid-feedback"></div>
+                           <small class="text-danger jenis_pelatihan_error"></small>
                     </div>
                     <div class="form-group">
                         <label>Jumlah JP</label>
                         <input type="number" class="form-control" value="0" name="jumlah_jp"/>
-                        <div class="invalid-feedback"></div>
+                           <small class="text-danger jumlah_jp_error"></small>
                     </div>
                     <div class="form-group">
                         <label>Sertifikat</label>
-                        <input type="file" onchange="changeFoto(this,'img_preview')" class="form-control" name="gambar"/>
-                        <div class="invalid-feedback"></div>
+                        <small class="text-primary filename"></small>
+                        <input type="file" class="form-control" name="sertifikat"/>
+                           <small class="text-danger sertifikat_error"></small>
                     </div>
                     <div class="form-group">
                         <label>Waktu Pelaksanaan</label>
                         <input type="date" class="form-control" name="waktu_pelaksanaan">
-                        <div class="invalid-feedback"></div>
+                           <small class="text-danger waktu_pelaksanaan_error"></small>
                     </div>
                     <div class="separator separator-dashed mt-8 mb-5"></div>
                     <div class="">
@@ -132,6 +135,7 @@
         "use strict";
         let url_ = {!! json_encode($url_img) !!};
         let role = {!! json_encode($role) !!}
+        let url_img = {!! json_encode($url_img) !!}
         
         if (role == 'super_admin') {
             $('#id_satuan_kerja').select2();
@@ -148,7 +152,8 @@
                 order: [[0, 'asc']],
                 processing:true,
                 ajax: "{{ route('bankom') }}",
-                columns:[{ 
+                columns:[
+                    { 
                         data : null, 
                         render: function (data, type, row, meta) {
                                 return meta.row + meta.settings._iDisplayStart + 1;
@@ -159,7 +164,13 @@
                         data:'jenis_pelatihan'
                     },{
                         data: 'waktu_pelaksanaan',
-                    },{
+                    },{ 
+                        data : null, 
+                        render: function (data) {
+                                return `<a href="${url_img}/storage/image/${data.sertifikat}" target="_blank" type="button" class="btn btn-primary btn-sm ">Lihat</a>`;
+                        }  
+                    }
+                    ,{
                         data:'id',
                     }
                 ],
@@ -170,8 +181,8 @@
                         orderable: false,
                         render: function(data, type, full, meta) {
                             return '\
-                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
-                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>\
+                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary btn-sm button-update">ubah</a>\
+                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger btn-sm button-delete">Hapus</a>\
                             ';
                         },
                     }
@@ -200,34 +211,62 @@
         $(document).on('submit', "#createForm[data-type='submit']", function(e){
             e.preventDefault();
             var formdata = new FormData(this);
-            AxiosCall.post("{{route('post-informasi')}}", formdata, "#createForm");
-            $(`#img_preview img`).remove();
+            $.ajax({
+                url:"{{route('post-bankom')}}",
+                type:"POST",
+                data : formdata,
+                processData: false,
+                contentType: false,
+                success: function(data){
+                    swal.fire({
+                        text: 'Bankom berhasil di tambahkan',
+                        icon: "success",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        $("#createForm")[0].reset();
+                        Panel.action('hide');
+                        $('#kt_datatable').DataTable().ajax.reload();
+                    });
+                   
+                },
+                error: function (err) {
+                    console.log(err);
+                    let error = err.responseJSON.errors;
+                    $.each( error, function( key, value ) {
+                        console.log(key + ": " + value);
+                        $(`.${key}_error`).html(value)
+                    }); 
+                }
+            });
+
+            
+       
         });
 
-        $(document).on('click','#side_form_toggle', function () {
-            $(`#img_preview img`).remove();
-        })
         
         $(document).on('click', '.button-update', function(){
             Panel.action('show','update');
             var key = $(this).data('id');
-            // AxiosCall.show(`admin/informasi/${key}`);
             $.ajax({
-                    url:`admin/informasi/${key}`,
+                    url:`/bankom/${key}`,
                     method:"GET",
-                    success: function(data){
-                      if(data.success){
+                    success: function(res){
+                        res = JSON.parse(res);
+                        console.log(res.status);
+                      
+                      if(res.status == 1){
                         // console.log(data.success);
-                        var res = data.success.data;
-                        console.log(res);
-                        $.each(res, function( key, value ) {
-                            if (key == 'gambar') {
-                                $(`#img_preview img`).remove();
-                                console.log(`${url_}/storage/image/${value}`);
-                                $(`#img_preview`).append(`<img src="${url_}/storage/image/${value}" style="height: 100%; width: 100%;">`);
-                            }
+                        var result = res.data;
+                        console.log(result);
+                 
+                        $.each(result, function( key, value ) {
+                           if (key == 'sertifikat') {
+                            $('.filename').html('<i class="fa fa-file" aria-hidden="true"></i> '+value)
+                           } else {
                             $("input[name='"+key+"']").val(value);
                             $("select[name='"+key+"']").val(value);
+                           }   
                            
                         });
                       }
@@ -238,15 +277,97 @@
         $(document).on('submit', "#createForm[data-type='update']", function(e){
             e.preventDefault();
             var formdata = new FormData(this);
-            var _id = $("input[name='id']").val();
-            AxiosCall.post(`admin/informasi/${_id}`, formdata, "#createForm");
-            $(`#img_preview img`).remove();
+            let id_ = $("input[name='id']").val();
+        
+            $.ajax({
+                url:"bankom/"+id_,
+                type:"POST",
+                data : formdata,
+                processData: false,
+                contentType: false,
+                success: function(data){
+                    swal.fire({
+                        text: 'Bankom berhasil di update',
+                        icon: "success",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        $("#createForm")[0].reset();
+                        Panel.action('hide');
+                        $('#kt_datatable').DataTable().ajax.reload();
+                    });
+                   
+                },
+                error: function (err) {
+                    console.log(err);
+                    let error = err.responseJSON.errors;
+                    $.each( error, function( key, value ) {
+                        console.log(key + ": " + value);
+                        $(`.${key}_error`).html(value)
+                    }); 
+                }
+            });
         });
 
         $(document).on('click', '.button-delete', function (e) {
             e.preventDefault();
             var key = $(this).data('id');
-            AxiosCall.delete(`admin/informasi/${key}`);
+    
+            Swal.fire({
+            title: 'Apakah kamu yakin akan menghapus data ini ?',
+            text: "Data akan di hapus permanen",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url  : 'bankom/'+ key,
+                        type : 'POST',
+                        data : {
+                            '_method' : 'DELETE',
+                            '_token' : $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (response) {
+                            let res = JSON.parse(response);
+                            console.log(res.status);
+                            if (res.status !== false) {
+                                Swal.fire('Deleted!', 'Your file has been deleted.','success');
+                                $('#kt_datatable').DataTable().ajax.reload();   
+                            }else{
+                                swal.fire({
+                                    title : "Bankom tidak dapat di hapus. ",
+                                    text: "Bankom digunakan oleh bawahaan. ",
+                                    icon: "warning",
+                                });
+                            }
+                        }
+                    })
+                }
+            })
+          
+            // swal.fire({
+            //     title: "Apakah kamu yakin ?",
+            //     text: "Data tidak dapat di pulihkan kembali",
+            //     icon: "warning",
+            //     buttons: true,
+            //     dangerMode: true,
+            // })
+            // .then((willDelete) => {
+            // if (willDelete) {
+            //     // AxiosCall.delete(`bankom/${key}`);
+            //     //     $('#kt_datatable').DataTable().ajax.reload();
+            //     // swal("Data anda berhasil di hapus", {
+            //     //     icon: "success",
+            //     // });
+            // } else {
+            //     swal("Data anda di amankan");
+            // }
+            // });
+
+           
         })
         
 
@@ -258,31 +379,6 @@
             });
         });
 
-        function changeFoto(params,area) {
-            var foto = $(params).prop('files')[0];
-            var check = 0;
-
-            var ext = ['image/jpeg', 'image/png', 'image/bmp'];
-
-            $.each(ext, function (key, val) {
-                if (foto.type == val) check = check + 1;
-            });
-
-            if (check == 1) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    // $('#text-upload').css('display', 'none');
-                    $(`#${area} img`).remove();
-                    $(`#${area}`).append('<img src="' + e.target.result +
-                        '" style="height: 100%; width: 100%;">');
-                }
-                reader.readAsDataURL(params.files[0]);
-            } else {
-                alert('Format file tidak dibolehkan, pilih file lain');
-                $(params).val('');
-                return;
-            }   
-        }
-
+      
     </script>
 @endsection

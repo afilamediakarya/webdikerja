@@ -34,4 +34,106 @@ class bankomController extends Controller
 
         return view('pages.bankom.index', compact('page_title', 'page_description','breadcumb','url_img','role','satuan_kerja'));
     }
+
+    public function store(Request $request){
+        $request->validate([
+            'nama_pelatihan' => 'required|string',
+            'jenis_pelatihan' => 'required',
+            'jumlah_jp' => 'required|numeric',
+            'waktu_pelaksanaan' => 'required',
+            'sertifikat' => 'required|mimes:pdf|max:2048'
+        ]);
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+        $data = $request->all();
+        if ($request->file('sertifikat')) {
+            $filtered = array_filter(
+                $data,
+                function ($key){
+                    if(!in_array($key,['_token', 'id', 'sertifikat'])){
+                        return $key;
+                    };
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+            $image = $request->file('sertifikat');
+            $response = Http::withToken($token)->attach('sertifikat', file_get_contents($image), $request->sertifikat->getClientOriginalName())->post($url."/bankom/store", $filtered);
+        } else {
+            $filtered = array_filter(
+                $data,
+                function ($key){
+                    if(!in_array($key,['_token', 'id'])){
+                        return $key;
+                    };
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+            $response = Http::withToken($token)->post($url."/bankom/store", $filtered);
+        }
+        
+        if($response->successful()){
+            return response()->json(['status'=> 'Berhasil Menambah Data']);
+        }else{
+            return response()->json(['status'=> 'Berhasil Menambah Data']);
+        }
+    }
+
+    public function show($params){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $response = Http::withToken($token)->get($url."/bankom/show/".$params);
+        return $response;
+    }
+
+    public function update($params,Request $request){
+        $request->validate([
+            'nama_pelatihan' => 'required|string',
+            'jenis_pelatihan' => 'required',
+            'jumlah_jp' => 'required|numeric',
+            'waktu_pelaksanaan' => 'required',
+            'sertifikat' => 'mimes:pdf|max:2048'
+        ]);
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+        $data = $request->all();
+        if ($request->file('sertifikat')) {
+            $filtered = array_filter(
+                $data,
+                function ($key){
+                    if(!in_array($key,['_token', 'id', 'sertifikat'])){
+                        return $key;
+                    };
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+            $image = $request->file('sertifikat');
+            $response = Http::withToken($token)->attach('sertifikat', file_get_contents($image), $request->sertifikat->getClientOriginalName())->post($url."/bankom/update/".$params, $filtered);
+        } else {
+            $filtered = array_filter(
+                $data,
+                function ($key){
+                    if(!in_array($key,['_token', 'id'])){
+                        return $key;
+                    };
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+            $response = Http::withToken($token)->post($url."/bankom/update/".$params, $filtered);
+        }
+        
+        if($response->successful()){
+            return response()->json(['status'=> 'Berhasil Menambah Data']);
+        }else{
+            return response()->json(['status'=> 'Berhasil Menambah Data']);
+        }
+    }
+
+    public function delete(Request $request, $id)
+    {
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+        $response = Http::withToken($token)->delete($url."/bankom/delete/".$id);
+      
+        return $response;
+    }
 }
