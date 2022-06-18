@@ -333,12 +333,15 @@ class LaporanController extends Controller
         $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.5);
         $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
 
+        $sheet->getStyle('A:L')->getAlignment()->setWrapText(true);
+        $sheet->getStyle('A:L')->getAlignment()->setVertical('top')->setHorizontal('left');
+
         $sheet->setCellValue('A1', 'SASARAN KINERJA PEGAWAI (SKP)')->mergeCells('A1:H1');
         $sheet->setCellValue('A2', 'PEJABAT ADMINISTRATOR PENGAWAS DAN FUNGSIONAL')->mergeCells('A2:H2');
         
         $sheet->setCellValue('A4', 'PERIODE PENILAIAN')->mergeCells('A4:H4');
-        $sheet->setCellValue('A5', $data['pegawai_dinilai']['nama_satuan_kerja'])->mergeCells('A5:C5');
-        $sheet->setCellValue('D5', "PERIODENYA PERIODENYA PERIODENYA ")->mergeCells('D5:H5');
+        $sheet->setCellValue('A5', $data['pegawai_dinilai']['nama_satuan_kerja'])->mergeCells('A5:D5');
+        $sheet->setCellValue('E5', "PERIODENYA PERIODENYA PERIODENYA ")->mergeCells('E5:H5');
 
         $sheet->setCellValue('A6', 'PEGAWAI YANG DINILAI')->mergeCells('A6:D6');
         $sheet->setCellValue('E6', 'PEJABAT PENILAI PEKERJA')->mergeCells('E6:H6');
@@ -406,22 +409,13 @@ class LaporanController extends Controller
         $sheet->getColumnDimension('H')->setWidth(25);
 
 
-        $sheet->getStyle('A1:H2')->getFont()->setSize(12);
-        $sheet->getStyle('A:H')->getAlignment()->setWrapText(true);
-        $sheet->getStyle('A6:H12')->getFont()->setBold(true);
-        $sheet->getStyle('A4:H11')->getAlignment()->setVertical('center')->setHorizontal('left');
-        $sheet->getStyle('D4:H5')->getAlignment()->setVertical('center')->setHorizontal('right');
-        $sheet->getStyle('A6:H6')->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('A1:A2')->getAlignment()->setVertical('center')->setHorizontal('center');
-
-        $sheet->getStyle('A')->getAlignment()->setVertical('center')->setHorizontal('center');
+        
 
         $cell = 13;
         //UTAMA
         $data_column = $data['skp']['utama'];
-        $sheet->setCellValue('A'.$cell, 'A. KINERJA UTAMA')->mergeCells('A'.$cell.':H'.$cell);
-        $sheet->getStyle('A'.$cell.':H'.$cell)->getAlignment()->setVertical('center')->setHorizontal('left');
-        $sheet->getStyle('A'.$cell.':H'.$cell)->getFont()->setBold(true);
+        $sheet->setCellValue('B'.$cell, 'A. KINERJA UTAMA')->mergeCells('B'.$cell.':H'.$cell);
+        $sheet->getStyle('B'.$cell.':H'.$cell)->getFont()->setBold(true);
         $cell++;
         foreach ( $data_column as $index => $value ){
                 
@@ -433,10 +427,12 @@ class LaporanController extends Controller
                 foreach ($value['skp_child'] as $key => $res) {
                     $sheet->setCellValue('D' . $cell, $res['rencana_kerja'])->mergeCells('D'.$cell.':D'.($cell+2));
                     foreach ($res['aspek_skp'] as $k => $v) {
+                        $sheet->getStyle('E'. $cell.':E'. $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
                         $sheet->setCellValue('E' . $cell, $v['aspek_skp']);
                         $sheet->setCellValue('F' . $cell, $v['iki'])->mergeCells('F'.$cell.':G'.$cell);
                         foreach ($v['target_skp'] as $mk => $rr) {
                             if ($rr['bulan'] ==  $bulan) {
+                                $sheet->getStyle('H'. $cell.':H'. $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
                                 $sheet->setCellValue('H' . $cell, $rr['target'].' '.$v['satuan']);
                             }
                         }
@@ -450,21 +446,22 @@ class LaporanController extends Controller
 
         // TAMBAHAN
         if(isset($data['skp']['tambahan'])){
-        $sheet->setCellValue('A'.$cell, 'B. KINERJA TAMBAHAN')->mergeCells('A'.$cell.':H'.$cell);
-        $sheet->getStyle('A'.$cell.':H'.$cell)->getAlignment()->setVertical('center')->setHorizontal('left');
-        $sheet->getStyle('A'.$cell.':H'.$cell)->getFont()->setBold(true);
+
+        $sheet->setCellValue('B'.$cell, 'A. KINERJA TAMBAHAN')->mergeCells('B'.$cell.':H'.$cell);
+        $sheet->getStyle('B'.$cell.':H'.$cell)->getFont()->setBold(true);
         $cell++;
             foreach ($data['skp']['tambahan'] as $keyy => $values) {
                 $sheet->setCellValue('A' . $cell, $index+1)->mergeCells('A'.$cell.':A'.($cell+2));
                 $sheet->setCellValue('B' . $cell, ' ')->mergeCells('B'.$cell.':C'.($cell+2));
                 $sheet->setCellValue('D' . $cell, $values['rencana_kerja'])->mergeCells('D'.$cell.':D'.($cell+2));
                 foreach ($values['aspek_skp'] as $k => $v) {
-                    
+                    $sheet->getStyle('E'. $cell.':E'. $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
                     $sheet->setCellValue('E' . $cell, $v['aspek_skp'])->mergeCells('E'.$cell.':E'.($cell+2));
                     $sheet->setCellValue('F' . $cell, $v['iki'])->mergeCells('F'.$cell.':G'.$cell);
                     
                     foreach ($v['target_skp'] as $mk => $rr) {
                         if ($rr['bulan'] ==  $bulan) {
+                            $sheet->getStyle('H'. $cell.':H'. $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
                             $sheet->setCellValue('H' . $cell, $rr['target'].' '.$v['satuan']);
                         }
                     }
@@ -490,10 +487,14 @@ class LaporanController extends Controller
        
         $sheet->getStyle('A6:H' . $cell)->applyFromArray($border);
 
-        
-        $sheet->getStyle('B12:H'.$cell)->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('B13:D'.$cell)->getAlignment()->setVertical('center')->setHorizontal('left');
-        $sheet->getStyle('F13:G'.$cell)->getAlignment()->setVertical('center')->setHorizontal('left');
+        $sheet->getStyle('A1:H2')->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('A1:H2')->getFont()->setSize(12);
+        $sheet->getStyle('A6:H6')->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('A6:H6')->getFont()->setBold(true);
+        $sheet->getStyle('A7:H7')->getFont()->setBold(true);
+        $sheet->getStyle('A12:H12')->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('A12:H12')->getFont()->setBold(true);
+        $sheet->getStyle('E4:H5')->getAlignment()->setVertical('center')->setHorizontal('right');
 
    
         if ($type == 'excel') {
@@ -762,12 +763,10 @@ class LaporanController extends Controller
         $sheet->getStyle('A:L')->getAlignment()->setWrapText(true);
         $sheet->getStyle('A:L')->getAlignment()->setVertical('top')->setHorizontal('left');
         
-
-
         $sheet->setCellValue('A1', 'PENILAIAN SASARAN KINERJA PEGAWAI (SKP)')->mergeCells('A1:L1');
         $sheet->setCellValue('A2', 'PEJABAT ADMINISTRATOR PENGAWAS & FUNGSIONAL')->mergeCells('A2:L2');
         
-        $sheet->setCellValue('A4', 'PERIODE PENILAIAN')->mergeCells('A4:L4');
+        $sheet->setCellValue('F4', 'PERIODE PENILAIAN')->mergeCells('F4:L4');
         $sheet->setCellValue('A5', $data['pegawai_dinilai']['nama_satuan_kerja'])->mergeCells('A5:E5');
         $sheet->setCellValue('F5', "PERIODENYA PERIODENYA PERIODENYA ")->mergeCells('F5:L5');
 
@@ -1074,6 +1073,7 @@ class LaporanController extends Controller
         $sheet->getStyle('A7:L7')->getFont()->setBold(true);
         $sheet->getStyle('A12:L13')->getAlignment()->setVertical('center')->setHorizontal('center');
         $sheet->getStyle('A12:L13')->getFont()->setBold(true);
+        $sheet->getStyle('F4:H5')->getAlignment()->setVertical('center')->setHorizontal('right');
 
         
        
