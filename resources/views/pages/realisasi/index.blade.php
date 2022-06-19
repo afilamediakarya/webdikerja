@@ -26,7 +26,6 @@
                                 <th>Target</th>
                                 <th>Satuan</th>
                                 <th>Realisasi</th>
-                                <th>Review</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -78,10 +77,12 @@
                                             @endphp
                                             <td>{{$total_realisasi}}</td>
                                             @if($i == 0)
-                                            <td>    <a href="javascript:;" disabled class="btn btn-light-danger btn-sm">{{$v['status_review']}}</a></td>
-                                            <td nowrap="nowrap">
-                                                <a role="button" onclick="realisasi('{{$v['id']}}','{{stripslashes($value['atasan']['rencana_kerja'])}}')" class="btn btn-secondary btn-sm">Realisasi</a>
-                                               
+                                            
+                                            <td >
+                                                <a role="button" onclick="realisasi('{{$v['id']}}','{{stripslashes($value['atasan']['rencana_kerja'])}}')" class="btn btn-secondary btn-sm">Realisasi</a><br>
+                                                <small>Status</small><br>
+                                                <span class="badge badge-{{$v['color']}}">{{$v['status_review']}}</span><br>
+                                                <small class="text-muted">{{$v['label']}}</small>
                                             </td>
                                             
                                             @else
@@ -135,10 +136,12 @@
                                             @endphp
                                             <td>{{$total_realisasi}}</td>
                                             @if($i == 0)
-                                            <td>    <a href="javascript:;" disabled class="btn btn-light-danger btn-sm">{{$v['status_review']}}</a></td>
-                                            <td nowrap="nowrap">
-                                                <a role="button" onclick="realisasi('{{$v['id']}}','{{stripslashes($value['atasan']['rencana_kerja'])}}')" class="btn btn-secondary btn-sm">Realisasi </a>
-                                               
+                                         
+                                            <td>
+                                                <a role="button" onclick="realisasi('{{$v['id']}}','{{stripslashes($value['atasan']['rencana_kerja'])}}')" class="btn btn-secondary btn-sm">Realisasi </a><br>
+                                                <small>Status</small><br>
+                                                <span class="badge badge-{{$v['color']}}">{{$v['status_review']}}</span><br>
+                                                <small class="text-muted">{{$v['label']}}</small>
                                             </td>
                                             
                                             @else
@@ -188,10 +191,12 @@
                                             @endphp
                                             <td>{{$total_realisasi}}</td>
                                             @if($i == 0)
-                                            <td>    <a href="javascript:;" disabled class="btn btn-light-danger btn-sm">{{$value['status_review']}}</a></td>
-                                            <td nowrap="nowrap">
-                                                <a role="button" onclick="realisasi('{{$value['id']}}','-')" class="btn btn-secondary btn-sm">Realisasi {{$value['status_review']}}</a>
                                             
+                                            <td >
+                                                <a role="button" onclick="realisasi('{{$value['id']}}','-')" class="btn btn-secondary btn-sm">Realisasi</a><br>
+                                                <small>Status</small><br>
+                                                <span class="badge badge-{{$value['color']}}">{{$value['status_review']}}</span><br>
+                                                <small class="text-muted">{{$value['label']}}</small>
                                             </td>
                                             @else
                                             <td></td>

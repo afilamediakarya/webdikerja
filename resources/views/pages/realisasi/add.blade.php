@@ -82,8 +82,10 @@
                                             @for ($i=0; $i < count($value['realisasi_skp']); $i++)
                                                 @if($bulan != 0)
                                                     @if($value['realisasi_skp'][$i]['bulan'] == $bulan)
-                                                    <label>Realisasi </label>
-                                                    <input type="text" id="tes" class="form-control" name="realisasi[{{$key}}]" value="{{$value['realisasi_skp'][$i]['realisasi_bulanan']}}" placeholder="">
+                                                        @if($value['aspek_skp'] == 'kuantitas')
+                                                        <label>Realisasi </label>
+                                                        <input type="text" id="tes" class="form-control form-control-solid" name="realisasi[{{$key}}]" value="{{$kuantitas}}" placeholder="" readonly>
+                                                    @endif
                                                     @endif
                                                 @else
                                                 <div class="mb-10">

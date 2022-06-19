@@ -43,6 +43,13 @@ class RealisasiController extends Controller
         return view('pages.realisasi.index', compact('page_title', 'page_description','breadcumb','data','level'));
     }
 
+    public function checkKuantitasRealisasi($bulan,$params){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $data = Http::withToken($token)->get($url."/realisasi_skp/realisasiKuantitas/".$bulan.'/'.$params);
+        return $data['data'];
+    }
+
 
     public function create($params,$rencana,$bulan){
         $page_title = 'Realisasi';
@@ -54,8 +61,10 @@ class RealisasiController extends Controller
         $dataById = Http::withToken($token)->get($url."/skp/show/".$params);
         // return $dataById;
         $data = $dataById['data'];
-        // return $data;
-        return view('pages.realisasi.add', compact('page_title', 'page_description','breadcumb','data','rencana','bulan'));
+        $kuantitas = $this->checkKuantitasRealisasi($bulan,$params);
+        // return $kuantitas;
+    
+        return view('pages.realisasi.add', compact('page_title', 'page_description','breadcumb','data','rencana','bulan','kuantitas'));
     }
 
     public function store(Request $request){
