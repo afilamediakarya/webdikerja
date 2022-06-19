@@ -98,15 +98,14 @@
                                     @endif
 
                                    @if(isset($data['data']['tambahan']))
-                                   <tr>
-                                        <td colspan="7"><b>B. Kinerja Tambahan</b></td>
-                                    </tr>
-                                    
+
                                     @php
                                         $nox = 0;
                                     @endphp
 
-
+                                    <tr>
+                                        <td colspan="7"><b>B. Kinerja Tambahan</b></td>
+                                    </tr>
                                     @foreach($data['data']['tambahan'] as $k => $v)
                                         @foreach($v['aspek_skp'] as $i => $l)
                                         <tr>

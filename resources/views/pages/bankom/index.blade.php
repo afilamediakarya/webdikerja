@@ -109,11 +109,24 @@
                         <input type="file" class="form-control" name="sertifikat"/>
                            <small class="text-danger sertifikat_error"></small>
                     </div>
-                    <div class="form-group">
-                        <label>Waktu Pelaksanaan</label>
-                        <input type="date" class="form-control" name="waktu_pelaksanaan">
-                           <small class="text-danger waktu_pelaksanaan_error"></small>
+                    
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Waktu Awal</label>
+                                <input type="date" class="form-control" name="waktu_awal">
+                                <small class="text-danger waktu_awal_error"></small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Waktu Akhir</label>
+                                <input type="date" class="form-control" name="waktu_akhir">
+                                <small class="text-danger waktu_akhir_error"></small>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="separator separator-dashed mt-8 mb-5"></div>
                     <div class="">
                         <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
@@ -163,7 +176,10 @@
                     },{
                         data:'jenis_pelatihan'
                     },{
-                        data: 'waktu_pelaksanaan',
+                        data: null,
+                        render : function (data) {
+                            return `${data.waktu_awal} s/d ${data.waktu_akhir}`;
+                        }
                     },{ 
                         data : null, 
                         render: function (data) {

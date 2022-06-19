@@ -40,7 +40,8 @@ class bankomController extends Controller
             'nama_pelatihan' => 'required|string',
             'jenis_pelatihan' => 'required',
             'jumlah_jp' => 'required|numeric',
-            'waktu_pelaksanaan' => 'required',
+            'waktu_awal' => 'required',
+            'waktu_akhir' => 'required',
             'sertifikat' => 'required|mimes:pdf|max:2048'
         ]);
         $url = env('API_URL');
@@ -70,7 +71,7 @@ class bankomController extends Controller
             );
             $response = Http::withToken($token)->post($url."/bankom/store", $filtered);
         }
-        
+        // return $response;
         if($response->successful()){
             return response()->json(['status'=> 'Berhasil Menambah Data']);
         }else{
@@ -90,7 +91,8 @@ class bankomController extends Controller
             'nama_pelatihan' => 'required|string',
             'jenis_pelatihan' => 'required',
             'jumlah_jp' => 'required|numeric',
-            'waktu_pelaksanaan' => 'required',
+            'waktu_awal' => 'required',
+            'waktu_akhir' => 'required',
             'sertifikat' => 'mimes:pdf|max:2048'
         ]);
         $url = env('API_URL');
