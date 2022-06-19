@@ -57,14 +57,7 @@
                         <div class="col-5">
                             <div class="form-group">
                                 <label>Tanggal Kegiatan </label>
-                                <div class="input-group date" >
-                                    <input type="date" class="form-control" name="tanggal"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                    </div>
-                                </div>
+                                <input type="date" class="form-control" name="tanggal"/>
                             </div>
                         </div>
                         <input type="text" style="display:none" name="id">
@@ -228,9 +221,7 @@
                     url = '/aktivitas/update/'+id_;
                     text = 'Data anda berhasil di update';
                 }
-
-                alert(url);
-
+                
                 $.ajaxSetup({
                     headers: {
                         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
