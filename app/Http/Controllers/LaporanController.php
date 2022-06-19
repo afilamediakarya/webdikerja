@@ -125,13 +125,14 @@ class LaporanController extends Controller
         if ($data['status'] == true) {
             $res = $data['data'];
         }
-
+        //return $res;
         if ($jenis == 'skp') {
 
             if ($level == 'pegawai') {
                 return $this->exportSkp($res,$bulan,$type,$level);
             }else{
                 return $this->exportKepala($res,$bulan,$type,$level);
+                
             }
 
              
@@ -187,7 +188,7 @@ class LaporanController extends Controller
         $sheet->setCellValue('A7', 'Nama')->mergeCells('A7:B7');
         $sheet->setCellValue('C7', $data['pegawai_dinilai']['nama'])->mergeCells('C7:C7');
         $sheet->setCellValue('A8', 'NIP')->mergeCells('A8:B8');
-        $sheet->setCellValue('C8', $data['pegawai_dinilai']['nip'])->mergeCells('C8:C8');
+        $sheet->setCellValue('C8', "'".$data['pegawai_dinilai']['nip'])->mergeCells('C8:C8');
         $sheet->setCellValue('A9', 'Pangkat / Gol Ruang')->mergeCells('A9:B9');
         $sheet->setCellValue('C9', $data['pegawai_dinilai']['golongan'])->mergeCells('C9:C9');
         $sheet->setCellValue('A10', 'Jabatan')->mergeCells('A10:B10');
@@ -203,7 +204,7 @@ class LaporanController extends Controller
         }
         $sheet->setCellValue('D8', 'NIP');
         if ($data['atasan'] != "") {
-            $sheet->setCellValue('E8', $data['atasan']['nip'])->mergeCells('E8:F8');
+            $sheet->setCellValue('E8', "'".$data['atasan']['nip'])->mergeCells('E8:F8');
         } else {
             $sheet->setCellValue('E8', '-')->mergeCells('E8:F8');
         }
@@ -245,34 +246,63 @@ class LaporanController extends Controller
         $sheet->getStyle('A6:F6')->getAlignment()->setVertical('center')->setHorizontal('center');
         $sheet->getStyle('A1:A2')->getAlignment()->setVertical('center')->setHorizontal('center');
 
-        $sheet->setCellValue('A13', 'A. KINERJA UTAMA')->mergeCells('A13:F13');
-        $sheet->getStyle('A13:F13')->getFont()->setBold(true);
         
-        $cell = 14;
-        foreach ( $data['skp'] as $index => $value ){
-            $sheet->setCellValue('B' . $cell, $value['rencana_kerja'])->mergeCells('B' . $cell .':C'. $cell);
-            foreach ($value['aspek_skp'] as $k => $v) {
-                $sheet->setCellValue('D' . $cell, $v['iki'])->mergeCells('D' . $cell .':E'. $cell);
-                
-                foreach ($v['target_skp'] as $mk => $rr) {
-                    $sum_capaian = 0;
-                    $kategori_ = '';
-                    if ($rr['bulan'] ==  $bulan) {
-                        $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                        $sum_capaian += $capaian_iki;
-                        $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);                                
+        $cell = 13;
+        if (isset($data['skp']['utama'])) {
+            $sheet->setCellValue('B'.$cell, 'A. KINERJA UTAMA')->mergeCells('B'.$cell.':F'.$cell);
+            $sheet->getStyle('B'.$cell.':F'.$cell)->getFont()->setBold(true);
+            $cell++;
+            foreach ( $data['skp']['utama'] as $index => $value ){
+                $sheet->setCellValue('A' . $cell, $index+1);
+                $sheet->setCellValue('B' . $cell, $value['rencana_kerja'])->mergeCells('B' . $cell .':C'. $cell);
+                foreach ($value['aspek_skp'] as $k => $v) {
+                    $sheet->setCellValue('D' . $cell, $v['iki'])->mergeCells('D' . $cell .':E'. $cell);
+                    
+                    foreach ($v['target_skp'] as $mk => $rr) {
+                        $sum_capaian = 0;
+                        $kategori_ = '';
+                        if ($rr['bulan'] ==  $bulan) {
+                            $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                            $sum_capaian += $capaian_iki;
+                            $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);                                
+                        }
                     }
+                    $cell++;  
                 }
-                
-
-                $cell++;  
             }
-            
+
         }
+        if (isset($data['skp']['tambahan'])) {
+            $sheet->setCellValue('B'.$cell, 'B. KINERJA TAMBAHAN')->mergeCells('B'.$cell.':F'.$cell);
+            $sheet->getStyle('B'.$cell.':F'.$cell)->getFont()->setBold(true);
+            $cell++;
+            foreach ( $data['skp']['tambahan'] as $index => $value ){
+                $sheet->setCellValue('A' . $cell, $index+1);
+                $sheet->setCellValue('B' . $cell, $value['rencana_kerja'])->mergeCells('B' . $cell .':C'. $cell);
+                foreach ($value['aspek_skp'] as $k => $v) {
+                    $sheet->setCellValue('D' . $cell, $v['iki'])->mergeCells('D' . $cell .':E'. $cell);
+                    
+                    foreach ($v['target_skp'] as $mk => $rr) {
+                        $sum_capaian = 0;
+                        $kategori_ = '';
+                        if ($rr['bulan'] ==  $bulan) {
+                            $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                            $sum_capaian += $capaian_iki;
+                            $sheet->setCellValue('F' . $cell, $rr['target'].' '.$v['satuan']);                                
+                        }
+                    }
+                    
+    
+                    $cell++;  
+                }
+            }
+
+        }
+        
  
         $sheet->getStyle('A12:F'.$cell)->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('A13:E'.$cell)->getAlignment()->setVertical('center')->setHorizontal('left');
-        $sheet->getStyle('A14:E'.$cell)->getAlignment()->setVertical('center')->setHorizontal('left');
+        $sheet->getStyle('B13:E'.$cell)->getAlignment()->setVertical('center')->setHorizontal('left');
+        //$sheet->getStyle('A14:E'.$cell)->getAlignment()->setVertical('center')->setHorizontal('left');
 
         $border = [
             'borders' => [
@@ -289,7 +319,7 @@ class LaporanController extends Controller
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="Laporan_absensi_.xlsx"');
+            header('Content-Disposition: attachment;filename="Laporan SKP '.$data['pegawai_dinilai']['nama'].'.xlsx"');
         }else{
             $spreadsheet->getActiveSheet()->getHeaderFooter()
             ->setOddHeader('&C&H' . url()->current());
@@ -350,7 +380,7 @@ class LaporanController extends Controller
         $sheet->setCellValue('A7', 'Nama')->mergeCells('A7:B7');
         $sheet->setCellValue('C7', $data['pegawai_dinilai']['nama'])->mergeCells('C7:D7');
         $sheet->setCellValue('A8', 'NIP')->mergeCells('A8:B8');
-        $sheet->setCellValue('C8', $data['pegawai_dinilai']['nip'])->mergeCells('C8:D8');
+        $sheet->setCellValue('C8', "'".$data['pegawai_dinilai']['nip'])->mergeCells('C8:D8');
         $sheet->setCellValue('A9', 'Pangkat / Gol Ruang')->mergeCells('A9:B9');
         $sheet->setCellValue('C9', $data['pegawai_dinilai']['golongan'])->mergeCells('C9:D9');
         $sheet->setCellValue('A10', 'Jabatan')->mergeCells('A10:B10');
@@ -367,7 +397,7 @@ class LaporanController extends Controller
         }
         $sheet->setCellValue('E8', 'NIP')->mergeCells('E8:F8');
         if ($data['atasan'] != "") {
-            $sheet->setCellValue('G8', $data['atasan']['nip'])->mergeCells('G8:H8');
+            $sheet->setCellValue('G8', "'".$data['atasan']['nip'])->mergeCells('G8:H8');
         } else {
             $sheet->setCellValue('G8', '-')->mergeCells('G8:H8');
         }
@@ -413,12 +443,12 @@ class LaporanController extends Controller
 
         $cell = 13;
         //UTAMA
-        $data_column = $data['skp']['utama'];
-        $sheet->setCellValue('B'.$cell, 'A. KINERJA UTAMA')->mergeCells('B'.$cell.':H'.$cell);
-        $sheet->getStyle('B'.$cell.':H'.$cell)->getFont()->setBold(true);
-        $cell++;
-        foreach ( $data_column as $index => $value ){
-                
+        
+        if(isset($data['skp']['utama'])){
+        foreach ( $data['skp']['utama'] as $index => $value ){
+                $sheet->setCellValue('B'.$cell, 'A. KINERJA UTAMA')->mergeCells('B'.$cell.':H'.$cell);
+                $sheet->getStyle('B'.$cell.':H'.$cell)->getFont()->setBold(true);
+                $cell++;
                 if(isset($value['atasan']['rencana_kerja'])){
                     $sheet->setCellValue('B' . $cell, $value['atasan']['rencana_kerja'])->mergeCells('B'.$cell.':C'.($cell+2));
                 }else{
@@ -442,11 +472,15 @@ class LaporanController extends Controller
                     if (!$key==0)
                     $sheet->setCellValue('B' . ($cell-3), '')->mergeCells('B'.($cell-3).':C'.($cell-1)); 
                 }         
+            }
         }
+        else{
+            $sheet->setCellValue('A'.$cell, 'Data masih kosong')->mergeCells('A'.$cell.':H'.$cell);
+        }
+
 
         // TAMBAHAN
         if(isset($data['skp']['tambahan'])){
-
         $sheet->setCellValue('B'.$cell, 'A. KINERJA TAMBAHAN')->mergeCells('B'.$cell.':H'.$cell);
         $sheet->getStyle('B'.$cell.':H'.$cell)->getFont()->setBold(true);
         $cell++;
@@ -471,6 +505,9 @@ class LaporanController extends Controller
                 if (!$keyy==0)
                 $sheet->setCellValue('B' . ($cell-3), '')->mergeCells('B'.($cell-3).':C'.($cell-1)); 
             }
+        }
+        else{
+            $sheet->setCellValue('A'.$cell, 'Data masih kosong')->mergeCells('B'.$cell.':H'.$cell);
         }
         
 
@@ -501,7 +538,7 @@ class LaporanController extends Controller
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="Laporan_absensi_.xlsx"');
+            header('Content-Disposition: attachment;filename="Laporan SKP '.$data['pegawai_dinilai']['nama'].'.xlsx"');
         }else{
             $spreadsheet->getActiveSheet()->getHeaderFooter()
             ->setOddHeader('&C&H' . url()->current());
@@ -560,7 +597,7 @@ class LaporanController extends Controller
         $sheet->setCellValue('A7', 'Nama')->mergeCells('A7:B7');
         $sheet->setCellValue('C7', $data['pegawai_dinilai']['nama'])->mergeCells('C7:C7');
         $sheet->setCellValue('A8', 'NIP')->mergeCells('A8:B8');
-        $sheet->setCellValue('C8', $data['pegawai_dinilai']['nip'])->mergeCells('C8:C8');
+        $sheet->setCellValue('C8', "'".$data['pegawai_dinilai']['nip'])->mergeCells('C8:C8');
         $sheet->setCellValue('A9', 'Pangkat / Gol Ruang')->mergeCells('A9:B9');
         $sheet->setCellValue('C9', $data['pegawai_dinilai']['golongan'])->mergeCells('C9:C9');
         $sheet->setCellValue('A10', 'Jabatan')->mergeCells('A10:B10');
@@ -577,7 +614,7 @@ class LaporanController extends Controller
         }
         $sheet->setCellValue('D8', 'NIP')->mergeCells('D8:E8');
         if ($data['atasan'] != "") {
-            $sheet->setCellValue('F8', $data['atasan']['nip'])->mergeCells('F8:J8');
+            $sheet->setCellValue('F8', "'".$data['atasan']['nip'])->mergeCells('F8:J8');
         } else {
             $sheet->setCellValue('F8', '-')->mergeCells('F8:J8');
         }
@@ -633,11 +670,17 @@ class LaporanController extends Controller
 
 
         $cell = 13;
-        $jumlah_data= 0;
-        $sum_nilai_iki = 0;
-
-        foreach ( $data['skp'] as $index => $value ){
-            $sheet->setCellValue('B' . $cell, '');
+        $nilai_utama=0;
+        $nilai_tambahan=0;
+        //TAMBAHAN
+        if (isset($data['skp']['utama'])) {
+            $sheet->setCellValue('B'.$cell, 'A. KINERJA UTAMA')->mergeCells('B'.$cell.':J'.$cell);
+            $sheet->getStyle('B'.$cell.':J'.$cell)->getFont()->setBold(true);
+            $cell++;
+            $jumlah_data= 0;
+            $sum_nilai_iki = 0;
+            foreach ( $data['skp']['utama'] as $index => $value ){
+            $sheet->setCellValue('A' . $cell, $index+1);
             $sheet->setCellValue('B' . $cell, $value['rencana_kerja']);
             
                     foreach ($value['aspek_skp'] as $k => $v) {
@@ -649,50 +692,136 @@ class LaporanController extends Controller
                                 $sheet->setCellValue('E' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'].' '.$v['satuan']);
                                 $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
                                 
-                                
                                 $sheet->setCellValue('F' . $cell, round($single_rate,0) .' %');
                                 if ($single_rate > 110) {
                                     $sheet->setCellValue('G' . $cell, '110');
                                     $sheet->setCellValue('H' . $cell, 'Sangat Baik');
                                     $nilai_iki=110+((120-110)/(110-101))*(110-101);
-                                    $sheet->setCellValue('I' . $cell, round($nilai_iki,1).' %');
+                                    $sheet->setCellValue('I' . $cell, round($nilai_iki,1));
                                 }elseif($single_rate >= 101 && $single_rate <= 110){
                                     $sheet->setCellValue('G' . $cell, round($single_rate,0) .' %');
                                     $sheet->setCellValue('H' . $cell, 'Sangat Baik');
                                     $nilai_iki=110+((120-110)/(110-101))*($single_rate-101);
-                                    $sheet->setCellValue('I' . $cell, round($nilai_iki,1).' %');
+                                    $sheet->setCellValue('I' . $cell, round($nilai_iki,1));
                                 }elseif($single_rate == 100){
                                     $sheet->setCellValue('G' . $cell, round($single_rate,0) .' %');
                                     $sheet->setCellValue('H' . $cell, 'Baik');
                                     $nilai_iki=109;
-                                    $sheet->setCellValue('I' . $cell, round($nilai_iki,1).' %');
+                                    $sheet->setCellValue('I' . $cell, round($nilai_iki,1));
                                 }elseif($single_rate >= 80 && $single_rate <= 99){
                                     $sheet->setCellValue('G' . $cell, round($single_rate,0) .' %');
                                     $sheet->setCellValue('H' . $cell, 'Cukup');
                                     $nilai_iki=70+((89-70)/(99-80))*($single_rate-80);
-                                    $sheet->setCellValue('I' . $cell, round($nilai_iki,1).' %');
+                                    $sheet->setCellValue('I' . $cell, round($nilai_iki,1));
                                 }elseif($single_rate >= 60 && $single_rate <= 79){
                                     $sheet->setCellValue('G' . $cell, round($single_rate,0) .' %');
                                     $sheet->setCellValue('H' . $cell, 'Kurang');
                                     $nilai_iki=50+((69-50)/(79-60))*($single_rate-60);
-                                    $sheet->setCellValue('I' . $cell, round($nilai_iki,1).' %');
+                                    $sheet->setCellValue('I' . $cell, round($nilai_iki,1));
                                 }elseif($single_rate >= 0 && $single_rate <= 79){
                                     $sheet->setCellValue('G' . $cell, round($single_rate,0) .' %');
                                     $sheet->setCellValue('H' . $cell, 'Sangat Kurang');
                                     $nilai_iki=(49/59)*$single_rate;
-                                    $sheet->setCellValue('I' . $cell, round($nilai_iki,1).' %');
+                                    $sheet->setCellValue('I' . $cell, round($nilai_iki,1));
                                 } 
                                 //$sheet->setCellValue('J13', round($nilai_iki,1).' %' )->mergeCells('J13:J13');
                                 $sum_nilai_iki += $nilai_iki; 
                                 $jumlah_data++;     
                             }
-                            
                         }
-                        $sheet->setCellValue('J13', round($sum_nilai_iki/$jumlah_data,1).' %' )->mergeCells('J13:J'. $cell);
-                        $cell++;  
-                        
                     }      
+                $sheet->setCellValue('J'.($cell-$jumlah_data-1), $nilai_utama=round($sum_nilai_iki/$jumlah_data,1) )->mergeCells('J'.($cell-$jumlah_data-1).':J'. $cell);
+                $cell++;
         }
+        }
+        
+        //TAMBAHAN
+        if (isset($data['skp']['tambahan'])) {
+            $cell++;
+            $sheet->setCellValue('B'.$cell, 'B. KINERJA TAMBAHAN')->mergeCells('B'.$cell.':J'.$cell);
+            $sheet->getStyle('B'.$cell.':J'.$cell)->getFont()->setBold(true);
+            $cell++;
+            $total_tambahan = 0;
+            foreach ( $data['skp']['tambahan'] as $index => $value ){
+                $sheet->setCellValue('A' . $cell, $index+1);
+                $sheet->setCellValue('B' . $cell, $value['rencana_kerja']);
+                
+                        foreach ($value['aspek_skp'] as $k => $v) {
+                            $sheet->setCellValue('C' . $cell, $v['iki']);
+                            foreach ($v['target_skp'] as $mk => $rr) {
+                                $kategori_ = '';
+                                if ($rr['bulan'] ==  $bulan) {
+                                    $sheet->setCellValue('D' . $cell, $rr['target'].' '.$v['satuan']);
+                                    $sheet->setCellValue('E' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'].' '.$v['satuan']);
+                                    $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                    
+                                    
+                                    $sheet->setCellValue('F' . $cell, round($single_rate,0) .' %');
+                                    if ($single_rate > 110) {
+                                        $sheet->setCellValue('G' . $cell, '110');
+                                        $sheet->setCellValue('H' . $cell, 'Sangat Baik');
+                                        $nilai_iki=110+((120-110)/(110-101))*(110-101);
+                                        $sheet->setCellValue('I' . $cell, round($nilai_iki,1));
+                                    }elseif($single_rate >= 101 && $single_rate <= 110){
+                                        $sheet->setCellValue('G' . $cell, round($single_rate,0) .' %');
+                                        $sheet->setCellValue('H' . $cell, 'Sangat Baik');
+                                        $nilai_iki=110+((120-110)/(110-101))*($single_rate-101);
+                                        $sheet->setCellValue('I' . $cell, round($nilai_iki,1));
+                                    }elseif($single_rate == 100){
+                                        $sheet->setCellValue('G' . $cell, round($single_rate,0) .' %');
+                                        $sheet->setCellValue('H' . $cell, 'Baik');
+                                        $nilai_iki=109;
+                                        $sheet->setCellValue('I' . $cell, round($nilai_iki,1));
+                                    }elseif($single_rate >= 80 && $single_rate <= 99){
+                                        $sheet->setCellValue('G' . $cell, round($single_rate,0) .' %');
+                                        $sheet->setCellValue('H' . $cell, 'Cukup');
+                                        $nilai_iki=70+((89-70)/(99-80))*($single_rate-80);
+                                        $sheet->setCellValue('I' . $cell, round($nilai_iki,1));
+                                    }elseif($single_rate >= 60 && $single_rate <= 79){
+                                        $sheet->setCellValue('G' . $cell, round($single_rate,0) .' %');
+                                        $sheet->setCellValue('H' . $cell, 'Kurang');
+                                        $nilai_iki=50+((69-50)/(79-60))*($single_rate-60);
+                                        $sheet->setCellValue('I' . $cell, round($nilai_iki,1));
+                                    }elseif($single_rate >= 0 && $single_rate <= 79){
+                                        $sheet->setCellValue('G' . $cell, round($single_rate,0) .' %');
+                                        $sheet->setCellValue('H' . $cell, 'Sangat Kurang');
+                                        $nilai_iki=(49/59)*$single_rate;
+                                        $sheet->setCellValue('I' . $cell, round($nilai_iki,1));
+                                    } 
+
+                                    if ($nilai_iki > 110) {
+                                        $sheet->setCellValue('J' . $cell, '2.4');
+                                        $total_tambahan+=2.4;
+                                    }elseif($nilai_iki >= 101 && $nilai_iki <= 110){
+                                        $sheet->setCellValue('J' . $cell, '1.6');
+                                        $total_tambahan+=1.6;
+                                    }elseif($nilai_iki == 100){
+                                        $sheet->setCellValue('J' . $cell, '1.0');
+                                        $total_tambahan+=1.0;
+                                    }elseif($nilai_iki >= 80 && $nilai_iki <= 99){
+                                        $sheet->setCellValue('J' . $cell, '0.5');
+                                        $total_tambahan+=0.5;
+                                    }elseif($nilai_iki >= 60 && $nilai_iki <= 79){
+                                        $sheet->setCellValue('J' . $cell, '0.3');
+                                        $total_tambahan+=0.3;
+                                    }elseif($nilai_iki >= 0 && $nilai_iki <= 79){
+                                        $sheet->setCellValue('J' . $cell, '0.1');
+                                        $total_tambahan+=0.1;
+                                    } 
+                                }
+                            }
+                            $cell++; 
+                        }      
+                }
+                $sheet->getStyle('F'.$cell.':J'.($cell+1))->getAlignment()->setVertical('top')->setHorizontal('center');
+                $sheet->getStyle('B'.$cell.':J'.($cell+1))->getAlignment()->setVertical('top')->setHorizontal('right');
+                $sheet->getStyle('B'.$cell.':J'.($cell+1))->getFont()->setBold(true);
+                $sheet->setCellValue('B' . $cell, 'NILAI KINERJA TAMBAHAN')->mergeCells('B'.$cell.':I'.$cell);
+                $sheet->setCellValue('J' . $cell, $nilai_tambahan=$total_tambahan);
+                $cell++;
+            }
+            $sheet->setCellValue('B' . $cell, 'NILAI SKP')->mergeCells('B'.$cell.':I'.$cell);
+            $sheet->setCellValue('J' . $cell, $nilai_utama+$nilai_tambahan);
 
         
         $sheet->getStyle('A12:J'.$cell)->getAlignment()->setVertical('center')->setHorizontal('center');
@@ -715,7 +844,7 @@ class LaporanController extends Controller
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="Laporan_absensi_.xlsx"');
+            header('Content-Disposition: attachment;filename="Laporan Penilaian SKP '.$data['pegawai_dinilai']['nama'].'.xlsx"');
         }else{
             $spreadsheet->getActiveSheet()->getHeaderFooter()
             ->setOddHeader('&C&H' . url()->current());
@@ -776,7 +905,7 @@ class LaporanController extends Controller
         $sheet->setCellValue('A7', 'Nama')->mergeCells('A7:B7');
         $sheet->setCellValue('C7', $data['pegawai_dinilai']['nama'])->mergeCells('C7:E7');
         $sheet->setCellValue('A8', 'NIP')->mergeCells('A8:B8');
-        $sheet->setCellValue('C8', $data['pegawai_dinilai']['nip'])->mergeCells('C8:E8');
+        $sheet->setCellValue('C8', "'".$data['pegawai_dinilai']['nip'])->mergeCells('C8:E8');
         $sheet->setCellValue('A9', 'Pangkat / Gol Ruang')->mergeCells('A9:B9');
         $sheet->setCellValue('C9', $data['pegawai_dinilai']['golongan'])->mergeCells('C9:E9');
         $sheet->setCellValue('A10', 'Jabatan')->mergeCells('A10:B10');
@@ -792,7 +921,7 @@ class LaporanController extends Controller
         }
         $sheet->setCellValue('F8', 'NIP')->mergeCells('F8:G8');
         if ($data['atasan'] != "") {
-            $sheet->setCellValue('H8', $data['atasan']['nip'])->mergeCells('H8:L8');
+            $sheet->setCellValue('H8', "'".$data['atasan']['nip'])->mergeCells('H8:L8');
         } else {
             $sheet->setCellValue('H8', '-')->mergeCells('H8:L8');
         }
@@ -845,10 +974,11 @@ class LaporanController extends Controller
 
         
         $cell = 14;
-    
+        $nilai_utama=0;
+        $nilai_tambahan=0;
         //$data_column = $data['skp']['utama'];
         //UTAMA
-       if (isset($data['skp']['utama'])) {
+        if (isset($data['skp']['utama'])) {
         $sheet->setCellValue('B'.$cell, 'A. KINERJA UTAMA')->mergeCells('B'.$cell.':K'.$cell);
         $sheet->getStyle('B'.$cell.':K'.$cell)->getFont()->setBold(true);
         $cell++;
@@ -951,6 +1081,10 @@ class LaporanController extends Controller
             $sheet->setCellValue('L' . $cell, $nilai_utama=$total_utama/$data_utama);
         }
        }
+        
+       else{
+            $sheet->setCellValue('A'.$cell, 'Data masih kosong')->mergeCells('A'.$cell.':L'.$cell);
+        }
 
        // TAMBAHAN
        if(isset($data['skp']['tambahan'])){
@@ -1048,6 +1182,10 @@ class LaporanController extends Controller
             $cell++;
             
         }
+        else{
+            $sheet->setCellValue('A'.$cell, 'Data masih kosong')->mergeCells('A'.$cell.':L'.$cell);
+        }
+        //if(isset($nilai_utama))
         $sheet->setCellValue('B' . $cell, 'NILAI SKP')->mergeCells('B'.$cell.':K'.$cell);
         $sheet->setCellValue('L' . $cell, $nilai_utama+$nilai_tambahan);
         
@@ -1083,7 +1221,7 @@ class LaporanController extends Controller
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="Laporan_absensi_.xlsx"');
+            header('Content-Disposition: attachment;filename="Laporan Penilaian SKP '.$data['pegawai_dinilai']['nama'].'.xlsx"');
         }else{
             $spreadsheet->getActiveSheet()->getHeaderFooter()
             ->setOddHeader('&C&H' . url()->current());
@@ -1154,8 +1292,9 @@ class LaporanController extends Controller
         $sheet->setCellValue('A1', 'Laporan Rekapitulasi Absen Pegawai')->mergeCells('A1:G1');
         $sheet->setCellValue('A2', ''.$data['data']['pegawai']['satuan_kerja']['nama_satuan_kerja'])->mergeCells('A2:G2');
         $sheet->setCellValue('A3',  $data['data']['pegawai']['nama'].'/ '.$data['data']['pegawai']['nip'])->mergeCells('A3:G3');
-        $sheet->getStyle('A1:G3')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A1:G3')->getFont()->setSize(14);
+        //$sheet->setCellValue('A4', $startDate.' s/d '.$endDate)->mergeCells('A4:G4');
+        $sheet->getStyle('A1:G4')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('A1:G4')->getFont()->setSize(14);
 
         $sheet->setCellValue('A5', 'Jumlah hari kerja')->mergeCells('A5:B5');
         $sheet->setCellValue('C5', ': '.$data['data']['jml_hari_kerja'])->mergeCells('C5:G5');
@@ -1265,7 +1404,7 @@ class LaporanController extends Controller
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="Laporan_absensi_'.$data['data']['pegawai']['nama'].'.xlsx"');
+            header('Content-Disposition: attachment;filename="Laporan Absen'.$data['data']['pegawai']['nama'].'.xlsx"');
         }else{
             $spreadsheet->getActiveSheet()->getHeaderFooter()
             ->setOddHeader('&C&H' . url()->current());
@@ -1315,7 +1454,7 @@ class LaporanController extends Controller
         $sheet->setCellValue('D3', ':');
         $sheet->setCellValue('E3', $data['satuan_kerja'])->mergeCells('E3:AB3');
         
-        $sheet->setCellValue('B4', 'KEADAAN BULAN');
+        $sheet->setCellValue('B4', 'PERIODE');
         $sheet->mergeCells('B4:C4');
         $sheet->setCellValue('D4', ':');
         $sheet->setCellValue('E4', $startDate.' s/d '.$endDate)->mergeCells('E4:AB4');
@@ -1496,7 +1635,7 @@ class LaporanController extends Controller
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="Laporan_rekapitulasi_daftar_hadir'.$data['satuan_kerja'].'.xlsx"');
+            header('Content-Disposition: attachment;filename="Laporan Absen'.$data['satuan_kerja'].'.xlsx"');
         }else{
             $spreadsheet->getActiveSheet()->getHeaderFooter()
             ->setOddHeader('&C&H' . url()->current());
