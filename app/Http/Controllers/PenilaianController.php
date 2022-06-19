@@ -64,7 +64,7 @@ class PenilaianController extends Controller
         $page_description = 'Daftar Pegawai yang dinilai';
         $breadcumb = ['Daftar Pegawai yang dinilai', 'tambah Realisasi'];
         $skp = $this->getSkpPegawai($id,$type,$bulan);
-        return $skp;
+        
         return view('pages.penilaian.'.$type, compact('page_title', 'page_description','breadcumb','skp','bulan'));
     }
 

@@ -50,7 +50,12 @@
                                     $inc_letter = 'A';
                                     $no = 0;
                                 @endphp
-                                @foreach($skp as $key => $value)
+                                
+                                @if(isset($skp['data']['utama']))
+                                <tr>
+                                    <td colspan="7"><b>A. Kinerja Utama</b></td>
+                                </tr> 
+                                @foreach($skp['data']['utama'] as $key => $value)
                                     <tr style="background:#f2f2f2">
                                         <td>{{$inc_letter++}}.</td>
                                         <td colspan="7">{{$value['atasan']['rencana_kerja']}}</td>  
@@ -114,7 +119,78 @@
                                                 $no++;
                                     @endphp
                                     @endforeach
-                                @endforeach    
+                                @endforeach
+                                @endif
+
+                                @php
+                                    $nox = 0;
+                                @endphp
+
+                                @if(isset($skp['data']['tambahan']))
+                                <tr>
+                                    <td colspan="7"><b>B. Kinerja Tambahan</b></td>
+                                </tr> 
+                                @foreach($skp['data']['tambahan'] as $key => $value)
+                                        @foreach($value['aspek_skp'] as $i => $l)
+                                        <tr>
+                                        
+                                            @if($i == 0)
+                                            <td>{{$nox+1}}.</td>
+                                            <td>{{$v['rencana_kerja']}}</td>
+                                            @else
+                                            <td></td>
+                                            <td></td>
+                                            @endif
+                                            <td>{{$l['aspek_skp']}}</td>
+                                            <td>{{$l['iki']}}</td>                                       
+                                            @php
+                                                $num = 0;
+                                                foreach($l['target_skp'] as $f => $b){
+                                                    $num =+ $b['target'];
+                                                }
+                                            @endphp
+                                            <td>{{$num}}</td>
+                                            <td>{{$l['satuan']}}</td>
+                                            @php
+                                                $num_realisasi = 0;
+                                                foreach($l['realisasi_skp'] as $c => $p){
+                                                    $num_realisasi =+ $p['realisasi_bulanan'];
+                                                }
+                                            @endphp
+                                            <td>{{$num_realisasi}}</td>
+                                            @if($i == 0)
+                                            <input type="hidden" value="{{$v['id']}}" name="id_skp[{{$no}}]" />
+                                            <input type="hidden" value="{{$bulan}}" name="bulan[{{$no}}]" />
+                                            <td rowspan="3">
+                                                        <div class="form-group">
+                                                            <label>Kesesuaian Skp</label>
+                                                            <div class="radio-inline">
+                                                                <label for="{{$k}}_sesuai_{{$v['id']}}_{{$nox}}" class="radio {{$k}}_sesuai_{{$v['id']}}_{{$nox}}">
+                                                                <input type="radio" id="{{$k}}_sesuai_{{$v['id']}}_{{$nox}}" @if($v['realisasi_bulan']['kesesuaian'] == 'ya') checked @endif value="ya" name="kesesuaian[{{$no}}]" />
+                                                                <span></span>Sesuai</label>
+                                                                <label for="{{$k}}_tidak_{{$v['id']}}_{{$nox}}" class="radio {{$k}}_tidak_{{$v['id']}}_{{$nox}}">
+                                                                <input type="radio" id="{{$k}}_tidak_{{$v['id']}}_{{$nox}}" @if($v['realisasi_bulan']['kesesuaian'] == 'tidak') checked @endif value="tidak" name="kesesuaian[{{$no}}]" />
+                                                                <span></span>Tidak</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="keterangan">Keterangan</label>
+                                                            <textarea name="keterangan[{{$no}}]" class="form-control form-control-solid" id="keterangan"  rows="5">{{$v['realisasi_bulan']['keterangan']}}</textarea>
+                                                        </div>
+                                                        
+                                            </td>
+                                            @else
+                                            <td></td>
+                                            @endif
+                                        </tr>
+                                        @endforeach
+                                    @php
+                                                $nox++;
+                                    @endphp
+                                 
+                                @endforeach
+                                @endif
+                                
                             </tbody>
                     </table>
 
