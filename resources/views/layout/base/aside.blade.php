@@ -138,14 +138,14 @@
                                     <span class="menu-text text-capitalize">Review Realisasi</span>
                                 </a>
                             </li>
-                            <li class="menu-item" aria-haspopup="true">
+                            <!-- <li class="menu-item" aria-haspopup="true">
                                 <a href="{{route('penilaian',['type' => 'perilaku'])}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
                                     <span class="menu-text text-capitalize">Nilai Perilaku</span>
                                 </a>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                 </li>
