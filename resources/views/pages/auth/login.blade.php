@@ -51,6 +51,7 @@
             <div class="d-flex flex-column-fluid flex-column flex-center">
                 <!--begin::Signin-->
                 <div class="login-form login-signin py-11">
+                
                     <!--begin::Form-->
                     <form method="POST" action="{{route('do-Login')}}" class="form" novalidate="novalidate" >
                         @csrf
@@ -123,11 +124,13 @@
 
 @section('script')
     @if(Session::has('error'))
+          
         <script>
+            let message_ = '{{session('error')}}';
             Swal.fire(
-                "Error",
-                "User Not Found",
-                "error"
+                "Maaf anda gagal login",
+                message_,
+                'error'
             );
         </script>
     @endif

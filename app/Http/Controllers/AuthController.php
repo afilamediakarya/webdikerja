@@ -42,7 +42,6 @@ class AuthController extends Controller
                 'password' => $request->password
             ]);
 
-
             if($response->status() == 200){
                 $data = $response->json();
                 // return $data;
@@ -59,7 +58,8 @@ class AuthController extends Controller
                 }
                 
             }else{
-                return redirect()->back()->with('error', 'data Salah');
+             
+                return redirect()->back()->with('error', $response['messages_']);
             }
 
     }
