@@ -32,6 +32,7 @@
         <div id="kt_aside_menu" class="aside-menu my-4" data-menu-vertical="1" data-menu-scroll="1" data-menu-dropdown-timeout="500">
             <!--begin::Menu Nav-->
             <ul class="menu-nav">
+            @if(Session::get('user.role') !== 'super_admin')
                 <li class="menu-item {{ Request::path() == '/dashboard/pegawai' ? 'menu-item-active' : '' }}" aria-haspopup="true">
                     <a href="{{url('/dashboard/pegawai')}}" class="menu-link">
                         <span class="svg-icon menu-icon">
@@ -165,19 +166,23 @@
                         <span class="menu-text text-capitalize">Laporan</span>
                         <i class="menu-arrow"></i>
                     </a>
-                    <div class="menu-submenu">
-                        <i class="menu-arrow"></i>
-                        <ul class="menu-subnav">
-                        @if (Session::get('user.role') == 'super_admin')
-                            <li class="menu-item" aria-haspopup="true">
+
+                    <!-- Draft Menu -->
+
+                    <!-- <li class="menu-item" aria-haspopup="true">
                                 <a href="{{url('/laporan/absen/super_admin')}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
                                     <span class="menu-text text-capitalize">Absen</span>
                                 </a>
-                            </li>
-                        @else
+                            </li> -->
+
+                            <!--  -->
+                    <div class="menu-submenu">
+                        <i class="menu-arrow"></i>
+                        <ul class="menu-subnav">
+                        
                             <li class="menu-item" aria-haspopup="true">
                                 <a href="{{url('/laporan/absen/pegawai')}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
@@ -186,7 +191,7 @@
                                     <span class="menu-text text-capitalize">Absen</span>
                                 </a>
                             </li>
-                        @endif
+                        
                     
                             <li class="menu-item" aria-haspopup="true">
                                 <a href="{{route('laporan-skp')}}" class="menu-link">
@@ -207,6 +212,9 @@
                         </ul>
                     </div>
                 </li>
+        
+              
+
                 <li class="menu-item {{ Request::path() == 'bankom' ? 'menu-item-active' : '' }}" aria-haspopup="true">
                     <a href="{{url('/bankom')}}" class="menu-link">
                         <span class="svg-icon menu-icon">
@@ -228,6 +236,9 @@
                         <span class="menu-text text-capitalize">Bankom</span>
                     </a>
                 </li>
+
+                @endif
+
             @if (Session::get('user.role') <> 'pegawai')
                 <li class="menu-section">
                     <h4 class="menu-text text-capitalize text-white">Admin</h4>
@@ -250,7 +261,6 @@
                         <span class="menu-text text-capitalize">Dashboard</span>
                     </a>
                 </li>
-                
                 <li class="menu-item {{str_contains(Request::path(), 'pegawai') ? 'menu-item-active' : '' }}" aria-haspopup="true">
                     <a href="{{route('pegawai')}}" class="menu-link">
                         <span class="svg-icon menu-icon">
@@ -267,58 +277,8 @@
                         <span class="menu-text text-capitalize">pegawai</span>
                     </a>
                 </li>
-                <li class="menu-item {{str_contains(Request::path(), 'informasi') ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
-                    <a href="{{route('informasi')}}" class="menu-link">
-                        <span class="svg-icon menu-icon">
-                           
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <rect x="0" y="0" width="24" height="24"/>
-                                <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10"/>
-                                <rect fill="#000000" x="11" y="10" width="2" height="7" rx="1"/>
-                                <rect fill="#000000" x="11" y="7" width="2" height="2" rx="1"/>
-                            </g>
-                                                    </svg>
-                            <!--end::Svg Icon-->
-                        </span>
-                        <span class="menu-text text-capitalize">informasi</span>
-                    </a>
-                </li>
-                @if (Session::get('user.role') == 'super_admin')
-                <li class="menu-item {{str_contains(Request::path(), 'jadwal') ? 'menu-item-active' : '' }}" aria-haspopup="true">
-                    <a href="{{route('jadwal')}}" class="menu-link">
-                        <span class="svg-icon menu-icon">
-                           
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                    <rect x="0" y="0" width="24" height="24"/>
-                                    <path d="M10.9630156,7.5 L11.0475062,7.5 C11.3043819,7.5 11.5194647,7.69464724 11.5450248,7.95024814 L12,12.5 L15.2480695,14.3560397 C15.403857,14.4450611 15.5,14.6107328 15.5,14.7901613 L15.5,15 C15.5,15.2109164 15.3290185,15.3818979 15.1181021,15.3818979 C15.0841582,15.3818979 15.0503659,15.3773725 15.0176181,15.3684413 L10.3986612,14.1087258 C10.1672824,14.0456225 10.0132986,13.8271186 10.0316926,13.5879956 L10.4644883,7.96165175 C10.4845267,7.70115317 10.7017474,7.5 10.9630156,7.5 Z" fill="#000000"/>
-                                    <path d="M7.38979581,2.8349582 C8.65216735,2.29743306 10.0413491,2 11.5,2 C17.2989899,2 22,6.70101013 22,12.5 C22,18.2989899 17.2989899,23 11.5,23 C5.70101013,23 1,18.2989899 1,12.5 C1,11.5151324 1.13559454,10.5619345 1.38913364,9.65805651 L3.31481075,10.1982117 C3.10672013,10.940064 3,11.7119264 3,12.5 C3,17.1944204 6.80557963,21 11.5,21 C16.1944204,21 20,17.1944204 20,12.5 C20,7.80557963 16.1944204,4 11.5,4 C10.54876,4 9.62236069,4.15592757 8.74872191,4.45446326 L9.93948308,5.87355717 C10.0088058,5.95617272 10.0495583,6.05898805 10.05566,6.16666224 C10.0712834,6.4423623 9.86044965,6.67852665 9.5847496,6.69415008 L4.71777931,6.96995273 C4.66931162,6.97269931 4.62070229,6.96837279 4.57348157,6.95710938 C4.30487471,6.89303938 4.13906482,6.62335149 4.20313482,6.35474463 L5.33163823,1.62361064 C5.35654118,1.51920756 5.41437908,1.4255891 5.49660017,1.35659741 C5.7081375,1.17909652 6.0235153,1.2066885 6.2010162,1.41822583 L7.38979581,2.8349582 Z" fill="#000000" opacity="0.3"/>
-                                </g>
-                            </svg>
-                            <!--end::Svg Icon-->
-                        </span>
-                        <span class="menu-text text-capitalize">jadwal</span>
-                    </a>
-                </li>
-                @else
-                <li class="menu-item {{str_contains(Request::path(), 'kegiatan') ? 'menu-item-active' : '' }}" aria-haspopup="true">
-                    <a href="{{route('kegiatan')}}" class="menu-link">
-                        <span class="svg-icon menu-icon">
-                           
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                    <polygon points="0 0 24 0 24 24 0 24" />
-                                    <path d="M12.9336061,16.072447 L19.36,10.9564761 L19.5181585,10.8312381 C20.1676248,10.3169571 20.2772143,9.3735535 19.7629333,8.72408713 C19.6917232,8.63415859 19.6104327,8.55269514 19.5206557,8.48129411 L12.9336854,3.24257445 C12.3871201,2.80788259 11.6128799,2.80788259 11.0663146,3.24257445 L4.47482784,8.48488609 C3.82645598,9.00054628 3.71887192,9.94418071 4.23453211,10.5925526 C4.30500305,10.6811601 4.38527899,10.7615046 4.47382636,10.8320511 L4.63,10.9564761 L11.0659024,16.0730648 C11.6126744,16.5077525 12.3871218,16.5074963 12.9336061,16.072447 Z" fill="#000000" fill-rule="nonzero" />
-                                    <path d="M11.0563554,18.6706981 L5.33593024,14.122919 C4.94553994,13.8125559 4.37746707,13.8774308 4.06710397,14.2678211 C4.06471678,14.2708238 4.06234874,14.2738418 4.06,14.2768747 L4.06,14.2768747 C3.75257288,14.6738539 3.82516916,15.244888 4.22214834,15.5523151 C4.22358765,15.5534297 4.2250303,15.55454 4.22647627,15.555646 L11.0872776,20.8031356 C11.6250734,21.2144692 12.371757,21.2145375 12.909628,20.8033023 L19.7677785,15.559828 C20.1693192,15.2528257 20.2459576,14.6784381 19.9389553,14.2768974 C19.9376429,14.2751809 19.9363245,14.2734691 19.935,14.2717619 L19.935,14.2717619 C19.6266937,13.8743807 19.0546209,13.8021712 18.6572397,14.1104775 C18.654352,14.112718 18.6514778,14.1149757 18.6486172,14.1172508 L12.9235044,18.6705218 C12.377022,19.1051477 11.6029199,19.1052208 11.0563554,18.6706981 Z" fill="#000000" opacity="0.3" />
-                                </g>
-                            </svg>
-                            <!--end::Svg Icon-->
-                        </span>
-                        <span class="menu-text text-capitalize">kegiatan</span>
-                    </a>
-                </li>
-                @endif
+               
+               
                 <li class="menu-item menu-item-submenu {{str_contains(Request::path(), 'admin/laporan') ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true" data-menu-toggle="hover">
                     <a href="javascript:;" class="menu-link menu-toggle">
                         <span class="svg-icon menu-icon">
@@ -365,11 +325,82 @@
                         </ul>
                     </div>
                 </li>
-            
-                <li class="menu-item menu-item-submenu {{str_contains(Request::path(), 'jabatan') ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true" data-menu-toggle="hover">
+           
+                <li class="menu-item {{str_contains(Request::path(), 'jabatan') ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                    <a href="{{route('jabatan')}}" class="menu-link">
+                        <span class="svg-icon menu-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <path d="M19,11 L21,11 C21.5522847,11 22,11.4477153 22,12 C22,12.5522847 21.5522847,13 21,13 L19,13 C18.4477153,13 18,12.5522847 18,12 C18,11.4477153 18.4477153,11 19,11 Z M3,11 L5,11 C5.55228475,11 6,11.4477153 6,12 C6,12.5522847 5.55228475,13 5,13 L3,13 C2.44771525,13 2,12.5522847 2,12 C2,11.4477153 2.44771525,11 3,11 Z M12,2 C12.5522847,2 13,2.44771525 13,3 L13,5 C13,5.55228475 12.5522847,6 12,6 C11.4477153,6 11,5.55228475 11,5 L11,3 C11,2.44771525 11.4477153,2 12,2 Z M12,18 C12.5522847,18 13,18.4477153 13,19 L13,21 C13,21.5522847 12.5522847,22 12,22 C11.4477153,22 11,21.5522847 11,21 L11,19 C11,18.4477153 11.4477153,18 12,18 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                                    <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="2"/>
+                                    <path d="M12,17 C14.7614237,17 17,14.7614237 17,12 C17,9.23857625 14.7614237,7 12,7 C9.23857625,7 7,9.23857625 7,12 C7,14.7614237 9.23857625,17 12,17 Z M12,19 C8.13400675,19 5,15.8659932 5,12 C5,8.13400675 8.13400675,5 12,5 C15.8659932,5 19,8.13400675 19,12 C19,15.8659932 15.8659932,19 12,19 Z" fill="#000000" fill-rule="nonzero"/>
+                                </g>
+                            </svg>
+                        </span>
+                        <span class="menu-text text-capitalize">Jabatan</span>
+                    </a>
+                </li>
+
+                @if (Session::get('user.role') == 'super_admin')
+                <li class="menu-item {{str_contains(Request::path(), 'jadwal') ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                    <a href="{{route('jadwal')}}" class="menu-link">
+                        <span class="svg-icon menu-icon">
+                           
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"/>
+                                    <path d="M10.9630156,7.5 L11.0475062,7.5 C11.3043819,7.5 11.5194647,7.69464724 11.5450248,7.95024814 L12,12.5 L15.2480695,14.3560397 C15.403857,14.4450611 15.5,14.6107328 15.5,14.7901613 L15.5,15 C15.5,15.2109164 15.3290185,15.3818979 15.1181021,15.3818979 C15.0841582,15.3818979 15.0503659,15.3773725 15.0176181,15.3684413 L10.3986612,14.1087258 C10.1672824,14.0456225 10.0132986,13.8271186 10.0316926,13.5879956 L10.4644883,7.96165175 C10.4845267,7.70115317 10.7017474,7.5 10.9630156,7.5 Z" fill="#000000"/>
+                                    <path d="M7.38979581,2.8349582 C8.65216735,2.29743306 10.0413491,2 11.5,2 C17.2989899,2 22,6.70101013 22,12.5 C22,18.2989899 17.2989899,23 11.5,23 C5.70101013,23 1,18.2989899 1,12.5 C1,11.5151324 1.13559454,10.5619345 1.38913364,9.65805651 L3.31481075,10.1982117 C3.10672013,10.940064 3,11.7119264 3,12.5 C3,17.1944204 6.80557963,21 11.5,21 C16.1944204,21 20,17.1944204 20,12.5 C20,7.80557963 16.1944204,4 11.5,4 C10.54876,4 9.62236069,4.15592757 8.74872191,4.45446326 L9.93948308,5.87355717 C10.0088058,5.95617272 10.0495583,6.05898805 10.05566,6.16666224 C10.0712834,6.4423623 9.86044965,6.67852665 9.5847496,6.69415008 L4.71777931,6.96995273 C4.66931162,6.97269931 4.62070229,6.96837279 4.57348157,6.95710938 C4.30487471,6.89303938 4.13906482,6.62335149 4.20313482,6.35474463 L5.33163823,1.62361064 C5.35654118,1.51920756 5.41437908,1.4255891 5.49660017,1.35659741 C5.7081375,1.17909652 6.0235153,1.2066885 6.2010162,1.41822583 L7.38979581,2.8349582 Z" fill="#000000" opacity="0.3"/>
+                                </g>
+                            </svg>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-text text-capitalize">jadwal</span>
+                    </a>
+                </li>
+                @else
+                <li class="menu-item {{str_contains(Request::path(), 'kegiatan') ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                    <a href="{{route('kegiatan')}}" class="menu-link">
+                        <span class="svg-icon menu-icon">
+                           
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                    <path d="M12.9336061,16.072447 L19.36,10.9564761 L19.5181585,10.8312381 C20.1676248,10.3169571 20.2772143,9.3735535 19.7629333,8.72408713 C19.6917232,8.63415859 19.6104327,8.55269514 19.5206557,8.48129411 L12.9336854,3.24257445 C12.3871201,2.80788259 11.6128799,2.80788259 11.0663146,3.24257445 L4.47482784,8.48488609 C3.82645598,9.00054628 3.71887192,9.94418071 4.23453211,10.5925526 C4.30500305,10.6811601 4.38527899,10.7615046 4.47382636,10.8320511 L4.63,10.9564761 L11.0659024,16.0730648 C11.6126744,16.5077525 12.3871218,16.5074963 12.9336061,16.072447 Z" fill="#000000" fill-rule="nonzero" />
+                                    <path d="M11.0563554,18.6706981 L5.33593024,14.122919 C4.94553994,13.8125559 4.37746707,13.8774308 4.06710397,14.2678211 C4.06471678,14.2708238 4.06234874,14.2738418 4.06,14.2768747 L4.06,14.2768747 C3.75257288,14.6738539 3.82516916,15.244888 4.22214834,15.5523151 C4.22358765,15.5534297 4.2250303,15.55454 4.22647627,15.555646 L11.0872776,20.8031356 C11.6250734,21.2144692 12.371757,21.2145375 12.909628,20.8033023 L19.7677785,15.559828 C20.1693192,15.2528257 20.2459576,14.6784381 19.9389553,14.2768974 C19.9376429,14.2751809 19.9363245,14.2734691 19.935,14.2717619 L19.935,14.2717619 C19.6266937,13.8743807 19.0546209,13.8021712 18.6572397,14.1104775 C18.654352,14.112718 18.6514778,14.1149757 18.6486172,14.1172508 L12.9235044,18.6705218 C12.377022,19.1051477 11.6029199,19.1052208 11.0563554,18.6706981 Z" fill="#000000" opacity="0.3" />
+                                </g>
+                            </svg>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-text text-capitalize">kegiatan</span>
+                    </a>
+                </li>
+                @endif
+
+              
+                <li class="menu-item {{str_contains(Request::path(), 'informasi') ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
+                    <a href="{{route('informasi')}}" class="menu-link">
+                        <span class="svg-icon menu-icon">
+                           
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24"/>
+                                <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10"/>
+                                <rect fill="#000000" x="11" y="10" width="2" height="7" rx="1"/>
+                                <rect fill="#000000" x="11" y="7" width="2" height="2" rx="1"/>
+                            </g>
+                                                    </svg>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-text text-capitalize">informasi</span>
+                    </a>
+                </li>
+                
+                <!-- <li class="menu-item menu-item-submenu {{str_contains(Request::path(), 'jabatan') ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true" data-menu-toggle="hover">
                     <a href="javascript:;" class="menu-link menu-toggle">
                         <span class="svg-icon menu-icon">
-                            <!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-arrange.svg-->
+                         
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                     <rect x="0" y="0" width="24" height="24"/>
@@ -378,9 +409,9 @@
                                     <path d="M12,17 C14.7614237,17 17,14.7614237 17,12 C17,9.23857625 14.7614237,7 12,7 C9.23857625,7 7,9.23857625 7,12 C7,14.7614237 9.23857625,17 12,17 Z M12,19 C8.13400675,19 5,15.8659932 5,12 C5,8.13400675 8.13400675,5 12,5 C15.8659932,5 19,8.13400675 19,12 C19,15.8659932 15.8659932,19 12,19 Z" fill="#000000" fill-rule="nonzero"/>
                                 </g>
                             </svg>
-                            <!--end::Svg Icon-->
+                            
                         </span>
-                        <span class="menu-text text-capitalize">jabatan</span>
+                        <span class="menu-text text-capitalize">jabatanss</span>
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="menu-submenu">
@@ -406,7 +437,7 @@
                             @endif
                         </ul>
                     </div>
-                </li>
+                </li> -->
                 @if (Session::get('user.role') == 'super_admin')
                     <li class="menu-item {{str_contains(Request::path(), 'satker') ? 'menu-item-active' : '' }}" aria-haspopup="true">
                     <a href="{{route('satker')}}" class="menu-link">
