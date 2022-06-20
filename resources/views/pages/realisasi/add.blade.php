@@ -85,7 +85,11 @@
                                                         @if($value['aspek_skp'] == 'kuantitas')
                                                         <label>Realisasi </label>
                                                         <input type="text" id="tes" class="form-control form-control-solid" name="realisasi[{{$key}}]" value="{{$kuantitas}}" placeholder="" readonly>
+                                                        @else
+                                                         <label>Realisasi </label>
+                                                        <input type="text" id="tes" class="form-control" name="realisasi[{{$key}}]" value="{{$value['realisasi_skp'][$i]['bulan']}}" placeholder="">
                                                     @endif
+                                                    
                                                     @endif
                                                 @else
                                                 <div class="mb-10">

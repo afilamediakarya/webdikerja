@@ -47,7 +47,7 @@
                                 <th>No.</th>
                                 <th>Nama</th>
                                 <th>NIP</th>
-                                <th>Jabatan</th>
+                                <th>Golongan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -314,7 +314,12 @@
                         },
                         {data:'nama'},
                         {data:'nip'},
-                        {data:'nama_jabatan'},
+                        {
+                            data:'golongan',
+                            render: function (data) {
+                                    return data !== null ? data : '-'
+                            }
+                        },
                         {
                             data:'id',
                         }
