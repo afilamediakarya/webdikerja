@@ -95,20 +95,22 @@
                         <div class="invalid-feedback"></div>
                     </div>
 
+                     <div id="mapView" style="height: 300px;"></div>
+
                     <div class="form-group">
                         <label>Lokasi Satker</label>
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
                                     <label for="">Lattitude</label>
-                                    <input class="form-control form-control-solid col" type="text" name="lat_location" placeholder="lattitude"/>
+                                    <input class="form-control form-control-solid col" id="lat_location" type="text" name="lat_location" placeholder="lattitude"/>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label for="">Longitude</label>
-                                    <input class="form-control form-control-solid col" type="text" name="long_location" placeholder="longitude"/>
+                                    <input class="form-control form-control-solid col" id="long_location" type="text" name="long_location" placeholder="longitude"/>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
@@ -131,6 +133,7 @@
 
 @section('script')
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDV6TkgOG03jL2sEnUP7umqQ3qeJtyVK_M&callback=initMap&libraries=v=weekly,places&sensor=false" defer></script>
     <script>
         "use strict";
         var dataRow = function() {
@@ -241,13 +244,105 @@
                 }
             )
         }
+
+        let marker;
+        function initMap() {
+                const center = { lat: parseFloat('-5.558543'), lng: parseFloat('120.1909133,17') };
+                const bounds = new google.maps.LatLngBounds();
+                const map = new google.maps.Map(document.getElementById("mapView"), {
+                    zoom: 14,
+                    center: center,
+                    mapTypeControl: true,
+                    mapTypeControlOptions: {
+                        style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+                        // mapTypeId: google.maps.MapTypeId.SATELLITE
+                        mapTypeId: 'satellite'
+                    },
+                });
+
+                const geocoder = new google.maps.Geocoder();
+             // build request
+                
+
+
+            marker = new google.maps.Marker({
+                position: center,
+                map,
+            });
+            google.maps.event.addListener(map, 'click', function(event) {
+                setMarker(this, event.latLng);
+                // geocodeLatLng(geocoder, map);
+
+            });
+
+
+         
+
+            // document.getElementById("setKoordinat_").addEventListener("keyup", function () {
+            //     let value_koor = this.value;
+            //     let result = '';
+            //      result = value_koor.split(",");
+            //      console.log(result);
+
+            //      if (navigator.geolocation) {
+            //         let centerss = { lat: parseFloat(result[0]), lng: parseFloat(result[1]) };
+            //             map.setZoom(14);
+            //             map.setCenter(centerss);
+
+            //             if( marker ){
+            //                 marker.setPosition(centerss);
+            //             } else {
+            //                 marker = new google.maps.Marker({
+            //                     position: centerss,
+            //                     map: this
+            //                 });
+            //             }
+            //         } else {
+            //             alert('geolocation failure!');
+            //         }
+
+            // });
+
+        }
+
+        function setMarker(map, markerPosition) {
+            const geocoder = new google.maps.Geocoder();
+            const service = new google.maps.DistanceMatrixService();
+            console.log(markerPosition)
+            if( marker ){
+                marker.setPosition(markerPosition);
+            } else {
+                marker = new google.maps.Marker({
+                    position: markerPosition,
+                    map: map
+                });
+            }
+            map.setZoom(16);
+            map.setCenter(markerPosition);
+                // isi nilai koordinat ke form
+                // document.getElementById("setLongitude").value = markerPosition.lng();
+                // document.getElementById("setLatitude").value = markerPosition.lat();
+                document.getElementById('lat_location').value = markerPosition.lat();
+                 document.getElementById('long_location').value = markerPosition.lng();
+                // Get Lokasi
+                // lat_locationlong_location
+
+
+        }
+
         jQuery(document).ready(function() {
+
             Panel.init('side_form');
             dataRow.init();
             $('#kt_datepicker_3').datepicker({format:'dd-mm-yyyy'});
             $(document).on('click','.btn-cancel', function(){
                 Panel.action('hide');
             });
+
+
+            initMap();
+
+
         });
 
     </script>
