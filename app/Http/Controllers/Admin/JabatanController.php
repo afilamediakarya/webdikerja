@@ -8,7 +8,15 @@ use Illuminate\Support\Facades\Http;
 use Validator;
 class JabatanController extends Controller
 {
-    //
+    
+    public function getLokasiKerja(){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $data = Http::withToken($token)->get($url."/lokasi/optionLokasi");
+        return $data->json();
+        
+    }
+
     public function index(Request $request)
     {
         $url = env('API_URL');
@@ -25,7 +33,10 @@ class JabatanController extends Controller
         $jenisJabatan = $dataJenisJabatan->json();
 
         $pegawai = Http::withToken($token)->get($url."/jabatan/pegawaiBySatuanKerja")->collect();
-        // dd($dinas);
+        $lokasiKerja = $this->getLokasiKerja();
+        // return $lokasiKerja;
+      
+   
 
         $role = session()->get('user.role');
 
@@ -49,7 +60,7 @@ class JabatanController extends Controller
             }
         }
 
-        return view('pages.admin.jabatan.index', compact('page_title', 'page_description','breadcumb', 'kelas', 'dinas', 'pegawai','jenisJabatan','role'));
+        return view('pages.admin.jabatan.index', compact('page_title', 'page_description','breadcumb', 'kelas', 'dinas', 'pegawai','jenisJabatan','role','lokasiKerja'));
     }
 
     public function getParent($params){

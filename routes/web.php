@@ -12,7 +12,7 @@ use App\Http\Controllers\RealisasiController;
 use App\Http\Controllers\SkpController;
 use App\Http\Controllers\AxiosController;
 use App\Http\Controllers\bankomController;
-
+use App\Http\Controllers\lokasiController;
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\PegawaiController;
@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\Master\FaqController;
 use App\Http\Controllers\Admin\Master\SatuanController;
 use App\Http\Controllers\Admin\Master\PerilakuController;
 use App\Http\Controllers\Admin\Master\MasterController;
+
 /*
 
 |--------------------------------------------------------------------------
@@ -151,6 +152,12 @@ Route::middleware('Auth')->group(function(){
                     Route::get('/satuan/{id}', [SatuanController::class, 'show'])->name('show-satuan');
                     Route::post('/satuan/{id}', [SatuanController::class, 'update'])->name('update-satuan');
                     Route::delete('/satuan/{id}', [SatuanController::class, 'delete'])->name('delete-satuan');
+
+                    Route::get('/lokasi', [lokasiController::class, 'index'])->name('lokasi');
+                    Route::post('/lokasi', [lokasiController::class, 'store'])->name('post-lokasi');
+                    Route::get('/lokasi/{id}', [lokasiController::class, 'show'])->name('show-lokasi');
+                    Route::post('/lokasi/{id}', [lokasiController::class, 'update'])->name('update-lokasi');
+                    Route::delete('/lokasi/{id}', [lokasiController::class, 'delete'])->name('delete-lokasi');
                     
                     Route::get('/data-satuan', [MasterController::class, 'get_satuan'])->name('data_master_satuan');
                     

@@ -24,6 +24,7 @@ class PagesController extends Controller
 
         if ($params == 'pegawai') {
             $response = Http::withToken($token)->get($url."/dashboard/pegawai");
+          
         }elseif($params == 'admin'){
             $response = Http::withToken($token)->get($url."/dashboard/admin_opd");
         }else{
@@ -41,6 +42,7 @@ class PagesController extends Controller
 
         if ($type == 'pegawai') {
             $data = $this->getDataDashboard($type);
+        
             return view('pages.dashboard.index', compact('page_title', 'page_description','breadcumb','data'));   
         }elseif($type == 'admin'){
             $data = $this->getDataDashboard($type);

@@ -160,6 +160,19 @@
                         <div class="invalid-feedback"></div>
                     </div>
 
+                    <div class="form-group">
+                     
+                            <label>Pilih lokasi kerja</label>
+                            <select class="form-control form-control-solid" type="text" name="id_lokasi" id="id_lokasi">
+                            <option selected disabled>Pilih lokasi kerja</option>    
+                                @foreach($lokasiKerja as $loc => $locs)
+                                    <option value="{{$locs['id']}}">{{$locs['nama_lokasi']}}</option>
+                                @endforeach
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        
+                    </div>
+
                     <div class="separator separator-dashed mt-8 mb-5"></div>
                     <div class="">
                         <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
@@ -319,6 +332,8 @@
                 placeholder: "Pilih Pegawai"
             });
 
+            $('#id_lokasi').select2();
+
             $('#parent').select2({
                 placeholder: "Pilih Atasan"
             });
@@ -374,6 +389,10 @@
                                     
                                     $("input[name='"+key+"']").val(value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                                     $("input[name='"+key+"']").trigger('change');
+                                }else if(key == 'id_lokasi'){
+                                    $('#id_lokasi').val(value);
+                                    $('#id_lokasi').trigger('change');
+                                    
                                 } else {
                                     $("input[name='"+key+"']").val(value);
                                     $("select[name='"+key+"']").val(value);    
