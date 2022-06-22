@@ -96,6 +96,9 @@
                                 </div>
                                 <span class="invalid-feedback"></span>
                             </div>
+                            
+                            
+                            @if($role == 'super_admin')
                             <div class="form-group col-6">
                                 <label>Satuan Kerja</label>
                                 <select name="id_satuan_kerja" class="form-control form-control-solid">
@@ -106,14 +109,18 @@
                                 </select>
                                 <span class="invalid-feedback"></span>
                             </div>
-                            <div class="form-group col-6">
+                            @else
+                                <input type="hidden" name="id_satuan_kerja" value="{{$dinas}}">
+                            @endif
+
+                            <!-- <div class="form-group col-6">
                                 <label>Eselon</label>
                                 <select class="form-control form-control-solid" name="eselon">
                                     @foreach($eselon as $item)
                                         <option value="{{$item['value']}}">{{$item['value']}}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> -->
 
                             <div class="form-group col-6">
                                 <label>Golongan Pangkat</label>
@@ -136,7 +143,7 @@
                                 </div>
                                 <span class="invalid-feedback"></span>
                             </div>
-
+<!-- 
                             <div class="form-group col-6">
                                 <label>Jenis Jabatan Pegawai</label>
                                 <select class="form-control form-control-solid" name="jenis_jabatan">
@@ -146,15 +153,15 @@
                                     @endforeach
                                
                                 </select>
-                            </div>
-                            <div class="form-group col-6">
+                            </div> -->
+                            <!-- <div class="form-group col-6">
                                 <label>Jabatan Pegawai</label>
                                 <select class="form-control form-control-solid" name="jabatan">
                                     <option value="Aktif">Aktif</option>
                                     <option value="Non Aktif">Non Aktif</option>
                                 </select>
-                            </div>
-                            <div class="form-group col-6">
+                            </div> -->
+                            <!-- <div class="form-group col-6">
                                 <label>TMT Jabatan</label>
                                 <div class="input-group date" >
                                     <input type="text" class="form-control form-control-solid" readonly  value="{{date("Y-m-d")}}" name="tmt_jabatan" id="tmt_jab"/>
@@ -164,8 +171,8 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group col-6">
+                            </div> -->
+                            <!-- <div class="form-group col-6">
                                 <label>TMT Pegawai</label>
                                 <div class="input-group date" >
                                     <input type="text" class="form-control form-control-solid" readonly  value="{{date("Y-m-d")}}" name="tmt_pegawai" id="tmt_peg"/>
@@ -175,17 +182,17 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             
                             
-                            <div class="form-group col-6">
+                            <!-- <div class="form-group col-6">
                                 <label>Jenis Jabatan</label>
                                 <select class="form-control form-control-solid" name="jenis_jabatan">
                                     <option>1</option>
                                     <option>2</option>
                                 </select>
                             </div>
-                            
+                             -->
                             <div class="form-group col-6">
                                 <label>Jenis Kelamin</label>
                                 <select class="form-control form-control-solid" name="jenis_kelamin">
@@ -225,14 +232,14 @@
                             </div>
 
 
-                            <div class="form-group col-6">
+                            <!-- <div class="form-group col-6">
                                 <label>Pendidikan Struktural</label>
                                 <input type="text" class="form-control form-control-solid" name="pendidikan_struktural">
                             </div>
                             <div class="form-group col-6">
                                 <label>Tahun Lulus Pendidikan Struktural</label>
                                 <input type="text" class="form-control form-control-solid" name="lulus_pendidikan_struktural">
-                            </div>
+                            </div> -->
 
                             <input type="hidden" value="pegawai" name="type">
 
@@ -415,7 +422,7 @@
         $(document).on('submit', "#createForm[data-type='update']", function(e){
             e.preventDefault();
             var _id = $("input[name='id']").val();
-            axios.post( `admin/pegawai/${_id}/pegawai`,  $(this).serialize())
+            axios.post( `admin/pegawai/update/${_id}`,  $(this).serialize())
             .then(function(res){
                 var data = res.data;
                 if(data.fail){
@@ -473,6 +480,7 @@
             axios.get('admin/pegawai/'+key)
             .then(function(res){
                 let data = res.data;
+                console.log(data);
                 $.map(data.data, function(val, i){
                     $("input[name="+i+"]").val(val);
                     $("select[name="+i+"]").val(val);

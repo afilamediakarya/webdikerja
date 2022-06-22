@@ -41,15 +41,14 @@ class PegawaiController extends Controller
         })->values();
         // dd($jabatan);
 
-        if ($request->session()->get('user.role') == 'super_admin') {
+        if ($role == 'super_admin') {
             $datadinas = Http::withToken($token)->get($url."/satuan_kerja/list");
             $dinas = $datadinas->collect('data');
         }else{
-            $datadinas = $request->session()->get('user_details.satuan_kerja');
-            $dinas = collect([$datadinas]);
+            $dinas = session()->get('user.current.pegawai.id_satuan_kerja');
+            // $dinas = collect([$datadinas]);
         }
 
-        // return $dinas;
         return view('pages.admin.pegawai.index', compact('page_title', 'page_description','breadcumb', 'dinas', 'pangkat', 'agama', 'status_kawin', 'pendidikan', 'status_pegawai', 'eselon', 'jabatan','role'));
     }
 
@@ -72,6 +71,8 @@ class PegawaiController extends Controller
             ARRAY_FILTER_USE_KEY
         );
 
+        // return $filtered;
+
         $response = Http::withToken($token)->post($url."/pegawai/store", $filtered);
         if($response->successful()){
             $data = $response->object();
@@ -87,7 +88,7 @@ class PegawaiController extends Controller
     }
 
     public function show(Request $request, $id){
-        return $id;
+        // return $id;
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
         $response = Http::withToken($token)->get($url."/pegawai/show/".$id);
