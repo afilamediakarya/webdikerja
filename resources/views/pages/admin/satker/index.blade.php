@@ -198,8 +198,9 @@
         $(document).on('click', '.button-update', function(){
             Panel.action('show','update');
             var key = $(this).data('id');
+
             $.ajax({
-                url:"admin/satker/"+key,
+                url:"admin//"+key,
                 method:"GET",
                 success: function(data){
                     if(data.success){

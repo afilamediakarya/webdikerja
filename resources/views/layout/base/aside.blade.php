@@ -201,14 +201,15 @@
                                     <span class="menu-text text-capitalize">SKP</span>
                                 </a>
                             </li>
-                            <!-- <li class="menu-item" aria-haspopup="true">
-                                <a href="{{route('laporan-aktivitas')}}" class="menu-link">
+                            
+                            <li class="menu-item" aria-haspopup="true">
+                                <a href="{{url('/laporan/bankom/pegawai')}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
-                                    <span class="menu-text text-capitalize">Aktivitas</span>
+                                    <span class="menu-text text-capitalize">Bankom</span>
                                 </a>
-                            </li> -->
+                            </li>
                         </ul>
                     </div>
                 </li>
@@ -314,6 +315,18 @@
                                     <span class="menu-text text-capitalize">SKP</span>
                                 </a>
                             </li>
+
+                            @if(Session::get('user.role') == 'admin_opd')
+                            <li class="menu-item" aria-haspopup="true">
+                                <a href="{{url('/laporan/bankom/admin')}}" class="menu-link">
+                                    <i class="menu-bullet menu-bullet-dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="menu-text text-capitalize">Bankom</span>
+                                </a>
+                            </li>
+                            @endif
+
                             <!-- <li class="menu-item" aria-haspopup="true">
                                 <a href="{{route('laporan-aktivitas')}}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">

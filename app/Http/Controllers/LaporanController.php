@@ -1681,4 +1681,220 @@ class LaporanController extends Controller
         return $menit;
     }
 
+    public function bankom($role_page)
+    {
+        
+        $page_title = 'Laporan';
+        $page_description = 'Daftar Laporan Bankom';
+        $breadcumb = ['Bankom'];
+
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $role = session()->get('user.role');
+        $satker = session()->get('user.current.pegawai.id_satuan_kerja');
+        $idPegawai = session()->get('user.current.pegawai.id');
+        $pegawaiBysatker = Http::withToken($token)->get($url."/pegawai/BySatuanKerja/".$satker);
+        $pegawaiBysatker_ = $pegawaiBysatker->json();
+
+        // return $satker_;
+
+        return view('pages.laporan.bankom', compact('page_title', 'page_description','breadcumb','pegawaiBysatker_','role','role_page','idPegawai'));
+    }
+
+    public function getDataBankom($type,$tahun,$id_pegawai){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $satker = session()->get('user.current.pegawai.id_satuan_kerja');
+        $data = Http::withToken($token)->get($url."/bankom/laporan/".$type.'/'.$satker.'/'.$tahun.'/'.$id_pegawai);
+        return $data->json();
+    }
+
+    public function exportbankom($tahun,$type,$id_pegawai){
+       
+        if ($id_pegawai == 'semua') {
+            $data = $this->getDataBankom('rekap',$tahun,$id_pegawai);
+        
+            return $this->laporanRekap($data,$type,$tahun);
+        }else{
+            $data = $this->getDataBankom('pegawai',$tahun,$id_pegawai);
+           
+    
+            return $this->laporanByPegawai($data,$type,$tahun);
+        }
+    }
+
+    public function laporanRekap($data,$type,$tahun){
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
+            ->setLastModifiedBy('BKPSDM BULUKUMBA')
+            ->setTitle('Laporan Rekapitulasi Data Pengembangan Kompentensi')
+            ->setSubject('Laporan Rekapitulasi Data Pengembangan Kompentensi')
+            ->setDescription('Laporan Rekapitulasi Data Pengembangan Kompentensi')
+            ->setKeywords('pdf php')
+            ->setCategory('LAPORAN Rekapitulasi Pengembangan Kompetensi');
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
+        $sheet->getRowDimension(3)->setRowHeight(17);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setHorizontalCentered(true);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setVerticalCentered(false);
+
+        // //Margin PDF
+        $spreadsheet->getActiveSheet()->getPageMargins()->setTop(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setRight(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.5);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
+
+        $sheet->setCellValue('A1', 'REKAPITULASI DATA PENGEMBANGAN KOMPETENSI');
+        $sheet->mergeCells('A1:G1');
+        $sheet->setCellValue('A3', 'TAHUN : ');
+        $sheet->setCellValue('B3',  $tahun);
+
+        // HEADER
+        $sheet->setCellValue('A5', 'No');
+        $sheet->setCellValue('B5', 'Nama Pegawai');
+        $sheet->setCellValue('C5', 'Nama Pelatihan');
+        $sheet->setCellValue('D5', 'Jenis Pelatihan');
+        $sheet->setCellValue('E5', 'Waktu Pelaksanaan');
+        $sheet->setCellValue('F5', 'JP');
+        $sheet->setCellValue('G5', 'Total JP');
+        $cell = 6;
+
+
+        foreach ($data as $key => $value) {
+            $sheet->setCellValue('A'.$cell, $key+1);
+            $sheet->setCellValue('B'.$cell, $value['nama']);
+            $total_jp = 0;
+            $jumlah_data=0;
+            foreach ($value['bankom'] as $x => $y) {
+                $jumlah_data++;
+                $total_jp += $y['jumlah_jp'];
+                $sheet->setCellValue('C'.$cell, $y['nama_pelatihan']);
+                $sheet->setCellValue('D'.$cell, $y['jenis_pelatihan']);
+                $sheet->setCellValue('E'.$cell, $y['waktu_awal'].' s/d '.$y['waktu_akhir']);
+                $sheet->setCellValue('F'.$cell, $y['jumlah_jp']);
+                $sheet->setCellValue('G'.$cell, $total_jp);
+                $cell++;
+            }
+           
+        }
+
+        $border = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '0000000'],
+                ],
+            ],
+        ];
+
+        $sheet->getStyle('A5:G' . $cell)->applyFromArray($border);
+        $sheet->getStyle('A:AB')->getAlignment()->setHorizontal('center');
+        if ($type == 'excel') {
+            // Untuk download 
+            $writer = new Xlsx($spreadsheet);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="Laporan Rekapitulasi Pengembangan Kompetensi.xlsx"');
+        }else{
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+            ->setOddHeader('&C&H' . url()->current());
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+                ->setOddFooter('&L&B &RPage &P of &N');
+            $class = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class;
+            \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', $class);
+            header('Content-Type: application/pdf');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Pdf');
+        }
+
+        $writer->save('php://output');
+    }
+
+    public function laporanByPegawai($data,$type,$tahun){
+      
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
+            ->setLastModifiedBy('BKPSDM BULUKUMBA')
+            ->setTitle('Laporan Rekapitulasi Data Pengembangan Kompentensi')
+            ->setSubject('Laporan Rekapitulasi Data Pengembangan Kompentensi')
+            ->setDescription('Laporan Rekapitulasi Data Pengembangan Kompentensi')
+            ->setKeywords('pdf php')
+            ->setCategory('LAPORAN Rekapitulasi Pengembangan Kompetensi');
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
+        $sheet->getRowDimension(3)->setRowHeight(17);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setHorizontalCentered(true);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setVerticalCentered(false);
+
+        // //Margin PDF
+        $spreadsheet->getActiveSheet()->getPageMargins()->setTop(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setRight(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.5);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
+
+        $sheet->setCellValue('A1', 'REKAPITULASI DATA PENGEMBANGAN KOMPETENSI');
+        $sheet->mergeCells('A1:G1');
+        $sheet->setCellValue('A3', 'TAHUN : ');
+        $sheet->setCellValue('B3',  $tahun);
+
+        // HEADER
+        $sheet->setCellValue('A5', 'No');
+        $sheet->setCellValue('B5', 'Nama Pelatihan');
+        $sheet->setCellValue('C5', 'Jenis Pelatihan');
+        $sheet->setCellValue('D5', 'Waktu Pelaksanaan');
+        $sheet->setCellValue('E5', 'JP');
+        $sheet->setCellValue('F5', 'Total JP');
+        $cell = 6;
+
+        $total_jp = 0;
+        foreach ($data as $key => $y) {
+            $total_jp += $y['jumlah_jp'];
+            $sheet->setCellValue('A'.$cell, $key+1);
+            $sheet->setCellValue('B'.$cell, $y['nama_pelatihan']);
+            $sheet->setCellValue('C'.$cell, $y['jenis_pelatihan']);
+            $sheet->setCellValue('D'.$cell, $y['waktu_awal'].' s/d '.$y['waktu_akhir']);
+            $sheet->setCellValue('E'.$cell, $y['jumlah_jp']);
+            $sheet->setCellValue('F'.$cell, $total_jp);
+            $cell++;
+        }
+
+        $border = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '0000000'],
+                ],
+            ],
+        ];
+
+        $sheet->getStyle('A5:F' . $cell)->applyFromArray($border);
+        $sheet->getStyle('A:AB')->getAlignment()->setHorizontal('center');
+        if ($type == 'excel') {
+            // Untuk download 
+            $writer = new Xlsx($spreadsheet);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="Laporan Rekapitulasi Pengembangan Kompetensi.xlsx"');
+        }else{
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+            ->setOddHeader('&C&H' . url()->current());
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+                ->setOddFooter('&L&B &RPage &P of &N');
+            $class = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class;
+            \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', $class);
+            header('Content-Type: application/pdf');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Pdf');
+        }
+
+        $writer->save('php://output');
+    }
+
+
 }
