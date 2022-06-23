@@ -34,10 +34,7 @@ class JabatanController extends Controller
 
         $pegawai = Http::withToken($token)->get($url."/jabatan/pegawaiBySatuanKerja")->collect();
         $lokasiKerja = $this->getLokasiKerja();
-        // return $lokasiKerja;
-      
-   
-
+ 
         $role = session()->get('user.role');
 
         if($role == 'admin_opd'){
