@@ -1737,8 +1737,9 @@ class LaporanController extends Controller
         $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
         $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
         $sheet->getRowDimension(3)->setRowHeight(17);
+        $sheet->getRowDimension(4)->setRowHeight(24);
         $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
-        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(12);
         $spreadsheet->getActiveSheet()->getPageSetup()->setHorizontalCentered(true);
         $spreadsheet->getActiveSheet()->getPageSetup()->setVerticalCentered(false);
 
@@ -1748,25 +1749,33 @@ class LaporanController extends Controller
         $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.5);
         $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
 
-        $sheet->setCellValue('A1', 'REKAPITULASI DATA PENGEMBANGAN KOMPETENSI');
-        $sheet->mergeCells('A1:G1');
-        $sheet->setCellValue('A3', 'TAHUN : ');
-        $sheet->setCellValue('B3',  $tahun);
+        $sheet->setCellValue('A1', 'REKAPITULASI DATA PENGEMBANGAN KOMPETENSI')->mergeCells('A1:G1');
+        $sheet->setCellValue('A2', 'TAHUN '.$tahun)->mergeCells('A2:G2');
+        
+        $sheet->getStyle('A:G')->getAlignment()->setWrapText(true);
+        $sheet->getStyle('A1:G4')->getFont()->setBold(true);
+        $sheet->getStyle('A:L')->getAlignment()->setVertical('center')->setHorizontal('center');
 
         // HEADER
-        $sheet->setCellValue('A5', 'No');
-        $sheet->setCellValue('B5', 'Nama Pegawai');
-        $sheet->setCellValue('C5', 'Nama Pelatihan');
-        $sheet->setCellValue('D5', 'Jenis Pelatihan');
-        $sheet->setCellValue('E5', 'Waktu Pelaksanaan');
-        $sheet->setCellValue('F5', 'JP');
-        $sheet->setCellValue('G5', 'Total JP');
-        $cell = 6;
+        $sheet->setCellValue('A4', 'No');
+        $sheet->getColumnDimension('A')->setWidth(5);
+        $sheet->setCellValue('B4', 'Nama Pegawai');
+        $sheet->getColumnDimension('B')->setWidth(30);
+        $sheet->setCellValue('C4', 'Nama Pelatihan');
+        $sheet->getColumnDimension('C')->setWidth(40);
+        $sheet->setCellValue('D4', 'Jenis Pelatihan');
+        $sheet->getColumnDimension('D')->setWidth(25);
+        $sheet->setCellValue('E4', 'Waktu Pelaksanaan');
+        $sheet->getColumnDimension('E')->setWidth(30);
+        $sheet->setCellValue('F4', 'JP');
+        $sheet->getColumnDimension('F')->setWidth(15);
+        $sheet->setCellValue('G4', 'Total JP');
+        $sheet->getColumnDimension('G')->setWidth(15);
+        $cell = 5;
 
 
         foreach ($data as $key => $value) {
-            $sheet->setCellValue('A'.$cell, $key+1);
-            $sheet->setCellValue('B'.$cell, $value['nama']);
+            
             $total_jp = 0;
             $jumlah_data=0;
             foreach ($value['bankom'] as $x => $y) {
@@ -1776,10 +1785,12 @@ class LaporanController extends Controller
                 $sheet->setCellValue('D'.$cell, $y['jenis_pelatihan']);
                 $sheet->setCellValue('E'.$cell, $y['waktu_awal'].' s/d '.$y['waktu_akhir']);
                 $sheet->setCellValue('F'.$cell, $y['jumlah_jp']);
-                $sheet->setCellValue('G'.$cell, $total_jp);
                 $cell++;
             }
-           
+            $sheet->setCellValue('A'.($cell-$jumlah_data), $key+1)->mergeCells('A'.($cell-$jumlah_data).':A'.($cell-1));
+            $sheet->setCellValue('B'.($cell-$jumlah_data), $value['nama'])->mergeCells('B'.($cell-$jumlah_data).':B'.($cell-1));
+            $sheet->setCellValue('G'.($cell-$jumlah_data), $total_jp)->mergeCells('G'.($cell-$jumlah_data).':G'.($cell-1));
+            $sheet->getStyle('G'.($cell-$jumlah_data))->getFont()->setBold(true);
         }
 
         $border = [
@@ -1791,8 +1802,10 @@ class LaporanController extends Controller
             ],
         ];
 
-        $sheet->getStyle('A5:G' . $cell)->applyFromArray($border);
-        $sheet->getStyle('A:AB')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('A4:G' . $cell)->applyFromArray($border);
+        $sheet->getStyle('A1:G'.$cell)->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('B5:C'.$cell)->getAlignment()->setVertical('center')->setHorizontal('left');
+
         if ($type == 'excel') {
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
@@ -1828,8 +1841,9 @@ class LaporanController extends Controller
         $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
         $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
         $sheet->getRowDimension(3)->setRowHeight(17);
+        $sheet->getRowDimension(4)->setRowHeight(24);
         $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
-        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(12);
         $spreadsheet->getActiveSheet()->getPageSetup()->setHorizontalCentered(true);
         $spreadsheet->getActiveSheet()->getPageSetup()->setVerticalCentered(false);
 
@@ -1839,32 +1853,41 @@ class LaporanController extends Controller
         $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.5);
         $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
 
-        $sheet->setCellValue('A1', 'REKAPITULASI DATA PENGEMBANGAN KOMPETENSI');
-        $sheet->mergeCells('A1:G1');
-        $sheet->setCellValue('A3', 'TAHUN : ');
-        $sheet->setCellValue('B3',  $tahun);
+        $sheet->setCellValue('A1', 'DATA PENGEMBANGAN KOMPETENSI')->mergeCells('A1:F1');
+        $sheet->setCellValue('A2', 'TAHUN '.$tahun)->mergeCells('A2:F2');
+        
+        $sheet->getStyle('A:F')->getAlignment()->setWrapText(true);
+        $sheet->getStyle('A1:F4')->getFont()->setBold(true);
+        $sheet->getStyle('A:F')->getAlignment()->setVertical('center')->setHorizontal('center');
 
         // HEADER
-        $sheet->setCellValue('A5', 'No');
-        $sheet->setCellValue('B5', 'Nama Pelatihan');
-        $sheet->setCellValue('C5', 'Jenis Pelatihan');
-        $sheet->setCellValue('D5', 'Waktu Pelaksanaan');
-        $sheet->setCellValue('E5', 'JP');
-        $sheet->setCellValue('F5', 'Total JP');
-        $cell = 6;
-
+        $sheet->setCellValue('A4', 'No');
+        $sheet->getColumnDimension('A')->setWidth(5);
+        $sheet->setCellValue('B4', 'Nama Pelatihan');
+        $sheet->getColumnDimension('B')->setWidth(60);
+        $sheet->setCellValue('C4', 'Jenis Pelatihan');
+        $sheet->getColumnDimension('C')->setWidth(25);
+        $sheet->setCellValue('D4', 'Waktu Pelaksanaan');
+        $sheet->getColumnDimension('D')->setWidth(30);
+        $sheet->setCellValue('E4', 'JP');
+        $sheet->getColumnDimension('E')->setWidth(15);
+        $sheet->setCellValue('F4', 'Total JP');
+        $sheet->getColumnDimension('F')->setWidth(15);
+        $cell = 5;
+        $jumlah_data=0;
         $total_jp = 0;
         foreach ($data as $key => $y) {
+            $jumlah_data++;
             $total_jp += $y['jumlah_jp'];
             $sheet->setCellValue('A'.$cell, $key+1);
             $sheet->setCellValue('B'.$cell, $y['nama_pelatihan']);
             $sheet->setCellValue('C'.$cell, $y['jenis_pelatihan']);
             $sheet->setCellValue('D'.$cell, $y['waktu_awal'].' s/d '.$y['waktu_akhir']);
             $sheet->setCellValue('E'.$cell, $y['jumlah_jp']);
-            $sheet->setCellValue('F'.$cell, $total_jp);
             $cell++;
         }
-
+        $sheet->setCellValue('F'.($cell-$jumlah_data), $total_jp)->mergeCells('F'.($cell-$jumlah_data).':F'.($cell-1));
+        $sheet->getStyle('F'.($cell-$jumlah_data))->getFont()->setBold(true);
         $border = [
             'borders' => [
                 'allBorders' => [
@@ -1874,8 +1897,9 @@ class LaporanController extends Controller
             ],
         ];
 
-        $sheet->getStyle('A5:F' . $cell)->applyFromArray($border);
-        $sheet->getStyle('A:AB')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('A4:F' . $cell)->applyFromArray($border);
+        $sheet->getStyle('A1:F'.$cell)->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('B5:B'.$cell)->getAlignment()->setVertical('center')->setHorizontal('left');
         if ($type == 'excel') {
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
