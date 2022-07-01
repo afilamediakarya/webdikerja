@@ -47,7 +47,7 @@ class AuthController extends Controller
                 // return $data;
                 session(['user' => $response->json()]);
                 session(['user_details' => $response->json()['current']['pegawai']]);
-                session(['atasan' => $response->json()['check_atasan']]);
+                // session(['atasan' => $response->json()['check_atasan']]);
                 session(['tahun' => date("Y")]);
                 if ($data['role'] == 'admin_opd') {
                     return redirect('/dashboard/admin');    

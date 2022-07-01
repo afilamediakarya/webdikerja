@@ -99,7 +99,7 @@ class SkpController extends Controller
     }
 
     public function customValidate($params){
-        // return $params;
+
         $result = [];
         $cek = [];
 
@@ -109,13 +109,12 @@ class SkpController extends Controller
 
         if (is_null($params->jenis_kinerja)) {
             $result['jenis_kinerja'][] = 'Jenis Kinerja is field required';
-
+        }else{
             if ($params->jenis_kinerja == 'utama') {
                 if (is_null($params->sasaran_kinerja)) {
                     $result['sasaran_kinerja'][] = 'Sasaran Kinerja is field required';
                 }
            }
-
         }
 
        
@@ -182,7 +181,9 @@ class SkpController extends Controller
     }   
 
     public function store(Request $request){
-       $validated = $this->customValidate($request);
+
+
+        $validated = $this->customValidate($request);
 
         if (count($validated) > 0 ) {
             return response()->json($validated,422);   

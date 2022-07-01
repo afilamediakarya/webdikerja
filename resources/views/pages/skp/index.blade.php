@@ -55,7 +55,7 @@
                             </tr>
                             @foreach($data['data']['utama'] as $key => $value)
                         
-                            <tr style="background:#f2f2f2">
+                                <tr style="background:#f2f2f2">
                                     <td>{{$inc_letter++}}.</td>
                                     @if($value['atasan'] != [])
                                     <td colspan="6">{{$value['atasan']['rencana_kerja']}}</td> 
@@ -64,7 +64,7 @@
                                     @endif
                                 <tr>
 
-                                @if($value['skp'] != [])
+                                @if(count($value['skp'])>0)
                                     @foreach($value['skp'] as $k => $v)
                                         @foreach($v['aspek_skp'] as $i => $l)
                                         <tr>
