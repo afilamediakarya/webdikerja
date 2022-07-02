@@ -21,7 +21,7 @@
         <!--end::Title-->
         <!--begin::Image-->
         <div class="d-flex flex-row-fluid bgi-no-repeat bgi-position-y-center bgi-position-x-center" 
-            style="background-image: url(image/back.png); height:30px; background-size:contain">
+            style="background-image: url(image/back.png); height:30px;">
         </div>
         <div class="d-flex justify-content-center">
             <a href="https://play.google.com/store/apps/details?id=com.afilamediakarya.dikerja" target="_blank">
