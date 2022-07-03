@@ -8,7 +8,7 @@
 @section('content')
 
 <div class="login login-2 login-signin-on d-flex flex-column flex-lg-row flex-column-fluid bg-white" id="kt_login">
-	
+    
     <div class="content order-1 d-flex flex-column w-100 pb-0" style="background-color: #0093DD;">
         <!--begin::Title-->
         <div class="d-flex flex-column justify-content-center text-center px-lg-0 px-7">
@@ -115,8 +115,8 @@
         </div>
         <!--end: Aside Container-->
     </div>
-				<!--begin::Aside-->
-				<!--begin::Content-->
+                <!--begin::Aside-->
+                <!--begin::Content-->
     
     <!--end::Content-->
 </div>
@@ -136,8 +136,6 @@
     @endif
     <script>
         "use strict";
-
-// Class Definition
     var KTLogin = function() {
         var _login;
 
