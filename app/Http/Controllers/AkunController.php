@@ -69,4 +69,34 @@ class AkunController extends Controller
         return view('pages.akun.bantuan', compact('page_title', 'page_description','breadcumb'));
     }
 
+    public function change_password(Request $request){
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+        $data = $request->all();
+    
+        $filtered = array_filter(
+            $data,
+            function ($key){
+                if(!in_array($key,['_token', 'id'])){
+                    return $key;
+                };
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+        // return $filtered;
+
+        $response = Http::withToken($token)->post($url."/change-password", $filtered);
+        if($response->successful()){
+            $data = $response->object();
+            if (isset($data->status)) {
+                return response()->json(['success'=> 'Berhasil Ubah Password']);
+            } else {
+                return response()->json(['invalid'=> $response->json()]);
+            }
+        }else{
+            return response()->json(['failed'=> $response->json()]);
+        }
+    }
+
 }

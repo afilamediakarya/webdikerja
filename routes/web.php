@@ -109,7 +109,7 @@ Route::middleware('Auth')->group(function(){
     
         Route::get('/', [AkunController::class, 'index'])->name('akun');
         Route::get('/edit', [AkunController::class, 'edit'])->name('edit-profil');
-        Route::get('/ganti-password', [AkunController::class, 'index'])->name('ganti-password');
+        Route::post('/change_password', [AkunController::class, 'change_password'])->name('ganti-password');
         Route::post('/pegawai/{id}', [PegawaiController::class, 'update'])->name('update-profil');
         Route::get('/bantuan', [AkunController::class, 'bantuan'])->name('bantuan');
     });

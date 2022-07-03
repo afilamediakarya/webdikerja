@@ -6,15 +6,15 @@
 
 
 @section('button')
-    <a href="{{url('skp/tambah')}}" class="btn btn-primary font-weight-bolder">
-        <span class="svg-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+    <!-- <a href="{{url('skp/tambah')}}" class="btn btn-primary font-weight-bolder">
+        <span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                 <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1"/>
                 <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000) " x="4" y="11" width="16" height="2" rx="1"/>
             </g>
-        </svg><!--end::Svg Icon--></span>
+        </svg></span>
         Tambah SKP
-    </a>
+    </a> -->
 @endsection
 
 
@@ -31,7 +31,7 @@
                 <div class="card-body">
                     <!--begin: Datatable-->
                     <form id="review_skp">
-
+                    <div class="table-responsive">
                     <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
@@ -41,7 +41,7 @@
                                     <th nowrap="nowrap">Indikator Kinerja Individu</th>
                                     <th>Target</th>
                                     <th>Satuan</th>
-                                    <th>Aksi</th>
+                                    <th style="width:250px;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,21 +84,21 @@
                                             @if($i == 0)
                                             <input type="hidden" value="{{$v['id']}}" name="id_skp[{{$no}}]" />
                                             <td rowspan="3">
-                                                        <div class="form-group">
-                                                            <label>Kesesuaian Skp</label>
-                                                            <div class="radio-inline">
-                                                                <label for="{{$k}}_sesuai_{{$v['id']}}" class="radio {{$k}}_sesuai_{{$v['id']}}">
-                                                                <input type="radio" id="{{$k}}_sesuai_{{$v['id']}}" @if($v['review_skp']['kesesuaian'] == 'ya') checked @endif value="ya" name="kesesuaian[{{$no}}]" />
-                                                                <span></span>Sesuai</label>
-                                                                <label for="{{$k}}_tidak_{{$v['id']}}" class="radio {{$k}}_tidak_{{$v['id']}}">
-                                                                <input type="radio" id="{{$k}}_tidak_{{$v['id']}}" @if($v['review_skp']['kesesuaian'] == 'tidak') checked @endif value="tidak" name="kesesuaian[{{$no}}]" />
-                                                                <span></span>Tidak</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="keterangan">Keterangan</label>
-                                                            <textarea name="keterangan[{{$no}}]" class="form-control form-control-solid" id="keterangan"  rows="5">{{$v['review_skp']['keterangan']}}</textarea>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <label>Kesesuaian Skp</label>
+                                                    <div class="radio-inline">
+                                                        <label for="{{$k}}_sesuai_{{$v['id']}}" class="radio {{$k}}_sesuai_{{$v['id']}}">
+                                                        <input type="radio" id="{{$k}}_sesuai_{{$v['id']}}" @if($v['review_skp']['kesesuaian'] == 'ya') checked @endif value="ya" name="kesesuaian[{{$no}}]" />
+                                                        <span></span>Sesuai</label>
+                                                        <label for="{{$k}}_tidak_{{$v['id']}}" class="radio {{$k}}_tidak_{{$v['id']}}">
+                                                        <input type="radio" id="{{$k}}_tidak_{{$v['id']}}" @if($v['review_skp']['kesesuaian'] == 'tidak') checked @endif value="tidak" name="kesesuaian[{{$no}}]" />
+                                                        <span></span>Tidak</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="keterangan">Keterangan</label>
+                                                    <textarea name="keterangan[{{$no}}]" class="form-control form-control-solid" id="keterangan"  rows="5">{{$v['review_skp']['keterangan']}}</textarea>
+                                                </div>
                                                         
                                             </td>
                                             @else
@@ -144,24 +144,26 @@
                                             <td>{{$l['satuan']}}</td>
                                             @if($i == 0)
                                             <input type="hidden" value="{{$v['id']}}" name="id_skp[{{$no}}]" />
-                                            <td rowspan="3">
-                                                        <div class="form-group">
-                                                            <label>Kesesuaian Skp</label>
-                                                            <div class="radio-inline">
-                                                                <label for="{{$k}}_sesuai_{{$v['id']}}_{{$nox}}" class="radio {{$k}}_sesuai_{{$v['id']}}_{{$nox}}">
-                                                                <input type="radio" id="{{$k}}_sesuai_{{$v['id']}}_{{$nox}}" @if($v['review_skp']['kesesuaian'] == 'ya') checked @endif value="ya" name="kesesuaian[{{$no}}]" />
-                                                                <span></span>Sesuai</label>
-                                                                <label for="{{$k}}_tidak_{{$v['id']}}_{{$nox}}" class="radio {{$k}}_tidak_{{$v['id']}}_{{$nox}}">
-                                                                <input type="radio" id="{{$k}}_tidak_{{$v['id']}}_{{$nox}}" @if($v['review_skp']['kesesuaian'] == 'tidak') checked @endif value="tidak" name="kesesuaian[{{$no}}]" />
-                                                                <span></span>Tidak</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="keterangan">Keterangan</label>
-                                                            <textarea name="keterangan[{{$no}}]" class="form-control form-control-solid" id="keterangan"  rows="5">{{$v['review_skp']['keterangan']}}</textarea>
-                                                        </div>
+                                            <td >
+                                               
+                                                <div class="form-group">
+                                                    <label>Kesesuaian Skp</label>
+                                                    <div class="radio-inline">
+                                                        <label for="{{$k}}_sesuai_{{$v['id']}}_{{$no}}" class="radio {{$k}}_sesuai_{{$v['id']}}_{{$no}}">
+                                                        <input type="radio" id="{{$k}}_sesuai_{{$v['id']}}_{{$no}}" @if($v['review_skp']['kesesuaian'] == 'ya') checked @endif value="ya" name="kesesuaian[{{$no}}]" />
+                                                        <span></span>Sesuai</label>
+                                                        <label for="{{$k}}_tidak_{{$v['id']}}_{{$no}}" class="radio {{$k}}_tidak_{{$v['id']}}_{{$no}}">
+                                                        <input type="radio" id="{{$k}}_tidak_{{$v['id']}}_{{$no}}" @if($v['review_skp']['kesesuaian'] == 'tidak') checked @endif value="tidak" name="kesesuaian[{{$no}}]" />
+                                                        <span></span>Tidak</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="keterangan">Keterangan</label>
+                                                    <textarea name="keterangan[{{$no}}]" class="form-control form-control-solid" id="keterangan"  rows="5">{{$v['review_skp']['keterangan']}}</textarea>
+                                                </div>
                                                         
                                             </td>
+                                            
                                             @else
                                             <td></td>
                                             @endif
@@ -175,6 +177,7 @@
                                 @endif
                             </tbody>
                     </table>
+                    </div>
 
                     </form>
                     <!--end: Datatable-->

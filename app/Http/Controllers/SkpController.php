@@ -182,7 +182,6 @@ class SkpController extends Controller
 
     public function store(Request $request){
 
-
         $validated = $this->customValidate($request);
 
         if (count($validated) > 0 ) {

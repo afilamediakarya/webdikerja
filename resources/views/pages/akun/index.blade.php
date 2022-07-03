@@ -200,18 +200,22 @@
             <div class="card card-custom gutter-b example example-compact">
                 <div class="card-header">
                     <h3 class="card-title">Password</h3>
-                    <button type="reset" class="btn btn-sm btn-primary align-self-center"><i class="flaticon2-pen"></i>Ganti Password</button>
+                    <button id="change_password" class="btn btn-sm btn-primary align-self-center"><i class="flaticon2-pen"></i>Ganti Password</button>
                 </div>
                 <div class="card-body">
-                    <div class="form-group col-6">
-                        <label>Password Baru</label>
-                        <input type="text" class="form-control form-control-solid" name="old_password">
-                    </div>
+                        <form id="change-password">
+                            <div class="form-group col-6">
+                                <label>Password Baru</label>
+                                <input type="text" class="form-control form-control-solid" name="password_baru">
+                                <span class="invalid-feedback"></span>
+                            </div>
 
-                    <div class="form-group col-6">
-                        <label>Kenformasi Password</label>
-                        <input type="text" class="form-control form-control-solid" name="old_password">
-                    </div>
+                            <div class="form-group col-6">
+                                <label>Kenformasi Password</label>
+                                <input type="text" class="form-control form-control-solid" name="password_lama">
+                                <span class="invalid-feedback"></span>
+                            </div>
+                        </form>
                 </div>
             </div>
             <!--end::Card-->
@@ -277,25 +281,6 @@
             });
 
             let _id = $("input[name='id']").val();
-            // alert(`/admin/pegawai/${_id}    `)
-            // $.ajax({
-            //     url:`/admin/pegawai/update/${_id}`,
-            //     method:"POST",
-            //     data : $('#createForm').serialize(),
-            //     success: function(data){
-            //         swal.fire({
-            //             text: "Profil berhasil di update.",
-            //             icon: "success",
-            //             buttonsStyling: false,
-            //             confirmButtonText: "Ok, got it!",
-            //             customClass: {
-            //                 confirmButton: "btn font-weight-bold btn-light-primary"
-            //             }
-            //         }).then(function() {
-            //             // window.location.href = '/akun';
-            //         });   
-            //     }
-            // });
             
             axios.post( `/admin/pegawai/update/${_id}`,  $('#createForm').serialize())
             .then(function(res){
@@ -318,6 +303,62 @@
                 }else if(data.success){
                     swal.fire({
                         text: "Data anda berhasil disimpan",
+                        title:"Sukses",
+                        icon: "success",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        window.location.href = '/akun';    
+                    });
+                }
+            }).catch(function(){
+                swal.fire({
+                    text: "Terjadi Kesalahan Sistem",
+                    title:"Error",
+                    icon: "error",
+                    showConfirmButton:true,
+                    confirmButtonText: "OK",
+                })
+            });
+        })
+
+        $(document).on('click', '#change_password', function () {
+            $('.invalid-feedback').html('')
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+            
+            axios.post( `/akun/change_password`,  $('#change-password').serialize())
+            .then(function(res){
+                var data = res.data;
+                if(data.fail){
+                    swal.fire({
+                        text: "Maaf Terjadi Kesalahan",
+                        title:"Error",
+                        timer: 2000,
+                        icon: "danger",
+                        showConfirmButton:false,
+                    });
+                }else if(data.invalid){
+                    $.each(data.invalid, function( key, value ) {
+                        console.log(key);
+                        $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                    });
+                }else if(data.failed){
+                    // console.log(data.failed)
+                    swal.fire({
+                        text: data.failed['message'],
+                        title:"Error",
+                        timer: 2000,
+                        icon: "danger",
+                        showConfirmButton:false,
+                    });
+                }
+                else if(data.success){
+                    swal.fire({
+                        text: "Password berhasil di ubah",
                         title:"Sukses",
                         icon: "success",
                         showConfirmButton:true,
