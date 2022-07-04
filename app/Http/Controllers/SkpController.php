@@ -60,7 +60,7 @@ class SkpController extends Controller
         $sasaran_kinerja_atasan = $this->getSasaranKinerjaAtasan();
         $satuan = $this->getSatuan();
         $level = $this->checkLevel();
-
+        // return $level;
         if ($level == 1 || $level == 2) {
             return view('pages.skp.add_', compact('page_title', 'page_description','breadcumb','satuan'));   
         } else {
@@ -252,36 +252,69 @@ class SkpController extends Controller
             $result['rencana_kerja'][] = 'rencana kerja is field required';
         }
 
+        // return $params->indikator_kerja_individu;
         $row_count = count($params->indikator_kerja_individu);
 
-        for ($i=0; $i < $row_count; $i++) { 
-            if (is_null($params->indikator_kerja_individu[$i])) {
-                $result['indikator_kerja_individu_'.$i][] = 'Indikator Kerja Individu is field required';
+        // return $params->target_;
+
+        foreach ($params->indikator_kerja_individu as $k => $val) {
+            if (is_null($val)) {
+                $result['indikator_kerja_individu_'.$k][] = 'Indikator Kerja Individu is field required';
             }
 
-            if (!empty($params->satuan)) {
-                if (!isset($params->satuan[$i])) {
-                    $result['satuan_'.$i][] = 'Satuan is field required';
-                }
-            }else{
-                $result['satuan_'.$i][] = 'Satuan is field required';
-            }
+                   if (!empty($params->satuan)) {
+                        if (!isset($params->satuan[$k])) {
+                            $result['satuan_'.$k][] = 'Satuan is field required';
+                        }
+                    }else{
+                        $result['satuan_'.$k][] = 'Satuan is field required';
+                    }
 
-           if (!empty($params->target_)) {
+        }
+
+        // return $params->target_;
+        
+        if (!empty($params->target_)) {
             foreach ($params->target_ as $key => $value) {
                 // return $value;
                 foreach ($value as $x => $v) {
                     if (is_null($v)) {
-                        // $tes[] =  'row ='.$i.' nilai ='.$x;
-                        $result['target_'.$i.'_'.$x] = 'Target is field required';
+                        $result['target_'.$key.'_'.$x] = 'Target is field required';
                     }
                 }
                 
             }
                 
-           }
-    
         }
+
+        // for ($i=0; $i < $row_count; $i++) { 
+        //     if (is_null($params->indikator_kerja_individu[$i])) {
+        //         $result['indikator_kerja_individu_'.$i][] = 'Indikator Kerja Individu is field required';
+        //     }
+
+        //     if (!empty($params->satuan)) {
+        //         if (!isset($params->satuan[$i])) {
+        //             $result['satuan_'.$i][] = 'Satuan is field required';
+        //         }
+        //     }else{
+        //         $result['satuan_'.$i][] = 'Satuan is field required';
+        //     }
+
+        //    if (!empty($params->target_)) {
+        //     foreach ($params->target_ as $key => $value) {
+        //         // return $value;
+        //         foreach ($value as $x => $v) {
+        //             if (is_null($v)) {
+        //                 // $tes[] =  'row ='.$i.' nilai ='.$x;
+        //                 $result['target_'.$i.'_'.$x] = 'Target is field required';
+        //             }
+        //         }
+                
+        //     }
+                
+        //    }
+    
+        // }
 
         // return $tes;
 
@@ -423,11 +456,9 @@ class SkpController extends Controller
     }
     
     public function update_kepala($params,Request $request){
-        // return $request;
+    
 
         $validated = $this->validate_skp_kepala($request);
-
-        // return $validated;
 
         if (count($validated) > 0 ) {
             return response()->json($validated,422);   
@@ -452,7 +483,7 @@ class SkpController extends Controller
                 'type_skp' => $request->type_skp,
                 'tahun' => date('Y'),
             ];
-            // return $result;
+            
             $url = env('API_URL');
             $token = session()->get('user.access_token');
         

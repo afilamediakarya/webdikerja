@@ -30,7 +30,7 @@
                                 <input type="radio" value="tambahan" @if($data['jenis'] == 'tambahan') checked @endif name="jenis_kinerja" />
                                 <span></span>Tambahan</label>
                             </div>
-                            <div class="invalid-feedback jenis_kinerja_error"></div>
+                            <div class="text-danger jenis_kinerja_error"></div>
                         </div>
 
                         <input type="hidden" value="kepala" name="type_skp">
@@ -39,7 +39,7 @@
                             <label for="rencana_kerja">Rencana Kerja 
                             <span class="text-danger">*</span></label>
                             <textarea class="form-control" id="rencana_kerja" name="rencana_kerja" rows="3">{{$data['rencana_kerja']}}</textarea>
-                            <div class="invalid-feedback rencana_kerja_error"></div>
+                            <div class="text-danger rencana_kerja_error"></div>
                         </div>
 
                         <button type="button" id="add_content_iki" class="btn btn-info btn-sm"> <i class="far fa-plus-square"></i> Tambah Indikator</button>
@@ -52,7 +52,7 @@
                                     <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
                                     <textarea class="form-control" name="indikator_kerja_individu[{{$key}}]" id="indikator_kerja_individu_{{$key}}" rows="3">{{$value['iki']}}</textarea>
                             
-                                    <div class="invalid-feedback indikator_kerja_individu_{{$key}}_error"></div>
+                                    <div class="text-danger indikator_kerja_individu_{{$key}}_error"></div>
                                 </div>
                                 <div class="col-md-3">
                                     <label>Volume Satuan</label>
@@ -66,7 +66,7 @@
                                     <option value="{{$v['value']}}" @if($v['value'] == $value['satuan']) selected @endif >{{$v['value']}}</option>
                                     @endforeach
                                     </select>
-                                    <div class="invalid-feedback satuan_0_error"></div>
+                                    <div class="text-danger satuan_0_error"></div>
                                 </div>    
                                 <div class="col-md-1">
                                      <a href="javascript:;" data-id="{{$key}}" class="btn btn-icon btn-light-danger btn-circle btn-lg mr-4" style="position:relative;top:16px;" onclick="deleteiki('{{$key}}')">
@@ -83,7 +83,7 @@
                                     <div class="col-1">
                                         <input type="number" value="{{$value['target_skp'][$i]['target']}}" name="target_[{{$key}}][{{$i}}]" class="form-control nilai_target_{{$key}} nilai_kinerja" data-id="{{$key}}" placeholder="">
                                         <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
-                                        <div class="invalid-feedback target_waktu_{{$i}}_error"></div>
+                                        <div class="text-danger target_{{$key}}_{{$i}}_error"></div>
                                     </div>
                                 @endfor
                                 </div>
@@ -137,7 +137,7 @@
                             <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
                             <textarea class="form-control" name="indikator_kerja_individu[${i}]" id="indikator_kerja_individu_${i}" rows="3"></textarea>
                         
-                            <div class="invalid-feedback indikator_kerja_individu_${i}_error"></div>
+                            <div class="text-danger indikator_kerja_individu_${i}_error"></div>
                         </div>
                         <div class="col-md-3">
                             <label>Volume satuan</label>
@@ -153,7 +153,7 @@
             });
                             
             html += `</select>`;                
-            html += `<div class="invalid-feedback satuan_${i}_error"></div>
+            html += `<div class="text-danger satuan_${i}_error"></div>
                         </div>  
                         <div class="col-md-1">
                         <a href="javascript:;" data-id=${i} class="btn btn-icon btn-light-danger btn-circle btn-lg mr-4 delete_iki" style="position:relative;top:16px;">
@@ -170,7 +170,7 @@
                 html += `<div class="col-1">
                             <input type="number" name="target_[${i}][${index}]" class="form-control nilai_target_${i} nilai_kinerja" data-id=${i} placeholder="">
                             <span class="form-text text-muted text-center">Bulan ${index+1}</span>
-                            <div class="invalid-feedback target_waktu_${index}_error"></div>
+                            <div class="text-danger target_${i}_${index}_error"></div>
                         </div>`;
             }
             html += `</div></div>`;
@@ -207,6 +207,7 @@
                 data: $('#skp-form').serialize(),
                 success: function (response) {
                     console.log(response);
+                    $('.text-danger').html('');
                     swal.fire({
                         text: "Skp berhasil di Update.",
                         icon: "success",
@@ -220,12 +221,12 @@
                     });
                 },
                 error : function (xhr) {
-                    $('.invalid-feedback').html('');
-                    $('.form-control').removeClass('is-invalid');
+                    $('.text-danger').html('');
+                    // $('.form-control').removeClass('is-invalid');
                     $.each(xhr.responseJSON,function (key, value) {
                         console.log(key+' - '+value)
                         $(`.${key}_error`).html(value);
-                        $(`#${key}`).addClass('is-invalid');
+                        // $(`#${key}`).addClass('is-invalid');
                     })
                 }
             });
@@ -236,7 +237,6 @@
             let index = $(this).attr('data-id');
             console.log(index);
             let sum = 0;
-
              $('.nilai_target_'+index).each(function() {
                 sum += Number($(this).val());
             });

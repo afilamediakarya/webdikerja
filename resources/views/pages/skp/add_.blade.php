@@ -202,7 +202,7 @@
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
                     }).then(function() {
-                        // window.location.href = '/skp';
+                        window.location.href = '/skp';
                     });
                 },
                 error : function (xhr) {
