@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\JabatanController;
 use App\Http\Controllers\Admin\JadwalController;
 use App\Http\Controllers\Admin\KegiatanController;
 use App\Http\Controllers\Admin\SatkerController;
+use App\Http\Controllers\Admin\AbsenController;
 use App\Http\Controllers\Admin\Master\FaqController;
 use App\Http\Controllers\Admin\Master\SatuanController;
 use App\Http\Controllers\Admin\Master\PerilakuController;
@@ -206,9 +207,15 @@ Route::middleware('Auth')->group(function(){
                 Route::post('/{id}', [SatkerController::class, 'update'])->name('update-satker');
                 Route::delete('/{id}', [SatkerController::class, 'delete'])->name('delete-satker');
             });
-        
-            
-            
+
+            Route::prefix('absen')->group(function(){
+                Route::get('/', [AbsenController::class, 'index'])->name('absen');
+                Route::get('/datatable/{satuan_kerja}/{tanggal}/{valid}', [AbsenController::class, 'datatable_'])->name('absen.filter');
+                Route::post('/', [AbsenController::class, 'store'])->name('post-absen');
+                Route::get('/{pegawai}/{tanggal}/{valid }', [AbsenController::class, 'show'])->name('show-absen');
+                Route::post('/{id}', [AbsenController::class, 'update'])->name('update-absen');
+                Route::delete('/{id}', [AbsenController::class, 'delete'])->name('delete-absen');
+            });
             
             Route::prefix('admin')->group(function(){
                 Route::get('/', [AdminController::class, 'index'])->name('admin');
@@ -221,7 +228,6 @@ Route::middleware('Auth')->group(function(){
                 Route::get('/pegawai/{satuan}', [AdminController::class, 'getPegawai']);
                 Route::get('/jabatan/{id}', [AxiosController::class, 'jabatan']);
                 Route::get('/atasan/{id}', [AxiosController::class, 'getAtasan']);
-
             });
         });
     });
