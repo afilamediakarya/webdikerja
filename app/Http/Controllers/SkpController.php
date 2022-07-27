@@ -7,13 +7,36 @@ use Illuminate\Support\Facades\Http;
 // use Illuminate\Validation\ValidationException;
 class SkpController extends Controller
 {
-
     public function checkLevel(){
         $level = session()->get('user.level_jabatan');
         return $level;
     }
 
-    public function index()
+    public function datatable_skp_tahunan(){
+        $type = request('type');
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $data = array();
+        $level = $this->checkLevel();
+     
+        if ($type == 'tahunan') {
+            if ($level == 1 || $level == 2) {
+                $data = Http::withToken($token)->get($url."/skp/list/kepala?tahun=".session('tahun_penganggaran')."&type=tahunan");  
+            } else {
+                $data = Http::withToken($token)->get($url."/skp/list/pegawai?tahun=".session('tahun_penganggaran')."&type=tahunan");
+            }
+        }else{
+            if ($level == 1 || $level == 2) {
+                $data = Http::withToken($token)->get($url."/skp/list/kepala?tahun=".session('tahun_penganggaran')."&type=bulanan&bulan=".request('bulan'));  
+            } else {
+                $data = Http::withToken($token)->get($url."/skp/list/pegawai?tahun=".session('tahun_penganggaran')."&type=bulanan&bulan=".request('bulan'));
+            }
+        }
+       
+        return $data;
+    }
+
+    public function index($params)
     {
         $page_title = 'SKP';
         $page_description = 'Daftar Sasaran Kinerja Pegawai';
@@ -22,18 +45,24 @@ class SkpController extends Controller
         $url = env('API_URL');
         $token = session()->get('user.access_token');
 
-        $level = $this->checkLevel();
+        $level = $this->checkLevel();    
        
-        if ($level == 1 || $level == 2) {
-            $data = Http::withToken($token)->get($url."/skp/list/kepala")['data'];
-       
-            // return $data;
-            return view('pages.skp.index2', compact('page_title', 'page_description','breadcumb','data'));   
-        } else {
-            $data = Http::withToken($token)->get($url."/skp/list/pegawai");
-             
-            return view('pages.skp.index', compact('page_title', 'page_description','breadcumb','data'));
-        }
+        if ($params == 'tahunan') {
+            if ($level == 1 || $level == 2) {
+                return view('pages.skp.index2', compact('page_title', 'page_description','breadcumb'));   
+            } else {
+                return view('pages.skp.index', compact('page_title', 'page_description','breadcumb'));
+            }
+        }else{
+            $nama_bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            
+            if ($level == 1 || $level == 2) {
+                return view('pages.skp.skp_bulanan.index2', compact('page_title', 'page_description','breadcumb','nama_bulan'));   
+            }else{
+                return view('pages.skp.skp_bulanan.index', compact('page_title', 'page_description','breadcumb','nama_bulan')); 
+            }
+            
+        }   
 
     }
 
@@ -68,33 +97,47 @@ class SkpController extends Controller
         }
     }
 
+    public function get_sasaran_kinerja(){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $sasaran_kinerja = Http::withToken($token)->get($url."/aktivitas/get-option-sasaran-kinerja?tahun=".session('tahun_penganggaran'));
+        return $sasaran_kinerja->json();
+    }
+
+    public function create_target(){
+        $bulan = request('bulan');
+        $page_title = 'SKP';
+        $page_description = 'Daftar Sasaran Kinerja Pegawai';
+        $breadcumb = ['Daftar Sasaran Kinerja Pegawai', 'tambah Target SKP'];
+
+        $level = $this->checkLevel();
+        $get_sasaran_kinerja = $this->get_sasaran_kinerja();
+        $level = $this->checkLevel();
+        return view('pages.skp.skp_bulanan.add', compact('page_title', 'page_description','breadcumb','get_sasaran_kinerja','level','bulan'));   
+        
+    }
+
     public function edit($params){
+        $type = request('type');
         $page_title = 'SKP';
         $page_description = 'Daftar Sasaran Kinerja Pegawai';
         $breadcumb = ['Daftar Sasaran Kinerja Pegawai', 'update skp'];
         $sasaran_kinerja_atasan = $this->getSasaranKinerjaAtasan(); 
-        $satuan = $this->getSatuan();
-        $total_sum = [];
-
+        
         $url = env('API_URL');
         $token = session()->get('user.access_token');
         $dataById = Http::withToken($token)->get($url."/skp/show/".$params);
         $data = $dataById['data'];
-        foreach($data['aspek_skp'] as $key => $value){
-            $nilai = 0;
-            foreach ($value['target_skp'] as $k => $v) {
-                $total_sum[$key] = $nilai+= $v['target'];
-            }
-        }
 
         $level = $this->checkLevel();
-  
-        if ($level == 1 || $level == 2) {
-            return view('pages.skp.edit_', compact('page_title', 'page_description','breadcumb','sasaran_kinerja_atasan','satuan','data','total_sum'));   
-        } else {
-            return view('pages.skp.edit', compact('page_title', 'page_description','breadcumb','sasaran_kinerja_atasan','satuan','data','total_sum'));
+       
+        if ($type == 'tahunan') {
+            return view('pages.skp.edit', compact('page_title', 'page_description','breadcumb','sasaran_kinerja_atasan','data','level'));
+        }else{
+            $bulan = request('bulan');
+            $get_sasaran_kinerja = $this->get_sasaran_kinerja();
+            return view('pages.skp.skp_bulanan.edit', compact('page_title', 'page_description','breadcumb','get_sasaran_kinerja','data','level','bulan'));
         }
-
         
     }
 
@@ -107,71 +150,66 @@ class SkpController extends Controller
             $result['rencana_kerja'][] = 'Rencana Kerja is field required';
         }
 
-        if (is_null($params->jenis_kinerja)) {
-            $result['jenis_kinerja'][] = 'Jenis Kinerja is field required';
+        if ($params->type_skp == 'pegawai') {
+            if (is_null($params->jenis_kinerja)) {
+                $result['jenis_kinerja'][] = 'Jenis Kinerja is field required';
+            }else{
+                if ($params->jenis_kinerja == 'utama') {
+                    if (is_null($params->sasaran_kinerja)) {
+                        $result['sasaran_kinerja'][] = 'Sasaran Kinerja is field required';
+                    }
+               }
+            }
         }else{
-            if ($params->jenis_kinerja == 'utama') {
-                if (is_null($params->sasaran_kinerja)) {
-                    $result['sasaran_kinerja'][] = 'Sasaran Kinerja is field required';
+            if (is_null($params->jenis_kinerja)) {
+                $result['jenis_kinerja'][] = 'Jenis Kinerja is field required';
+            }
+
+            if (isset($params->indikator_kerja_individu_add)) {
+                foreach ($params->indikator_kerja_individu_add as $key => $ikis) {
+                    if (is_null($ikis)) {
+                        $result['indikator_kerja_individu_add_'.$key][] = 'Indikator Kerja Individu is field required';
+                     }
                 }
-           }
+            }
+     
+            if (isset($params->satuan_add)) {
+                foreach ($params->satuan_add as $key => $ikis) {
+                    if (is_null($ikis)) {
+                        $result['satuan_add_'.$key][] = 'Satuan is field required';
+                     }
+                 }
+            }
+     
+            if ($params->target_add) {
+                foreach ($params->target_add as $key => $ikis) {
+                    if (is_null($ikis)) {
+                        $result['target_add_'.$key][] = 'Target is field required';
+                     }
+                 }
+            }
         }
 
        
-       
-
         foreach ($params->indikator_kerja_individu as $key => $ikis) {
            if (is_null($ikis)) {
                $result['indikator_kerja_individu_'.$key][] = 'Indikator Kerja Individu is field required';
             }
         }
 
-        foreach ($params->satuan as $key => $satuans) {
-            if (is_null($satuans)) {
+        foreach ($params->satuan as $key => $ikis) {
+            if (is_null($ikis)) {
                 $result['satuan_'.$key][] = 'Satuan is field required';
              }
          }
- 
 
-        foreach ($params->target_kualitas as $key => $targetKualitas) {
-            if (is_null($targetKualitas)) {
-                $result['target_kualitas_'.$key][] = 'Nilai Kinerja is field required';
+         foreach ($params->target as $key => $ikis) {
+            if (is_null($ikis)) {
+                $result['target_'.$key][] = 'Target is field required';
              }
          }
 
-         foreach ($params->target_kuantitas as $key => $targetKualitas) {
-            if (is_null($targetKualitas)) {
-                $result['target_kuantitas_'.$key][] = 'Nilai Kinerja is field required';
-             }
-         }
-
-         foreach ($params->target_waktu as $key => $targetKualitas) {
-            if (is_null($targetKualitas)) {
-                $result['target_waktu_'.$key][] = 'Nilai Kinerja is field required';
-             }
-         }
-
-        // return $params->satuan;
-
-        // VALIDASI SELECT SATUAN
-        // if (empty($params->satuan)) {
-        //     return 'kosong';
-        //     for ($i=0; $i < 3; $i++) { 
-        //         $result['satuan_'.$i][] = 'Satuan is field required';
-        //     }
-        // }else{
-           
-        //    if (count($params->satuan) < 3) {
-        //     foreach ($params->satuan as $k => $v) {
-        //         for ($i=0; $i < 3; $i++) { 
-        //             if ($i !== $k) {
-        //                 // $cek[$i] = $i;
-        //                 $result['satuan_'.$i][] = 'Satuan is field required';
-        //             }
-        //         }
-        //     }
-        //    }
-        // }
+        
 
         // return $cek;
 
@@ -182,26 +220,29 @@ class SkpController extends Controller
 
     public function store(Request $request){
 
+        // return $request->all();
+        
         $validated = $this->customValidate($request);
 
         if (count($validated) > 0 ) {
             return response()->json($validated,422);   
-        }else{
+        }
+        else{
             $result = [];
                 $aspek = [];
-                $target_bulan = [$request->target_kuantitas,$request->target_kualitas,$request->target_waktu];
-                $type_aspek = ['kuantitas','kualitas','waktu'];
                 $current_user = session()->get('user.current');
 
                 for ($i=0; $i < count($request->indikator_kerja_individu); $i++) { 
                 
-                $aspek[$i] = [
-                        'iki' => $request->indikator_kerja_individu[$i],
-                        'satuan' => $request->satuan[$i],
-                        'target' => $target_bulan[$i],
-                        'type_aspek' => $type_aspek[$i]
-                ];
+                    $aspek[$i] = [
+                            'iki' => $request->indikator_kerja_individu[$i],
+                            'satuan' => $request->satuan[$i],
+                            'target' => $request->target[$i],
+                            'type_aspek' => $request->type_aspek[$i]
+                    ];
                 }
+
+               
 
                 // 
                 $result = [
@@ -212,16 +253,14 @@ class SkpController extends Controller
                     'rencana_kerja' => $request['rencana_kerja'],
                     'tahun' => date('Y'),
                     'aspek' => $aspek,
-                    'type_skp' => $request['type_skp'],
+                    'type_skp' => $request['type_skp']
                 ];
-
-                // return $result;
 
                 $url = env('API_URL');
                 $token = session()->get('user.access_token');
             
                 $response = Http::withToken($token)->post($url."/skp/store", $result);
-                return $response;
+               
                 if($response->successful()){
                     return response()->json(['success'=> $response->json()]);
                 }else{
@@ -233,7 +272,6 @@ class SkpController extends Controller
         
        }elseif($validated !== 'success'){
            return 'tidak';
-        //    return $validated;
        }
 
         
@@ -365,41 +403,54 @@ class SkpController extends Controller
          if (count($validated) > 0 ) {
              return response()->json($validated,422);   
          }else{
-             $result = [];
-                 $aspek = [];
-                 $target_bulan = [$request->target_kuantitas,$request->target_kualitas,$request->target_waktu];
-                 $target_id = [$request->id_target_kuantitas,$request->id_target_kualitas,$request->id_target_waktu];
-                 $type_aspek = ['kuantitas','kualitas','waktu'];
-                 $current_user = session()->get('user.current');
- 
-                 for ($i=0; $i < count($request->indikator_kerja_individu); $i++) { 
-                 
-                 $aspek[$i] = [
-                         'iki' => $request->indikator_kerja_individu[$i],
-                         'satuan' => $request->satuan[$i],
-                         'target' => $target_bulan[$i],
-                         'id_target' => $target_id[$i],
-                         'type_aspek' => $type_aspek[$i],
-                         'id' => $request->id_aspek[$i]
-                 ];
-                 }
- 
-                 // 
-                 $result = [
-                     'id_satuan_kerja' =>$current_user['pegawai']['id_satuan_kerja'],
-                     'id_skp_atasan' => $request['sasaran_kinerja'],
-                     'jenis' => $request['jenis_kinerja'],
-                     'rencana_kerja' => $request['rencana_kerja'],
-                     'tahun' => date('Y'),
-                     'aspek' => $aspek,
-                     'type_skp' => $request['type_skp'],
-                 ];
- 
-                 $url = env('API_URL');
-                 $token = session()->get('user.access_token');
+
+                $result = [];
+                $aspek = [];
+                $aspek_additional = [];
+                $current_user = session()->get('user.current');
+
+                for ($i=0; $i < count($request->indikator_kerja_individu); $i++) { 
+                
+                    $aspek[$i] = [
+                            'iki' => $request->indikator_kerja_individu[$i],
+                            'satuan' => $request->satuan[$i],
+                            'target' => $request->target[$i],
+                            'type_aspek' => $request->type_aspek[$i],
+                            'id' => $request->id_aspek[$i],
+                            'id_target' => $request->id_target[$i],
+                    ];
+                }
+
+                if (isset($request->indikator_kerja_individu_add)) {
+                   foreach ($request->indikator_kerja_individu_add as $mk => $iki_add) {
+                        $aspek_additional[] = [
+                            'iki' => $iki_add,
+                            'satuan' => $request->satuan_add[$mk],
+                            'target' => $request->target_add[$mk],
+                            'type_aspek' => $request->type_aspek_add[$mk]
+                        ];
+                   }
+                }
+
+                
+                $result = [
+                    'type_skp' => $request['type_skp'],
+                    'id_satuan_kerja' =>$current_user['pegawai']['id_satuan_kerja'],
+                    'id_skp_atasan' => $request['sasaran_kinerja'],
+                    'jenis' => $request['jenis_kinerja'],
+                    'rencana_kerja' => $request['rencana_kerja'],
+                    'tahun' => date('Y'),
+                    'aspek' => $aspek,
+                    'type_skp' => $request['type_skp'],
+                    'aspek_additional' => $aspek_additional
+                ];
+
+                $url = env('API_URL');
+                $token = session()->get('user.access_token');
+            
              
                  $response = Http::withToken($token)->post($url."/skp/update/".$params, $result);
-                 return $response;
+                 
                  if($response->successful()){
                      return response()->json(['success'=> $response->json()]);
                  }else{
@@ -492,6 +543,70 @@ class SkpController extends Controller
         }
 
         
+    }
+
+    public function show($params){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $response = Http::withToken($token)->get($url."/skp/show/".$params);
+        return $response;
+    }
+
+    public function store_target(Request $request){
+        // return $request->all();
+        $result = array();
+        if (is_null($request->rencana_kerja)) {
+            $result['rencana_kerja'][] = 'Rencana Kerja is field required';
+        }
+        
+        if (isset($request->target)) {
+            foreach ($request->target as $key => $ikis) {
+                if (is_null($ikis)) {
+                    $result['target_'.$key][] = 'Target is field required';
+                 }
+            }
+        }
+
+        if (count($result) > 0) {
+            return response()->json($result,422);   
+        }else{
+            $url = env('API_URL');
+            $token = session()->get('user.access_token');
+            $data = $request->all();
+
+            $response = Http::withToken($token)->post($url."/skp/store-bulanan/",$data);
+            if($response->successful()){
+                return response()->json(['success'=> $response->json()]);
+            }else{
+                return response()->json(['failed'=> $response->json()]);
+            }
+        }
+    }
+
+    public function update_target($params,Request $request){
+        $result = array();
+        if (isset($request->target)) {
+            foreach ($request->target as $key => $ikis) {
+                if (is_null($ikis)) {
+                    $result['target_'.$key][] = 'Target is field required';
+                 }
+            }
+        }
+
+        if (count($result) > 0) {
+            return response()->json($result,422);   
+        }else{
+            $url = env('API_URL');
+            $token = session()->get('user.access_token');
+            $data = $request->all();
+
+            $response = Http::withToken($token)->post($url."/skp/update-bulanan/".$params,$data);
+            if($response->successful()){
+                return response()->json(['success'=> $response->json()]);
+            }else{
+                return response()->json(['failed'=> $response->json()]);
+            }
+        }
     }
 
     public function delete($params){

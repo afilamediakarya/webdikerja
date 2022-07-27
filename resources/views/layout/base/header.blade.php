@@ -646,18 +646,29 @@
 							<div class="topbar">
 								<!--begin::Search-->
 								
-								<div class="dropdown mr-3" id="kt_quick_search_toggle">
-									<!--begin::Toggle-->
-									<div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
-										<a href="#" class="btn btn-light-success">
-											{{Session::get('tahun')}} <i class="flaticon-calendar-with-a-clock-time-tools"></i>
-										</a>
+								<div class="d-flex align-items-center mr-5">
+									<div class="input-group input-group-solid">
+										<input type="text" class="form-control" disabled aria-label="Text input with dropdown button"
+											value="Tahun Penganggaran">
+										<div class="input-group-append">
+											<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+													aria-haspopup="true" aria-expanded="false">
+												{{session('tahun_penganggaran')}}</button>
+											<div class="dropdown-menu dropdown-menu-right" style="">
+												@php
+													$tahun_anggaran = session()->has('tahun_penganggaran') ? (int)session('tahun_penganggaran') : (int)date('Y');
+												@endphp
+												@for ($i = $tahun_anggaran - 3;$i <= $tahun_anggaran + 3; $i++)
+													<a class="dropdown-item"
+													href="{{route('set-tahun-penganggaran',['tahun' => $i])}}">{{$i}}</a>
+												@endfor
+											</div>
+										</div>
 									</div>
-									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-										<!-- <a class="dropdown-item" href="#">2020</a>
-										<a class="dropdown-item" href="#">2021</a> -->
-										<a class="dropdown-item" href="#">2022</a>
-									</div>
+									<!-- <a href="#" class="btn btn-sm btn-light font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="Select dashboard daterange" data-placement="left">
+										<span class="text-muted font-size-base font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today</span>
+										<span class="text-primary font-size-base font-weight-bolder" id="kt_dashboard_daterangepicker_date">Aug 16</span>
+									</a> -->
 								</div>
 								<div class="dropdown" id="kt_user_toggle">
 									<!--begin::Toggle-->

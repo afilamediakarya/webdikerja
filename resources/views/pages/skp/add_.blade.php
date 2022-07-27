@@ -46,39 +46,25 @@
 
                         <div class="mt-3">
                             <div class="row">
-                                <div class="col-md-5">
-                                    <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
-                                    <textarea class="form-control" name="indikator_kerja_individu[0]" id="indikator_kerja_individu_0" rows="3"></textarea>
-                            
-                                    <small class="text-danger indikator_kerja_individu_0_error"></small>
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Volume Satuan</label>
-                                    <input type="text" class="form-control form-control-solid" readonly id="total_target_0">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="satuan_2">Jenis Satuan</label>
-                                    <select class="form-control form-control-solid satuan_" id="satuan_0" name="satuan[0]">
-                                    <option selected disabled>Pilih Satuan</option>
-                                    @foreach($satuan as $indexes => $vals)
-                                    <option value="{{$vals['value']}}">{{$vals['value']}}</option>
-                                   @endforeach
-                                    </select>
-                                    <small class="text-danger satuan_0_error"></small>
-                                </div>    
-                            </div>
-
-                            <div class="form-group">
-                                <label>Target </label>
-                                <div class="row">
-
-                                @for ($i = 0; $i < 12; $i++)
-                                    <div class="col-1">
-                                        <input type="number" name="target_[0][{{$i}}]" class="form-control nilai_target_0 nilai_kinerja" data-id="0" placeholder="">
-                                        <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
-                                        <small class="text-danger target_0_{{$i}}_error"></small>
+                            <input type="hidden" value="iki" name="type_aspek[0]">
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label for="indikator_kerja_individu_0">Indikator Kerja Individu </label>
+                                        <textarea class="form-control" name="indikator_kerja_individu[0]" id="indikator_kerja_individu_0" rows="5"></textarea>
+                                        <div class="text-danger indikator_kerja_individu_0_error"></div>
                                     </div>
-                                @endfor
+                                </div>
+                                <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="satuan_0">Jenis Satuan</label>
+                                    <input type="text" class="form-control" name="satuan[0]">
+                                    <div class="text-danger satuan_0_error"></div>
+                                </div>
+                                <div class="form-group">
+                                <label>Target tahun {{ session('tahun_penganggaran') }}</label>
+                                    <input type="text" class="form-control" name="target[0]" id="target">
+                                    <div class="text-danger target_0_error"></div>
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -113,66 +99,52 @@
         });
 
         let satuan = {!! json_encode($satuan) !!};
-        
-      
+        let tahun_penganggaran = {!! json_encode(session('tahun_penganggaran')) !!}  
 
         let i = 1;
         $('#add_content_iki').on('click', function () {
             let html = '';
             console.log(satuan);
-            html += ` 
-                <div class="mt-3" id="iki_${i}"> 
-                    <div class="row">
-                        <div class="col-md-5">
-                            <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
-                            <textarea class="form-control" name="indikator_kerja_individu[${i}]" id="indikator_kerja_individu_${i}" rows="3"></textarea>
-                        
-                            <small class="text-danger indikator_kerja_individu_${i}_error"></small>
-                        </div>
-                        <div class="col-md-3">
-                            <label>Volume satuan</label>
-                            <input type="text" class="form-control form-control-solid" readonly id="total_target_${i}">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="satuan_2">Jenis Satuan</label>`;
 
-            html +=  `<select class="form-control form-control-solid satuan_" id="satuan_0" name="satuan[${i}]"><option selected disabled>Pilih Satuan</option>`;
-                            
-            $.each(satuan, function (i, v) { 
-                 html += `<option value="${v['value']}">${v['value']}</option>`;
-            });
-                            
-            html += `</select>`;                
-            html += `<div class="text-danger satuan_${i}_error"></div>
-                        </div>  
-                        <div class="col-md-1">
-                        <a href="javascript:;" data-id=${i} class="btn btn-icon btn-light-danger btn-circle btn-lg mr-4 delete_iki" style="position:relative;top:16px;">
-                                    <i class="fas fa-trash"></i>
-															</a>
-                        </div>  
-                    </div>`;
-            
-            html += ` <div class="form-group">
-                                <label>Target </label>
-                                <div class="row">`;
-            
-            for (let index = 0; index < 12; index++) {
-                html += `<div class="col-1">
-                            <input type="number" name="target_[${i}][${index}]" class="form-control nilai_target_${i} nilai_kinerja" data-id=${i} placeholder="">
-                            <span class="form-text text-muted text-center">Bulan ${index+1}</span>
-                            <small class="text-danger target_${i}_${index}_error"></small>
-                        </div>`;
-            }
-            html += `</div></div>`;
-            html += `</div>`;
+            html += ` 
+                <div class="mt-3" id="iki_${i}">
+                    <div class="row">
+                    <input type="hidden" value="iki" name="type_aspek[${i}]">
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                <label for="indikator_kerja_individu_${i}">Indikator Kerja Individu </label>
+                                <textarea class="form-control" name="indikator_kerja_individu[${i}]" id="indikator_kerja_individu_${i}" rows="5"></textarea>
+                                <div class="text-danger indikator_kerja_individu_${i}_error"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="satuan_${i}">Jenis Satuan</label>
+                                <input type="text" class="form-control" name="satuan[${i}]">
+                                <div class="text-danger satuan_${i}_error"></div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-10">
+                                    <label>Target tahun ${tahun_penganggaran}</label>
+                                    <input type="text" class="form-control" name="target[${i}]" >
+                                    <div class="text-danger target_${i}_error"></div>
+                                </div>
+                                <div class="col-lg-2">
+                                     <a href="javascript:;" data-id=${i} class="btn btn-icon btn-light-danger btn-circle btn-lg mr-4 delete_iki" style="position:relative;top:16px;">
+                                            <i class="fas fa-trash"></i>
+                                                                    </a>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               `;
 
             $('#content_iki').append(html);
 
             i++;
 
         })
-
-        // $('.satuan_').select2();
 
         $(document).on('click','.delete_iki', function(){
             let index = $(this).attr('data-id');
@@ -189,7 +161,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/skp/store/kepala",
+                url: "/skp/store",
                 data: $('#skp-form').serialize(),
                 success: function (response) {
                     console.log(response);
@@ -202,7 +174,7 @@
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
                     }).then(function() {
-                        window.location.href = '/skp';
+                        window.location.href = '/skp/tahunan';
                     });
                 },
                 error : function (xhr) {

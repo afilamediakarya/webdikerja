@@ -6,7 +6,7 @@
 
 
 @section('button')
-    <button onclick="Panel.action('show','submit')" class="btn btn-primary font-weight-bolder" id="side_form_open">
+    <button class="btn btn-primary font-weight-bolder" id="side_form_open">
         <span class="svg-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                 <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1"/>
@@ -43,21 +43,14 @@
                         <div class="col-lg-2">
                             <input type="date" value="{{ date('Y-m-d') }}" class="form-control" id="filter-tanggal">
                         </div>
-                        <div class="col-lg-3">
-                            <div class="radio-inline" style="position:relative;top:8px;">
-                                <label class="radio">
-                                 <input type="radio" name="radio-filter" value="1">
-                                <span></span>Valid</label> 
-                                <label class="radio">
-                                 <input type="radio" value="0" name="radio-filter" checked>
-                                <span></span>Invalid</label>
-                            </div>
-                            
+                        <div class="col-lg-2">
+                            <select class="form-control" id="valid_">
+                                <option value="0" selected>invalid</option>
+                                <option value="1">valid</option>
+                                <option value="semua">semua</option>
+                            </select>        
                         </div>
-                        <button class="btn btn-primary btn-sm" style="position:relative;right:72px;">Filter</button>
-                        <!-- <div class="col-lg-1">
-                            
-                        </div> -->
+                        <button class="btn btn-primary btn-sm" id="filter-btn" style="position:relative;right:0px;">Filter</button>
                     </div>
                     <table class="table table-borderless table-head-bg" id="kt_absen" style="margin-top: 13px !important">
                         <thead>
@@ -104,7 +97,7 @@
                     <div class="form-group">
                         <label>Satuan Kerja</label>
                         <select class="form-control" type="text" id="id_satuan_kerja" name="satuan_kerja">
-                            <option disabled selected> Semua </option>
+                            <option disabled selected> Pilih satuan kerja </option>
                             @foreach ($satker as $key => $value)
                                 <option value="{{$value['id']}}">{{$value['nama_satuan_kerja']}}</option>
                             @endforeach
@@ -120,17 +113,30 @@
                        <small class="text-danger pegawai_error"></small>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group form-create-form">
                         <label>Jenis</label>
                         <div class="radio-inline">
                             <label class="radio">
-                            <input type="radio" value="checkin" name="jenis">
+                            <input type="radio" value="checkin" id="checkin" name="jenis">
                             <span></span>Checkin</label>
                             <label class="radio">
-                            <input type="radio" value="checkout" name="jenis">
+                            <input type="radio" value="checkout" id="checkout" name="jenis">
                             <span></span>Checkout</label>
                         </div>
                        <small class="text-danger jenis_error"></small>
+                    </div>
+
+                    <div class="row form-update-form">
+                        <div class="form-group col-6">
+                            <label>Waktu absen masuk</label>
+                            <input type="time" class="form-control" name="waktu_absen_masuk">
+                           <small class="text-danger waktu_absen_masuk_error"></small>
+                        </div>
+                        <div class="form-group col-6">
+                                <label>Waktu Absen pulang</label>
+                                <input type="time" class="form-control" name="waktu_absen_pulang">
+                           <small class="text-danger waktu_absen_pulang_error"></small>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -139,33 +145,30 @@
                             <input type="date" class="form-control" name="tanggal">
                            <small class="text-danger tanggal_error"></small>
                         </div>
-                        <div class="form-group col-6">
+                        <div class="form-group col-6 form-create-form">
                                 <label>Waktu Absen</label>
                                 <input type="time" class="form-control" name="waktu_absen">
                            <small class="text-danger waktu_absen_error"></small>
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="status_">
                         <label>Status</label>
                         <div class="radio-inline">
                             <label class="radio">
-                            <input type="radio" value="hadir" name="status">
+                            <input type="radio" value="hadir" id="hadir" name="status">
                             <span></span>Hadir</label>
                             <label class="radio">
-                            <input type="radio" value="dinas luar" name="status">
+                            <input type="radio" value="dinas luar" id="dinas_luar" name="status">
                             <span></span>Dinas luar</label>
                             <label class="radio">
-                            <input type="radio" value="izin" name="status">
+                            <input type="radio" value="izin" id="izin"  name="status">
                             <span></span>Izin</label>
                             <label class="radio">
-                            <input type="radio" value="sakit" name="status">
+                            <input type="radio" value="sakit" id="sakit" name="status">
                             <span></span>Sakit</label>
                             <label class="radio">
-                            <input type="radio" value="cuti" name="status">
-                            <span></span>Cuti</label>
-                            <label class="radio">
-                            <input type="radio" value="apel" name="status">
+                            <input type="radio" value="apel" id="apel" name="status">
                             <span></span>Apel</label>
                         </div>
                        <small class="text-danger status_error"></small>
@@ -193,8 +196,25 @@
         let url = {!! json_encode($url) !!};
 
     $(document).on('change','#id_satuan_kerja', function () {
+        satuanKerjaChange('',$(this).val());
+    
+    })
+
+    $(document).on('click','#side_form_open', function (e) {
+        e.preventDefault();
+        $("#pegawai").prop('disabled', false);
+            $("#id_satuan_kerja").prop('disabled', false);
+            $("input[name='tanggal']").prop('disabled', false);
+        $('.form-create-form').show();
+        $('.form-update-form').hide();
+        $('#pegawai').val(null).trigger('change');
+        $('#id_satuan_kerja').val(null).trigger('change');
+        Panel.action('show','submit')
+    })
+
+    function satuanKerjaChange(params,value) {
         $.ajax({
-            url : '/admin/axios/pegawai/'+$(this).val(),
+            url : '/admin/axios/pegawai/'+value,
             method : 'GET',
             success : function (res) {
                 $('#pegawai').html('').trigger('change');
@@ -205,89 +225,183 @@
                      newOption += `<option value="${valueOfElement.id}">${valueOfElement.value}</option>`;
                     });
                     $('#pegawai').append(newOption).trigger('change');
+                    // if (params !== null) {
+                        $('#pegawai').val(params).trigger('change');
+                        $('#id_satuan_kerja').val(value).trigger('change.select2');;
+                        // $docInput.val(null).trigger('change.select2');
+                    // }
+                    
                 }
             }, 
             error : function (xhr) {
                 alert('gagal');
             }
         })
-    })
+    }
 
     $(document).on('click', '.button-update', function(){
-               
-               $('#id_satuan_kerja').val(null).trigger('change');
-               $('#parent').val(null).trigger('change');
-               Panel.action('show','update');
-               var key = $(this).data('id');
-               $.ajax({
-                   url:"admin/jabatan/jabatan/"+key,
-                   method:"GET",
-                   success: function(response){
-                   let data = JSON.parse(response);
-                   //   if(data.success){
-                       console.log(data.data);
-                       var res = data.data;
-                       $.each(res, function( key, value ) {
-                  
-                        $("input[name='"+key+"']").val(value);
-                              
-                       });
-
-                       
-                   //   }
-                   }
-               });
+        Panel.action('show','update');
+        $('#pegawai').val(null).trigger('change');
+        $('#id_satuan_kerja').val(null).trigger('change');
+        $('.form-create-form').hide();
+        $('.form-update-form').show();
+        $('.text_danger').html('');
+        var key = $(this).data('id');
+        let params = key.split(",");
+        console.log(params);
+        $.ajax({
+            url:"admin/absen/"+params[0]+'/'+params[1]+'/'+params[2],
+            method:"GET",
+            success: function(response){
+             console.log(response.success)
+            if (response.success) {
+                satuanKerjaChange(response.success['satker']['id_pegawai'],response.success['satker']['satuan_kerja']);
+                $.each(response.success, function( key, value ) {
+                    if(key == 'status'){
+                        $(`#${value}`).prop('checked', true);
+                    }
+                    else{
+                        $("input[name='"+key+"']").val(value); 
+                        $('#checkin').prop('checked',true);
+                    }
+                });
+            }
+            $("#pegawai").prop('disabled', true);
+            $("#id_satuan_kerja").prop('disabled', true);
+            $("input[name='tanggal']").prop('disabled', true);
+            }
+        });
         
-           })
+    })
 
     $(document).on('submit', "#createForm[data-type='submit']", function(e){
-            e.preventDefault();
-            $.ajaxSetup({
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                },
-            });
-
-            $.ajax({
-                url : "{{route('post-absen')}}",
-                method : 'POST',
-                data: $('#createForm').serialize(),
-                success : function (res) {
-                    $('.text_danger').html('');
-                    console.log(res);
-                    if (res.success) {
-                        swal.fire({
-                            text: 'Absen berhasil di tambahkan',
-                            icon: "success",
-                            showConfirmButton:true,
-                            confirmButtonText: "OK, Siip",
-                        }).then(function() {
-                            $("#createForm")[0].reset();
-                            Panel.action('hide');
-                            // $('#kt_datatable').DataTable().ajax.reload();
-                        });      
-                    }else{
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Maaf, terjadi kesalahan',
-                            text: 'Silahkan Hubungi Admin'
-                        })
-                    }
-                  
-                },
-                error : function (xhr) {
-                    $('.text_danger').html('');
-                    let error = xhr.responseJSON.errors;
-                    $.each( error, function( key, value ) {
-                        $(`.${key}_error`).html(value)
-                    }); 
-                }
-            });
+        e.preventDefault();
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
         });
+
+        $.ajax({
+            url : "{{route('post-absen')}}",
+            method : 'POST',
+            data: $('#createForm').serialize(),
+            success : function (res) {
+                $('.text_danger').html('');
+                console.log(res);
+                if (res.success) {
+                    swal.fire({
+                        text: 'Absen berhasil di tambahkan',
+                        icon: "success",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        $("#createForm")[0].reset();
+                        Panel.action('hide');
+                        $('.text_danger').html('');
+                        $('#pegawai').val(null).trigger('change');
+                        $('#id_satuan_kerja').val(null).trigger('change');
+                        datatable_();
+                        // $('#kt_datatable').DataTable().ajax.reload();
+                    });      
+                }else if(res.fails){
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Maaf, Anda tidak bisa absen',
+                        text: res.fails
+                    })
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Maaf, terjadi kesalahan',
+                        text: 'Silahkan Hubungi Admin'
+                    })
+                }
+            
+            },
+            error : function (xhr) {
+                $('.text_danger').html('');
+                let error = xhr.responseJSON.errors;
+                $.each( error, function( key, value ) {
+                    $(`.${key}_error`).html(value)
+                }); 
+            }
+        });
+    });
+
+    $(document).on('submit', "#createForm[data-type='update']", function(e){
+        e.preventDefault();
+
+        $("#pegawai").prop('disabled', false);
+        $("#id_satuan_kerja").prop('disabled', false);
+        $("input[name='tanggal']").prop('disabled', false);
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+
+        $.ajax({
+            url : "/admin/absen/"+$('#pegawai').val(),
+            method : 'POST',
+            data: $('#createForm').serialize(),
+            success : function (res) {
+                $('.text_danger').html('');
+                console.log(res);
+                if (res.success) {
+                    swal.fire({
+                        text: 'Absen berhasil di update',
+                        icon: "success",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        $("#createForm")[0].reset();
+                        Panel.action('hide');
+                        datatable_();
+                    });      
+                }else if(res.fails){
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Maaf, Anda tidak bisa absen',
+                        text: res.fails
+                    })
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Maaf, terjadi kesalahan',
+                        text: 'Silahkan Hubungi Admin'
+                    })
+                }
+            
+            },
+            error : function (xhr) {
+                $('.text_danger').html('');
+                let error = xhr.responseJSON.errors;
+                $.each( error, function( key, value ) {
+                    $(`.${key}_error`).html(value)
+                }); 
+            }
+        });
+    });
+
+    $(document).on('change',"input[name='jenis']",function () {
+        let val = $(this).val();
+        if (val == 'checkin') {
+            $('#status_').show();
+        }else{
+            $('#status_').hide();
+            
+        }
+    })
+
+    $(document).on('click','#filter-btn', function () {
+        datatable_();
+    })
 
         function datatable_() {
             let satuan_kerja = $('#filter-satuan-kerja').val();
-            let valid_ =  $("input[name='radio-filter']:checked").val();
+            let valid_ =  $("#valid_").val();
             let tanggal = $('#filter-tanggal').val();
             // alert("/absen/datatable/"+satuan_kerja+'/'+tanggal+'/'+valid_);
             $('#kt_absen').dataTable().fnDestroy();
@@ -335,7 +449,8 @@
                         title: 'Actions',
                         orderable: false,
                         render: function(data, type, full, meta) {
-                            let params = data.id+','+data.tanggal_absen+'/'+data.validation;
+                            let params = data.id+','+data.tanggal_absen+','+data.validation;
+                           
                             return `<a href="javascript:;" type="button" data-id="${params}" class="btn btn-secondary button-update">ubah</a>`;
                         },
                     }

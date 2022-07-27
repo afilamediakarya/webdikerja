@@ -32,21 +32,29 @@
                             </div>
                             <div class="text-danger jenis_kinerja_error"></div>
                         </div>
-                        <input type="hidden" value="pegawai" name="type_skp">
-                     
-                        <div id="sasaran_">
-                        <div class="form-group">
-                            <label for="sasaran_kinerja">Sasaran Kerja </label>
-                            <select class="form-control" type="text" name="sasaran_kinerja" id="sasaran_kinerja">
-                                <option selected disabled>Pilih Sasaran Kerja</option>
-                                @foreach($sasaran_kinerja_atasan as $key => $value)
-                                    <option value="{{$value['id']}}" @if($data['id_skp_atasan'] == $value['id']) selected @endif>{{$value['value']}}</option>
-                                @endforeach
-                             </select>
-                             <div class="text-danger sasaran_kinerja_error"></div>
-                        </div>
-                        </div>
 
+                        @if($level > 2)
+                        <input type="hidden" value="pegawai" name="type_skp">
+                        @else
+                        <input type="hidden" value="kepala" name="type_skp">
+                        @endif
+
+                        @if($level > 2)
+                        <div id="sasaran_">
+                            <div class="form-group">
+                                <label for="sasaran_kinerja">Sasaran Kerja </label>
+                                <!-- <input type="email" class="form-control" placeholder=""> -->
+                                <select class="form-control" type="text" name="sasaran_kinerja" id="sasaran_kinerja">
+                                    <option selected disabled>Pilih Sasaran Kerja</option>
+                                    @foreach($sasaran_kinerja_atasan as $key => $value)
+                                        <option value="{{$value['id']}}" @if($data['id_skp_atasan'] == $value['id']) selected @endif>{{$value['value']}}</option>
+                                    @endforeach
+                                </select>
+                                <div class="text-danger sasaran_kinerja_error"></div>
+                            </div>
+                        </div>
+                        @endif
+                       
                         <div class="form-group">
                             <label for="rencana_kerja">Rencana Kerja 
                             <span class="text-danger">*</span></label>
@@ -54,134 +62,102 @@
                             <div class="text-danger rencana_kerja_error"></div>
                         </div>
 
-                        <div class="form-group">
+                        @if($level == 1 || $level == 2)
+                        <button type="button" id="add_content_iki" class="btn btn-info btn-sm mb-5"> <i class="far fa-plus-square"></i> Tambah Indikator</button>
+                        @endif
+                        
+
+                        @foreach($data['aspek_skp'] as $key => $value)
+                            @if($level > 2)
+                            <div class="form-group">
+                                <label for="exampleTextarea">Aspek</label>
+                                <p class="text-dark font-weight-bolder">{{$value['aspek_skp']}}</p>
+                            </div>
+                            @endif
+                            <input type="hidden" value="{{$value['aspek_skp']}}" name="type_aspek[{{$key}}]">
+                            <input type="hidden" value="{{$value['id']}}" name="id_aspek[{{$key}}]">
+                            <input type="hidden" value="{{$value['target_skp'][0]['id']}}" name="id_target[{{$key}}]">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label for="indikator_kerja_individu_{{$key}}">Indikator Kerja Individu </label>
+                                        <textarea class="form-control" name="indikator_kerja_individu[{{$key}}]" id="indikator_kerja_individu_{{$key}}" rows="5">{{$value['iki']}}</textarea>
+                                        <div class="text-danger indikator_kerja_individu_{{$key}}_error"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="satuan_{{$key}}">Jenis Satuan</label>
+                                    <input type="text" class="form-control" value="{{$value['satuan']}}" name="satuan[{{$key}}]">
+                                    <div class="text-danger satuan_{{$key}}_error"></div>
+                                </div>
+                                <div class="form-group">
+                                <label>Target tahun {{ session('tahun_penganggaran') }}</label>
+                                    <input type="text" class="form-control" value="{{$value['target_skp'][0]['target']}}" name="target[{{$key}}]" id="target">
+                                    <div class="text-danger target_{{$key}}_error"></div>
+                                </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <div id="content_iki"></div>
+
+                        
+
+                        <!-- <div class="form-group">
                             <label for="exampleTextarea">Aspek</label>
-                            <p class="text-dark font-weight-bolder">Kuantitas</p>
+                            <p class="text-dark font-weight-bolder">Kualitas</p>
                         </div>
-
-                        <input type="hidden" name="id_aspek[0]" value="{{$data['aspek_skp'][0]['id']}}">
-
-                        <div class="form-group">
-                            <label for="indikator_kerja_individu_0">Indikator Kerja Individu </label>
-                            <textarea class="form-control" name="indikator_kerja_individu[0]" id="indikator_kerja_individu_0" rows="3">{{$data['aspek_skp'][0]['iki']}}</textarea>
-                            <div class="text-danger indikator_kerja_individu_0_error"></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Target </label>
-                            <div class="row">
-
-                            @for ($i = 0; $i < 12; $i++)
-                                <div class="col-1">
-                                    <input type="number" id="target_kuantitas_{{$i}}" value="{{$data['aspek_skp'][0]['target_skp'][$i]['target']}}" name="target_kuantitas[{{$i}}]" class="form-control nilai_kinerja_kuantitas" placeholder="">
-                                    <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
-                                    <div class="text-danger target_kuantitas_{{$i}}_error"></div>
-                                </div>
-                                <input type="hidden" name="id_target_kuantitas[{{$i}}]" value="{{$data['aspek_skp'][0]['target_skp'][$i]['id']}}">
-                            @endfor
-                            </div>
-                        </div>
+                        <input type="hidden" value="kualitas" name="type_aspek[1]">
                         <div class="row">
-                            <div class="form-group col-6">
-                                <label for="satuan_0">Jenis Satuan</label>
-                                <!-- <select class="form-control form-control-solid satuan_" id="satuan_0" name="satuan[0]"> -->
-                                <!-- <option selected disabled>Pilih Satuan</option>
-                                   @foreach($satuan as $indexes => $vals)
-                                    <option value="{{$vals['value']}}" @if($vals['value'] == $data['aspek_skp'][0]['satuan']) selected @endif >{{$vals['value']}}</option>
-                                   @endforeach
-                                </select> -->
-                                <input type="text" class="form-control" name="satuan[0]" value="{{$data['aspek_skp'][0]['satuan']}}">
-                                <div class="text-danger satuan_0_error"></div>
-                            </div>
-                            <div class="form-group col-6">
-                                <label>Total</label>
-                                <input type="text" value="{{$total_sum[0]}}" class="form-control form-control-solid" readonly id="total_target_kuantitas">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                        <p class="text-dark font-weight-bolder">Kualitas</p>
-                        </div>
-
-                        <input type="hidden" name="id_aspek[1]" value="{{$data['aspek_skp'][1]['id']}}">
-
-                        <div class="form-group">
-                            <label for="indikator_kerja_individu_1">Indikator Kerja Individu </label>
-                            <textarea class="form-control" name="indikator_kerja_individu[1]" id="indikator_kerja_individu_1" rows="3">{{$data['aspek_skp'][1]['iki']}}</textarea>
-                            <div class="text-danger indikator_kerja_individu_1_error"></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Target </label>
-                            <div class="row">
-
-                            @for ($i = 0; $i < 12; $i++)
-                                <div class="col-1">
-                                    <input type="number" id="target_kualitas_{{$i}}" value="{{$data['aspek_skp'][1]['target_skp'][$i]['target']}}" name="target_kualitas[{{$i}}]" class="form-control nilai_kinerja_kualitas" placeholder="">
-                                    <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
-                                    <div class="text-danger target_kualitas_{{$i}}_error"></div>
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <label for="indikator_kerja_individu_1">Indikator Kerja Individu </label>
+                                    <textarea class="form-control" name="indikator_kerja_individu[1]" id="indikator_kerja_individu_1" rows="5"></textarea>
+                                    <div class="text-danger indikator_kerja_individu_1_error"></div>
                                 </div>
-                                <input type="hidden" name="id_target_kualitas[{{$i}}]" value="{{$data['aspek_skp'][1]['target_skp'][$i]['id']}}">
-                            @endfor
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-6">
-                                 <label for="satuan_1">Jenis Satuan</label>
-                                <!-- <select class="form-control form-control-solid satuan_" id="satuan_1" name="satuan[1]">
-                                <option selected disabled>Pilih Satuan</option>
-                                    @foreach($satuan as $indexes => $vals)
-                                    <option value="{{$vals['value']}}" @if($vals['value'] == $data['aspek_skp'][1]['satuan']) selected @endif >{{$vals['value']}}</option>
-                                   @endforeach
-                                </select> -->
-                                <input type="text" class="form-control" name="satuan[1]" value="{{$data['aspek_skp'][1]['satuan']}}">
+                            <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="satuan_1">Jenis Satuan</label>
+                                <input type="text" class="form-control" name="satuan[1]">
                                 <div class="text-danger satuan_1_error"></div>
                             </div>
-                            <div class="form-group col-6">
-                                <label>Total</label>
-                                <input type="text" value="{{$total_sum[1]}}" class="form-control form-control-solid" readonly id="total_target_kualitas">
+                            <div class="form-group">
+                                <label>Target tahun {{ session('tahun_penganggaran') }}</label>
+                                <input type="text" class="form-control" name="target[1]"  id="target">
+                                <div class="text-danger target_1_error"></div>
+                            </div>
                             </div>
                         </div>
 
                         <div class="form-group">
+                            <label for="exampleTextarea">Aspek</label>
                             <p class="text-dark font-weight-bolder">Waktu</p>
                         </div>
-                        <input type="hidden" name="id_aspek[2]" value="{{$data['aspek_skp'][2]['id']}}">
-                        <div class="form-group">
-                            <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
-                            <textarea class="form-control" name="indikator_kerja_individu[2]" id="indikator_kerja_individu_2" rows="3">{{$data['aspek_skp'][2]['iki']}}</textarea>
-                            <div class="text-danger indikator_kerja_individu_2_error"></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Target </label>
-                            <div class="row">
-
-                            @for ($i = 0; $i < 12; $i++)
-                                <div class="col-1">
-                                    <input type="number" id="target_waktu_{{$i}}" name="target_waktu[{{$i}}]" value="{{$data['aspek_skp'][2]['target_skp'][$i]['target']}}" class="form-control nilai_kinerja_waktu" placeholder="">
-                                    <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
-                                    <div class="text-danger target_waktu_{{$i}}_error"></div>
-                                </div>
-                                <input type="hidden" name="id_target_waktu[{{$i}}]" value="{{$data['aspek_skp'][2]['target_skp'][$i]['id']}}">
-                            @endfor
-                            </div>
-                        </div>
+                        <input type="hidden" value="waktu" name="type_aspek[2]">
                         <div class="row">
-                            <div class="form-group col-6">
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
+                                    <textarea class="form-control" name="indikator_kerja_individu[2]" id="indikator_kerja_individu_2" rows="5"></textarea>
+                                    <div class="text-danger indikator_kerja_individu_2_error"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                            <div class="form-group">
                                 <label for="satuan_2">Jenis Satuan</label>
-                                <!-- <select class="form-control form-control-solid satuan_" id="satuan_2" name="satuan[2]">
-                                <option selected disabled>Pilih Satuan</option>
-                                  @foreach($satuan as $indexes => $vals)
-                                    <option value="{{$vals['value']}}" @if($vals['value'] == $data['aspek_skp'][2]['satuan']) selected @endif >{{$vals['value']}}</option>
-                                   @endforeach
-                                </select> -->
-                                <input type="text" class="form-control" name="satuan[2]" value="{{$data['aspek_skp'][2]['satuan']}}">
+                                <input type="text" class="form-control" name="satuan[2]">
                                 <div class="text-danger satuan_2_error"></div>
                             </div>
-                            <div class="form-group col-6">
-                                <label>Total</label>
-                                <input type="text" value="{{$total_sum[2]}}" class="form-control form-control-solid" readonly id="total_target_waktu">
+                            <div class="form-group">
+                                <label>Target tahun {{ session('tahun_penganggaran') }}</label>
+                                <input type="text" class="form-control" name="target[2]" id="target">
+                                <div class="text-danger target_2_error"></div>
                             </div>
-                        </div>
-                        
+                            </div>
+                        </div> -->
+
                     </form>
                     <!--end::Form-->
                 </div>
@@ -202,14 +178,63 @@
 
 <script>
     $(function () {
+
         let id = {!! json_encode($data['id']) !!};
         let jenis_ = {!! json_encode($data['jenis']) !!};
-
-        console.log(jenis_);
 
         if (jenis_ == 'tambahan') {
             $('#sasaran_').hide();
         }
+        let tahun_penganggaran = {!! json_encode(session('tahun_penganggaran')) !!}  
+
+        let i = 0;
+        $('#add_content_iki').on('click', function () {
+            let html = '';
+
+            html += ` 
+                <div class="mt-3" id="iki_${i}">
+                    <div class="row">
+                    <input type="hidden" value="iki" name="type_aspek_add[${i}]">
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                <label for="indikator_kerja_individu_${i}">Indikator Kerja Individu </label>
+                                <textarea class="form-control" name="indikator_kerja_individu_add[${i}]" id="indikator_kerja_individu_${i}" rows="5"></textarea>
+                                <div class="text-danger indikator_kerja_individu_add_${i}_error"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="satuan_${i}">Jenis Satuan</label>
+                                <input type="text" class="form-control" name="satuan_add[${i}]">
+                                <div class="text-danger satuan_add_${i}_error"></div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-10">
+                                    <label>Target tahun ${tahun_penganggaran}</label>
+                                    <input type="text" class="form-control" name="target_add[${i}]" >
+                                    <div class="text-danger target_add_${i}_error"></div>
+                                </div>
+                                <div class="col-lg-2">
+                                     <a href="javascript:;" data-id=${i} class="btn btn-icon btn-light-danger btn-circle btn-lg mr-4 delete_iki" style="position:relative;top:16px;">
+                                            <i class="fas fa-trash"></i>
+                                                                    </a>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               `;
+
+            $('#content_iki').append(html);
+
+            i++;
+
+        })
+
+        $(document).on('click','.delete_iki', function(){
+            let index = $(this).attr('data-id');
+            $('#iki_'+index).remove();
+        });
 
         $('#sasaran_kinerja').select2({
             placeholder: "Pilih Sasaran Kerja"
@@ -228,10 +253,11 @@
                 type: "POST",
                 url: "/skp/update/"+id,
                 data: $('#skp-form').serialize(),
-                success: function (response) {
-                    console.log(response);
+                success: function (res) {
+                    console.log(res);
+                if (res.success) {
                     swal.fire({
-                        text: "Skp berhasil di Update.",
+                        text: "Skp berhasil di update.",
                         icon: "success",
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",
@@ -239,8 +265,16 @@
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
                     }).then(function() {
-                        window.location.href = '/skp';
-                    });
+                        window.location.href = '/skp/tahunan';
+                    });      
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Maaf, terjadi kesalahan',
+                        text: 'Silahkan Hubungi Admin'
+                    })
+                }
+
                 },
                 error : function (xhr) {
                     $('.text-danger').html('');
@@ -254,37 +288,6 @@
             });
         }
 
-       
-        $(".nilai_kinerja_kuantitas").on('change', function () {
-            let sum = 0;
-            $('.nilai_kinerja_kuantitas').each(function() {
-                sum += Number($(this).val());
-            });
-            console.log(sum);
-            $('#total_target_kuantitas').val(sum);
-            
-        })
-
-        $(".nilai_kinerja_kualitas").on('change', function () {
-            let sum = 0;
-            $('.nilai_kinerja_kualitas').each(function() {
-                sum += Number($(this).val());
-            });
-            console.log(sum);
-            $('#total_target_kualitas').val(sum);
-            
-        })
-
-        $(".nilai_kinerja_waktu").on('change', function () {
-            let sum = 0;
-            $('.nilai_kinerja_waktu').each(function() {
-                sum += Number($(this).val());
-            });
-            console.log(sum);
-            $('#total_target_waktu').val(sum);
-            
-        })
-    
         $('input[type=radio][name=jenis_kinerja]').change(function() {
             let val = $(this).val();
             if (val == 'utama') {
@@ -292,8 +295,10 @@
             }
             else if (val == 'tambahan') {
                 $('#sasaran_').hide();
+                $('#sasaran_kinerja').val(null).trigger('change');
             }
         });
+    
 
     })
 </script>

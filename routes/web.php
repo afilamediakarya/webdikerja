@@ -12,6 +12,7 @@ use App\Http\Controllers\RealisasiController;
 use App\Http\Controllers\SkpController;
 use App\Http\Controllers\AxiosController;
 use App\Http\Controllers\bankomController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\lokasiController;
 
 use App\Http\Controllers\Admin\AdminController;
@@ -45,22 +46,29 @@ Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::get('/laporan/viewexport/rekapitulasi_pegawai/{params1}/{params2}/{params3}', [LaporanController::class, 'viewexportRekapAbsen'])->name('laporan-view-absen-pegawai');
 Route::get('/maintanence', [AuthController::class, 'aborts'])->name('aborts');
 Route::get('/', [AuthController::class, 'indexes'])->name('indexes');
+Route::get('set-tahun-penganggaran', [Controller::class, 'setTahunAnggaran'])->name('set-tahun-penganggaran');
 
 Route::middleware('Auth')->group(function(){
 
     Route::get('/dashboard/{type}', [PagesController::class, 'index'])->name('dashboard');
+    
     // Route::get('/', [PagesController::class, 'index_'])->name('main');
 
     Route::get('atasan/update/{id}', [AkunController::class , 'update_atasan'])->name("update-atasan");
 
     Route::middleware('roles:pegawai|admin_opd|super_admin')->group(function(){
-        Route::get('/skp', [SkpController::class, 'index'])->name('skp');
-        Route::get('/skp/tambah', [SkpController::class, 'create'])->name('tambah-skp');
+        Route::get('/skp/{type}', [SkpController::class, 'index'])->name('skp');
+        Route::get('/skp/bulanan/create-target', [SkpController::class, 'create_target'])->name('skp.bulanan');
+        Route::post('/skp/bulanan/store', [SkpController::class, 'store_target'])->name('skp.bulanan.store');
+        Route::post('/skp/bulanan/update/{params}', [SkpController::class, 'update_target'])->name('skp.bulanan.update');
+        Route::get('/skp-datatable', [SkpController::class, 'datatable_skp_tahunan'])->name('skp_tahunan_datatable');
+        Route::get('/skp/tahunan/tambah', [SkpController::class, 'create'])->name('tambah-skp');
         Route::post('/skp/store', [SkpController::class, 'store'])->name('store-skp');
-        Route::post('/skp/store/kepala', [SkpController::class, 'store_kepala'])->name('store-skp-kepala');
+        // Route::post('/skp/store/kepala', [SkpController::class, 'store_kepala'])->name('store-skp-kepala');
         Route::get('/skp/edit/{params}', [SkpController::class, 'edit'])->name('edit-skp');
+        Route::get('/skp/show/{params}', [SkpController::class, 'show'])->name('show-skp');
         Route::post('/skp/update/{params}', [SkpController::class, 'update'])->name('update-skp');
-        Route::post('/skp/update/kepala/{params}', [SkpController::class, 'update_kepala'])->name('update_kepala');
+        // Route::post('/skp/update/kepala/{params}', [SkpController::class, 'update_kepala'])->name('update_kepala');
         Route::delete('/skp/delete/{params}', [SkpController::class, 'delete'])->name('delete-skp');
     });
     
@@ -212,8 +220,9 @@ Route::middleware('Auth')->group(function(){
                 Route::get('/', [AbsenController::class, 'index'])->name('absen');
                 Route::get('/datatable/{satuan_kerja}/{tanggal}/{valid}', [AbsenController::class, 'datatable_'])->name('absen.filter');
                 Route::post('/', [AbsenController::class, 'store'])->name('post-absen');
-                Route::get('/{pegawai}/{tanggal}/{valid }', [AbsenController::class, 'show'])->name('show-absen');
-                Route::post('/{id}', [AbsenController::class, 'update'])->name('update-absen');
+                Route::get('/{pegawai}/{tanggal}/{valid}', [AbsenController::class, 'show'])->name('show-absen');
+                Route::post('/{id_pegawai}', [AbsenController::class, 'update'])->name('update-absen');
+                Route::post('/pegawai/change-validation', [AbsenController::class, 'change_validation'])->name('change-validation');
                 Route::delete('/{id}', [AbsenController::class, 'delete'])->name('delete-absen');
             });
             

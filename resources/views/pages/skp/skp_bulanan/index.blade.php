@@ -6,14 +6,35 @@
 
 
 @section('button')
-    <a href="{{url('skp/tahunan/tambah')}}" class="btn btn-primary font-weight-bolder">
-        <span class="svg-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+    <!-- <input id="bday-month" type="month" value="{{ date('Y-m') }}" class="form-control" > -->
+
+    <select id="bulan_" class="form-control" style="position: absolute;left: 63rem;width: 12rem;">
+        <option selected disabled> Pilih bulan </option>
+        @foreach($nama_bulan as $in => $month)
+            <option value="{{$in+1}}" @if($in+1 == date('m')) selected @endif>{{$month}}</option>
+        @endforeach
+        <!-- <option value="1">Januari</option>
+        <option value="2">Februari</option>
+        <option value="3">Maret</option>
+        <option value="4">April</option>
+        <option value="5">Mei</option>
+        <option value="6">Juni</option>
+        <option value="7">Juli</option>
+        <option value="8">Agustus</option>
+        <option value="9">September</option>
+        <option value="10">Oktober</option>
+        <option value="11">November</option>
+        <option value="12">Desember</option> -->
+    </select>
+
+    <a href="javascript:;" id="create_target" class="btn btn-primary font-weight-bolder">
+        <span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                 <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1"/>
                 <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000) " x="4" y="11" width="16" height="2" rx="1"/>
             </g>
-        </svg><!--end::Svg Icon--></span>
-        Tambah SKP
+        </svg></span>
+        Tambah Target
     </a>
 @endsection
 
@@ -35,7 +56,9 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Jenis Kinerja</th>
+                                <th>Rencana Kerja atasan</th>
                                 <th>Rencana Kerja</th>
+                                <th>Aspek</th>
                                 <th nowrap="nowrap">Indikator Kinerja Individu</th>
                                 <th>Target</th>
                                 <th>Satuan</th>
@@ -65,12 +88,13 @@
         "use strict";
         $(function () {
             let table = $('#kt_datatable');
+            let bulan = $('#bulan_').val();
             table.DataTable({
                 responsive: true,
                 pageLength: 10,
-                order: [[1, 'desc']],
+                order: [[1, 'asc'],[2, 'asc']],
                 processing:true,
-                ajax: '/skp-datatable?type=tahunan',
+                ajax: '/skp-datatable?type=bulanan&bulan='+bulan,
                 columns : [
                     { 
                     data : null, 
@@ -81,7 +105,11 @@
                     },{
                         data:'jenis'
                     },{
+                        data:'skp_atasan'
+                    },{
                         data:'rencana_kerja'
+                    },{
+                        data: 'aspek_skp'
                     },{
                         data: 'aspek_skp'
                     },{
@@ -94,11 +122,27 @@
                 ],
                 columnDefs : [
                     {
-                        targets: 1,
+                        targets: [1,2],
                         visible: false
                     },
                     {
-                        targets : 3,
+                        targets : 4,
+                        render : function (data) {
+                            
+                            let html ='';
+                            html += '<ul style="list-style:none">';
+                            $.each(data,function (x,y) {
+                                html += `<li style="margin-bottom:4rem">${y.aspek_skp}<li>`;
+                            })
+                            html += '</ul>';
+                            
+
+                            return html;
+                            
+                        }
+                    },
+                    {
+                        targets : 5,
                         render : function (data) {
                             
                             let html ='';
@@ -114,27 +158,25 @@
                         }
                     },
                     {
-                        targets : 4,
+                        targets : 6,
                         render : function (data) {
-                            
-                            let html ='';
-                            let target = 0;
+                            console.log(data);
+                            let html = '';
                             html += '<ul style="list-style:none">';
-                            $.each(data,function (x,y) {
-                                target = 0;
-                                $.each(y.target_skp, function (n,m) {
-                                        target += m.target;
+                            $.each(data, function (index,value) {
+                                $.each(value.target_skp, function (x,y) {
+                                    if (y['bulan'] == bulan) {
+                                        html += `<li style="margin-bottom:4rem">${y.target}<li>`;
+                                    }
                                 })
-                                html += `<li style="margin-bottom:4rem">${target}<li>`;
-                                
                             })
                             html += '</ul>';
+                           
                             return html;
-                            
                         }
                     },
                     {
-                        targets : 5,
+                        targets : 7,
                         render : function (data) {
                             
                             let html ='';
@@ -144,6 +186,8 @@
                                 html += `<li style="margin-bottom:4rem">${y.satuan}<li>`;
                             })
                             html += '</ul>';
+                            
+
                             return html;
                             
                         }
@@ -156,56 +200,30 @@
                         class:"wrapok",
                         render: function(data, type, full, meta) {
                             return `
-                            <a role="button" href="/skp/edit/${data}?type=tahunan" class="btn btn-success btn-sm">Ubah</a>
-                            <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="${data}">Hapus</button>
+                            <a role="button" href="/skp/edit/${data}?type=bulanan&bulan=${bulan}" class="btn btn-success btn-sm">Ubah</a>
+                            <button type="button" class="btn btn-danger btn-sm">Hapus</button>
                             `;
                         },
                     }
                 ],
                 rowGroup: {
-                    dataSrc: 'jenis_kinerja'
+                    dataSrc: ['jenis_kinerja','skp_atasan']
                 },
             });
         })
 
-        $(document).on('click','.btn-delete', function (e) {
-            e.preventDefault()
-            let params = $(this).attr('data-id');
-
-                 Swal.fire({
-                    title: 'Apakah kamu yakin akan menghapus data ini ?',
-                    text: "Data akan di hapus permanen",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                url  : '/skp/delete/'+ params + '?type=tahunan',
-                                type : 'POST',
-                                data : {
-                                    '_method' : 'DELETE',
-                                    '_token' : $('meta[name="csrf-token"]').attr('content')
-                                },
-                                success: function (response) {
-                                    let res = JSON.parse(response);
-                                    console.log(res.status);
-                                    if (res.status !== false) {
-                                        Swal.fire('Deleted!', 'Your file has been deleted.','success');
-                                        table.ajax.reload();
-                                    }else{
-                                        swal.fire({
-                                            title : "SKP tidak dapat di hapus. ",
-                                            text: "SKP digunakan oleh bawahaan. ",
-                                            icon: "warning",
-                                        });
-                                    }
-                                }
-                            })
-                        }
-                })
+        $(document).on('click','#create_target', function (e) {
+            e.preventDefault();
+            let bulan = $('#bulan_').val();
+            if (bulan !== null) {
+                window.location.href = '/skp/bulanan/create-target?bulan='+bulan
+            }else{
+                swal.fire({
+                    title : "Maaf. ",
+                    text: "Pilih bulan terlebih dahulu. ",
+                    icon: "warning",
+                });
+            }
         })
 
         // function deleteRow(params) {

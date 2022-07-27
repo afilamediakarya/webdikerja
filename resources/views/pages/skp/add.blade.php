@@ -60,123 +60,83 @@
                             <label for="exampleTextarea">Aspek</label>
                             <p class="text-dark font-weight-bolder">Kuantitas</p>
                         </div>
-
-                        <div class="form-group">
-                            <label for="indikator_kerja_individu_0">Indikator Kerja Individu </label>
-                            <textarea class="form-control" name="indikator_kerja_individu[0]" id="indikator_kerja_individu_0" rows="3"></textarea>
-                            <div class="text-danger indikator_kerja_individu_0_error"></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Target </label>
-                            <div class="row">
-
-                            @for ($i = 0; $i < 12; $i++)
-                                <div class="col-1">
-                                    <input type="number" id="target_kuantitas_{{$i}}" name="target_kuantitas[{{$i}}]" class="form-control nilai_kinerja_kuantitas" placeholder="">
-                                    <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
-                                    <div class="text-danger target_kuantitas_{{$i}}_error"></div>
-                                </div>
-                            @endfor
-                            </div>
-                        </div>
+                        <input type="hidden" value="kuantitas" name="type_aspek[0]">
                         <div class="row">
-                            <div class="form-group col-6">
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <label for="indikator_kerja_individu_0">Indikator Kerja Individu </label>
+                                    <textarea class="form-control" name="indikator_kerja_individu[0]" id="indikator_kerja_individu_0" rows="5"></textarea>
+                                    <div class="text-danger indikator_kerja_individu_0_error"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                            <div class="form-group">
                                 <label for="satuan_0">Jenis Satuan</label>
-                                <!-- <select class="form-control form-control-solid satuan_" id="satuan_0" name="satuan[0]">
-                                <option selected disabled>Pilih Satuan</option>
-                                   @foreach($satuan as $indexes => $vals)
-                                    <option value="{{$vals['value']}}">{{$vals['value']}}</option>
-                                   @endforeach
-                                </select> -->
                                 <input type="text" class="form-control" name="satuan[0]">
                                 <div class="text-danger satuan_0_error"></div>
                             </div>
-                            <div class="form-group col-6">
-                                <label>Total</label>
-                                <input type="text" class="form-control form-control-solid" readonly id="total_target_kuantitas">
+                            <div class="form-group">
+                            <label>Target tahun {{ session('tahun_penganggaran') }}</label>
+                                <input type="text" class="form-control" name="target[0]" id="target">
+                                <div class="text-danger target_0_error"></div>
+                            </div>
                             </div>
                         </div>
 
                         <div class="form-group">
+                            <label for="exampleTextarea">Aspek</label>
                             <p class="text-dark font-weight-bolder">Kualitas</p>
                         </div>
-
-                        <div class="form-group">
-                            <label for="indikator_kerja_individu_1">Indikator Kerja Individu </label>
-                            <textarea class="form-control" name="indikator_kerja_individu[1]" id="indikator_kerja_individu_1" rows="3"></textarea>
-                            <div class="text-danger indikator_kerja_individu_1_error"></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Target </label>
-                            <div class="row">
-
-                            @for ($i = 0; $i < 12; $i++)
-                                <div class="col-1">
-                                    <input type="number" id="target_kualitas_{{$i}}" name="target_kualitas[{{$i}}]" class="form-control nilai_kinerja_kualitas" placeholder="">
-                                    <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
-                                    <div class="text-danger target_kualitas_{{$i}}_error"></div>
-                                </div>
-                            @endfor
-                            </div>
-                        </div>
+                        <input type="hidden" value="kualitas" name="type_aspek[1]">
                         <div class="row">
-                            <div class="form-group col-6">
-                                 <label for="satuan_1">Jenis Satuan</label>
-                                <!-- <select class="form-control form-control-solid satuan_" id="satuan_1" name="satuan[1]">
-                                <option selected disabled>Pilih Satuan</option>
-                                @foreach($satuan as $indexes => $vals)
-                                    <option value="{{$vals['value']}}">{{$vals['value']}}</option>
-                                   @endforeach
-                                </select> -->
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <label for="indikator_kerja_individu_1">Indikator Kerja Individu </label>
+                                    <textarea class="form-control" name="indikator_kerja_individu[1]" id="indikator_kerja_individu_1" rows="5"></textarea>
+                                    <div class="text-danger indikator_kerja_individu_1_error"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="satuan_1">Jenis Satuan</label>
                                 <input type="text" class="form-control" name="satuan[1]">
                                 <div class="text-danger satuan_1_error"></div>
                             </div>
-                            <div class="form-group col-6">
-                                <label>Total</label>
-                                <input type="text" class="form-control form-control-solid" readonly id="total_target_kualitas">
+                            <div class="form-group">
+                                <label>Target tahun {{ session('tahun_penganggaran') }}</label>
+                                <input type="text" class="form-control" name="target[1]"  id="target">
+                                <div class="text-danger target_1_error"></div>
+                            </div>
                             </div>
                         </div>
 
                         <div class="form-group">
+                            <label for="exampleTextarea">Aspek</label>
                             <p class="text-dark font-weight-bolder">Waktu</p>
                         </div>
-
-                        <div class="form-group">
-                            <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
-                            <textarea class="form-control" name="indikator_kerja_individu[2]" id="indikator_kerja_individu_2" rows="3"></textarea>
-                            <div class="text-danger indikator_kerja_individu_2_error"></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Target </label>
-                            <div class="row">
-
-                            @for ($i = 0; $i < 12; $i++)
-                                <div class="col-1">
-                                    <input type="number" id="target_waktu_{{$i}}" name="target_waktu[{{$i}}]" class="form-control nilai_kinerja_waktu" placeholder="">
-                                    <span class="form-text text-muted text-center">Bulan {{$i+1}}</span>
-                                    <div class="text-danger target_waktu_{{$i}}_error"></div>
-                                </div>
-                            @endfor
-                            </div>
-                        </div>
+                        <input type="hidden" value="waktu" name="type_aspek[2]">
                         <div class="row">
-                            <div class="form-group col-6">
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <label for="indikator_kerja_individu_2">Indikator Kerja Individu </label>
+                                    <textarea class="form-control" name="indikator_kerja_individu[2]" id="indikator_kerja_individu_2" rows="5"></textarea>
+                                    <div class="text-danger indikator_kerja_individu_2_error"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                            <div class="form-group">
                                 <label for="satuan_2">Jenis Satuan</label>
-                                <!-- <select class="form-control form-control-solid satuan_" id="satuan_2" name="satuan[2]">
-                                <option selected disabled>Pilih Satuan</option>
-                                    @foreach($satuan as $indexes => $vals)
-                                    <option value="{{$vals['value']}}">{{$vals['value']}}</option>
-                                   @endforeach
-                                </select> -->
                                 <input type="text" class="form-control" name="satuan[2]">
                                 <div class="text-danger satuan_2_error"></div>
                             </div>
-                            <div class="form-group col-6">
-                                <label>Total</label>
-                                <input type="text" class="form-control form-control-solid" readonly id="total_target_waktu">
+                            <div class="form-group">
+                                <label>Target tahun {{ session('tahun_penganggaran') }}</label>
+                                <input type="text" class="form-control" name="target[2]" id="target">
+                                <div class="text-danger target_2_error"></div>
+                            </div>
                             </div>
                         </div>
-                        
+
                     </form>
                     <!--end::Form-->
                 </div>
@@ -214,8 +174,9 @@
                 type: "POST",
                 url: "/skp/store",
                 data: $('#skp-form').serialize(),
-                success: function (response) {
-                    console.log(response);
+                success: function (res) {
+                    console.log(res);
+                if (res.success) {
                     swal.fire({
                         text: "Skp berhasil di tambahkan.",
                         icon: "success",
@@ -225,8 +186,16 @@
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
                     }).then(function() {
-                        // window.location.href = '/skp';
-                    });
+                        window.location.href = '/skp/tahunan';
+                    });      
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Maaf, terjadi kesalahan',
+                        text: 'Silahkan Hubungi Admin'
+                    })
+                }
+
                 },
                 error : function (xhr) {
                     $('.text-danger').html('');
