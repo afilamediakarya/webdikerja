@@ -141,9 +141,9 @@ Route::middleware('Auth')->group(function(){
                 Route::delete('/{id}', [InformasiController::class, 'delete'])->name('delete-informasi');
             });
     
-            
             Route::middleware('roles:super_admin')->group(function(){
                 Route::prefix('jadwal')->group(function(){
+                    Route::get('/datatable', [JadwalController::class, 'datatable'])->name('jadwal.datatable');
                     Route::get('/', [JadwalController::class, 'index'])->name('jadwal');
                     Route::post('/', [JadwalController::class, 'store'])->name('post-jadwal');
                     Route::get('/{id}', [JadwalController::class, 'show'])->name('show-jadwal');

@@ -260,7 +260,6 @@ class SkpController extends Controller
                 $token = session()->get('user.access_token');
             
                 $response = Http::withToken($token)->post($url."/skp/store", $result);
-               
                 if($response->successful()){
                     return response()->json(['success'=> $response->json()]);
                 }else{

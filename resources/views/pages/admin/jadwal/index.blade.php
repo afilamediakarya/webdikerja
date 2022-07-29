@@ -6,7 +6,7 @@
 
 
 @section('button')
-    <button onclick="Panel.action('show','submit')" class="btn btn-primary font-weight-bolder">
+    <button id="side_form_open" class="btn btn-primary font-weight-bolder">
         <span class="svg-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                 <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1"/>
@@ -34,8 +34,8 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <th>Nama Kegiatan</th>
-                                <th>Nama Sub Kegiatan</th>
+                                <th>Nama Tahapan</th>
+                                <th>Nama Sub Tahapan</th>
                                 <th>Jadwal</th>
                                 <th>Aksi</th>
                             </tr>
@@ -70,14 +70,33 @@
                     @csrf
                     <input type="hidden" name="id"/>
                     <div class="form-group">
-                        <label>Nama kegiatan</label>
-                        <input type="text" class="form-control form-control-solid" name="nama_kegiatan" />
-                        <div class="invalid-feedback"></div>
+                        <label>Nama Tahapan</label>
+                        <select name="tahapan" class="form-control">
+                            <option selected disabled> Pilih tahapan </option>
+                            <option value="Tahapan target">Tahapan target</option>
+                            <option value="Tahapan realisasi">Tahapan realisasi</option>
+                        </select>
+                        <small class="text-danger tahapan_error"></small>
                     </div>
                     <div class="form-group">
-                        <label>Nama Sub Kegiatan</label>
-                        <input type="text" class="form-control form-control-solid" name="nama_sub_kegiatan"/>
-                        <div class="invalid-feedback"></div>
+                        <label>Nama Sub Tahapan</label>
+                        <select name="sub_tahapan" class="form-control">
+                            <option selected disabled> Pilih sub tahapan </option>
+                            <option value="0">Tahunan</option>
+                            <option value="1">Januari</option>
+                            <option value="2">Februari</option>
+                            <option value="3">Maret</option>
+                            <option value="4">April</option>
+                            <option value="5">Mei</option>
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">Agustus</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                        <small class="text-danger sub_tahapan_error"></small>
                     </div>
                     <div class="form-group">
                         <label>Jadwal Pelaksanaan</label>
@@ -121,124 +140,128 @@
 @section('script')
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
-        "use strict";
-        var dataRow = function() {
+      
+        $(document).on('click','#side_form_open', function (e) {
+            e.preventDefault();
+            $('.text_danger').html('');
+            Panel.action('show','submit')
+        })
 
-        var init = function() {
-            var table = $('#kt_datatable');
-
-            // begin first table
-            table.DataTable({
+        function datatable_() {
+            $('#kt_datatable').dataTable().fnDestroy();
+            $('#kt_datatable').DataTable({
                 responsive: true,
                 pageLength: 10,
                 order: [[0, 'asc']],
                 processing:true,
-                ajax: "{{ route('jadwal') }}",
-                columns:[{ 
-                        data : null, 
+                ajax: '{{route("jadwal.datatable")}}',
+                columns : [
+                    { 
+                    data : null, 
                         render: function (data, type, row, meta) {
+                            console.log(data);
                                 return meta.row + meta.settings._iDisplayStart + 1;
                         }  
                     },{
-                        data:'nama_kegiatan'
+                        data:'tahapan'
                     },{
-                        data:'nama_sub_kegiatan'
+                        data:'sub_tahapan'
                     },{
-                        data: null, 
-                        render: function (data, type, row) {
-                            var tanggal = row.tanggal_awal + " - " + row.tanggal_akhir;
-                            return tanggal;
-                        }
+                        data:null
                     },{
                         data:'id',
                     }
                 ],
-                columnDefs: [
+                columnDefs : [
+                    {
+                        targets: 2,
+                        render: function(data, type, full, meta) {
+                 
+                          let months = [ "Tahunan","Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ];
+                            return months[data];
+
+                        },
+                    },
+                    {
+                        targets: 3,
+                        width: '22rem',
+                        render: function(data, type, full, meta) {
+                           return data.tanggal_awal+ ' s/d ' +data.tanggal_akhir;
+                        },
+                    },
                     {
                         targets: -1,
                         title: 'Actions',
+                        width: '15rem',
                         orderable: false,
                         render: function(data, type, full, meta) {
-                            return '\
-                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
-                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>\
-                            ';
+                            let params = data.id+','+data.tanggal_absen+','+data.validation;
+                           
+                            return `
+                            <a href="javascript:;" type="button" data-id="${params}" class="btn btn-secondary btn-sm button-update">Ubah</a>
+                            <a href="javascript:;" type="button" data-id="${params}" class="btn btn-danger btn-sm button-update">Hapus</a>
+                            `;
                         },
                     }
-                ],
+                ]
             });
-        };
-
-        var destroy = function(){
-            var table = $('#kt_datatable').DataTable();
-            table.destroy();
         }
 
-        return {
-            init: function() {
-                init();
-            },
-            destroy:function(){
-                destroy();
-            }
-
-        };
-
-        }();
-
-
         $(document).on('submit', "#createForm[data-type='submit']", function(e){
-            e.preventDefault();
-            AxiosCall.post("{{route('post-jadwal')}}", $(this).serialize(), "#createForm");
-        });
-        
-        // $(document).on('click', '.button-update', function(){
-        //     var key = $(this).data('id');
-        //     AxiosCall.show(`admin/jadwal/${key}`);
-        // })
-
-        $(document).on('submit', "#createForm[data-type='update']", function(e){
-            e.preventDefault();
-            var _id = $("input[name='id']").val();
-            AxiosCall.post(`admin/jadwal/${_id}`, $(this).serialize(), "#createForm");
+        e.preventDefault();
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
         });
 
-        $(document).on('click', '.button-delete', function (e) {
-            e.preventDefault();
-            var key = $(this).data('id');
-            AxiosCall.delete(`admin/jadwal/${key}`);
-        })
-        
-        
+        $.ajax({
+            url : "{{route('post-jadwal')}}",
+            method : 'POST',
+            data: $('#createForm').serialize(),
+            success : function (res) {
+                    $('.text_danger').html('');
+                    console.log(res);
+                    if (res.success) {
+                        swal.fire({
+                            text: 'Jadwal berhasil di tambahkan',
+                            icon: "success",
+                            showConfirmButton:true,
+                            confirmButtonText: "OK, Siip",
+                        }).then(function() {
+                            $("#createForm")[0].reset();
+                            Panel.action('hide');
+                            $('.text_danger').html('');
+                            // $('#kt_datatable').DataTable().ajax.reload();
+                        });      
+                    }else if(res.failed){
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Maaf, Anda gagal',
+                            text: res.failed
+                        })
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Maaf, terjadi kesalahan',
+                            text: 'Silahkan Hubungi Admin'
+                        })
+                    }
+                
+                },
+                error : function (xhr) {
+                    $('.text_danger').html('');
+                    let error = xhr.responseJSON.errors;
+                    $.each( error, function( key, value ) {
+                        $(`.${key}_error`).html(value)
+                    }); 
+                }
+            });
+        });
 
         jQuery(document).ready(function() {
             Panel.init('side_form');
-            dataRow.init();
-            $('#jadwal_1, #jadwal_2').datepicker({format: 'dd-mm-yyyy'});
-
-
-            $(document).on('click','.btn-cancel', function(){
-                Panel.action('hide');
-            });
-
-            // // edit
-            $(document).on('click', '.button-update', function(){
-                Panel.action('show','update');
-                var key = $(this).data('id');
-                $.ajax({
-                    url:"admin/jadwal/"+key,
-                    method:"GET",
-                    success: function(data){
-                      if(data.success){
-                        console.log(data.success);
-                        var res = data.success.data;
-                        $.each(res, function( key, value ) {
-                            $("input[name='"+key+"']").val(value);
-                        });
-                      }
-                    }
-                });
-            })
+            datatable_();
         });
 
     </script>
