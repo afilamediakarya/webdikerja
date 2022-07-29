@@ -45,9 +45,10 @@
                         </div>
                         <div class="col-lg-2">
                             <select class="form-control" id="valid_">
-                                <option value="0" selected>invalid</option>
+                            <option value="semua" selected>semua</option>
+                                <option value="0">invalid</option>
                                 <option value="1">valid</option>
-                                <option value="semua">semua</option>
+                                
                             </select>        
                         </div>
                         <button class="btn btn-primary btn-sm" id="filter-btn" style="position:relative;right:0px;">Filter</button>
@@ -437,9 +438,9 @@
                         targets: 5,
                         render: function(data, type, full, meta) {
                             if (data > 0) {
-                                return `<a href="#" class="btn btn-icon btn-success btn-sm"><i class="fa fa-check" aria-hidden="true"></i></a>`;
+                                return ` <a href="javascript:;" style="cursor:none" class="btn btn-icon btn-success btn-sm"><i class="fa fa-check" aria-hidden="true"></i></a>`;
                             }else{
-                                return `<a href="#" class="btn btn-icon btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></a>`;
+                                return `<a href="javascript:;" style="cursor:none" class="btn btn-icon btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></a>`;
                                 
                             }
                         },

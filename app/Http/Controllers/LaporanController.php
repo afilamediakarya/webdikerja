@@ -118,8 +118,6 @@ class LaporanController extends Controller
             $level = 'pegawai';
         }
 
-       
-
         $data = $this->getSkp($level); 
   
         if ($data['status'] == true) {

@@ -68,7 +68,6 @@ class AbsenController extends Controller
 
         $checkAbsen = $this->checkAbsen($request->pegawai,$request->tanggal);
 
-
         if ($request->jenis == 'checkin') {
             if ($checkAbsen['checkin'] !== true) {
                 return $this->create_absen($request);
