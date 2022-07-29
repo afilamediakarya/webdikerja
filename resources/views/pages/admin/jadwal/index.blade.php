@@ -58,7 +58,7 @@
         <div id="side_form" class="offcanvas offcanvas-right p-10">
 			<!--begin::Header-->
 			<div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
-				<h3 class="font-weight-bold m-0">Tambah Informasi<h3>
+				<h3 class="font-weight-bold m-0">Form Jadwal<h3>
 				<a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="side_form_close">
 					<i class="ki ki-close icon-xs text-muted"></i>
 				</a>

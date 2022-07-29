@@ -459,7 +459,7 @@
                             </svg>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-text text-capitalize">jadwal</span>
+                        <span class="menu-text text-capitalize">jadwal Pelaksanaan</span>
                     </a>
                 </li>
                 @else
@@ -542,7 +542,7 @@
                     </div>
                 </li> -->
                 @if (Session::get('user.role') == 'super_admin')
-                    <li class="menu-item {{str_contains(Request::path(), 'satker') ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                <li class="menu-item {{str_contains(Request::path(), 'satker') ? 'menu-item-active' : '' }}" aria-haspopup="true">
                     <a href="{{route('satker')}}" class="menu-link">
                         <span class="svg-icon menu-icon">
                            

@@ -29,9 +29,9 @@
             <div class="card card-custom">
                 
                 <div class="card-body">
-                    
                     <div class="row" style="margin-bottom: 1rem">
-                        <div class="col-lg-2">
+                        <div class="col-lg-3">
+                         <label for="filter-satuan-kerja" class="form-label">Satuan kerja</label>
                             <select class="form-control" type="text" id="filter-satuan-kerja">
                                 <!-- <option disabled selected> Pilih Satuan Kerja </option> -->
                                 <option selected disabled> Pilih satuan kerja</option>
@@ -41,17 +41,33 @@
                             </select>
                         </div>
                         <div class="col-lg-2">
+                        <label for="filter-tanggal" class="form-label">Tanggal</label>
                             <input type="date" value="{{ date('Y-m-d') }}" class="form-control" id="filter-tanggal">
                         </div>
                         <div class="col-lg-2">
-                            <select class="form-control" id="valid_">
+                        <label for="filter-valid" class="form-label">Validation</label>
+                            <select class="form-control" id="filter-valid">
                             <option value="semua" selected>semua</option>
                                 <option value="0">invalid</option>
                                 <option value="1">valid</option>
                                 
                             </select>        
                         </div>
-                        <button class="btn btn-primary btn-sm" id="filter-btn" style="position:relative;right:0px;">Filter</button>
+                        <div class="col-lg-2">
+                        <label for="filter-status" class="form-label">Status</label>
+                            <select class="form-control" id="filter-status">
+                            <option value="semua" selected>Semua</option>
+                                <option value="hadir">Hadir</option>
+                                <option value="dinas luar">Dinas luar</option>
+                                <option value="izin">Izin</option>
+                                <option value="sakit">Sakit</option>
+                                <option value="apel">Apel</option>
+                            </select>        
+                        </div>
+                        <div class="d-grid gap-2 d-md-block">
+                             <button class="btn btn-primary btn-sm" id="filter-btn" style="position: relative;top: 27px;left: 12px;">Filter</button>
+                        </div>
+                        <!-- <button class="btn btn-primary btn-sm" id="filter-btn" style="position:relative;right:0px;">Filter</button> -->
                     </div>
                     <table class="table table-borderless table-head-bg" id="kt_absen" style="margin-top: 13px !important">
                         <thead>
@@ -210,6 +226,7 @@
         $('.form-update-form').hide();
         $('#pegawai').val(null).trigger('change');
         $('#id_satuan_kerja').val(null).trigger('change');
+        $('.text_danger').html('');
         Panel.action('show','submit')
     })
 
@@ -402,16 +419,17 @@
 
         function datatable_() {
             let satuan_kerja = $('#filter-satuan-kerja').val();
-            let valid_ =  $("#valid_").val();
+            let valid_ =  $("#filter-valid").val();
             let tanggal = $('#filter-tanggal').val();
-            // alert("/absen/datatable/"+satuan_kerja+'/'+tanggal+'/'+valid_);
+            let status_ = $('#filter-status').val();
+
             $('#kt_absen').dataTable().fnDestroy();
             $('#kt_absen').DataTable({
                 responsive: true,
                 pageLength: 10,
                 order: [[0, 'asc']],
                 processing:true,
-                ajax: '/admin/absen/datatable/'+satuan_kerja+'/'+tanggal+'/'+valid_,
+                ajax: '/admin/absen/datatable?satuan_kerja='+satuan_kerja+'&tanggal='+tanggal+'&valid='+valid_+'&status='+status_,
                 columns : [
                     { 
                     data : null, 

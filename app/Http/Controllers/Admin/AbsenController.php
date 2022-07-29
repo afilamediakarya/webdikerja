@@ -9,12 +9,16 @@ use Illuminate\Support\Facades\Http;
 class AbsenController extends Controller
 {
 
-    public function datatable_($satuan_kerja,$tanggal,$valid){
+    public function datatable_(){
         //  return $satuan_kerja.' / '.$tanggal.' / '.$valid;
+        $satuan_kerja = request('satuan_kerja');
+        $tanggal = request('tanggal');
+        $valid = request('valid');
+        $status = request('status');
+
         $url = env('API_URL');
         $token = session()->get('user.access_token');
-        $response = Http::withToken($token)->get($url."/absen/list-filter-absen/".$satuan_kerja."/".$tanggal."/".$valid);
-        // return $response;
+        $response = Http::withToken($token)->get($url."/absen/list-filter-absen?satuan_kerja=".$satuan_kerja."&tanggal=".$tanggal."&valid=".$valid.'&status='.$status);
         $data = $response->json();
         return $data;
     }
@@ -97,6 +101,12 @@ class AbsenController extends Controller
         $status = '';
 
         if ($request->jenis == 'checkout') {
+            $checkAbsen = $this->checkAbsen($request->pegawai,$request->tanggal);
+            if ($checkAbsen['status'] == 'hadir' || $checkAbsen['status'] == 'apel') {
+                $validate_ = 1;
+            }else{
+                $validate_ = 0;
+            }
             $status = 'hadir';
         }else{
             $status = $request->status;
