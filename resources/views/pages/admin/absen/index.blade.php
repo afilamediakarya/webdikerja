@@ -34,7 +34,7 @@
                         <div class="col-lg-2">
                             <select class="form-control" type="text" id="filter-satuan-kerja">
                                 <!-- <option disabled selected> Pilih Satuan Kerja </option> -->
-                                <option value="semua" selected> Semua</option>
+                                <option selected disabled> Pilih satuan kerja</option>
                                 @foreach ($satker as $key => $value)
                                     <option value="{{$value['id']}}">{{$value['nama_satuan_kerja']}}</option>
                                 @endforeach
