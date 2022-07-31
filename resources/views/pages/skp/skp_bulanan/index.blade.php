@@ -33,7 +33,7 @@
             <div class="card card-custom">
                 
                 <div class="card-body">
-                <select id="bulan_" class="form-control" style="    position: relative;left: 52rem;top: 32px;width: 12rem;">
+                <select id="bulan_" class="form-control" style="position: relative;bottom: 11px;width: 12rem;">
                     <option selected disabled> Pilih bulan </option>
                     @foreach($nama_bulan as $in => $month)
                         <option value="{{$in+1}}" @if($in+1 == date('m')) selected @endif>{{$month}}</option>
