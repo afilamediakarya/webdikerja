@@ -47,6 +47,7 @@ class JadwalController extends Controller
             'tanggal_akhir' => date("Y-m-d", strtotime($request->tanggal_akhir)),
             'tahun' => session('tahun_penganggaran')
         ]);
+        
         if($response->successful()){
             return response()->json(['success'=> $response->json()]);
         }else{
@@ -69,24 +70,26 @@ class JadwalController extends Controller
 
     public function update(Request $request, $id)
     {
+        $validated = $request->validate([
+            'tahapan' => 'required|string',
+            'sub_tahapan' => 'required|string',
+            'tanggal_awal' => 'required|date',
+            'tanggal_akhir' => 'required|date',
+        ]);  
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
-        $response = Http::withToken($token)->post($url."/jadwal/update/".$id, [
-            'nama_kegiatan' => $request->nama_kegiatan,
-            'nama_sub_kegiatan' => $request->nama_sub_kegiatan,
+        $response = Http::withToken($token)->post($url."/jadwal/update/".$request->id, [
+            'tahapan' => $request->tahapan,
+            'sub_tahapan' => $request->sub_tahapan,
             'tanggal_awal' => date("Y-m-d", strtotime($request->tanggal_awal)),
             'tanggal_akhir' => date("Y-m-d", strtotime($request->tanggal_akhir)),
+            'tahun' => session('tahun_penganggaran')
         ]);
+        
         if($response->successful()){
-            $data = $response->object();
-            if (isset($data->status)) {
-                return response()->json(['success'=> 'Berhasil Menambah Data']);
-            } else {
-                return response()->json(['invalid'=> $response->json()]);
-            }
+            return response()->json(['success'=> $response->json()]);
         }else{
-            return $response->body();
-            return response()->json(['failed'=> $response->body()]);
+            return response()->json(['failed'=> $response->json()]);
         }
         
     }

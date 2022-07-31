@@ -84,13 +84,17 @@
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
         "use strict";
+        let bulan = $('#bulan_').val();
         $(function () {
-            let table = $('#kt_datatable');
-            let bulan = $('#bulan_').val();
-            table.DataTable({
+            datatable_(bulan)
+        })
+
+        function datatable_(bulan) {
+            $('#kt_datatable').dataTable().fnDestroy();
+            $('#kt_datatable').DataTable({
                 responsive: true,
                 pageLength: 10,
-                order: [[1, 'desc']],
+                order: [[1, 'asc'],[2, 'asc']],
                 processing:true,
                 ajax: '/skp-datatable?type=bulanan&bulan='+bulan,
                 columns : [
@@ -103,7 +107,11 @@
                     },{
                         data:'jenis'
                     },{
+                        data:'skp_atasan'
+                    },{
                         data:'rencana_kerja'
+                    },{
+                        data: 'aspek_skp'
                     },{
                         data: 'aspek_skp'
                     },{
@@ -116,11 +124,27 @@
                 ],
                 columnDefs : [
                     {
-                        targets: 1,
+                        targets: [1,2],
                         visible: false
                     },
                     {
-                        targets : 3,
+                        targets : 4,
+                        render : function (data) {
+                            
+                            let html ='';
+                            html += '<ul style="list-style:none">';
+                            $.each(data,function (x,y) {
+                                html += `<li style="margin-bottom:4rem">${y.aspek_skp}<li>`;
+                            })
+                            html += '</ul>';
+                            
+
+                            return html;
+                            
+                        }
+                    },
+                    {
+                        targets : 5,
                         render : function (data) {
                             
                             let html ='';
@@ -136,9 +160,9 @@
                         }
                     },
                     {
-                        targets : 4,
+                        targets : 6,
                         render : function (data) {
-                            
+                            console.log(data);
                             let html = '';
                             html += '<ul style="list-style:none">';
                             $.each(data, function (index,value) {
@@ -151,11 +175,10 @@
                             html += '</ul>';
                            
                             return html;
-                            
                         }
                     },
                     {
-                        targets : 5,
+                        targets : 7,
                         render : function (data) {
                             
                             let html ='';
@@ -165,6 +188,8 @@
                                 html += `<li style="margin-bottom:4rem">${y.satuan}<li>`;
                             })
                             html += '</ul>';
+                            
+
                             return html;
                             
                         }
@@ -178,15 +203,20 @@
                         render: function(data, type, full, meta) {
                             return `
                             <a role="button" href="/skp/edit/${data}?type=bulanan&bulan=${bulan}" class="btn btn-success btn-sm">Ubah</a>
-                            <button type="button" class="btn btn-danger btn-sm">Hapus</button>
+                            <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="${data}" data-bulan="${bulan}">Hapus</button>
                             `;
                         },
                     }
                 ],
                 rowGroup: {
-                    dataSrc: 'jenis_kinerja'
+                    dataSrc: ['jenis_kinerja','skp_atasan']
                 },
             });
+        }
+
+        $(document).on('change','#bulan_', function () {
+            let value = $(this).val();
+            datatable_(value)
         })
 
         $(document).on('click','#create_target', function (e) {
@@ -202,6 +232,49 @@
                 });
             }
         })
+
+        $(document).on('click','.btn-delete', function (e) {
+            e.preventDefault()
+            let params = $(this).attr('data-id');
+            let params_bulan = $(this).attr('data-bulan'); 
+            alert(params_bulan);
+                 Swal.fire({
+                    title: 'Apakah kamu yakin akan menghapus data ini ?',
+                    text: "Data akan di hapus permanen",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url  : '/skp/delete/'+ params + '?type=bulanan&bulan='+params_bulan,
+                                type : 'POST',
+                                data : {
+                                    '_method' : 'DELETE',
+                                    '_token' : $('meta[name="csrf-token"]').attr('content')
+                                },
+                                success: function (response) {
+                                    let res = JSON.parse(response);
+                                    console.log(response);
+                                    if (res.status !== false) {
+                                        Swal.fire('Deleted!', 'Your file has been deleted.','success');
+                                        $('#kt_datatable').DataTable().ajax.reload()
+                                    }else{
+                                        swal.fire({
+                                            title : "SKP tidak dapat di hapus. ",
+                                            text: "SKP digunakan oleh bawahaan. ",
+                                            icon: "warning",
+                                        });
+                                    }
+                                }
+                            })
+                        }
+                })
+        })
+
+        
 
         // function deleteRow(params) {
         //     Swal.fire({

@@ -139,14 +139,16 @@
                     {
                         targets : 6,
                         render : function (data) {
-                            
+                            // console.log(data);
                             let html ='';
                             let target = 0;
                             html += '<ul style="list-style:none">';
                             $.each(data,function (x,y) {
                                 target = 0;
                                 $.each(y.target_skp, function (n,m) {
-                                        target += m.target;
+                                        if (m['bulan'] == 0) {
+                                            target = m['target'];
+                                        }
                                 })
                                 html += `<li style="margin-bottom:4rem">${target}<li>`;
                                 
@@ -218,10 +220,10 @@
                                 },
                                 success: function (response) {
                                     let res = JSON.parse(response);
-                                    console.log(res.status);
+                                    console.log(response);
                                     if (res.status !== false) {
                                         Swal.fire('Deleted!', 'Your file has been deleted.','success');
-                                        table.ajax.reload();
+                                        $('#kt_datatable').DataTable().ajax.reload()
                                     }else{
                                         swal.fire({
                                             title : "SKP tidak dapat di hapus. ",

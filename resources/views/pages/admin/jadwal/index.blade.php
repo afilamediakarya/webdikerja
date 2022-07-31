@@ -68,6 +68,7 @@
 			<div class="offcanvas-content pr-5 mr-n5">
                 <form class="form" id="createForm">
                     @csrf
+                    
                     <input type="hidden" name="id"/>
                     <div class="form-group">
                         <label>Nama Tahapan</label>
@@ -99,26 +100,16 @@
                         <small class="text-danger sub_tahapan_error"></small>
                     </div>
                     <div class="form-group">
-                        <label>Jadwal Pelaksanaan</label>
                         <div class="row">
-                            <div class="input-group input-group-solid col">
-                                <input type="text" class="form-control" readonly  value="{{date("d-m-Y")}}" id="jadwal_1" aria-describedby="basic-addon2" name="tanggal_awal">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calendar icon-lg"></i>
-                                    </span>
-                                </div>
+                            <div class="form-group col-md-6">
+                                <label>Tanggal awal</label>
+                                <input type="date" class="form-control" name="tanggal_awal">
+                                <small class="text-danger tanggal_awal_error"></small>
                             </div>
-                            <div class="col-1 d-flex flex-center">
-                                <label class="mb-0">s/d</label>
-                            </div>
-                            <div class="input-group input-group-solid col">
-                                <input type="text" class="form-control" readonly  value="{{date("d-m-Y")}}" id="jadwal_2" aria-describedby="basic-addon2" name="tanggal_akhir">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calendar icon-lg"></i>
-                                    </span>
-                                </div>
+                            <div class="form-group col-md-6">
+                                <label>Tanggal akhir</label>
+                                <input type="date" class="form-control" name="tanggal_akhir">
+                                <small class="text-danger tanggal_akhir_error"></small>
                             </div>
                         </div>
                     </div>
@@ -126,7 +117,7 @@
                     <div class="">
                         <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
                         <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
+                    </div> 
                 </form>
 
 				<!--begin::Separator-->
@@ -147,6 +138,26 @@
             Panel.action('show','submit')
         })
 
+        $(document).on('click', '.button-update', function(){
+            Panel.action('show','update');
+            let params = $(this).attr('data-id')
+            $.ajax({
+                url:"admin/jadwal/"+params,
+                method:"GET",
+                success: function(response){
+                console.log(response.success)
+                if (response.success) {
+                
+                    $.each(response.success['data'], function( key, value ) {
+                        $("input[name='"+key+"']").val(value); 
+                        $("select[name='"+key+"']").val(value); 
+                    });
+                }
+                }
+            });
+            
+        })
+
         function datatable_() {
             $('#kt_datatable').dataTable().fnDestroy();
             $('#kt_datatable').DataTable({
@@ -159,7 +170,6 @@
                     { 
                     data : null, 
                         render: function (data, type, row, meta) {
-                            console.log(data);
                                 return meta.row + meta.settings._iDisplayStart + 1;
                         }  
                     },{
@@ -195,11 +205,9 @@
                         width: '15rem',
                         orderable: false,
                         render: function(data, type, full, meta) {
-                            let params = data.id+','+data.tanggal_absen+','+data.validation;
-                           
                             return `
-                            <a href="javascript:;" type="button" data-id="${params}" class="btn btn-secondary btn-sm button-update">Ubah</a>
-                            <a href="javascript:;" type="button" data-id="${params}" class="btn btn-danger btn-sm button-update">Hapus</a>
+                            <a href="javascript:;" type="button" data-id="${data}" class="btn btn-secondary btn-sm button-update">Ubah</a>
+             
                             `;
                         },
                     }
@@ -208,54 +216,109 @@
         }
 
         $(document).on('submit', "#createForm[data-type='submit']", function(e){
-        e.preventDefault();
-        $.ajaxSetup({
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
+            e.preventDefault();
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            $.ajax({
+                url : "{{route('post-jadwal')}}",
+                method : 'POST',
+                data: $('#createForm').serialize(),
+                success : function (res) {
+                        $('.text_danger').html('');
+                        console.log(res);
+                        if (res.success) {
+                            swal.fire({
+                                text: 'Jadwal berhasil di tambahkan',
+                                icon: "success",
+                                showConfirmButton:true,
+                                confirmButtonText: "OK, Siip",
+                            }).then(function() {
+                                $("#createForm")[0].reset();
+                                Panel.action('hide');
+                                $('.text_danger').html('');
+                                datatable_();
+                                // $('#kt_datatable').DataTable().ajax.reload();
+                            });      
+                        }else if(res.failed){
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Maaf, Anda gagal',
+                                text: res.failed
+                            })
+                        }else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Maaf, terjadi kesalahan',
+                                text: 'Silahkan Hubungi Admin'
+                            })
+                        }
+                    
+                    },
+                    error : function (xhr) {
+                        $('.text_danger').html('');
+                        let error = xhr.responseJSON.errors;
+                        $.each( error, function( key, value ) {
+                            $(`.${key}_error`).html(value)
+                        }); 
+                    }
+            });
         });
 
-        $.ajax({
-            url : "{{route('post-jadwal')}}",
-            method : 'POST',
-            data: $('#createForm').serialize(),
-            success : function (res) {
-                    $('.text_danger').html('');
-                    console.log(res);
-                    if (res.success) {
-                        swal.fire({
-                            text: 'Jadwal berhasil di tambahkan',
-                            icon: "success",
-                            showConfirmButton:true,
-                            confirmButtonText: "OK, Siip",
-                        }).then(function() {
-                            $("#createForm")[0].reset();
-                            Panel.action('hide');
-                            $('.text_danger').html('');
-                            // $('#kt_datatable').DataTable().ajax.reload();
-                        });      
-                    }else if(res.failed){
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Maaf, Anda gagal',
-                            text: res.failed
-                        })
-                    }else{
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Maaf, terjadi kesalahan',
-                            text: 'Silahkan Hubungi Admin'
-                        })
-                    }
-                
+        $(document).on('submit', "#createForm[data-type='update']", function(e){
+            let _id = $("input[name='id']").val();
+            e.preventDefault();
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
                 },
-                error : function (xhr) {
-                    $('.text_danger').html('');
-                    let error = xhr.responseJSON.errors;
-                    $.each( error, function( key, value ) {
-                        $(`.${key}_error`).html(value)
-                    }); 
-                }
+            });
+
+            $.ajax({
+                url : "/admin/jadwal/"+_id,
+                method : 'POST',
+                data: $('#createForm').serialize(),
+                success : function (res) {
+                        $('.text_danger').html('');
+                        console.log(res);
+                        if (res.success) {
+                            swal.fire({
+                                text: 'Jadwal berhasil di tambahkan',
+                                icon: "success",
+                                showConfirmButton:true,
+                                confirmButtonText: "OK, Siip",
+                            }).then(function() {
+                                $("#createForm")[0].reset();
+                                Panel.action('hide');
+                                $('.text_danger').html('');
+                                datatable_();
+                                // $('#kt_datatable').DataTable().ajax.reload();
+                            });      
+                        }else if(res.failed){
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Maaf, Anda gagal',
+                                text: res.failed
+                            })
+                        }else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Maaf, terjadi kesalahan',
+                                text: 'Silahkan Hubungi Admin'
+                            })
+                        }
+                    
+                    },
+                    error : function (xhr) {
+                        $('.text_danger').html('');
+                        let error = xhr.responseJSON.errors;
+                        $.each( error, function( key, value ) {
+                            $(`.${key}_error`).html(value)
+                        }); 
+                    }
             });
         });
 

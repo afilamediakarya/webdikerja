@@ -611,7 +611,12 @@ class SkpController extends Controller
     public function delete($params){
         $url = env('API_URL');
         $token = session()->get('user.access_token');
-        $response = Http::withToken($token)->delete($url."/skp/delete/".$params);
+        $type = request('type');
+        if ($type == 'tahunan') {
+            $response = Http::withToken($token)->delete($url."/skp/delete/".$params."?type=".$type);
+        }else{
+            $response = Http::withToken($token)->delete($url."/skp/delete/".$params."?type=".$type."&bulan=".request('bulan'));
+        }
         return $response;
     }
 }

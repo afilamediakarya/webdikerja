@@ -8,24 +8,7 @@
 @section('button')
     <!-- <input id="bday-month" type="month" value="{{ date('Y-m') }}" class="form-control" > -->
 
-    <select id="bulan_" class="form-control" style="position: absolute;left: 63rem;width: 12rem;">
-        <option selected disabled> Pilih bulan </option>
-        @foreach($nama_bulan as $in => $month)
-            <option value="{{$in+1}}" @if($in+1 == date('m')) selected @endif>{{$month}}</option>
-        @endforeach
-        <!-- <option value="1">Januari</option>
-        <option value="2">Februari</option>
-        <option value="3">Maret</option>
-        <option value="4">April</option>
-        <option value="5">Mei</option>
-        <option value="6">Juni</option>
-        <option value="7">Juli</option>
-        <option value="8">Agustus</option>
-        <option value="9">September</option>
-        <option value="10">Oktober</option>
-        <option value="11">November</option>
-        <option value="12">Desember</option> -->
-    </select>
+ 
 
     <a href="javascript:;" id="create_target" class="btn btn-primary font-weight-bolder">
         <span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -50,6 +33,12 @@
             <div class="card card-custom">
                 
                 <div class="card-body">
+                <select id="bulan_" class="form-control" style="    position: relative;left: 52rem;top: 32px;width: 12rem;">
+                    <option selected disabled> Pilih bulan </option>
+                    @foreach($nama_bulan as $in => $month)
+                        <option value="{{$in+1}}" @if($in+1 == date('m')) selected @endif>{{$month}}</option>
+                    @endforeach
+                </select>
                     <!--begin: Datatable-->
                     <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
@@ -86,10 +75,14 @@
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
         "use strict";
+        let bulan = $('#bulan_').val();
         $(function () {
-            let table = $('#kt_datatable');
-            let bulan = $('#bulan_').val();
-            table.DataTable({
+            datatable_(bulan);
+        })
+
+        function datatable_(bulan) {
+            $('#kt_datatable').dataTable().fnDestroy();
+            $('#kt_datatable').DataTable({
                 responsive: true,
                 pageLength: 10,
                 order: [[1, 'asc'],[2, 'asc']],
@@ -201,7 +194,7 @@
                         render: function(data, type, full, meta) {
                             return `
                             <a role="button" href="/skp/edit/${data}?type=bulanan&bulan=${bulan}" class="btn btn-success btn-sm">Ubah</a>
-                            <button type="button" class="btn btn-danger btn-sm">Hapus</button>
+                            <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="${data}" data-bulan="${bulan}">Hapus</button>
                             `;
                         },
                     }
@@ -210,6 +203,11 @@
                     dataSrc: ['jenis_kinerja','skp_atasan']
                 },
             });
+        }
+
+        $(document).on('change','#bulan_', function () {
+            let value = $(this).val();
+            datatable_(value)
         })
 
         $(document).on('click','#create_target', function (e) {
@@ -224,6 +222,47 @@
                     icon: "warning",
                 });
             }
+        })
+
+        $(document).on('click','.btn-delete', function (e) {
+            e.preventDefault()
+            let params = $(this).attr('data-id');
+            let params_bulan = $(this).attr('data-bulan'); 
+            alert(params_bulan);
+                 Swal.fire({
+                    title: 'Apakah kamu yakin akan menghapus data ini ?',
+                    text: "Data akan di hapus permanen",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url  : '/skp/delete/'+ params + '?type=bulanan&bulan='+params_bulan,
+                                type : 'POST',
+                                data : {
+                                    '_method' : 'DELETE',
+                                    '_token' : $('meta[name="csrf-token"]').attr('content')
+                                },
+                                success: function (response) {
+                                    let res = JSON.parse(response);
+                                    console.log(response);
+                                    if (res.status !== false) {
+                                        Swal.fire('Deleted!', 'Your file has been deleted.','success');
+                                        $('#kt_datatable').DataTable().ajax.reload()
+                                    }else{
+                                        swal.fire({
+                                            title : "SKP tidak dapat di hapus. ",
+                                            text: "SKP digunakan oleh bawahaan. ",
+                                            icon: "warning",
+                                        });
+                                    }
+                                }
+                            })
+                        }
+                })
         })
 
         // function deleteRow(params) {
