@@ -24,23 +24,11 @@ class RealisasiController extends Controller
 
         $level = $this->checkLevel();
         if ($level == 1 || $level == 2) {
-           $level = 'kepala';   
+            return view('pages.realisasi.index2', compact('page_title', 'page_description','breadcumb'));
         } else {
-            $level = 'pegawai';
+            $nama_bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            return view('pages.realisasi.index', compact('page_title', 'page_description','breadcumb','nama_bulan'));
         }
-
-        $data = Http::withToken($token)->get($url."/realisasi_skp/list/".$level);
-        // // $data_ = json_encode($data);
-        // foreach ($data as $value) {
-        //     return $value;
-        //     // foreach ($value['aspek_skp'] as $i => $l) {
-        //     //     return $l;
-        //     // }
-        // 
-
-
-
-        return view('pages.realisasi.index', compact('page_title', 'page_description','breadcumb','data','level'));
     }
 
     public function checkKuantitasRealisasi($bulan,$params){
