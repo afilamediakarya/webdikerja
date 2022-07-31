@@ -8,25 +8,6 @@
 @section('button')
     <!-- <input id="bday-month" type="month" value="{{ date('Y-m') }}" class="form-control" > -->
 
-    <select id="bulan_" class="form-control" style="position: absolute;left: 63rem;width: 12rem;">
-        <option selected disabled> Pilih bulan </option>
-        @foreach($nama_bulan as $in => $month)
-            <option value="{{$in+1}}" @if($in+1 == date('m')) selected @endif>{{$month}}</option>
-        @endforeach
-        <!-- <option value="1">Januari</option>
-        <option value="2">Februari</option>
-        <option value="3">Maret</option>
-        <option value="4">April</option>
-        <option value="5">Mei</option>
-        <option value="6">Juni</option>
-        <option value="7">Juli</option>
-        <option value="8">Agustus</option>
-        <option value="9">September</option>
-        <option value="10">Oktober</option>
-        <option value="11">November</option>
-        <option value="12">Desember</option> -->
-    </select>
-
     <a href="javascript:;" id="create_target" class="btn btn-primary font-weight-bolder">
         <span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -50,6 +31,12 @@
             <div class="card card-custom">
                 
                 <div class="card-body">
+                <select id="bulan_" class="form-control" style="    position: relative;left: 52rem;top: 32px;width: 12rem;">
+                    <option selected disabled> Pilih bulan </option>
+                    @foreach($nama_bulan as $in => $month)
+                        <option value="{{$in+1}}" @if($in+1 == date('m')) selected @endif>{{$month}}</option>
+                    @endforeach
+                </select>
                     <!--begin: Datatable-->
                     <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
@@ -107,11 +94,7 @@
                     },{
                         data:'jenis'
                     },{
-                        data:'skp_atasan'
-                    },{
                         data:'rencana_kerja'
-                    },{
-                        data: 'aspek_skp'
                     },{
                         data: 'aspek_skp'
                     },{
@@ -124,27 +107,11 @@
                 ],
                 columnDefs : [
                     {
-                        targets: [1,2],
+                        targets: 1,
                         visible: false
                     },
                     {
-                        targets : 4,
-                        render : function (data) {
-                            
-                            let html ='';
-                            html += '<ul style="list-style:none">';
-                            $.each(data,function (x,y) {
-                                html += `<li style="margin-bottom:4rem">${y.aspek_skp}<li>`;
-                            })
-                            html += '</ul>';
-                            
-
-                            return html;
-                            
-                        }
-                    },
-                    {
-                        targets : 5,
+                        targets : 3,
                         render : function (data) {
                             
                             let html ='';
@@ -160,7 +127,7 @@
                         }
                     },
                     {
-                        targets : 6,
+                        targets : 4,
                         render : function (data) {
                             console.log(data);
                             let html = '';
@@ -178,7 +145,7 @@
                         }
                     },
                     {
-                        targets : 7,
+                        targets : 5,
                         render : function (data) {
                             
                             let html ='';
@@ -209,7 +176,7 @@
                     }
                 ],
                 rowGroup: {
-                    dataSrc: ['jenis_kinerja','skp_atasan']
+                    dataSrc: 'jenis_kinerja'
                 },
             });
         }
