@@ -397,8 +397,6 @@
                                     <th>Nama</th>
                                     <th>NIP</th>
                                     <th>Jabatan</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -420,27 +418,7 @@
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
             "use strict";  
-        let bulan = '';
 
-        $('#bulan_selectt').html(`<select id="bulan_select" class="form-control">
-                <option selected disabled>Pilih Bulan</option>
-                <option value="1">Januari</option>
-                <option value="2">Februari</option>
-                <option value="3">Maret</option>
-                <option value="4">April</option>
-                <option value="5">Mei</option>
-                <option value="6">Juni</option>
-                <option value="7">Juli</option>
-                <option value="8">Agustus</option>
-                <option value="9">September</option>
-                <option value="10">Oktober</option>
-                <option value="11">November</option>
-                <option value="12">Desember</option>
-            </select>`);
-
-            $('#bulan_select').on('change',function () {
-                bulan = $(this).val();
-            })
 
         function reviewSkp(type,id_pegawai) {
             if (bulan !== '') {
@@ -478,39 +456,7 @@
                     },{
                         data:'nip'
                     },{
-                        data:'jenis_jabatan'
-                    },{
-                        data:'status',
-                    },{
-                        data:null,
-                    }
-                ],
-                columnDefs: [
-                    {
-                        targets: -1,
-                        title: 'Actions',
-                        orderable: false,
-                        render: function(data) {
-                            if (data.status == 'Selesai') {
-                                return `<button type="button" class="btn btn-secondary" disabled>Review Skp</button>`
-                            }else{
-                                return `<a href="javascript:;" onClick="reviewSkp('realisasi','${data.id_pegawai}')" role="button" class="btn btn-primary">Review Skp</a>`;
-                            }
-                            
-                        },
-                    }, {
-                        targets: 4,
-                        title: 'Status',
-                        orderable: false,
-                        render: function(data) {
-                            if (data == 'Belum Review') {
-                                return `<a href="javascript:;" class="btn btn-light-danger btn-sm">${data}</a>`;
-                            }else if(data == 'Belum Sesuai'){
-                                return `<a href="javascript:;" class="btn btn-light-warning btn-sm">${data}</a>`;
-                            }else if(data == 'Selesai'){
-                                return `<a href="javascript:;" class="btn btn-light-success btn-sm">${data}</a>`;
-                            }
-                        },
+                        data:'nama_jabatan'
                     }
                 ],
             });

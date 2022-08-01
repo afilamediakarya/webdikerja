@@ -123,12 +123,16 @@
                             $.each(data,function (x,y) {
                                 target = 0;
                                 $.each(y.target_skp, function (n,m) {
-                                        target += m.target;
+                                        if (m['bulan'] == 0) {
+                                            target = m['target'];
+                                        }
                                 })
                                 html += `<li style="margin-bottom:4rem">${target}<li>`;
                                 
                             })
                             html += '</ul>';
+                            
+
                             return html;
                             
                         }

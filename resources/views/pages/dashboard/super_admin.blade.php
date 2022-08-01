@@ -136,44 +136,7 @@
                         </div>
                     </div>               
                 </div>
-            <div class="row">
-              
-                
-
-                <div class="col-lg-12 col-xxl-12 order-1 order-xxl-2">
-                    <div class="card card-custom card-stretch gutter-b">
-                        <!--begin::Header-->
-                        <div class="card-header border-0">
-                            <h3 class="card-title font-weight-bolder text-dark">Pegawai yang dinilai</h3>
-                        </div>
-                        <!--end::Header-->
-                        <!--begin::Body-->
-                        <div class="card-body pt-2">
-                            <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Nama</th>
-                                        <th>Status Review SKP</th>
-                                        <th>Realsi</th>
-                                        <th>Nilai Prilaku</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1.</td>
-                                        <td>Nama</td>
-                                        <td><span class="label label-lg font-weight-bold label-light-warning label-inline">Belum Review</span></td>
-                                        <td><span class="label label-lg font-weight-bold label-light-warning label-inline">Belum Review</span></td>
-                                        <td>Nilai Prilaku</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!--end::Body-->
-                    </div>
-                </div>
-            </div>
+         
         </div>
         <!--end::Container-->
     </div>
@@ -184,78 +147,78 @@
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
         "use strict";
-        var dataRow = function() {
-            var init = function() {
-                var table = $('#kt_datatable');
+        // var dataRow = function() {
+        //     var init = function() {
+        //         var table = $('#kt_datatable');
     
-                // begin first table
-                table.DataTable({
-                    responsive: true,
-                    pageLength: 25,
-                    order: [[0, 'asc']],
-                    // processing:true,
-                    // ajax: "{{ route('admin') }}",
-                    columns:[{ 
-                            data : null, 
-                            render: function (data, type, row, meta) {
-                                    return meta.row + meta.settings._iDisplayStart + 1;
-                            }  
-                        },{
-                            data:'nama'
-                        },{
-                            data:'satuan_kerja.nama_satuan_kerja'
-                        },
-                        {
-                            field: 'Realisasi',
-                            title: 'Status Review Realisasi',
-                            // callback function support for column rendering
-                            template: function(row) {
-                                var status = {
-                                    1: {'title': 'Pending', 'class': 'label-light-primary'},
-                                    2: {'title': 'Delivered', 'class': ' label-light-danger'},
-                                    3: {'title': 'Canceled', 'class': ' label-light-primary'},
-                                    4: {'title': 'Success', 'class': ' label-light-success'},
-                                    5: {'title': 'Info', 'class': ' label-light-info'},
-                                    6: {'title': 'Danger', 'class': ' label-light-danger'},
-                                    7: {'title': 'Warning', 'class': ' label-light-warning'},
-                                };
-                                return '<span class="label label-lg font-weight-bold' + status[row.Status].class + ' label-inline">' + status[row.Status].title + '</span>';
-                            },
-                        },{
-                            data:'id',
-                        }
-                    ],
-                    columnDefs: [
-                        {
-                            targets: -1,
-                            title: 'Actions',
-                            orderable: false,
-                            render: function(data, type, full, meta) {
-                                return '<a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>';
-                            },
-                        }
-                    ],
-                });
-            };
+        //         // begin first table
+        //         table.DataTable({
+        //             responsive: true,
+        //             pageLength: 25,
+        //             order: [[0, 'asc']],
+        //             // processing:true,
+        //             // ajax: "{{ route('admin') }}",
+        //             columns:[{ 
+        //                     data : null, 
+        //                     render: function (data, type, row, meta) {
+        //                             return meta.row + meta.settings._iDisplayStart + 1;
+        //                     }  
+        //                 },{
+        //                     data:'nama'
+        //                 },{
+        //                     data:'satuan_kerja.nama_satuan_kerja'
+        //                 },
+        //                 {
+        //                     field: 'Realisasi',
+        //                     title: 'Status Review Realisasi',
+        //                     // callback function support for column rendering
+        //                     template: function(row) {
+        //                         var status = {
+        //                             1: {'title': 'Pending', 'class': 'label-light-primary'},
+        //                             2: {'title': 'Delivered', 'class': ' label-light-danger'},
+        //                             3: {'title': 'Canceled', 'class': ' label-light-primary'},
+        //                             4: {'title': 'Success', 'class': ' label-light-success'},
+        //                             5: {'title': 'Info', 'class': ' label-light-info'},
+        //                             6: {'title': 'Danger', 'class': ' label-light-danger'},
+        //                             7: {'title': 'Warning', 'class': ' label-light-warning'},
+        //                         };
+        //                         return '<span class="label label-lg font-weight-bold' + status[row.Status].class + ' label-inline">' + status[row.Status].title + '</span>';
+        //                     },
+        //                 },{
+        //                     data:'id',
+        //                 }
+        //             ],
+        //             columnDefs: [
+        //                 {
+        //                     targets: -1,
+        //                     title: 'Actions',
+        //                     orderable: false,
+        //                     render: function(data, type, full, meta) {
+        //                         return '<a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>';
+        //                     },
+        //                 }
+        //             ],
+        //         });
+        //     };
     
-            var destroy = function(){
-                var table = $('#kt_datatable').DataTable();
-                table.destroy();
-            }
+        //     var destroy = function(){
+        //         var table = $('#kt_datatable').DataTable();
+        //         table.destroy();
+        //     }
     
-            return {
-                init: function() {
-                    init();
-                },
-                destroy:function(){
-                    destroy();
-                }
+        //     return {
+        //         init: function() {
+        //             init();
+        //         },
+        //         destroy:function(){
+        //             destroy();
+        //         }
     
-            };
-        }();
+        //     };
+        // }();
             
         jQuery(document).ready(function() {
-            dataRow.init();
+            // dataRow.init();
         });
     </script>
 @endsection

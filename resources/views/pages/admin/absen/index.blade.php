@@ -146,12 +146,12 @@
                     <div class="row form-update-form">
                         <div class="form-group col-6">
                             <label>Waktu absen masuk</label>
-                            <input type="time" class="form-control" name="waktu_absen_masuk">
+                            <input class="form-control input-time" type="time" ng-model="dr.startTime" name="waktu_absen_masuk">
                            <small class="text-danger waktu_absen_masuk_error"></small>
                         </div>
                         <div class="form-group col-6">
                                 <label>Waktu Absen pulang</label>
-                                <input type="time" class="form-control" name="waktu_absen_pulang">
+                                <input class="form-control input-time" type="time" ng-model="dr.startTime" name="waktu_absen_pulang">
                            <small class="text-danger waktu_absen_pulang_error"></small>
                         </div>
                     </div>
@@ -164,7 +164,7 @@
                         </div>
                         <div class="form-group col-6 form-create-form">
                                 <label>Waktu Absen</label>
-                                <input type="time" class="form-control" name="waktu_absen">
+                                <input class="form-control input-time" type="time" ng-model="dr.startTime" name="waktu_absen">
                            <small class="text-danger waktu_absen_error"></small>
                         </div>
                     </div>
@@ -479,13 +479,17 @@
 
         jQuery(document).ready(function() {
             Panel.init('side_form');
-            $('#id_satuan_kerja').select2();
+            $('#id_satuan_kerja').select2({
+                placeholder: "Pilih Satuan Kerja"
+            });
             $('#pegawai').select2({
                 placeholder: "Pilih Pegawai"
             });
             $('#filter-satuan-kerja').select2({
                 placeholder: "Pilih Satuan Kerja"
             });
+
+
             
             datatable_();
 
