@@ -113,6 +113,7 @@
         }
 
         $(document).on('change', '#rencana_kerja', function () {
+            alert($(this).val())
             $.ajax({
                 url : '/skp/show/'+$(this).val(),
                 method : 'GET',

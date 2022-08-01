@@ -223,7 +223,7 @@
                                     console.log(response);
                                     if (res.status !== false) {
                                         Swal.fire('Deleted!', 'Your file has been deleted.','success');
-                                        $('#kt_datatable').DataTable().ajax.reload()
+                                        table.ajax.reload()
                                     }else{
                                         swal.fire({
                                             title : "SKP tidak dapat di hapus. ",

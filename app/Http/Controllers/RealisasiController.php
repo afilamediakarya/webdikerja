@@ -12,6 +12,19 @@ class RealisasiController extends Controller
         return $level;
     }
 
+    public function datatable(){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $level = $this->checkLevel();
+        $data = array();
+        if ($level == 1 || $level == 2) {
+            $data = Http::withToken($token)->get($url."/realisasi_skp/list?type=kepala&tahun=".session('tahun_penganggaran')."&bulan=".request('bulan')); 
+        }else{
+            $data = Http::withToken($token)->get($url."/realisasi_skp/list?type=pegawai&tahun=".session('tahun_penganggaran')."&bulan=".request('bulan')); 
+        }
+        return $data;
+    }
+
     public function index()
     {
         $page_title = 'Realisasi';
@@ -20,13 +33,12 @@ class RealisasiController extends Controller
 
         $url = env('API_URL');
         $token = session()->get('user.access_token');
-        
+        $nama_bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 
         $level = $this->checkLevel();
         if ($level == 1 || $level == 2) {
-            return view('pages.realisasi.index2', compact('page_title', 'page_description','breadcumb'));
+            return view('pages.realisasi.index2', compact('page_title', 'page_description','breadcumb','nama_bulan'));
         } else {
-            $nama_bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
             return view('pages.realisasi.index', compact('page_title', 'page_description','breadcumb','nama_bulan'));
         }
     }
@@ -39,19 +51,20 @@ class RealisasiController extends Controller
     }
 
 
-    public function create($params,$rencana,$bulan){
+    public function create(){
         $page_title = 'Realisasi';
         $page_description = 'Daftar Sasaran Kinerja Pegawai';
         $breadcumb = ['Daftar Sasaran Kinerja Pegawai', 'tambah Realisasi'];
 
+        $bulan = request('bulan');
+        $rencana = request('rencana_kerja');
+
         $url = env('API_URL');
         $token = session()->get('user.access_token');
-        $dataById = Http::withToken($token)->get($url."/skp/show/".$params);
+        $dataById = Http::withToken($token)->get($url."/skp/show/".request('id_skp'));
         // return $dataById;
         $data = $dataById['data'];
-        $kuantitas = $this->checkKuantitasRealisasi($bulan,$params);
-        // return $kuantitas;
-    
+        $kuantitas = $this->checkKuantitasRealisasi($bulan,request('id_skp'));
         return view('pages.realisasi.add', compact('page_title', 'page_description','breadcumb','data','rencana','bulan','kuantitas'));
     }
 

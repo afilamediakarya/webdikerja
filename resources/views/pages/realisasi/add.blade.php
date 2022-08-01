@@ -23,20 +23,26 @@
                     <form class="form">
 
                     <div class="row">
+                        @if($rencana !== 'undefined')
                         <div class="form-group col-6">
                             <label for="exampleTextarea">Rencana Kinerja Pimpinan
                             <span class="text-danger">*</span></label>
                             <textarea 
-                                class="form-control bg-secondary" 
+                                class="form-control form-control-solid" 
                                 readonly="readonly" 
                                 id="exampleTextarea" 
                                 rows="4">{{$rencana}}</textarea>
                         </div>
+                        @endif
+                        @if($rencana !== 'undefined')
                         <div class="form-group col-6">
+                        @else    
+                        <div class="form-group col-12">
+                        @endif
                             <label for="exampleTextarea">Rencana Kinerja Pegawai
                             <span class="text-danger">*</span></label>
                             <textarea 
-                                class="form-control bg-secondary" 
+                                class="form-control form-control-solid" 
                                 readonly="readonly" 
                                 id="exampleTextarea" 
                                 rows="4">{{$data['rencana_kerja']}}</textarea>
@@ -56,25 +62,30 @@
                                 <label for="exampleTextarea">Indikator Kinerja Individu
                                 <span class="text-danger">*</span></label>
                                 <textarea 
-                                    class="form-control" 
+                                    class="form-control form-control-solid" 
                                     id="exampleTextarea" 
                                     rows="6" readonly>{{$value['iki']}}</textarea>
                             </div>
                             <div class="col-6">
                                 <div class="row">
                                     <div class="form-group col-6">
-                                            @php
+                                            <!-- @php
                                                 $num = 0;
                                                 foreach($value['target_skp'] as $f => $b){
                                                     $num += $b['target'];
                                                 }
-                                            @endphp
-                                        <label>Target </label>
-                                        <input type="text" readonly value="{{$num}}" class="form-control" placeholder="">
+                                            @endphp -->
+                                        @foreach($value['target_skp'] as $f => $b)
+                                            @if($b['bulan'] == $bulan)
+                                            <label>Target </label>
+                                        <input type="text" readonly value="{{$b['target']}}" class="form-control form-control-solid" placeholder="">
+                                            @endif
+                                        @endforeach
+                                       
                                     </div>
                                     <div class="form-group col-6">
                                         <label>Satuan </label>
-                                        <input type="text" readonly value="{{$value['satuan']}}" class="form-control" placeholder="">
+                                        <input type="text" readonly value="{{$value['satuan']}}" class="form-control form-control-solid" placeholder="">
                                     </div>
                                     <div class="form-group col-6">
                                         
@@ -82,13 +93,8 @@
                                             @for ($i=0; $i < count($value['realisasi_skp']); $i++)
                                                 @if($bulan != 0)
                                                     @if($value['realisasi_skp'][$i]['bulan'] == $bulan)
-                                                        @if($value['aspek_skp'] == 'kuantitas')
-                                                        <label>Realisasi </label>
-                                                        <input type="text" id="tes" class="form-control form-control-solid" name="realisasi[{{$key}}]" value="{{$kuantitas}}" placeholder="" readonly>
-                                                        @else
-                                                         <label>Realisasi </label>
-                                                        <input type="text" id="tes" class="form-control" name="realisasi[{{$key}}]" value="{{$value['realisasi_skp'][$i]['bulan']}}" placeholder="">
-                                                    @endif
+                                                    <label>Realisasi </label>
+                                                        <input type="number" id="tes" class="form-control" name="realisasi[{{$key}}]" value="{{$value['realisasi_skp'][$i]['realisasi_bulanan']}}" placeholder="" >
                                                     
                                                     @endif
                                                 @else
