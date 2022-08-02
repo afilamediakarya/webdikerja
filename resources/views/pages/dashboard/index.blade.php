@@ -445,7 +445,7 @@
                 pageLength: 10,
                 order: [[0, 'asc']],
                 processing:true,
-                ajax: "/get_data/penilaian/realisasi",
+                ajax: "/dashboard/pegawai/level",
                 columns:[{ 
                         data : null, 
                         render: function (data, type, row, meta) {

@@ -51,8 +51,12 @@ class PagesController extends Controller
             $data = $this->getDataDashboard($type);
             return view('pages.dashboard.super_admin', compact('page_title', 'page_description','breadcumb','data'));
         }
+    }
 
-        
+    public function pegawai_dinilai(){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $response = Http::withToken($token)->get($url."/dashboard/pegawai");
     }
 
 }

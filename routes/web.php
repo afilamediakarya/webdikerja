@@ -51,6 +51,7 @@ Route::get('set-tahun-penganggaran', [Controller::class, 'setTahunAnggaran'])->n
 Route::middleware('Auth')->group(function(){
 
     Route::get('/dashboard/{type}', [PagesController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/pegawai/level', [PagesController::class, 'pegawai_dinilai'])->name('dashboard.pegawai');
     
     // Route::get('/', [PagesController::class, 'index_'])->name('main');
 
@@ -91,8 +92,10 @@ Route::middleware('Auth')->group(function(){
     });
     
     Route::get('/penilaian/{type}', [PenilaianController::class, 'index'])->name('penilaian');
-    Route::get('/penilaian/{type}/{id}', [PenilaianController::class, 'create'])->name('tambah-penilaian');
-    Route::get('/penilaian/realisasi/{type}/{id}/{bulan}', [PenilaianController::class, 'createRealisasi'])->name('tambah-penilaian-realisasi');
+    Route::get('/penilaian-create', [PenilaianController::class, 'create'])->name('tambah-penilaian');
+    Route::get('/datatable/penilaian-skp-review', [PenilaianController::class, 'datatable'])->name('datatable-penilaian');
+    // Route::get('/penilaian/{type}/{id}', [PenilaianController::class, 'create'])->name('tambah-penilaian');
+    // Route::get('/penilaian/realisasi/{type}/{id}/{bulan}', [PenilaianController::class, 'createRealisasi'])->name('tambah-penilaian-realisasi');
     Route::get('/get_data/penilaian/{type}', [PenilaianController::class, 'getData'])->name('getdata_penilaian');
     // Route::get('/get_data/penilaian/{type}', [PenilaianController::class, 'getData'])->name('getdata_penilaian');
     Route::post('/review_skp', [PenilaianController::class, 'postReviewSkp'])->name('postReviewSkp');
