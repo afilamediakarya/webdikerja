@@ -64,7 +64,7 @@
                             </svg>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-text text-capitalize">SKP</span>
+                        <span class="menu-text text-capitalize">Target</span>
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="menu-submenu">
@@ -75,7 +75,7 @@
                                     <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
-                                    <span class="menu-text text-capitalize">SKP tahunan</span>
+                                    <span class="menu-text text-capitalize">Target tahunan</span>
                                 </a>
                             </li>
                             <li class="menu-item" aria-haspopup="true">
@@ -83,7 +83,7 @@
                                     <i class="menu-bullet menu-bullet-dot">
                                         <span></span>
                                     </i>
-                                    <span class="menu-text text-capitalize">SKP bulanan</span>
+                                    <span class="menu-text text-capitalize">Target bulanan</span>
                                 </a>
                             </li>
                        
@@ -110,7 +110,7 @@
                     </a>
                 </li> -->
 
-                <li class="menu-item {{ Request::path() == 'aktivitas' ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                <!-- <li class="menu-item {{ Request::path() == 'aktivitas' ? 'menu-item-active' : '' }}" aria-haspopup="true">
                     <a href="{{url('/aktivitas')}}" class="menu-link">
                         <span class="svg-icon menu-icon">
                            
@@ -122,11 +122,10 @@
                                     <path d="M5,3 L9,3 C10.1045695,3 11,3.8954305 11,5 L11,17 C11,19.209139 9.209139,21 7,21 C4.790861,21 3,19.209139 3,17 L3,5 C3,3.8954305 3.8954305,3 5,3 Z M7,19 C8.1045695,19 9,18.1045695 9,17 C9,15.8954305 8.1045695,15 7,15 C5.8954305,15 5,15.8954305 5,17 C5,18.1045695 5.8954305,19 7,19 Z" fill="#000000"/>
                                 </g>
                             </svg>
-                            <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-text text-capitalize">Aktivitas</span>
+                        <span class="menu-text text-capitalize">Aktivitas hold</span>
                     </a>
-                </li>
+                </li> -->
 
                 <li class="menu-item {{ Request::path() == 'realisasi' ? 'menu-item-active' : '' }}" aria-haspopup="true">
                     <a href="{{url('/realisasi')}}" class="menu-link">
