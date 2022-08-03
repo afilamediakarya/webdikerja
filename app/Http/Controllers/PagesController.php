@@ -56,7 +56,8 @@ class PagesController extends Controller
     public function pegawai_dinilai(){
         $url = env('API_URL');
         $token = session()->get('user.access_token');
-        $response = Http::withToken($token)->get($url."/dashboard/pegawai");
+        $response = Http::withToken($token)->get($url."/dashboard/pegawai/level");
+        return $response;
     }
 
 }

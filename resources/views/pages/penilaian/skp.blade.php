@@ -195,11 +195,15 @@
                             console.log(data);
                             let checked_true = '';
                             let checked_false = '';
-
+                            let keterangan = '';
                             if (data.kesesuaian == 'ya') {
                                 checked_true = 'checked';
                             } else {
                                 checked_false = 'checked';
+                            }
+
+                            if (data.keterangan !== null) {
+                                keterangan = data.keterangan
                             }
 
                             return `
@@ -217,7 +221,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="keterangan${meta.row}">Keterangan</label>
-                                <textarea name="keterangan[${meta.row}]" class="form-control form-control-solid" id="keterangan${meta.row}"  rows="5">${data.keterangan}</textarea>
+                                <textarea name="keterangan[${meta.row}]" class="form-control form-control-solid" id="keterangan${meta.row}"  rows="5">${keterangan}</textarea>
                             </div>
                             `;
                         },

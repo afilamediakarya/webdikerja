@@ -18,6 +18,15 @@
             <div class="card card-custom">
                 
                 <div class="card-body">
+                    @if($type == 'realisasi')
+                    <select id="bulan_" class="form-control" style="position: relative;bottom: 11px;width: 12rem;">
+                        <option selected disabled> Pilih bulan </option>
+                        <option value="0">Tahunan</option>
+                        @foreach($nama_bulan as $in => $month)
+                            <option value="{{$in+1}}" @if($in+1 == date('m')) selected @endif>{{$month}}</option>
+                        @endforeach
+                    </select>
+                    @endif
                     <!--begin: Datatable-->
                     <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
@@ -135,7 +144,7 @@
                 pageLength: 10,
                 order: [[0, 'asc']],
                 processing:true,
-                ajax: "/get_data/penilaian/"+type,
+                ajax: `/get_data/penilaian/${type}`,
                 columns:[{ 
                         data : null, 
                         render: function (data, type, row, meta) {
@@ -146,7 +155,7 @@
                     },{
                         data:'nip'
                     },{
-                        data:'jenis_jabatan'
+                        data:'nama_jabatan'
                     },{
                         data:'status',
                     },{
@@ -160,10 +169,9 @@
                         orderable: false,
                         render: function(data) {
                             if (data.status == 'Selesai') {
-                                return `<button type="button" class="btn btn-secondary" disabled>Review Skp</button>`
+                                return `<button type="button" class="btn btn-secondary" disabled>Review Realisasi</button>`
                             }else{
-                                // return `<a href="/penilaian/realisasi/${type}/${data.id_pegawai}/${bulan}" role="button" class="btn btn-primary">Review Skp</a>`;
-                                return `<a href="javascript:;" onClick="reviewSkp('${type}','${data.id_pegawai}')" role="button" class="btn btn-primary">Review Skp</a>`;
+                                return `<a href="/penilaian-create?type=${type}&id_pegawai=${data.id_pegawai}&bulan=${$('#bulan_').val()}" role="button" class="btn btn-primary">Review Realisasi</a>`;
                             }
                             
                         },

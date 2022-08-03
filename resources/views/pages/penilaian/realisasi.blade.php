@@ -5,19 +5,6 @@
 @endsection
 
 
-@section('button')
-    <a href="{{url('skp/tambah')}}" class="btn btn-primary font-weight-bolder">
-        <span class="svg-icon"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1"/>
-                <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000) " x="4" y="11" width="16" height="2" rx="1"/>
-            </g>
-        </svg><!--end::Svg Icon--></span>
-        Tambah SKP
-    </a>
-@endsection
-
-
 @section('content')
 
 <!--begin::Entry-->
@@ -35,163 +22,22 @@
                     <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                            <th>No.</th>
-                                    <th>Rencana Kerja</th>
-                                    <th>Aspek</th>
-                                    <th nowrap="nowrap">Indikator Kinerja Individu</th>
-                                    <th>Target</th>
-                                    <th>Satuan</th>
-                                    <th>Realisasi</th>
-                                    <th>Aksi</th>
+                              <th>No.</th>
+                                <th>Jenis Kinerja</th>
+                                <th>Rencana Kerja atasan</th>
+                                <th>Rencana Kerja</th>
+                                <th>Aspek</th>
+                                <th nowrap="nowrap">Indikator Kinerja Individu</th>
+                                <th>Target</th>
+                                <th>Satuan</th>
+                                <th>Realisasi</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                                @php
-                                    $inc_letter = 'A';
-                                    $no = 0;
-                                @endphp
+                
                                 
-                                @if(isset($skp['data']['utama']))
-                                <tr>
-                                    <td colspan="7"><b>A. Kinerja Utama</b></td>
-                                </tr> 
-                                @foreach($skp['data']['utama'] as $key => $value)
-                                    <tr style="background:#f2f2f2">
-                                        <td>{{$inc_letter++}}.</td>
-                                        <td colspan="7">{{$value['atasan']['rencana_kerja']}}</td>  
-                                    <tr>
-
-                                    @foreach($value['skp_child'] as $k => $v)
-                                        @foreach($v['aspek_skp'] as $i => $l)
-                                        <tr>
-                                        
-                                            @if($i == 0)
-                                            <td>{{$no+1}}.</td>
-                                            <td>{{$v['rencana_kerja']}}</td>
-                                            @else
-                                            <td></td>
-                                            <td></td>
-                                            @endif
-                                            <td>{{$l['aspek_skp']}}</td>
-                                            <td>{{$l['iki']}}</td>                                       
-                                            @php
-                                                $num = 0;
-                                                foreach($l['target_skp'] as $f => $b){
-                                                    $num =+ $b['target'];
-                                                }
-                                            @endphp
-                                            <td>{{$num}}</td>
-                                            <td>{{$l['satuan']}}</td>
-                                            @php
-                                                $num_realisasi = 0;
-                                                foreach($l['realisasi_skp'] as $c => $p){
-                                                    $num_realisasi =+ $p['realisasi_bulanan'];
-                                                }
-                                            @endphp
-                                            <td>{{$num_realisasi}}</td>
-                                            @if($i == 0)
-                                            <input type="hidden" value="{{$v['id']}}" name="id_skp[{{$no}}]" />
-                                            <input type="hidden" value="{{$bulan}}" name="bulan[{{$no}}]" />
-                                            <td rowspan="3">
-                                                        <div class="form-group">
-                                                            <label>Kesesuaian Skp</label>
-                                                            <div class="radio-inline">
-                                                                <label for="{{$k}}_sesuai_{{$v['id']}}" class="radio {{$k}}_sesuai_{{$v['id']}}">
-                                                                <input type="radio" id="{{$k}}_sesuai_{{$v['id']}}" @if($v['realisasi_bulan']['kesesuaian'] == 'ya') checked @endif value="ya" name="kesesuaian[{{$no}}]" />
-                                                                <span></span>Sesuai</label>
-                                                                <label for="{{$k}}_tidak_{{$v['id']}}" class="radio {{$k}}_tidak_{{$v['id']}}">
-                                                                <input type="radio" id="{{$k}}_tidak_{{$v['id']}}" @if($v['realisasi_bulan']['kesesuaian'] == 'tidak') checked @endif value="tidak" name="kesesuaian[{{$no}}]" />
-                                                                <span></span>Tidak</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="keterangan">Keterangan</label>
-                                                            <textarea name="keterangan[{{$no}}]" class="form-control form-control-solid" id="keterangan"  rows="5">{{$v['realisasi_bulan']['keterangan']}}</textarea>
-                                                        </div>
-                                                        
-                                            </td>
-                                            @else
-                                            <td></td>
-                                            @endif
-                                        </tr>
-                                        @endforeach
-                                    @php
-                                                $no++;
-                                    @endphp
-                                    @endforeach
-                                @endforeach
-                                @endif
-
-                                @php
-                                    $nox = 0;
-                                @endphp
-
-                                @if(isset($skp['data']['tambahan']))
-                                <tr>
-                                    <td colspan="7"><b>B. Kinerja Tambahan</b></td>
-                                </tr> 
-                                @foreach($skp['data']['tambahan'] as $key => $value)
-                                        @foreach($value['aspek_skp'] as $i => $l)
-                                        <tr>
-                                        
-                                            @if($i == 0)
-                                            <td>{{$nox+1}}.</td>
-                                            <td>{{$v['rencana_kerja']}}</td>
-                                            @else
-                                            <td></td>
-                                            <td></td>
-                                            @endif
-                                            <td>{{$l['aspek_skp']}}</td>
-                                            <td>{{$l['iki']}}</td>                                       
-                                            @php
-                                                $num = 0;
-                                                foreach($l['target_skp'] as $f => $b){
-                                                    $num =+ $b['target'];
-                                                }
-                                            @endphp
-                                            <td>{{$num}}</td>
-                                            <td>{{$l['satuan']}}</td>
-                                            @php
-                                                $num_realisasi = 0;
-                                                foreach($l['realisasi_skp'] as $c => $p){
-                                                    $num_realisasi =+ $p['realisasi_bulanan'];
-                                                }
-                                            @endphp
-                                            <td>{{$num_realisasi}}</td>
-                                            @if($i == 0)
-                                            <input type="hidden" value="{{$v['id']}}" name="id_skp[{{$no}}]" />
-                                            <input type="hidden" value="{{$bulan}}" name="bulan[{{$no}}]" />
-                                            <td rowspan="3">
-                                                        <div class="form-group">
-                                                            <label>Kesesuaian Skp</label>
-                                                            <div class="radio-inline">
-                                                                <label for="{{$k}}_sesuai_{{$v['id']}}_{{$nox}}" class="radio {{$k}}_sesuai_{{$v['id']}}_{{$nox}}">
-                                                                <input type="radio" id="{{$k}}_sesuai_{{$v['id']}}_{{$nox}}" @if($v['realisasi_bulan']['kesesuaian'] == 'ya') checked @endif value="ya" name="kesesuaian[{{$no}}]" />
-                                                                <span></span>Sesuai</label>
-                                                                <label for="{{$k}}_tidak_{{$v['id']}}_{{$nox}}" class="radio {{$k}}_tidak_{{$v['id']}}_{{$nox}}">
-                                                                <input type="radio" id="{{$k}}_tidak_{{$v['id']}}_{{$nox}}" @if($v['realisasi_bulan']['kesesuaian'] == 'tidak') checked @endif value="tidak" name="kesesuaian[{{$no}}]" />
-                                                                <span></span>Tidak</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="keterangan">Keterangan</label>
-                                                            <textarea name="keterangan[{{$no}}]" class="form-control form-control-solid" id="keterangan"  rows="5">{{$v['realisasi_bulan']['keterangan']}}</textarea>
-                                                        </div>
-                                                        
-                                            </td>
-                                            @else
-                                            <td></td>
-                                            @endif
-                                        </tr>
-                                        @endforeach
-                                    @php
-                                                $nox++;
-                                    @endphp
-                                 
-                                @endforeach
-                                @endif
-                                
-                            </tbody>
+                        </tbody>
                     </table>
 
                     </form>
@@ -215,7 +61,188 @@
 @section('script')
     <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script>
+         let idpegawai = {!! json_encode($id_pegawai) !!};
+         let bulan = {!! json_encode($bulan) !!};
       $(function(){
+        $('#kt_datatable').DataTable({
+            responsive: true,
+                pageLength: 10,
+                order: [[1, 'desc']],
+                "bPaginate": false,
+                processing:true,
+                ajax: '/datatable/penilaian-skp-review?id_pegawai='+idpegawai,
+                columns : [
+                    { 
+                    data : null, 
+                        render: function (data, type, row, meta) {
+                            // console.log(data);
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                        }  
+                    },{
+                        data:'jenis'
+                    },{
+                        data:'skp_atasan'
+                    },{
+                        data:'rencana_kerja'
+                    },{
+                        data: 'aspek_skp'
+                    },{
+                        data: 'aspek_skp'
+                    },{
+                        data: 'aspek_skp'
+                    },{
+                        data: 'aspek_skp'
+                    },{
+                        data: 'aspek_skp'
+                    },{
+                        data: null
+                    }
+                ],
+                columnDefs : [
+                    {
+                        targets: [1,2],
+                        visible: false
+                    },
+                    {
+                        targets : 4,
+                        render : function (data) {
+                            
+                            let html ='';
+                            html += '<ul style="list-style:none">';
+                            $.each(data,function (x,y) {
+                                html += `<li style="margin-bottom:4rem">${y.aspek_skp}<li>`;
+                            })
+                            html += '</ul>';
+                            
+
+                            return html;
+                            
+                        }
+                    },
+                    {
+                        targets : 5,
+                        render : function (data) {
+                            
+                            let html ='';
+                            html += '<ul style="list-style:none">';
+                            $.each(data,function (x,y) {
+                                html += `<li style="margin-bottom:4rem">${y.iki}<li>`;
+                            })
+                            html += '</ul>';
+                            
+
+                            return html;
+                            
+                        }
+                    },
+                    {
+                        targets : 6,
+                        render : function (data) {
+                            // console.log(data);
+                            let html ='';
+                            let target = 0;
+                            html += '<ul style="list-style:none">';
+                            $.each(data,function (x,y) {
+                                target = 0;
+                                $.each(y.target_skp, function (n,m) {
+                                        if (m['bulan'] == 0) {
+                                            target = m['target'];
+                                        }
+                                })
+                                html += `<li style="margin-bottom:4rem">${target}<li>`;
+                                
+                            })
+                            html += '</ul>';
+                            
+
+                            return html;
+                            
+                        }
+                    },
+                    {
+                        targets : 7,
+                        render : function (data) {
+                            
+                            let html ='';
+                            let target = 0;
+                            html += '<ul style="list-style:none">';
+                            $.each(data,function (x,y) {
+                                html += `<li style="margin-bottom:4rem">${y.satuan}<li>`;
+                            })
+                            html += '</ul>';
+                            return html;
+                            
+                        }
+                    },
+                    {
+                        targets : 8,
+                        render : function (data) {
+                            console.log(data); 
+                            console.log(bulan);
+                            let html ='';
+                            let target = 0;
+                            html += '<ul style="list-style:none">';
+                            $.each(data,function (x,y) {
+                                $.each(y.realisasi_skp, function (a,b) {
+                                    if (b.bulan == bulan) {
+                                        html += `<li style="margin-bottom:4rem">${b.realisasi_bulanan}<li>`;
+                                    }
+                                })
+                                
+                            })
+                            html += '</ul>';
+                            return html;
+                            
+                        }
+                    },
+                    {
+                        targets: -1,
+                        title: 'Actions',
+                        orderable: false,
+                        width: '10rem',
+                        class:"wrapok",
+                        render: function(data, type, full, meta) {
+                            console.log(data);
+                            let checked_true = '';
+                            let checked_false = '';
+                            let keterangan = '';
+                            if (data.kesesuaian == 'ya') {
+                                checked_true = 'checked';
+                            } else {
+                                checked_false = 'checked';
+                            }
+
+                            if (data.keterangan !== null) {
+                                keterangan = data.keterangan
+                            }
+
+                            return `
+                             <input type="hidden" value="${data.id}" name="id_skp[${meta.row}]"/>
+                             <input type="hidden" value="${bulan}" name="bulan[${meta.row}]"/>
+                            <div class="form-group">
+                                <label>Kesesuaian Skp</label>
+                                <div class="radio-inline">
+                                    <label for="kesesuaian_true${meta.row}" class="radio kesesuaian_true${meta.row}">
+                                    <input type="radio" id="kesesuaian_true${meta.row}" ${checked_true} value="ya" name="kesesuaian[${meta.row}]" />
+                                    <span></span>Sesuai</label>
+                                    <label for="kesesuaian_false${meta.row}" class="radio kesesuaian_false${meta.row}">
+                                    <input type="radio" id="kesesuaian_false${meta.row}" ${checked_false} value="tidak" name="kesesuaian[${meta.row}]" />
+                                    <span></span>Tidak</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="keterangan${meta.row}">Keterangan</label>
+                                <textarea name="keterangan[${meta.row}]" class="form-control form-control-solid" id="keterangan${meta.row}"  rows="5">${keterangan}</textarea>
+                            </div>
+                            `;
+                        },
+                    }
+                ],
+                rowGroup: {
+                    dataSrc: ['jenis_kinerja','skp_atasan']
+                },
+        });
+
         $('#submit_review_realisasi').on("click", function () {
               
             $.ajaxSetup({
@@ -231,7 +258,7 @@
                 success: function (response) {
                     console.log(response);
                     swal.fire({
-                        text: "Skp berhasil di Review.",
+                        text: "Realisasi berhasil di Review.",
                         icon: "success",
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",

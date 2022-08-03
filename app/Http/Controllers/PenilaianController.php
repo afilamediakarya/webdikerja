@@ -13,7 +13,8 @@ class PenilaianController extends Controller
         $page_title = 'Penilaian '.ucfirst($type);
         $page_description = 'Daftar Pegawai yang dinilai';
         $breadcumb = ['Daftar Pegawai yang dinilai'];
-        return view('pages.penilaian.index', compact('page_title', 'page_description','breadcumb', 'type'));
+        $nama_bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        return view('pages.penilaian.index', compact('page_title', 'page_description','breadcumb', 'type','nama_bulan'));
     }
 
     public function getData($type){
@@ -24,7 +25,7 @@ class PenilaianController extends Controller
         if ($type == 'skp') {
             $response = Http::withToken($token)->get($url."/review_skp/list?tahun=".session('tahun_penganggaran'));
         }else{
-            $response = Http::withToken($token)->get($url."/review_realisasi/list");
+            $response = Http::withToken($token)->get($url."/review_realisasi/list?tahun=".session('tahun_penganggaran'));
         }
    
         if ($response->successful()) {
@@ -58,10 +59,11 @@ class PenilaianController extends Controller
 
     public function create(){
         $id_pegawai = request('id_pegawai');
+        $bulan = request('bulan');
         $page_title = 'Penilaian';
         $page_description = 'Daftar Pegawai yang dinilai';
         $breadcumb = ['Daftar Pegawai yang dinilai', 'tambah Realisasi'];
-        return view('pages.penilaian.'.request('type'), compact('page_title', 'page_description','breadcumb','id_pegawai'));
+        return view('pages.penilaian.'.request('type'), compact('page_title', 'page_description','breadcumb','id_pegawai','bulan'));
     }
 
     public function createRealisasi($type, $id, $bulan){
