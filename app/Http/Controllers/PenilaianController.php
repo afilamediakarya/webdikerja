@@ -46,11 +46,11 @@ class PenilaianController extends Controller
         $url = env('API_URL');
         $token = session()->get('user.access_token');
         $data = '';
-        $type = '';
+        $type = request('type');
         $level = $this->checkLevel();
 
         if ($type == 'realisasi') {
-            $data = Http::withToken($token)->get($url."/review_realisasi/skpbyId/".$params."/".$bulan);
+            $data = Http::withToken($token)->get($url."/review_realisasi/skpbyId/".request('id_pegawai')."?type=pegawai&bulan=".request('bulan')."&tahun=".session('tahun_penganggaran'));
         }else{
             $data = Http::withToken($token)->get($url."/review_skp/skpbyId/".request('id_pegawai')."?&tahun=".session('tahun_penganggaran'));
         }

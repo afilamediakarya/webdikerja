@@ -83,7 +83,7 @@
                 order: [[1, 'desc']],
                 "bPaginate": false,
                 processing:true,
-                ajax: '/datatable/penilaian-skp-review?id_pegawai='+idpegawai,
+                ajax: '/datatable/penilaian-skp-review?type=skp&id_pegawai='+idpegawai,
                 columns : [
                     { 
                     data : null, 

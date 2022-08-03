@@ -70,7 +70,7 @@
                 order: [[1, 'desc']],
                 "bPaginate": false,
                 processing:true,
-                ajax: '/datatable/penilaian-skp-review?id_pegawai='+idpegawai,
+                ajax: '/datatable/penilaian-skp-review?type=realisasi&id_pegawai='+idpegawai+'&bulan='+bulan,
                 columns : [
                     { 
                     data : null, 
@@ -177,8 +177,6 @@
                     {
                         targets : 8,
                         render : function (data) {
-                            console.log(data); 
-                            console.log(bulan);
                             let html ='';
                             let target = 0;
                             html += '<ul style="list-style:none">';
@@ -206,15 +204,22 @@
                             let checked_true = '';
                             let checked_false = '';
                             let keterangan = '';
-                            if (data.kesesuaian == 'ya') {
-                                checked_true = 'checked';
-                            } else {
-                                checked_false = 'checked';
-                            }
 
-                            if (data.keterangan !== null) {
-                                keterangan = data.keterangan
-                            }
+                            $.each(data.review_realisasi_skp, function (x,y) {
+                                if (y.bulan == bulan) {
+                                    if (y.kesesuaian == 'ya') {
+                                        checked_true = 'checked';
+                                    } else {
+                                        checked_false = 'checked';
+                                    }
+
+                                    if (y.keterangan !== null) {
+                                        keterangan = y.keterangan
+                                    }
+                                }
+                            })
+
+                            
 
                             return `
                              <input type="hidden" value="${data.id}" name="id_skp[${meta.row}]"/>
