@@ -42,7 +42,7 @@ class bankomController extends Controller
             'jumlah_jp' => 'required|numeric',
             'waktu_awal' => 'required',
             'waktu_akhir' => 'required',
-            'sertifikat' => 'required|mimes:xlsx,xlx,xls,odt,ods,odp|max:2048'
+            'sertifikat' => 'required|mimes:pdf|max:2048'
         ]);
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
