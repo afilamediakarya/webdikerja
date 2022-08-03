@@ -8,8 +8,7 @@
 @section('button')
     <!-- <input id="bday-month" type="month" value="{{ date('Y-m') }}" class="form-control" > -->
 
-    <a href="javascript:;" id="create_target" class="btn btn-primary font-weight-bolder"
-        @if (date('m') != $jadwal) style="pointer-events: none;cursor: not-allowed;" @endif>
+    <a href="javascript:;" id="create_target" class="btn btn-primary font-weight-bolder">
         <span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                 width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
