@@ -64,7 +64,7 @@
                             </svg>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-text text-capitalize">Target</span>
+                        <span class="menu-text text-capitalize">Target SKP</span>
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="menu-submenu">
@@ -140,7 +140,7 @@
                             </svg>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-text text-capitalize">Realisasi</span>
+                        <span class="menu-text text-capitalize">Realisasi SKP</span>
                     </a>
                 </li>
                 <li class="menu-item menu-item-submenu {{str_contains(Request::path(), 'penilaian') ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true" data-menu-toggle="hover">
