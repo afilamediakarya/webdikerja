@@ -39,7 +39,7 @@
                         <input type="hidden" value="kepala" name="type_skp">
                         @endif
 
-                        @if($level > 2)
+                        @if($level !== 1 || $level !== 2)
                         <div id="sasaran_">
                             <div class="form-group">
                                 <label for="sasaran_kinerja">Sasaran Kerja </label>
