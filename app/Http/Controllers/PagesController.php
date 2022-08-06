@@ -42,7 +42,7 @@ class PagesController extends Controller
 
         if ($type == 'pegawai') {
             $data = $this->getDataDashboard($type);
-        
+          
             return view('pages.dashboard.index', compact('page_title', 'page_description','breadcumb','data'));   
         }elseif($type == 'admin'){
             $data = $this->getDataDashboard($type);
