@@ -74,7 +74,6 @@ class LaporanController extends Controller
             $response = Http::withToken($token)->get($url . "/laporan-rekapitulasi-absen/rekapByOpd/" . $params1 . "/" . $params2 . '/0');
         }
 
-
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -92,6 +91,7 @@ class LaporanController extends Controller
             $this->exportrekapPegawai($data, $val->type, 'desktop');
         } else if ($val->role == 'admin' || $val->role == 'super_admin') {
             $data = $this->getRekappegawaiByOpd($val->startDate, $val->endDate, $val->satuanKerja);
+
             $this->exportrekapOpd($data, $val->type, $val->startDate, $val->endDate);
         }
     }
@@ -1509,7 +1509,7 @@ class LaporanController extends Controller
 
     public function exportrekapOpd($data, $type, $startDate, $endDate)
     {
-        // return $type;
+        // return $data;
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
