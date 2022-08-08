@@ -123,12 +123,10 @@ class LaporanController extends Controller
         }
 
         $data = $this->getSkp($level);
-        // return $data;
 
         if ($data['status'] == true) {
             $res = $data['data'];
         }
-        // return $res;
         if ($jenis == 'skp') {
 
             if ($level == 'pegawai') {
@@ -483,7 +481,7 @@ class LaporanController extends Controller
             $sheet->getStyle('B' . $cell . ':H' . $cell)->getFont()->setBold(true);
             $cell++;
             foreach ($data['skp']['tambahan'] as $keyy => $values) {
-                $sheet->setCellValue('A' . $cell, $index + 1)->mergeCells('A' . $cell . ':A' . ($cell + 2));
+                $sheet->setCellValue('A' . $cell, $keyy + 1)->mergeCells('A' . $cell . ':A' . ($cell + 2));
                 $sheet->setCellValue('B' . $cell, ' ')->mergeCells('B' . $cell . ':C' . ($cell + 2));
                 $sheet->setCellValue('D' . $cell, $values['rencana_kerja'])->mergeCells('D' . $cell . ':D' . ($cell + 2));
                 foreach ($values['aspek_skp'] as $k => $v) {
@@ -975,7 +973,7 @@ class LaporanController extends Controller
         $nilai_utama = 0;
         $nilai_tambahan = 0;
         //$data_column = $data['skp']['utama'];
-        //UTAMA
+        //UTAMA ATASAN
         if (isset($data['skp']['utama'])) {
             $sheet->setCellValue('B' . $cell, 'A. KINERJA UTAMA')->mergeCells('B' . $cell . ':K' . $cell);
             $sheet->getStyle('B' . $cell . ':K' . $cell)->getFont()->setBold(true);
@@ -1080,6 +1078,104 @@ class LaporanController extends Controller
             $sheet->setCellValue('A' . $cell, 'Data masih kosong')->mergeCells('A' . $cell . ':L' . $cell);
         }
 
+        // UTAMA
+        // if (isset($data['skp']['utama'])) {
+        //     $cell++;
+        //     $sheet->setCellValue('B' . $cell, 'A. KINERJA UTAMA')->mergeCells('B' . $cell . ':K' . $cell);
+        //     $sheet->getStyle('B' . $cell . ':K' . $cell)->getFont()->setBold(true);
+        //     $cell++;
+        //     $total_tambahan = 0;
+        //     foreach ($data['skp']['utama'] as $keyy => $values) {
+        //         $sheet->setCellValue('A' . $cell, $keyy + 1)->mergeCells('A' . $cell . ':A' . ($cell + 2));
+        //         $sheet->setCellValue('B' . $cell, ' ')->mergeCells('B' . $cell . ':B' . ($cell + 2));
+        //         $sheet->setCellValue('C' . $cell, $values['rencana_kerja'])->mergeCells('C' . $cell . ':C' . ($cell + 2));
+        //         $sum_capaian = 0;
+        //         foreach ($values['aspek_skp'] as $k => $v) {
+        //             $sheet->getStyle('D' . $cell . ':D' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
+        //             $sheet->getStyle('F' . $cell . ':L' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
+        //             $sheet->setCellValue('D' . $cell, $v['aspek_skp'])->mergeCells('D' . $cell . ':D' . $cell);
+        //             $sheet->setCellValue('E' . $cell, $v['iki'])->mergeCells('E' . $cell . ':E' . $cell);
+
+        //             foreach ($v['target_skp'] as $mk => $rr) {
+        //                 if ($rr['bulan'] ==  $bulan) {
+        //                     $sheet->setCellValue('F' . $cell, $rr['target'] . ' ' . $v['satuan']);
+        //                     $sheet->setCellValue('G' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'] . ' ' . $v['satuan']);
+        //                     $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+
+        //                     if ($capaian_iki >= 101) {
+        //                         $sheet->setCellValue('H' . $cell, round($capaian_iki, 0) . ' %');
+        //                         $sheet->setCellValue('I' . $cell, 'Sangat Baik');
+        //                         $nilai_iki = 16;
+        //                     } elseif ($capaian_iki == 100) {
+        //                         $sheet->setCellValue('H' . $cell, round($capaian_iki, 0) . ' %');
+        //                         $sheet->setCellValue('I' . $cell, 'Baik');
+        //                         $nilai_iki = 13;
+        //                     } elseif ($capaian_iki >= 80 && $capaian_iki <= 99) {
+        //                         $sheet->setCellValue('H' . $cell, round($capaian_iki, 0) . ' %');
+        //                         $sheet->setCellValue('I' . $cell, 'Cukup');
+        //                         $nilai_iki = 8;
+        //                     } elseif ($capaian_iki >= 60 && $capaian_iki <= 79) {
+        //                         $sheet->setCellValue('H' . $cell, round($capaian_iki, 0) . ' %');
+        //                         $sheet->setCellValue('I' . $cell, 'Kurang');
+        //                         $nilai_iki = 3;
+        //                     } elseif ($capaian_iki >= 0 && $capaian_iki <= 79) {
+        //                         $sheet->setCellValue('H' . $cell, round($capaian_iki, 0) . ' %');
+        //                         $sheet->setCellValue('I' . $cell, 'Sangat Kurang');
+        //                         $nilai_iki = 1;
+        //                     }
+        //                     $sum_capaian += $nilai_iki;
+        //                 }
+        //             }
+        //             $cell++;
+        //         }
+        //         if ($sum_capaian >= 42) {
+        //             $sheet->setCellValue('J' . ($cell - 3), 'Sangat Baik')->mergeCells('J' . ($cell - 3) . ':J' . ($cell - 1));
+        //             $sheet->setCellValue('K' . ($cell - 3), '120')->mergeCells('K' . ($cell - 3) . ':K' . ($cell - 1));
+        //             $sheet->setCellValue('L' . ($cell - 3), '2.4')->mergeCells('L' . ($cell - 3) . ':L' . ($cell - 1));
+        //             $total_tambahan += 2.4;
+        //         } elseif ($sum_capaian >= 34) {
+        //             $sheet->setCellValue('J' . ($cell - 3), 'Baik')->mergeCells('J' . ($cell - 3) . ':J' . ($cell - 1));
+        //             $sheet->setCellValue('K' . ($cell - 3), '100')->mergeCells('K' . ($cell - 3) . ':K' . ($cell - 1));
+        //             $sheet->setCellValue('L' . ($cell - 3), '1.6')->mergeCells('L' . ($cell - 3) . ':L' . ($cell - 1));
+        //             $total_tambahan += 1.6;
+        //         } elseif ($sum_capaian >= 19) {
+        //             $sheet->setCellValue('J' . ($cell - 3), 'Cukup')->mergeCells('J' . ($cell - 3) . ':J' . ($cell - 1));
+        //             $sheet->setCellValue('K' . ($cell - 3), '80')->mergeCells('K' . ($cell - 3) . ':K' . ($cell - 1));
+        //             $sheet->setCellValue('L' . ($cell - 3), '1')->mergeCells('L' . ($cell - 3) . ':L' . ($cell - 1));
+        //             $total_tambahan += 1;
+        //         } elseif ($sum_capaian >= 7) {
+        //             $sheet->setCellValue('J' . ($cell - 3), 'Kurang')->mergeCells('J' . ($cell - 3) . ':J' . ($cell - 1));
+        //             $sheet->setCellValue('K' . ($cell - 3), '60 %')->mergeCells('K' . ($cell - 3) . ':K' . ($cell - 1));
+        //             $sheet->setCellValue('L' . ($cell - 3), '0.5')->mergeCells('L' . ($cell - 3) . ':L' . ($cell - 1));
+        //             $total_tambahan += 0.5;
+        //         } elseif ($sum_capaian >= 3) {
+        //             $sheet->setCellValue('J' . ($cell - 3), 'Sangat Kurang')->mergeCells('J' . ($cell - 3) . ':J' . ($cell - 1));
+        //             $sheet->setCellValue('K' . ($cell - 3), '25')->mergeCells('K' . ($cell - 3) . ':K' . ($cell - 1));
+        //             $sheet->setCellValue('L' . ($cell - 3), '0.1')->mergeCells('L' . ($cell - 3) . ':L' . ($cell - 1));
+        //             $total_tambahan += 0.1;
+        //         } elseif ($sum_capaian >= 0) {
+        //             $sheet->setCellValue('J' . ($cell - 3), 'Sangat Kurang')->mergeCells('J' . ($cell - 3) . ':J' . ($cell - 1));
+        //             $sheet->setCellValue('K' . ($cell - 3), '25')->mergeCells('K' . ($cell - 3) . ':K' . ($cell - 1));
+        //             $sheet->setCellValue('L' . ($cell - 3), '0.1')->mergeCells('L' . ($cell - 3) . ':L' . ($cell - 1));
+        //             $total_tambahan += 0.1;
+        //         }
+
+        //         $sheet->setCellValue('A' . ($cell - 3), $keyy + 1)->mergeCells('A' . ($cell - 3) . ':A' . ($cell - 1));
+        //         if (
+        //             !$keyy == 0
+        //         )
+        //             $sheet->setCellValue('B' . ($cell - 3), '')->mergeCells('B' . ($cell - 3) . ':B' . ($cell - 1));
+        //     }
+        //     $cell++;
+        //     $sheet->getStyle('F' . $cell . ':L' . ($cell + 1))->getAlignment()->setVertical('top')->setHorizontal('center');
+        //     $sheet->getStyle('B' . $cell . ':K' . ($cell + 1))->getAlignment()->setVertical('top')->setHorizontal('right');
+        //     $sheet->getStyle('B' . $cell . ':L' . ($cell + 1))->getFont()->setBold(true);
+        //     $sheet->setCellValue('B' . $cell, 'NILAI KINERJA UTAMA')->mergeCells('B' . $cell . ':K' . $cell);
+        //     $sheet->setCellValue('L' . $cell, $nilai_utama = $total_tambahan);
+        //     $cell++;
+        // } else {
+        //     $sheet->setCellValue('A' . $cell, 'Data masih kosong')->mergeCells('A' . $cell . ':L' . $cell);
+        // }
         // TAMBAHAN
         if (isset($data['skp']['tambahan'])) {
             $cell++;
@@ -1088,7 +1184,7 @@ class LaporanController extends Controller
             $cell++;
             $total_tambahan = 0;
             foreach ($data['skp']['tambahan'] as $keyy => $values) {
-                $sheet->setCellValue('A' . $cell, $index + 1)->mergeCells('A' . $cell . ':A' . ($cell + 2));
+                $sheet->setCellValue('A' . $cell, $keyy + 1)->mergeCells('A' . $cell . ':A' . ($cell + 2));
                 $sheet->setCellValue('B' . $cell, ' ')->mergeCells('B' . $cell . ':B' . ($cell + 2));
                 $sheet->setCellValue('C' . $cell, $values['rencana_kerja'])->mergeCells('C' . $cell . ':C' . ($cell + 2));
                 $sum_capaian = 0;
