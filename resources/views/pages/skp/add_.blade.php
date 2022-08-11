@@ -1,14 +1,12 @@
 @extends('layout.app')
 
 @section('style')
-    <link href="{{asset('plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 
 @section('content')
-
-
-<!--begin::Entry-->
+    <!--begin::Entry-->
     <div class="d-flex flex-column-fluid">
         <!--begin::Container-->
         <div class="container">
@@ -24,29 +22,30 @@
                             <label>Jenis Kinerja</label>
                             <div class="radio-inline">
                                 <label class="radio">
-                                <input type="radio" value="Utama" name="jenis_kinerja" />
-                                <span></span>Utama</label>
+                                    <input type="radio" value="Utama" name="jenis_kinerja" />
+                                    <span></span>Utama</label>
                                 <label class="radio">
-                                <input type="radio" value="Tambahan" name="jenis_kinerja" />
-                                <span></span>Tambahan</label>
+                                    <input type="radio" value="Tambahan" name="jenis_kinerja" />
+                                    <span></span>Tambahan</label>
                             </div>
                             <small class="text-danger jenis_kinerja_error"></small>
                         </div>
-                   
+
                         <input type="hidden" value="kepala" name="type_skp">
-                
+
                         <div class="form-group">
-                            <label for="rencana_kerja">Rencana Kerja 
-                            <span class="text-danger">*</span></label>
+                            <label for="rencana_kerja">Rencana Kerja
+                                <span class="text-danger">*</span></label>
                             <textarea class="form-control" id="rencana_kerja" name="rencana_kerja" rows="3"></textarea>
                             <small class="text-danger rencana_kerja_error"></small>
                         </div>
 
-                        <button type="button" id="add_content_iki" class="btn btn-info btn-sm"> <i class="far fa-plus-square"></i> Tambah Indikator</button>
+                        <button type="button" id="add_content_iki" class="btn btn-info btn-sm"> <i
+                                class="far fa-plus-square"></i> Tambah Indikator</button>
 
                         <div class="mt-3">
                             <div class="row">
-                            <input type="hidden" value="iki" name="type_aspek[0]">
+                                <input type="hidden" value="iki" name="type_aspek[0]">
                                 <div class="col-lg-8">
                                     <div class="form-group">
                                         <label for="indikator_kerja_individu_0">Indikator Kerja Individu </label>
@@ -55,25 +54,25 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
-                                <div class="form-group">
-                                    <label for="satuan_0">Jenis Satuan</label>
-                                    <input type="text" class="form-control" name="satuan[0]">
-                                    <div class="text-danger satuan_0_error"></div>
-                                </div>
-                                <div class="form-group">
-                                <label>Target tahun {{ session('tahun_penganggaran') }}</label>
-                                    <input type="text" class="form-control" name="target[0]" id="target">
-                                    <div class="text-danger target_0_error"></div>
-                                </div>
+                                    <div class="form-group">
+                                        <label for="satuan_0">Jenis Satuan</label>
+                                        <input type="text" class="form-control" name="satuan[0]">
+                                        <div class="text-danger satuan_0_error"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Target tahun {{ session('tahun_penganggaran') }}</label>
+                                        <input type="text" class="form-control" name="target[0]" id="target">
+                                        <div class="text-danger target_0_error"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                       <div id="content_iki">
+                        <div id="content_iki">
 
 
-                       </div>
-                        
+                        </div>
+
                     </form>
                     <!--end::Form-->
                 </div>
@@ -86,27 +85,27 @@
         </div>
         <!--end::Container-->
     </div>
-<!--end::Entry-->
+    <!--end::Entry-->
 @endsection
 
 @section('script')
-<!-- sasaran_kinerja -->
+    <!-- sasaran_kinerja -->
 
-<script>
-    $(function () {
-        $('#sasaran_kinerja').select2({
-            placeholder: "Pilih Sasaran Kerja"
-        });
+    <script>
+        $(function() {
+            $('#sasaran_kinerja').select2({
+                placeholder: "Pilih Sasaran Kerja"
+            });
 
-        let satuan = {!! json_encode($satuan) !!};
-        let tahun_penganggaran = {!! json_encode(session('tahun_penganggaran')) !!}  
+            let satuan = {!! json_encode($satuan) !!};
+            let tahun_penganggaran = {!! json_encode(session('tahun_penganggaran')) !!}
 
-        let i = 1;
-        $('#add_content_iki').on('click', function () {
-            let html = '';
-            console.log(satuan);
+            let i = 1;
+            $('#add_content_iki').on('click', function() {
+                let html = '';
+                console.log(satuan);
 
-            html += ` 
+                html += ` 
                 <div class="mt-3" id="iki_${i}">
                     <div class="row">
                     <input type="hidden" value="iki" name="type_aspek[${i}]">
@@ -140,75 +139,75 @@
                 </div>
                `;
 
-            $('#content_iki').append(html);
+                $('#content_iki').append(html);
 
-            i++;
+                i++;
+
+            })
+
+            $(document).on('click', '.delete_iki', function() {
+                let index = $(this).attr('data-id');
+                $('#iki_' + index).remove();
+            });
+
+            submit = () => {
+
+                $.ajaxSetup({
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                    },
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/skp/store",
+                    data: $('#skp-form').serialize(),
+                    success: function(response) {
+                        console.log(response);
+                        swal.fire({
+                                text: "Skp berhasil di tambahkan.",
+                                icon: "success",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn font-weight-bold btn-light-primary"
+                                }
+                            })
+                            .then(function() {
+                                window.location.href = '/skp/tahunan';
+                            });
+                    },
+                    error: function(xhr) {
+                        $('.text-danger').html('');
+                        $('.form-control').removeClass('is-invalid');
+                        $.each(xhr.responseJSON, function(key, value) {
+                            console.log(key + ' - ' + value)
+                            $(`.${key}_error`).html(value);
+                            $(`#${key}`).addClass('is-invalid');
+                        })
+                    }
+                });
+            }
+
+
+            $(document).on('change', ".nilai_kinerja", function() {
+                let index = $(this).attr('data-id');
+                console.log(index);
+                let sum = 0;
+
+                $('.nilai_target_' + index).each(function() {
+                    sum += Number($(this).val());
+                });
+
+                // $('.nilai_kinerja_kuantitas').each(function() {
+                //     sum += Number($(this).val());
+                // });
+                // console.log(sum);
+                $('#total_target_' + index).val(sum);
+
+            })
+
 
         })
-
-        $(document).on('click','.delete_iki', function(){
-            let index = $(this).attr('data-id');
-            $('#iki_'+index).remove();
-        });
-
-        submit = () =>{
-      
-            $.ajaxSetup({
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                },
-            });
-
-            $.ajax({
-                type: "POST",
-                url: "/skp/store",
-                data: $('#skp-form').serialize(),
-                success: function (response) {
-                    console.log(response);
-                    swal.fire({
-                        text: "Skp berhasil di tambahkan.",
-                        icon: "success",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn font-weight-bold btn-light-primary"
-                        }
-                    }).then(function() {
-                        window.location.href = '/skp/tahunan';
-                    });
-                },
-                error : function (xhr) {
-                    $('.text-danger').html('');
-                    $('.form-control').removeClass('is-invalid');
-                    $.each(xhr.responseJSON,function (key, value) {
-                        console.log(key+' - '+value)
-                        $(`.${key}_error`).html(value);
-                        $(`#${key}`).addClass('is-invalid');
-                    })
-                }
-            });
-        }
-
-       
-        $(document).on('change',".nilai_kinerja", function () {
-            let index = $(this).attr('data-id');
-            console.log(index);
-            let sum = 0;
-
-             $('.nilai_target_'+index).each(function() {
-                sum += Number($(this).val());
-            });
-
-            // $('.nilai_kinerja_kuantitas').each(function() {
-            //     sum += Number($(this).val());
-            // });
-            // console.log(sum);
-            $('#total_target_'+index).val(sum);
-            
-        })
-    
-
-    })
-</script>
-    
+    </script>
 @endsection

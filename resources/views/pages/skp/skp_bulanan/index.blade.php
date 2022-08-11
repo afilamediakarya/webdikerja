@@ -77,29 +77,55 @@
 
 @section('script')
     <script src="{{ asset('plugins/custom/datatables/datatables.bundle.js') }}"></script>
+
+    <script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
     <script>
         "use strict";
         let bulan = $('#bulan_').val();
+        let date = new Date();
+        if (!bulan) {
+            bulan = date.getMonth() + 1;
+        }
+
+        var currentNumber = null;
+        var cntNumber = 0;
+        var current = null;
+        var cnt = 0;
+
+
         $(function() {
             datatable_(bulan);
         })
 
         function datatable_(bulan) {
+            let index = 0;
             $('#kt_datatable').dataTable().fnDestroy();
             $('#kt_datatable').DataTable({
                 responsive: true,
                 pageLength: 10,
                 order: [
-                    [1, 'asc'],
-                    [2, 'asc']
+                    [1, 'desc'],
+                    [2, 'desc']
                 ],
                 processing: true,
                 ajax: '/skp-datatable?type=bulanan&bulan=' + bulan,
                 columns: [{
-                    data: null,
+                    data: 'id',
                     render: function(data, type, row, meta) {
-                        // console.log(data);
-                        return meta.row + meta.settings._iDisplayStart + 1;
+                        let id = row.id;
+
+                        if (row.id != currentNumber) {
+                            currentNumber = row.id;
+                            cntNumber++;
+                        }
+
+                        if (row.id != current) {
+                            current = row.id;
+                            cnt = 1;
+                        } else {
+                            cnt++;
+                        }
+                        return cntNumber;
                     }
                 }, {
                     data: 'jenis'
@@ -124,69 +150,66 @@
                     },
                     {
                         targets: 4,
-                        render: function(data) {
+                        render: function(data, type, row, meta) {
+                            let aspek_skp = '';
 
-                            let html = '';
-                            html += '<ul style="list-style:none">';
                             $.each(data, function(x, y) {
-                                html += `<li style="margin-bottom:4rem">${y.aspek_skp}<li>`;
-                            })
-                            html += '</ul>';
 
+                                if (cnt - 1 == x && cnt - 1 < data.length) {
+                                    aspek_skp = y.aspek_skp
+                                }
+                            });
 
-                            return html;
+                            return aspek_skp;
 
                         }
                     },
                     {
                         targets: 5,
-                        render: function(data) {
+                        render: function(data, type, row, meta) {
+                            let iki = '';
 
-                            let html = '';
-                            html += '<ul style="list-style:none">';
                             $.each(data, function(x, y) {
-                                html += `<li style="margin-bottom:4rem">${y.iki}<li>`;
-                            })
-                            html += '</ul>';
 
+                                if (cnt - 1 == x && cnt - 1 < data.length) {
+                                    iki = y.iki
+                                }
+                            });
 
-                            return html;
+                            return iki;
 
                         }
                     },
                     {
                         targets: 6,
-                        render: function(data) {
-                            console.log(data);
-                            let html = '';
-                            html += '<ul style="list-style:none">';
-                            $.each(data, function(index, value) {
-                                $.each(value.target_skp, function(x, y) {
-                                    if (y['bulan'] == bulan) {
-                                        html +=
-                                            `<li style="margin-bottom:4rem">${y.target}<li>`;
+                        render: function(data, type, row, meta) {
+                            let target = '';
+                            $.each(data, function(i, v) {
+                                $.each(v.target_skp, function(x, y) {
+                                    if (cnt - 1 == i && cnt - 1 < data.length) {
+                                        if (y['bulan'] == bulan) {
+                                            target = y.target
+                                        }
                                     }
                                 })
-                            })
-                            html += '</ul>';
+                            });
 
-                            return html;
+                            return target;
+
                         }
                     },
                     {
                         targets: 7,
-                        render: function(data) {
-
-                            let html = '';
-                            let target = 0;
-                            html += '<ul style="list-style:none">';
+                        render: function(data, type, row, meta) {
+                            let satuan = '';
                             $.each(data, function(x, y) {
-                                html += `<li style="margin-bottom:4rem">${y.satuan}<li>`;
-                            })
-                            html += '</ul>';
 
+                                if (cnt - 1 == x && cnt - 1 < data.length) {
+                                    satuan = y.satuan
+                                }
+                            });
 
-                            return html;
+                            return satuan;
 
                         }
                     },
@@ -206,6 +229,17 @@
                 ],
                 rowGroup: {
                     dataSrc: ['jenis_kinerja', 'skp_atasan']
+                },
+                "rowsGroup": [-1, 0, 3],
+                "ordering": false,
+                createdRow: function(row, data, index) {
+                    $('td', row).css({
+                        'text-align': 'top-left',
+                        'vertical-align': 'top',
+                        'border-collapse': 'collapse',
+                        'border': '0.2px solid gray'
+                    });
+
                 },
             });
         }
@@ -233,7 +267,7 @@
             e.preventDefault()
             let params = $(this).attr('data-id');
             let params_bulan = $(this).attr('data-bulan');
-            alert(params_bulan);
+            // alert(params_bulan);
             Swal.fire({
                 title: 'Apakah kamu yakin akan menghapus data ini ?',
                 text: "Data akan di hapus permanen",
@@ -255,8 +289,10 @@
                             let res = JSON.parse(response);
                             console.log(response);
                             if (res.status !== false) {
-                                Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
-                                $('#kt_datatable').DataTable().ajax.reload()
+                                Swal.fire('Deleted!', 'Your file has been deleted.',
+                                    'success').then(function() {
+                                    window.location.href = '/skp/bulanan';
+                                });
                             } else {
                                 swal.fire({
                                     title: "SKP tidak dapat di hapus. ",

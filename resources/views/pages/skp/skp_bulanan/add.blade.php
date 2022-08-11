@@ -1,14 +1,12 @@
 @extends('layout.app')
 
 @section('style')
-    <link href="{{asset('plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 
 @section('content')
-
-
-<!--begin::Entry-->
+    <!--begin::Entry-->
     <div class="d-flex flex-column-fluid">
         <!--begin::Container-->
         <div class="container">
@@ -22,23 +20,23 @@
                     <form class="form" id="skp-form">
 
                         <div id="sasaran_">
-                        <div class="form-group">
-                            <label for="sasaran_kinerja">Sasaran Kinerja </label>
-                            <!-- <input type="email" class="form-control" placeholder=""> -->
-                            <select class="form-control" type="text" name="rencana_kerja" id="rencana_kerja">
-                                <option selected disabled>Pilih Sasaran Kinerja</option>
-                                @foreach($get_sasaran_kinerja as $key => $value)
-                                    <option value="{{$value['id']}}">{{$value['value']}}</option>
-                                @endforeach
-                             </select>
-                             <div class="text-danger rencana_kerja_error"></div>
+                            <div class="form-group">
+                                <label for="sasaran_kinerja">Sasaran Kinerja </label>
+                                <!-- <input type="email" class="form-control" placeholder=""> -->
+                                <select class="form-control" type="text" name="rencana_kerja" id="rencana_kerja">
+                                    <option selected disabled>Pilih Sasaran Kinerja</option>
+                                    @foreach ($get_sasaran_kinerja as $key => $value)
+                                        <option value="{{ $value['id'] }}">{{ $value['value'] }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="text-danger rencana_kerja_error"></div>
+                            </div>
                         </div>
-                        </div>
-                       
-                        <input type="hidden" value="{{$bulan}}" name="bulan">
+
+                        <input type="hidden" value="{{ $bulan }}" name="bulan">
 
                         <div id="content_aspek"></div>
-                        
+
 
                     </form>
                     <!--end::Form-->
@@ -52,77 +50,80 @@
         </div>
         <!--end::Container-->
     </div>
-<!--end::Entry-->
+    <!--end::Entry-->
 @endsection
 
 @section('script')
-<!-- sasaran_kinerja -->
+    <!-- sasaran_kinerja -->
 
-<script>
-    $(function () {
-        $('#rencana_kerja').select2({
-            placeholder: "Pilih Sasaran Kerja"
-        });
-        $('.satuan_').select2();
-        let bulan = {!! json_encode($bulan) !!}
-        submit = () =>{
-      
-            $.ajaxSetup({
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                },
+    <script>
+        $(function() {
+            $('#rencana_kerja').select2({
+                placeholder: "Pilih Sasaran Kerja"
             });
+            $('.satuan_').select2();
+            let bulan = {!! json_encode($bulan) !!}
+            submit = () => {
 
-            $.ajax({
-                type: "POST",
-                url: "/skp/bulanan/store",
-                data: $('#skp-form').serialize(),
-                success: function (res) {
-                    console.log(res);
-                if (res.success) {
-                    swal.fire({
-                        text: "Skp berhasil di tambahkan.",
-                        icon: "success",
-                        buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
-                        customClass: {
-                            confirmButton: "btn font-weight-bold btn-light-primary"
+                $.ajaxSetup({
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                    },
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/skp/bulanan/store",
+                    data: $('#skp-form').serialize(),
+                    success: function(res) {
+                        console.log(res);
+                        if (res.success) {
+                            swal.fire({
+                                    text: "Skp berhasil di tambahkan.",
+                                    icon: "success",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn font-weight-bold btn-light-primary"
+                                    }
+                                })
+                                .then(function() {
+                                    window.location.href = '/skp/bulanan';
+                                });
+                        } else {
+                            console.log(res);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Maaf, terjadi kesalahan',
+                                text: 'Silahkan Hubungi Admin'
+                            })
                         }
-                    }).then(function() {
-                        window.location.href = '/skp/bulanan';
-                    });      
-                }else{
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Maaf, terjadi kesalahan',
-                        text: 'Silahkan Hubungi Admin'
-                    })
-                }
 
-                },
-                error : function (xhr) {
-                    $('.text-danger').html('');
-                    $('.form-control').removeClass('is-invalid');
-                    $.each(xhr.responseJSON,function (key, value) {
-                        console.log(key+' - '+value)
-                        $(`.${key}_error`).html(value);
-                        $(`#${key}`).addClass('is-invalid');
-                    })
-                }
-            });
-        }
+                    },
+                    error: function(xhr) {
+                        $('.text-danger').html('');
+                        $('.form-control').removeClass('is-invalid');
+                        $.each(xhr.responseJSON, function(key, value) {
+                            console.log(key + ' - ' + value)
+                            $(`.${key}_error`).html(value);
+                            $(`#${key}`).addClass('is-invalid');
+                        })
+                    }
+                });
+            }
 
-        $(document).on('change', '#rencana_kerja', function () {
-            alert($(this).val())
-            $.ajax({
-                url : '/skp/show/'+$(this).val(),
-                method : 'GET',
-                success : function (res) {
-                    let value = JSON.parse(res);
-                    let html = '';
-                    if (value.message == "Success") {
-                       $.each(value.data['aspek_skp'], function (x,y) {
-                        html += `<div class="form-group">
+            $(document).on('change', '#rencana_kerja', function() {
+                // alert($(this).val())
+                console.log($(this).val());
+                $.ajax({
+                    url: '/skp/show/' + $(this).val(),
+                    method: 'GET',
+                    success: function(res) {
+                        let value = JSON.parse(res);
+                        let html = '';
+                        if (value.message == "Success") {
+                            $.each(value.data['aspek_skp'], function(x, y) {
+                                html += `<div class="form-group">
                             <label for="exampleTextarea">Aspek</label>
                             <p class="text-dark font-weight-bolder">${y.aspek_skp}</p>
                         </div>
@@ -149,18 +150,17 @@
                             </div>
                             </div>
                         </div>`;
-                       });
-                       $('#content_aspek').html(html);
+                            });
+                            $('#content_aspek').html(html);
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('gagal');
                     }
-                },
-                error : function (xhr) {
-                    alert('gagal');
-                }
+                })
             })
-        })
-    
 
-    })
-</script>
-    
+
+        })
+    </script>
 @endsection

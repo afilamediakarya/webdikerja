@@ -245,7 +245,6 @@ class SkpController extends Controller
     public function store(Request $request)
     {
 
-        // return $request->all();
 
         $validated = $this->customValidate($request);
 
@@ -279,6 +278,8 @@ class SkpController extends Controller
                 'aspek' => $aspek,
                 'type_skp' => $request['type_skp']
             ];
+
+            // return $result;
 
             $url = env('API_URL');
             $token = session()->get('user.access_token');
@@ -570,7 +571,6 @@ class SkpController extends Controller
 
     public function store_target(Request $request)
     {
-        // return $request->all();
         $result = array();
         if (is_null($request->rencana_kerja)) {
             $result['rencana_kerja'][] = 'Rencana Kerja is field required';
@@ -590,6 +590,7 @@ class SkpController extends Controller
             $url = env('API_URL');
             $token = session()->get('user.access_token');
             $data = $request->all();
+            // return $data;
 
             $response = Http::withToken($token)->post($url . "/skp/store-bulanan/", $data);
             if ($response->successful()) {
