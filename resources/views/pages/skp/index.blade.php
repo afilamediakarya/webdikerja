@@ -36,8 +36,7 @@
 
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-borderless table-head-bg" id="kt_datatable"
-                        style="margin-top: 13px !important">
+                    <table class="table table-group table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -76,12 +75,12 @@
         "use strict";
         let table = $('#kt_datatable');
 
-        var currentNumber = null;
-        var cntNumber = 0;
-        var current = null;
-        var cnt = 0;
-
         $(function() {
+
+            var currentNumber = null;
+            var cntNumber = 0;
+            var current = null;
+            var cnt = 0;
 
             table.DataTable({
                 responsive: true,
@@ -131,79 +130,6 @@
                         targets: [1, 2],
                         visible: false
                     },
-                    // {
-                    //     targets: 4,
-                    //     render: function(data) {
-
-                    //         // let html = '';
-                    //         // html += '<ul style="list-style:none">';
-                    //         // $.each(data, function(x, y) {
-                    //         //     html += `<li style="margin-bottom:4rem">${y.aspek_skp}<li>`;
-                    //         // })
-                    //         // html += '</ul>';
-
-
-                    //         // return html;
-
-                    //     }
-                    // },
-                    // {
-                    //     targets: 5,
-                    //     render: function(data) {
-
-                    //         // let html = '';
-                    //         // html += '<ul style="list-style:none">';
-                    //         // $.each(data, function(x, y) {
-                    //         //     html += `<li style="margin-bottom:4rem">${y.iki}<li>`;
-                    //         // })
-                    //         // html += '</ul>';
-
-
-                    //         // return html;
-
-                    //     }
-                    // },
-                    // {
-                    //     targets: 6,
-                    //     render: function(data) {
-                    //         // console.log(data);
-                    //         // let html = '';
-                    //         // let target = 0;
-                    //         // html += '<ul style="list-style:none">';
-                    //         // $.each(data, function(x, y) {
-                    //         //     target = 0;
-                    //         //     $.each(y.target_skp, function(n, m) {
-                    //         //         if (m['bulan'] == 0) {
-                    //         //             target = m['target'];
-                    //         //         }
-                    //         //     })
-                    //         //     html += `<li style="margin-bottom:4rem">${target}<li>`;
-
-                    //         // })
-                    //         // html += '</ul>';
-
-
-                    //         // return html;
-
-                    //     }
-                    // },
-                    // {
-                    //     targets: 7,
-                    //     render: function(data) {
-
-                    //         // let html = '';
-                    //         // let target = 0;
-                    //         // html += '<ul style="list-style:none">';
-                    //         // $.each(data, function(x, y) {
-                    //         //     html += `<li style="margin-bottom:4rem">${y.satuan}<li>`;
-                    //         // })
-                    //         // html += '</ul>';
-
-
-                    //         // return html;
-
-                    //     }
-                    // },
                     {
                         targets: -1,
                         title: 'Actions',
@@ -211,7 +137,7 @@
                         width: '10rem',
                         class: "wrapok",
                         render: function(data, type, row, full, meta) {
-                            console.log(row);
+                            // console.log(row);
                             return `
                             <a role="button" href="/skp/edit/${row.id_skp}?type=tahunan" class="btn btn-success btn-sm">Ubah</a>
                             <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="${row.id_skp}">Hapus</button>
@@ -220,19 +146,11 @@
                     }
                 ],
                 rowGroup: {
-                    dataSrc: ['jenis_kinerja', 'skp_atasan']
+                    dataSrc: ['jenis_kinerja', 'skp_atasan'],
+                    // className: 'table-group',
                 },
                 "rowsGroup": [-1, 0, 3],
                 "ordering": false,
-                createdRow: function(row, data, index) {
-                    $('td', row).css({
-                        'text-align': 'top-left',
-                        'vertical-align': 'top',
-                        'border-collapse': 'collapse',
-                        'border': '0.2px solid gray'
-                    });
-
-                },
             });
         })
 
@@ -277,44 +195,5 @@
                 }
             })
         })
-
-        // function deleteRow(params) {
-        //     Swal.fire({
-        //     title: 'Apakah kamu yakin akan menghapus data ini ?',
-        //     text: "Data akan di hapus permanen",
-        //     icon: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#3085d6',
-        //     cancelButtonColor: '#d33',
-        //     confirmButtonText: 'Yes, delete it!'
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             $.ajax({
-        //                 url  : '/skp/delete/'+ params,
-        //                 type : 'POST',
-        //                 data : {
-        //                     '_method' : 'DELETE',
-        //                     '_token' : $('meta[name="csrf-token"]').attr('content')
-        //                 },
-        //                 success: function (response) {
-        //                     let res = JSON.parse(response);
-        //                     console.log(res.status);
-        //                     if (res.status !== false) {
-        //                         Swal.fire('Deleted!', 'Your file has been deleted.','success');
-        //                           setTimeout(function () {
-        //                             window.location.href = '/skp';
-        //                         }, 1500);     
-        //                     }else{
-        //                         swal.fire({
-        //                             title : "SKP tidak dapat di hapus. ",
-        //                             text: "SKP digunakan oleh bawahaan. ",
-        //                             icon: "warning",
-        //                         });
-        //                     }
-        //                 }
-        //             })
-        //         }
-        //     })
-        // }
     </script>
 @endsection

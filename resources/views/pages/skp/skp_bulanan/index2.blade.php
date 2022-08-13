@@ -42,8 +42,7 @@
                         @endforeach
                     </select>
                     <!--begin: Datatable-->
-                    <table class="table table-borderless table-head-bg" id="kt_datatable"
-                        style="margin-top: 13px !important">
+                    <table class="table table-group table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -83,16 +82,17 @@
             bulan = date.getMonth() + 1;
         }
 
-        var currentNumber = null;
-        var cntNumber = 0;
-        var current = null;
-        var cnt = 0;
-
         $(function() {
             datatable_(bulan)
         })
 
         function datatable_(bulan) {
+
+            var currentNumber = null;
+            var cntNumber = 0;
+            var current = null;
+            var cnt = 0;
+
             $('#kt_datatable').dataTable().fnDestroy();
             $('#kt_datatable').DataTable({
                 responsive: true,
@@ -206,15 +206,15 @@
                 },
                 "rowsGroup": [-1, 0, 2],
                 "ordering": false,
-                createdRow: function(row, data, index) {
-                    $('td', row).css({
-                        'text-align': 'top-left',
-                        'vertical-align': 'top',
-                        'border-collapse': 'collapse',
-                        'border': '0.2px solid gray'
-                    });
+                // createdRow: function(row, data, index) {
+                //     $('td', row).css({
+                //         'text-align': 'top-left',
+                //         'vertical-align': 'top',
+                //         'border-collapse': 'collapse',
+                //         'border': '0.2px solid gray'
+                //     });
 
-                },
+                // },
             });
         }
 
