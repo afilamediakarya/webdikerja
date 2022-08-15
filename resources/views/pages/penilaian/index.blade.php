@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('style')
-    <link href="{{asset('plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 
@@ -9,26 +9,28 @@
 
 @section('content')
 
-<!--begin::Entry-->
+    <!--begin::Entry-->
     <div class="d-flex flex-column-fluid">
         <!--begin::Container-->
         <div class="container">
-            
+
             <!--begin::Card-->
             <div class="card card-custom">
-                
+
                 <div class="card-body">
-                    @if($type == 'realisasi')
-                    <select id="bulan_" class="form-control" style="position: relative;bottom: 11px;width: 12rem;">
-                        <option selected disabled> Pilih bulan </option>
-                        <option value="0">Tahunan</option>
-                        @foreach($nama_bulan as $in => $month)
-                            <option value="{{$in+1}}" @if($in+1 == date('m')) selected @endif>{{$month}}</option>
-                        @endforeach
-                    </select>
+                    @if ($type == 'realisasi')
+                        <select id="bulan_" class="form-control" style="position: relative;bottom: 11px;width: 12rem;">
+                            <option selected disabled> Pilih bulan </option>
+                            <option value="0">Tahunan</option>
+                            @foreach ($nama_bulan as $in => $month)
+                                <option value="{{ $in + 1 }}" @if ($in + 1 == date('m')) selected @endif>
+                                    {{ $month }}</option>
+                            @endforeach
+                        </select>
                     @endif
                     <!--begin: Datatable-->
-                    <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
+                    <table class="table table-borderless table-head-bg" id="kt_datatable"
+                        style="margin-top: 13px !important">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -40,7 +42,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                         </tbody>
                     </table>
                     <!--end: Datatable-->
@@ -50,133 +52,131 @@
         </div>
         <!--end::Container-->
     </div>
-<!--end::Entry-->
+    <!--end::Entry-->
 
 @endsection
 
 
 
 @section('script')
-    <script src="{{asset('plugins/custom/datatables/datatables.bundle.js')}}"></script>
+    <script src="{{ asset('plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <script>
-          "use strict";
-        let type = {!! json_encode($type) !!};  
+        "use strict";
+        let type = {!! json_encode($type) !!};
 
-        $(document).on('change','#bulan_',function () {
-           let bulan = $(this).val();
+        $(document).on('change', '#bulan_', function() {
+            let bulan = $(this).val();
             datatable(bulan);
-        })        
+        })
 
         function datatable(bulan) {
             $('#kt_datatable').dataTable().fnDestroy();
             var table = $('#kt_datatable');
             // begin first table
-           
+
             if (type == 'skp') {
                 table.DataTable({
                     responsive: true,
                     pageLength: 10,
-                    order: [[0, 'asc']],
-                    processing:true,
-                    ajax: "/get_data/penilaian/"+type,
-                    columns:[{ 
-                            data : null, 
-                            render: function (data, type, row, meta) {
-                                    return meta.row + meta.settings._iDisplayStart + 1;
-                            }  
-                        },{
-                            data:'nama'
-                        },{
-                            data:'nip'
-                        },{
-                            data:'nama_jabatan'
-                        },{
-                            data:'status',
-                        },{
-                            data:null,
-                        }
+                    order: [
+                        [0, 'asc']
                     ],
-                    columnDefs: [
-                        {
-                            targets: -1,
-                            title: 'Actions',
-                            orderable: false,
-                            render: function(data) {
-                                if (data.status == 'Selesai') {
-                                    return `<button type="button" class="btn btn-secondary" disabled>Review Skp</button>`
-                                }else{
-                                    return `<a href="/penilaian-create?type=${type}&id_pegawai=${data.id_pegawai}" role="button" class="btn btn-primary">Review Skp</a>`;
-                                }
-                                
-                            },
-                        }, {
-                            targets: 4,
-                            title: 'Status',
-                            orderable: false,
-                            render: function(data) {
-                                if (data == 'Belum Review') {
-                                    return `<a href="javascript:;" class="btn btn-light-danger btn-sm">${data}</a>`;
-                                }else if(data == 'Belum Sesuai'){
-                                    return `<a href="javascript:;" class="btn btn-light-warning btn-sm">${data}</a>`;
-                                }else if(data == 'Selesai'){
-                                    return `<a href="javascript:;" class="btn btn-light-success btn-sm">${data}</a>`;
-                                }
-                            },
+                    processing: true,
+                    ajax: "/get_data/penilaian/" + type,
+                    columns: [{
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
                         }
-                    ],
+                    }, {
+                        data: 'nama'
+                    }, {
+                        data: 'nip'
+                    }, {
+                        data: 'nama_jabatan'
+                    }, {
+                        data: 'status',
+                    }, {
+                        data: null,
+                    }],
+                    columnDefs: [{
+                        targets: -1,
+                        title: 'Actions',
+                        orderable: false,
+                        render: function(data) {
+                            if (data.status == 'Selesai') {
+                                return `<button type="button" class="btn btn-secondary" disabled>Review Skp</button>`
+                            } else {
+                                return `<a href="/penilaian-create?type=${type}&id_pegawai=${data.id_pegawai}" role="button" class="btn btn-primary">Review Skp</a>`;
+                            }
+
+                        },
+                    }, {
+                        targets: 4,
+                        title: 'Status',
+                        orderable: false,
+                        render: function(data) {
+                            if (data == 'Belum Review') {
+                                return `<a href="javascript:;" class="btn btn-light-danger btn-sm">${data}</a>`;
+                            } else if (data == 'Belum Sesuai') {
+                                return `<a href="javascript:;" class="btn btn-light-warning btn-sm">${data}</a>`;
+                            } else if (data == 'Selesai') {
+                                return `<a href="javascript:;" class="btn btn-light-success btn-sm">${data}</a>`;
+                            }
+                        },
+                    }],
                 });
             } else {
                 table.DataTable({
                     responsive: true,
                     pageLength: 10,
-                    order: [[0, 'asc']],
-                    processing:true,
+                    order: [
+                        [0, 'asc']
+                    ],
+                    processing: true,
                     ajax: `/get_data/penilaian/${type}`,
-                    columns:[{ 
-                            data : null, 
-                            render: function (data, type, row, meta) {
-                                    return meta.row + meta.settings._iDisplayStart + 1;
-                            }  
-                        },{
-                            data:'nama'
-                        },{
-                            data:'nip'
-                        },{
-                            data:'nama_jabatan'
-                        },{
-                            data:'status',
-                        },{
-                            data:null,
+                    columns: [{
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
                         }
-                    ],
-                    columnDefs: [
-                        {
-                            targets: -1,
-                            title: 'Actions',
-                            orderable: false,
-                            render: function(data) {
-                                if (data.status == 'Selesai') {
-                                    return `<button type="button" class="btn btn-secondary" disabled>Review Realisasi</button>`
-                                }else{
-                                    return `<a href="/penilaian-create?type=${type}&id_pegawai=${data.id_pegawai}&bulan=${bulan}" role="button" class="btn btn-primary">Review Realisasi</a>`;
-                                }
-                                
-                            },
-                        }, {
-                            targets: 4,
-                            title: 'Status',
-                            orderable: false,
-                            render: function(data) {
-                                if (data == 'Belum Review') {
-                                    return `<a href="javascript:;" class="btn btn-light-danger btn-sm">${data}</a>`;
-                                }else if(data == 'Belum Sesuai'){
-                                    return `<a href="javascript:;" class="btn btn-light-warning btn-sm">${data}</a>`;
-                                }else if(data == 'Selesai'){
-                                    return `<a href="javascript:;" class="btn btn-light-success btn-sm">${data}</a>`;
-                                }
-                            },
-                        }
-                    ],
+                    }, {
+                        data: 'nama'
+                    }, {
+                        data: 'nip'
+                    }, {
+                        data: 'nama_jabatan'
+                    }, {
+                        data: 'status',
+                    }, {
+                        data: null,
+                    }],
+                    columnDefs: [{
+                        targets: -1,
+                        title: 'Actions',
+                        orderable: false,
+                        render: function(data) {
+                            if (data.status == 'Selesai') {
+                                return `<button type="button" class="btn btn-secondary" disabled>Review Realisasi</button>`
+                            } else {
+                                return `<a href="/penilaian-create?type=${type}&id_pegawai=${data.id_pegawai}&bulan=${bulan}" role="button" class="btn btn-primary">Review Realisasi</a>`;
+                            }
+
+                        },
+                    }, {
+                        targets: 4,
+                        title: 'Status',
+                        orderable: false,
+                        render: function(data) {
+                            if (data == 'Belum Review') {
+                                return `<a href="javascript:;" class="btn btn-light-danger btn-sm">${data}</a>`;
+                            } else if (data == 'Belum Sesuai') {
+                                return `<a href="javascript:;" class="btn btn-light-warning btn-sm">${data}</a>`;
+                            } else if (data == 'Selesai') {
+                                return `<a href="javascript:;" class="btn btn-light-success btn-sm">${data}</a>`;
+                            }
+                        },
+                    }],
                 });
             }
         }
@@ -185,6 +185,5 @@
             datatable($('#bulan_').val());
             // KTDatatablesAdvancedRowGrouping.init();
         });
-
     </script>
 @endsection
