@@ -52,6 +52,19 @@ class PegawaiController extends Controller
         return view('pages.admin.pegawai.index', compact('page_title', 'page_description', 'breadcumb', 'dinas', 'pangkat', 'agama', 'status_kawin', 'pendidikan', 'status_pegawai', 'eselon', 'jabatan', 'role'));
     }
 
+    public function pegawai_by_satuan_kerja(Request $request, $id_dinas)
+    {
+        // return "ok";
+        // $id_satker = request('satker');
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $data = array();
+
+        $data = Http::withToken($token)->get($url . "/pegawai/listBySatuanKerja/" . $id_dinas);
+
+        return $data;
+    }
+
     public function store(Request $request)
     {
         $url = env('API_URL');
@@ -77,7 +90,10 @@ class PegawaiController extends Controller
         if ($response->successful()) {
             $data = $response->object();
             if (isset($data->status)) {
-                return response()->json(['success' => 'Berhasil Menambah Data']);
+                return response()->json([
+                    'success' => 'Berhasil Menambah Data',
+                    'data' => $response->json()
+                ]);
             } else {
                 return response()->json(['invalid' => $response->json()]);
             }
@@ -125,7 +141,10 @@ class PegawaiController extends Controller
         if ($response->successful()) {
             $data = $response->object();
             if (isset($data->status)) {
-                return response()->json(['success' => 'Berhasil Menambah Data']);
+                return response()->json([
+                    'success' => 'Berhasil Menambah Data',
+                    'data' => $response->json()
+                ]);
             } else {
                 return response()->json(['invalid' => $response->json()]);
             }
@@ -141,7 +160,10 @@ class PegawaiController extends Controller
         $token = $request->session()->get('user.access_token');
         $response = Http::withToken($token)->delete($url . "/pegawai/delete/" . $id);
         if ($response->successful()) {
-            return response()->json(['success' => true]);
+            return response()->json([
+                'success' => true,
+                'data' => $response->json()
+            ]);
         }
 
         return response()->json(['error' => true]);

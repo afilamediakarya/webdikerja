@@ -265,7 +265,7 @@
                             if (res.status !== false) {
                                 Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
                                     .then(function() {
-                                        window.location.href = '/skp/tahunan';
+                                        window.location.href = '/skp/bulanan';
                                     });
                             } else {
                                 swal.fire({

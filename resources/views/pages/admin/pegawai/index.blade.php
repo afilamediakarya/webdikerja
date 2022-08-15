@@ -53,6 +53,22 @@
             <!--begin::Card-->
             <div class="card card-custom" id="table">
                 <div class="card-body">
+
+                    <div class="row" style="margin-bottom: 1rem">
+                        <div class="col-lg-6">
+                            <label for="filter-satuan-kerja" class="form-label">Satuan kerja</label>
+                            <select class="form-control" type="text" id="filter-satuan-kerja">
+                                <!-- <option disabled selected> Pilih Satuan Kerja </option> -->
+                                <option selected disabled> Pilih satuan kerja</option>
+                                @foreach ($dinas as $key => $value)
+                                    <option value="{{ $value['id'] }}" @if ($value['id'] == 1) selected @endif>
+                                        {{ $value['nama_satuan_kerja'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <!-- <button class="btn btn-primary btn-sm" id="filter-btn" style="position:relative;right:0px;">Filter</button> -->
+                    </div>
+
                     <!--begin: Datatable-->
                     <table class="table table-borderless table-head-bg" id="kt_datatable"
                         style="margin-top: 13px !important">
@@ -61,7 +77,7 @@
                                 <th>No.</th>
                                 <th>Nama</th>
                                 <th>NIP</th>
-                                <th>Golongan</th>
+                                <th>Jabatan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -114,9 +130,10 @@
 
 
                             @if ($role == 'super_admin')
-                                <div class="form-group col-6">
+                                <div class="form-group col">
                                     <label>Satuan Kerja</label>
-                                    <select name="id_satuan_kerja" class="form-control form-control-solid">
+                                    <select name="id_satuan_kerja" id="id_satuan_kerja"
+                                        class="form-control form-control-solid">
                                         <option value="">Pilih Satuan Kerja</option>
                                         @foreach ($dinas as $item)
                                             <option value="{{ $item['id'] }}">{{ $item['nama_satuan_kerja'] }}</option>
@@ -129,13 +146,13 @@
                             @endif
 
                             <!-- <div class="form-group col-6">
-                                                                                            <label>Eselon</label>
-                                                                                            <select class="form-control form-control-solid" name="eselon">
-                                                                                                @foreach ($eselon as $item)
+                                                                                                                                                                                                                                                                                                                                                                            <label>Eselon</label>
+                                                                                                                                                                                                                                                                                                                                                                            <select class="form-control form-control-solid" name="eselon">
+                                                                                                                                                                                                                                                                                                                                                                                @foreach ($eselon as $item)
     <option value="{{ $item['value'] }}">{{ $item['value'] }}</option>
     @endforeach
-                                                                                            </select>
-                                                                                        </div> -->
+                                                                                                                                                                                                                                                                                                                                                                            </select>
+                                                                                                                                                                                                                                                                                                                                                                        </div> -->
 
                             <div class="form-group col-6">
                                 <label>Golongan Pangkat</label>
@@ -160,55 +177,55 @@
                                 <span class="invalid-feedback"></span>
                             </div>
                             <!--
-                                                                                        <div class="form-group col-6">
-                                                                                            <label>Jenis Jabatan Pegawai</label>
-                                                                                            <select class="form-control form-control-solid" name="jenis_jabatan">
-                                                                                               
-                                                                                                @foreach ($jabatan as $item)
+                                                                                                                                                                                                                                                                                                                                                                        <div class="form-group col-6">
+                                                                                                                                                                                                                                                                                                                                                                            <label>Jenis Jabatan Pegawai</label>
+                                                                                                                                                                                                                                                                                                                                                                            <select class="form-control form-control-solid" name="jenis_jabatan">
+                                                                                                                                                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                                                                                                @foreach ($jabatan as $item)
     <option value="{{ $item['id'] }}">{{ $item['nama_jabatan'] }}</option>
     @endforeach
-                                                                                           
-                                                                                            </select>
-                                                                                        </div> -->
+                                                                                                                                                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                                                                                                                                            </select>
+                                                                                                                                                                                                                                                                                                                                                                        </div> -->
                             <!-- <div class="form-group col-6">
-                                                                                            <label>Jabatan Pegawai</label>
-                                                                                            <select class="form-control form-control-solid" name="jabatan">
-                                                                                                <option value="Aktif">Aktif</option>
-                                                                                                <option value="Non Aktif">Non Aktif</option>
-                                                                                            </select>
-                                                                                        </div> -->
+                                                                                                                                                                                                                                                                                                                                                                            <label>Jabatan Pegawai</label>
+                                                                                                                                                                                                                                                                                                                                                                            <select class="form-control form-control-solid" name="jabatan">
+                                                                                                                                                                                                                                                                                                                                                                                <option value="Aktif">Aktif</option>
+                                                                                                                                                                                                                                                                                                                                                                                <option value="Non Aktif">Non Aktif</option>
+                                                                                                                                                                                                                                                                                                                                                                            </select>
+                                                                                                                                                                                                                                                                                                                                                                        </div> -->
                             <!-- <div class="form-group col-6">
-                                                                                            <label>TMT Jabatan</label>
-                                                                                            <div class="input-group date" >
-                                                                                                <input type="text" class="form-control form-control-solid" readonly  value="{{ date('Y-m-d') }}" name="tmt_jabatan" id="tmt_jab"/>
-                                                                                                <div class="input-group-append">
-                                                                                                    <span class="input-group-text">
-                                                                                                        <i class="la la-calendar"></i>
-                                                                                                    </span>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div> -->
+                                                                                                                                                                                                                                                                                                                                                                            <label>TMT Jabatan</label>
+                                                                                                                                                                                                                                                                                                                                                                            <div class="input-group date" >
+                                                                                                                                                                                                                                                                                                                                                                                <input type="text" class="form-control form-control-solid" readonly  value="{{ date('Y-m-d') }}" name="tmt_jabatan" id="tmt_jab"/>
+                                                                                                                                                                                                                                                                                                                                                                                <div class="input-group-append">
+                                                                                                                                                                                                                                                                                                                                                                                    <span class="input-group-text">
+                                                                                                                                                                                                                                                                                                                                                                                        <i class="la la-calendar"></i>
+                                                                                                                                                                                                                                                                                                                                                                                    </span>
+                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                        </div> -->
                             <!-- <div class="form-group col-6">
-                                                                                            <label>TMT Pegawai</label>
-                                                                                            <div class="input-group date" >
-                                                                                                <input type="text" class="form-control form-control-solid" readonly  value="{{ date('Y-m-d') }}" name="tmt_pegawai" id="tmt_peg"/>
-                                                                                                <div class="input-group-append">
-                                                                                                    <span class="input-group-text">
-                                                                                                        <i class="la la-calendar"></i>
-                                                                                                    </span>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div> -->
+                                                                                                                                                                                                                                                                                                                                                                            <label>TMT Pegawai</label>
+                                                                                                                                                                                                                                                                                                                                                                            <div class="input-group date" >
+                                                                                                                                                                                                                                                                                                                                                                                <input type="text" class="form-control form-control-solid" readonly  value="{{ date('Y-m-d') }}" name="tmt_pegawai" id="tmt_peg"/>
+                                                                                                                                                                                                                                                                                                                                                                                <div class="input-group-append">
+                                                                                                                                                                                                                                                                                                                                                                                    <span class="input-group-text">
+                                                                                                                                                                                                                                                                                                                                                                                        <i class="la la-calendar"></i>
+                                                                                                                                                                                                                                                                                                                                                                                    </span>
+                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                        </div> -->
 
 
                             <!-- <div class="form-group col-6">
-                                                                                            <label>Jenis Jabatan</label>
-                                                                                            <select class="form-control form-control-solid" name="jenis_jabatan">
-                                                                                                <option>1</option>
-                                                                                                <option>2</option>
-                                                                                            </select>
-                                                                                        </div>
-                                                                                         -->
+                                                                                                                                                                                                                                                                                                                                                                            <label>Jenis Jabatan</label>
+                                                                                                                                                                                                                                                                                                                                                                            <select class="form-control form-control-solid" name="jenis_jabatan">
+                                                                                                                                                                                                                                                                                                                                                                                <option>1</option>
+                                                                                                                                                                                                                                                                                                                                                                                <option>2</option>
+                                                                                                                                                                                                                                                                                                                                                                            </select>
+                                                                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                                                                         -->
                             <div class="form-group col-6">
                                 <label>Jenis Kelamin</label>
                                 <select class="form-control form-control-solid" name="jenis_kelamin">
@@ -249,13 +266,13 @@
 
 
                             <!-- <div class="form-group col-6">
-                                                                                            <label>Pendidikan Struktural</label>
-                                                                                            <input type="text" class="form-control form-control-solid" name="pendidikan_struktural">
-                                                                                        </div>
-                                                                                        <div class="form-group col-6">
-                                                                                            <label>Tahun Lulus Pendidikan Struktural</label>
-                                                                                            <input type="text" class="form-control form-control-solid" name="lulus_pendidikan_struktural">
-                                                                                        </div> -->
+                                                                                                                                                                                                                                                                                                                                                                            <label>Pendidikan Struktural</label>
+                                                                                                                                                                                                                                                                                                                                                                            <input type="text" class="form-control form-control-solid" name="pendidikan_struktural">
+                                                                                                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                                                                                        <div class="form-group col-6">
+                                                                                                                                                                                                                                                                                                                                                                            <label>Tahun Lulus Pendidikan Struktural</label>
+                                                                                                                                                                                                                                                                                                                                                                            <input type="text" class="form-control form-control-solid" name="lulus_pendidikan_struktural">
+                                                                                                                                                                                                                                                                                                                                                                        </div> -->
 
                             <input type="hidden" value="pegawai" name="type">
 
@@ -286,8 +303,21 @@
     <script>
         "use strict";
         let role = {!! json_encode($role) !!}
-        console.log(role);
-        var dataRow = function() {
+        // console.log(role);
+
+        let dinas = $('#filter-satuan-kerja').val();
+        if (!dinas) {
+            dinas = 1;
+        }
+
+        $(function() {
+            datatable_(dinas);
+        })
+
+        function datatable_(dinas) {
+
+            $('#kt_datatable').dataTable().fnDestroy();
+
             let columnDefs = [];
             if (role == 'admin_opd') {
                 columnDefs = [{
@@ -295,10 +325,7 @@
                     title: 'Actions',
                     orderable: false,
                     render: function(data, type, full, meta) {
-                        return '\
-                                                                                                <a href="javascript:;" type="button" data-id="' +
-                            data + '" class="btn btn-secondary button-update">ubah</a>\
-                                                                                            ';
+                        return `<a href="javascript:;" type="button" data-id="${data}" class="btn btn-secondary button-update">ubah</a>`;
                     }
                 }];
             } else {
@@ -317,64 +344,68 @@
                 }];
             }
 
-            console.log(columnDefs);
+            // console.log('{{ route('pegawai') }}/pegawai');
 
-            var init = function() {
-                var table = $('#kt_datatable');
+            // var init = function() {
+            //     var table = $('#kt_datatable');
 
-                table.DataTable({
-                    responsive: true,
-                    pageLength: 25,
-                    order: [
-                        [0, 'asc']
-                    ],
-                    processing: true,
-                    ajax: '{{ route('pegawai') }}',
-                    columns: [{
-                            data: null,
-                            render: function(data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            }
-                        },
-                        {
-                            data: 'nama'
-                        },
-                        {
-                            data: 'nip'
-                        },
-                        {
-                            data: 'golongan',
-                            render: function(data) {
-                                return data !== null ? data : '-'
-                            }
-                        },
-                        {
-                            data: 'id',
+            //     table.DataTable({
+            $('#kt_datatable').DataTable({
+                responsive: true,
+                pageLength: 25,
+                order: [
+                    [0, 'asc']
+                ],
+                processing: true,
+                ajax: '{{ route('pegawai') }}/pegawai-by-satuan-kerja/' + dinas,
+                // ajax: 'admin/pegawai/pegawai-by-satuan-kerja?satker=' + dinas,
+                columns: [{
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            // console.log(row);
+                            return meta.row + meta.settings._iDisplayStart + 1;
                         }
-                    ],
-                    filter: function(data) {
-                        console.log(data);
                     },
-                    columnDefs: columnDefs
-                });
-            };
-
-            var destroy = function() {
-                var table = $('#kt_datatable').DataTable();
-                table.destroy();
-            }
-
-            return {
-                init: function() {
-                    init();
+                    {
+                        data: 'nama'
+                    },
+                    {
+                        data: 'nip'
+                    },
+                    {
+                        data: 'nama_jabatan',
+                        render: function(data) {
+                            // console.log(data);
+                            return data !== null ? data : '-'
+                        }
+                    },
+                    {
+                        data: 'id',
+                    }
+                ],
+                filter: function(data) {
+                    // console.log(data);
                 },
-                destroy: function() {
-                    destroy();
-                }
+                columnDefs: columnDefs
+            });
 
-            };
 
-        }();
+            // var destroy = function() {
+            //     var table = $('#kt_datatable').DataTable();
+            //     table.destroy();
+            // }
+
+            // return {
+            //     init: function() {
+            //         init();
+            //     },
+            //     destroy: function() {
+            //         destroy();
+            //     }
+
+            // };
+
+        };
 
         $(document).on('click', ".open_form", function() {
             $("#table").toggle();
@@ -385,6 +416,7 @@
             $("input").removeClass('is-invalid');
             $("select").removeClass('is-invalid');
             $("textarea").removeClass('is-invalid');
+            $("select[name='id_satuan_kerja']").val(dinas);
         })
 
         $(document).on('click', ".btn-cancel", function() {
@@ -408,7 +440,7 @@
                         });
                     } else if (data.invalid) {
                         $.each(data.invalid, function(key, value) {
-                            console.log(key);
+                            // console.log(key);
                             $("input[name='" + key + "']").addClass('is-invalid').siblings(
                                 '.invalid-feedback').html(value[0]);
                             $("textarea[name='" + key + "']").addClass('is-invalid').siblings(
@@ -423,13 +455,16 @@
                             icon: "success",
                             showConfirmButton: true,
                             confirmButtonText: "OK, Siip",
-                        }).then(function() {
-                            dataRow.destroy();
-                            dataRow.init();
+                        }).then(function(response) {
+                            // dataRow.destroy();
+                            // dataRow.init();
+
+                            datatable_(data['data']['data']['id_satuan_kerja']);
                             $("#createForm")[0].reset();
                             $("#table").toggle();
                             $("#form").toggle();
                             $(".open_form").toggle();
+
                         });
                     }
                 }).catch(function() {
@@ -459,7 +494,7 @@
                         });
                     } else if (data.invalid) {
                         $.each(data.invalid, function(key, value) {
-                            console.log(key);
+                            // console.log(key);
                             $("input[name='" + key + "']").addClass('is-invalid').siblings(
                                 '.invalid-feedback').html(value[0]);
                             $("textarea[name='" + key + "']").addClass('is-invalid').siblings(
@@ -473,8 +508,10 @@
                             showConfirmButton: true,
                             confirmButtonText: "OK, Siip",
                         }).then(function() {
-                            dataRow.destroy();
-                            dataRow.init();
+                            // dataRow.destroy();
+                            // dataRow.init();
+
+                            datatable_(data['data']['data']['id_satuan_kerja']);
                             $("#createForm")[0].reset();
                             $("#table").toggle();
                             $("#form").toggle();
@@ -506,7 +543,7 @@
             axios.get('admin/pegawai/' + key)
                 .then(function(res) {
                     let data = res.data;
-                    console.log(data);
+                    // console.log(data);
                     $.map(data.data, function(val, i) {
                         $("input[name=" + i + "]").val(val);
                         $("select[name=" + i + "]").val(val);
@@ -532,19 +569,24 @@
                     cancelButton: "btn btn-light-danger",
                 }
             }).then(function(result) {
-                console.log(result);
+                // console.log(result);
                 if (result.value) {
                     axios.delete('admin/pegawai/' + key)
                         .then(function(res) {
                             let data = res.data;
                             if (data.success) {
-                                Swal.fire(
-                                    "Deleted!",
-                                    "Data terhapus",
-                                    "success"
-                                );
-                                dataRow.destroy();
-                                dataRow.init();
+                                swal.fire({
+                                    text: "Data anda berhasil dihapus",
+                                    title: "Sukses",
+                                    icon: "success",
+                                    showConfirmButton: true,
+                                    confirmButtonText: "OK, Siip",
+                                }).then(function() {
+                                    // dataRow.destroy();
+                                    // dataRow.init();
+
+                                    datatable_(res['data']['data']['data']['id_satuan_kerja']);
+                                });
                             } else {
                                 Swal.fire(
                                     "Error",
@@ -553,9 +595,7 @@
                                 );
                             }
                         })
-                        .catch(function(err) {
-
-                        });
+                        .catch(function(err) {});
                 }
             });
         })
@@ -608,7 +648,20 @@
             $('#tmt_peg, #tmt_jab, #tmt_gol, #tgl_lahir').datepicker({
                 format: 'yyyy-mm-dd'
             });
-            dataRow.init();
+
+            $('#filter-satuan-kerja').on('change', function() {
+                let value = $(this).val();
+                dinas = value;
+                datatable_(value);
+            })
+
+            $('#filter-satuan-kerja').select2({
+                placeholder: "Pilih Satuan Kerja"
+            });
+            // $('#id_satuan_kerja').select2({
+            //     placeholder: "Pilih Satuan Kerja"
+            // });
+
         });
     </script>
 @endsection
