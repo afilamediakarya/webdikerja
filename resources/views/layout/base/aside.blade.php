@@ -200,7 +200,7 @@
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
-                                        <span class="menu-text text-capitalize">Review Taget SKP</span>
+                                        <span class="menu-text text-capitalize">Review Target SKP</span>
                                     </a>
                                 </li>
                                 <li class="menu-item" aria-haspopup="true">
@@ -208,7 +208,7 @@
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
-                                        <span class="menu-text text-capitalize">Review Taget Realisasi</span>
+                                        <span class="menu-text text-capitalize">Review Target Realisasi</span>
                                     </a>
                                 </li>
                                 <!-- <li class="menu-item" aria-haspopup="true">
