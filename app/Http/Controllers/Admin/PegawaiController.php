@@ -46,7 +46,8 @@ class PegawaiController extends Controller
             $dinas = $datadinas->collect('data');
         } else {
             $dinas = session()->get('user.current.pegawai.id_satuan_kerja');
-            // $dinas = collect([$datadinas]);
+            // $datadinas = Http::withToken($token)->get($url . "/satuan_kerja/show/" . session()->get('user.current.pegawai.id_satuan_kerja'));
+            // $dinas = $datadinas->collect('data');
         }
 
         return view('pages.admin.pegawai.index', compact('page_title', 'page_description', 'breadcumb', 'dinas', 'pangkat', 'agama', 'status_kawin', 'pendidikan', 'status_pegawai', 'eselon', 'jabatan', 'role'));
