@@ -102,12 +102,13 @@ class LaporanController extends Controller
         return $level;
     }
 
-    public function getSkp($level)
+    public function getSkp($level, $bulan)
     {
 
         $url = env('API_URL');
         $token = session()->get('user.access_token');
-        $data = Http::withToken($token)->get($url . "/laporan/skp/" . $level);
+        // $data = Http::withToken($token)->get($url . "/laporan/skp/" . $level);
+        $data = Http::withToken($token)->get($url . "/laporan/skp/" . $level . "/" . $bulan);
         return $data;
     }
 
@@ -122,7 +123,8 @@ class LaporanController extends Controller
             $level = 'pegawai';
         }
 
-        $data = $this->getSkp($level);
+        // $data = $this->getSkp($level);
+        $data = $this->getSkp($level, $bulan);
 
         if ($data['status'] == true) {
             $res = $data['data'];
@@ -250,9 +252,13 @@ class LaporanController extends Controller
             $sheet->setCellValue('B' . $cell, 'A. KINERJA UTAMA')->mergeCells('B' . $cell . ':F' . $cell);
             $sheet->getStyle('B' . $cell . ':F' . $cell)->getFont()->setBold(true);
             $cell++;
+            // return $data;
             foreach ($data['skp']['utama'] as $index => $value) {
-                $sheet->setCellValue('A' . $cell, $index + 1);
-                $sheet->setCellValue('B' . $cell, $value['rencana_kerja'])->mergeCells('B' . $cell . ':C' . $cell);
+
+                // print rencana_kerja
+                $sheet->setCellValue('A' . $cell, $index + 1)->mergeCells('A' . $cell . ':A' . ($cell + count($value['aspek_skp']) - 1));
+                $sheet->setCellValue('B' . $cell, $value['rencana_kerja'])->mergeCells('B' . $cell . ':C' . ($cell + count($value['aspek_skp']) - 1));
+
                 foreach ($value['aspek_skp'] as $k => $v) {
                     $sheet->setCellValue('D' . $cell, $v['iki'])->mergeCells('D' . $cell . ':E' . $cell);
 
@@ -269,6 +275,11 @@ class LaporanController extends Controller
                 }
             }
         }
+        if (count($data['skp']['tambahan']) <= 0) {
+            $sheet->setCellValue('A' . $cell, 'Data masih kosong')->mergeCells('A' . $cell . ':H' . $cell);
+        }
+
+        // TAMBAHAN
         if (isset($data['skp']['tambahan'])) {
             $sheet->setCellValue('B' . $cell, 'B. KINERJA TAMBAHAN')->mergeCells('B' . $cell . ':F' . $cell);
             $sheet->getStyle('B' . $cell . ':F' . $cell)->getFont()->setBold(true);
@@ -294,6 +305,9 @@ class LaporanController extends Controller
                 }
             }
         }
+        // if (count($data['skp']['tambahan']) <= 0) {
+        //     $sheet->setCellValue('A' . $cell, 'Data masih kosong')->mergeCells('A' . $cell . ':H' . $cell);
+        // }
 
 
         $sheet->getStyle('A12:F' . $cell)->getAlignment()->setVertical('center')->setHorizontal('center');
@@ -333,6 +347,8 @@ class LaporanController extends Controller
 
     public function exportSkp($data, $bulan, $type, $level)
     {
+
+        // return $data;
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
@@ -441,11 +457,12 @@ class LaporanController extends Controller
         $cell = 13;
         //UTAMA
 
+        // return $data;
         if (isset($data['skp']['utama'])) {
+            $sheet->setCellValue('B' . $cell, 'A. KINERJA UTAMA')->mergeCells('B' . $cell . ':H' . $cell);
+            $sheet->getStyle('B' . $cell . ':H' . $cell)->getFont()->setBold(true);
+            $cell++;
             foreach ($data['skp']['utama'] as $index => $value) {
-                $sheet->setCellValue('B' . $cell, 'A. KINERJA UTAMA')->mergeCells('B' . $cell . ':H' . $cell);
-                $sheet->getStyle('B' . $cell . ':H' . $cell)->getFont()->setBold(true);
-                $cell++;
                 if (isset($value['atasan']['rencana_kerja'])) {
                     $sheet->setCellValue('B' . $cell, $value['atasan']['rencana_kerja'])->mergeCells('B' . $cell . ':C' . ($cell + 2));
                 } else {
@@ -465,9 +482,10 @@ class LaporanController extends Controller
                         }
                         $cell++;
                     }
-                    $sheet->setCellValue('A' . ($cell - 3), $key + 1)->mergeCells('A' . ($cell - 3) . ':A' . ($cell - 1));
                     if (!$key == 0)
                         $sheet->setCellValue('B' . ($cell - 3), '')->mergeCells('B' . ($cell - 3) . ':C' . ($cell - 1));
+                    // $sheet->setCellValue('A' . ($cell - 3), $key + 1)->mergeCells('A' . ($cell - 3) . ':A' . ($cell - 1));
+                    $sheet->setCellValue('A' . ($cell - 3), $index + $key)->mergeCells('A' . ($cell - 3) . ':A' . ($cell - 1));
                 }
             }
         } else {
@@ -477,7 +495,7 @@ class LaporanController extends Controller
 
         // TAMBAHAN
         if (isset($data['skp']['tambahan'])) {
-            $sheet->setCellValue('B' . $cell, 'A. KINERJA TAMBAHAN')->mergeCells('B' . $cell . ':H' . $cell);
+            $sheet->setCellValue('B' . $cell, 'B. KINERJA TAMBAHAN')->mergeCells('B' . $cell . ':H' . $cell);
             $sheet->getStyle('B' . $cell . ':H' . $cell)->getFont()->setBold(true);
             $cell++;
             foreach ($data['skp']['tambahan'] as $keyy => $values) {
@@ -486,7 +504,8 @@ class LaporanController extends Controller
                 $sheet->setCellValue('D' . $cell, $values['rencana_kerja'])->mergeCells('D' . $cell . ':D' . ($cell + 2));
                 foreach ($values['aspek_skp'] as $k => $v) {
                     $sheet->getStyle('E' . $cell . ':E' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
-                    $sheet->setCellValue('E' . $cell, $v['aspek_skp'])->mergeCells('E' . $cell . ':E' . ($cell + 2));
+                    // $sheet->setCellValue('E' . $cell, $v['aspek_skp'])->mergeCells('E' . $cell . ':E' . ($cell + 2));
+                    $sheet->setCellValue('E' . $cell, $v['aspek_skp']);
                     $sheet->setCellValue('F' . $cell, $v['iki'])->mergeCells('F' . $cell . ':G' . $cell);
 
                     foreach ($v['target_skp'] as $mk => $rr) {
@@ -501,9 +520,10 @@ class LaporanController extends Controller
                 if (!$keyy == 0)
                     $sheet->setCellValue('B' . ($cell - 3), '')->mergeCells('B' . ($cell - 3) . ':C' . ($cell - 1));
             }
-        } else {
-            $sheet->setCellValue('A' . $cell, 'Data masih kosong')->mergeCells('B' . $cell . ':H' . $cell);
         }
+        // else {
+        //     $sheet->setCellValue('A' . $cell, 'Data masih kosong')->mergeCells('A' . $cell . ':H' . $cell);
+        // }
 
 
 
@@ -857,6 +877,7 @@ class LaporanController extends Controller
 
     public function exportRealisasi($data, $bulan, $type, $level)
     {
+        return $data;
 
         $spreadsheet = new Spreadsheet();
 
