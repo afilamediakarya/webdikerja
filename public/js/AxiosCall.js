@@ -27,9 +27,17 @@ var AxiosCall = function() {
                         showConfirmButton:true,
                         confirmButtonText: "OK, Siip",
                     }).then(function() {
-                        dataRow.destroy();
-                        dataRow.init();
+                        // dataRow.destroy();
+                        // dataRow.init();
+                        // $(_element)[0].reset();
+                        // console.log("ok");
+                        // console.log(_data['id_satua_kerja']);
+                        // console.log(data['data']['data']['id_satuan_kerja']);
+                        datatable_(data['data']['data']['id_satuan_kerja']);
+                        $("#createForm")[0].reset();
                         $(_element)[0].reset();
+                        $("#table").toggle();
+                        $("#form").toggle();
                         Panel.action('hide');
                     });
                 }
@@ -88,14 +96,20 @@ var AxiosCall = function() {
                     axios.delete(_url)
                     .then(function(res){
                         var data = res.data;
+                        console.log(data);
                         if(data.success){
                             Swal.fire(
                                 "Deleted!",
                                 "Data terhapus",
                                 "success"
-                            );
-                            dataRow.destroy();
-                            dataRow.init();
+                            ).then(function() {
+                                datatable_(data['data']['data']['id_satuan_kerja']);
+                                $("#createForm")[0].reset();
+                                $(_element)[0].reset();
+                                $("#table").toggle();
+                                $("#form").toggle();
+                                Panel.action('hide');
+                            });
                         }else{
                             Swal.fire(
                                 "Error",
