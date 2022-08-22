@@ -7,6 +7,9 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Http;
 use Session;
+use \Illuminate\Support\Facades\Auth;
+
+use App\Models\jabatan;
 
 class LaporanController extends Controller
 {
@@ -27,12 +30,20 @@ class LaporanController extends Controller
         return view('pages.laporan.absen', compact('page_title', 'page_description', 'breadcumb', 'TypeRole', 'satuan_kerja'));
     }
 
-    public function skp()
+    public function skp(Request $request)
     {
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+
         $page_title = 'Laporan';
         $page_description = 'Daftar Sasaran Kinerja Pegawai';
         $breadcumb = ['SKP'];
-        return view('pages.laporan.skp', compact('page_title', 'page_description', 'breadcumb'));
+
+        $level = session()->get('user.role');
+        $id_pegawai = session()->get('user.current.id');
+        $pegawai = Http::withToken($token)->get($url . "/jabatan/pegawaiBySatuanKerja")->collect();
+
+        return view('pages.laporan.skp', compact('page_title', 'page_description', 'breadcumb', 'level', 'pegawai', 'id_pegawai'));
     }
 
 
@@ -96,35 +107,40 @@ class LaporanController extends Controller
         }
     }
 
-    public function checkLevel()
+    public function checkLevel($id_pegawai)
     {
-        $level = session()->get('user.level_jabatan');
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        // $level = session()->get('user.level_jabatan');
+        $level = Http::withToken($token)->get($url . "/laporan/skp/cekLevel/" . $id_pegawai);
         return $level;
     }
 
-    public function getSkp($level, $bulan)
+    public function getSkp($level, $bulan, $id_pegawai)
     {
 
         $url = env('API_URL');
         $token = session()->get('user.access_token');
         // $data = Http::withToken($token)->get($url . "/laporan/skp/" . $level);
-        $data = Http::withToken($token)->get($url . "/laporan/skp/" . $level . "/" . $bulan);
+        $data = Http::withToken($token)->get($url . "/laporan/skp/" . $level . "/" . $bulan . "/" . $id_pegawai);
         return $data;
     }
 
-    public function exportLaporanSkp($jenis, $type, $bulan)
+    public function exportLaporanSkp($jenis, $type, $bulan, $id_pegawai)
     {
-        $level = $this->checkLevel();
+
+        $level = $this->checkLevel($id_pegawai);
         $res = [];
 
-        if ($level == 1 || $level == 2) {
+        if ($level['level_jabatan'] == 1 || $level['level_jabatan'] == 2) {
             $level = 'kepala';
         } else {
             $level = 'pegawai';
         }
+        // return $level;
 
         // $data = $this->getSkp($level);
-        $data = $this->getSkp($level, $bulan);
+        $data = $this->getSkp($level, $bulan, $id_pegawai);
 
         if ($data['status'] == true) {
             $res = $data['data'];
