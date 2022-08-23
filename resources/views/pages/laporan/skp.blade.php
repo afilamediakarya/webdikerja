@@ -16,7 +16,7 @@
                     <h3 class="card-title">Laporan</h3>
                 </div>
                 <div class="card-body">
-                    {{-- @dd($id_pegawai) --}}
+                    {{-- @dd(session('user')) --}}
                     <!--begin::Form-->
                     <form class="form">
 
@@ -120,11 +120,13 @@
                 let pegawai = $('#pegawai').val();
                 if (jenis_skp !== null && bulan !== null) {
                     if (level == 'admin_opd') {
+                        if (id_pegawai == 0) {
+                            url = `/laporan/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}`;
+                            window.open(url);
+                        }
                         url = `/laporan/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
                         window.open(url);
-                        // console.log(jenis_skp);
-                        // console.log(bulan);
-                        // console.log(id_pegawai);
+
                     } else {
                         // url = `/laporan/export/laporanSkp/${jenis_skp}/pdf/${bulan}`;
                         url = `/laporan/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;

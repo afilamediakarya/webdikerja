@@ -11,6 +11,8 @@ use \Illuminate\Support\Facades\Auth;
 
 use App\Models\jabatan;
 
+setlocale(LC_ALL, 'IND');
+
 class LaporanController extends Controller
 {
     //
@@ -125,6 +127,232 @@ class LaporanController extends Controller
         $data = Http::withToken($token)->get($url . "/laporan/skp/" . $level . "/" . $bulan . "/" . $id_pegawai);
         return $data;
     }
+
+
+    // Rekapitulasi skp Satuan Kerja
+
+    public function getRekapSkp($bulan)
+    {
+
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        // $data = Http::withToken($token)->get($url . "/laporan/skp/" . $level);
+        $data = Http::withToken($token)->get($url . "/laporan/skp/rekapitulasi/" . $bulan);
+        return $data;
+    }
+
+    public function exportRekapSkp($jenis, $type, $bulan)
+    {
+        $res = [];
+        $data = $this->getRekapSkp($bulan);
+        // return $data;
+        if ($data['status'] == true) {
+            $res = $data['data'];
+        }
+
+        return $this->laporanRekapSkp($res, $bulan, $type);
+    }
+
+    public function laporanRekapSkp($data, $bulan, $type)
+    {
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
+            ->setLastModifiedBy('BKPSDM BULUKUMBA')
+            ->setTitle('Laporan Rekapitulasi SKP Satuan Kerja')
+            ->setSubject('Laporan Rekapitulasi SKP Satuan Kerja')
+            ->setDescription('Laporan Rekapitulasi SKP Satuan Kerja')
+            ->setKeywords('pdf php')
+            ->setCategory('Laporan Rekapitulasi SKP Satuan Kerja');
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+
+        $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
+
+        $sheet->getRowDimension(1)->setRowHeight(17);
+        $sheet->getRowDimension(2)->setRowHeight(17);
+        $sheet->getRowDimension(3)->setRowHeight(7);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setHorizontalCentered(true);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setVerticalCentered(false);
+
+        // //Margin PDF
+        $spreadsheet->getActiveSheet()->getPageMargins()->setTop(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setRight(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.5);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
+
+        $sheet->setCellValue('A1', 'REKAPITULASI CAPAIAN PRODUKTIVITAS KERJA (SKP)')->mergeCells('A1:L1');
+        $sheet->setCellValue('A2', 'PERANGKAT DAERAH')->mergeCells('A2:B2');
+        $sheet->setCellValue('C2', ': ' . $data['satuan_kerja']['nama_satuan_kerja'])->mergeCells('C2:K2');
+
+        $sheet->setCellValue('A3', 'PERIODE PENILAIAN')->mergeCells('A3:B3');
+        $sheet->setCellValue('C3', ': ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran'))))
+            ->mergeCells('C3:K3');
+
+        $sheet->setCellValue('A4', 'No')->mergeCells('A4:A4');
+        $sheet->getColumnDimension('A')->setWidth(8);
+        $sheet->setCellValue('B4', 'Nama / NIP / Pangkat Golongan')->mergeCells('B4:C4');
+        $sheet->getColumnDimension('B')->setWidth(1);
+        $sheet->getColumnDimension('C')->setWidth(30);
+        $sheet->setCellValue('D4', 'Nama Jabatan');
+        $sheet->getColumnDimension('D')->setWidth(30);
+        $sheet->setCellValue('E4', 'Jumlah Pemangku');
+        $sheet->getColumnDimension('E')->setWidth(5);
+        $sheet->setCellValue('F4', 'Unit Kerja Eselon II');
+        $sheet->getColumnDimension('F')->setWidth(20);
+        $sheet->setCellValue('G4', 'Unit Kerja Eselon III');
+        $sheet->getColumnDimension('G')->setWidth(20);
+        $sheet->setCellValue('H4', 'Unit Kerja Eselon IV');
+        $sheet->getColumnDimension('H')->setWidth(20);
+        $sheet->setCellValue('I4', 'Kelas');
+        $sheet->getColumnDimension('I')->setWidth(5);
+        $sheet->setCellValue('J4', 'Nilai SKP Bulanan');
+        $sheet->getColumnDimension('J')->setWidth(5);
+        $sheet->setCellValue('K4', 'Status');
+        $sheet->getColumnDimension('K')->setWidth(10);
+        $sheet->setCellValue('L4', 'Keterangan');
+        $sheet->getColumnDimension('L')->setWidth(5);
+
+        $cell = 4;
+
+        $sheet->getStyle('A1')->getFont()->setSize(12);
+        $sheet->getStyle('A:L')->getAlignment()->setWrapText(true);
+        $sheet->getStyle('A4:L4')->getFont()->setBold(true);
+        $sheet->getStyle('A4:L4')->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('A5:A' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('D5:D' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center');
+        $sheet->getStyle('J5:J' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('A1')->getAlignment()->setVertical('center')->setHorizontal('center');
+
+        $nilai_utama = 0;
+        $nilai_tambahan = 0;
+        // return $data;
+        foreach ($data['list_pegawai'] as $index => $value) {
+            $cell++;
+
+            $sheet->setCellValue('A' . $cell, $index + 1);
+            $sheet->setCellValue('B' . $cell, $value['nama'] . ' / ' . $value['nip'] . ' / ' . $value['golongan'])->mergeCells('B' . $cell . ':C' . $cell);
+            $sheet->setCellValue('D' . $cell, $value['nama_jabatan']);
+
+            if (isset($value['skp_utama'])) {
+
+                $jumlah_data = 0;
+                $sum_nilai_iki = 0;
+                foreach ($value['skp_utama'] as $key => $val) {
+
+                    foreach ($val['aspek_skp'] as $k => $v) {
+
+                        foreach ($v['target_skp'] as $mk => $rr) {
+                            $kategori_ = '';
+                            if ($rr['bulan'] ==  $bulan) {
+                                $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+
+                                if ($single_rate > 110) {
+                                    $nilai_iki = 110 + ((120 - 110) / (110 - 101)) * (110 - 101);
+                                } elseif ($single_rate >= 101 && $single_rate <= 110) {
+                                    $nilai_iki = 110 + ((120 - 110) / (110 - 101)) * ($single_rate - 101);
+                                } elseif ($single_rate == 100) {
+                                    $nilai_iki = 109;
+                                } elseif ($single_rate >= 80 && $single_rate <= 99) {
+                                    $nilai_iki = 70 + ((89 - 70) / (99 - 80)) * ($single_rate - 80);
+                                } elseif ($single_rate >= 60 && $single_rate <= 79) {
+                                    $nilai_iki = 50 + ((69 - 50) / (79 - 60)) * ($single_rate - 60);
+                                } elseif ($single_rate >= 0 && $single_rate <= 79) {
+                                    $nilai_iki = (49 / 59) * $single_rate;
+                                }
+                                $sum_nilai_iki += $nilai_iki;
+                                $jumlah_data++;
+                            }
+                        }
+                    }
+
+                    $nilai_utama = round($sum_nilai_iki / $jumlah_data, 1);
+                }
+            }
+
+            if (isset($value['skp_tambahan'])) {
+                $total_tambahan = 0;
+                foreach ($value['skp_tambahan'] as $key => $val) {
+
+                    foreach ($val['aspek_skp'] as $k => $v) {
+
+                        foreach ($v['target_skp'] as $mk => $rr) {
+
+                            if ($rr['bulan'] ==  $bulan) {
+                                $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+
+                                if ($single_rate > 110) {
+                                    $nilai_iki = 110 + ((120 - 110) / (110 - 101)) * (110 - 101);
+                                } elseif ($single_rate >= 101 && $single_rate <= 110) {
+                                    $nilai_iki = 110 + ((120 - 110) / (110 - 101)) * ($single_rate - 101);
+                                } elseif ($single_rate == 100) {
+                                    $nilai_iki = 109;
+                                } elseif ($single_rate >= 80 && $single_rate <= 99) {
+                                    $nilai_iki = 70 + ((89 - 70) / (99 - 80)) * ($single_rate - 80);
+                                } elseif ($single_rate >= 60 && $single_rate <= 79) {
+                                    $nilai_iki = 50 + ((69 - 50) / (79 - 60)) * ($single_rate - 60);
+                                } elseif ($single_rate >= 0 && $single_rate <= 79) {
+                                    $nilai_iki = (49 / 59) * $single_rate;
+                                }
+
+                                if ($nilai_iki > 110) {
+                                    $total_tambahan += 2.4;
+                                } elseif ($nilai_iki >= 101 && $nilai_iki <= 110) {
+                                    $total_tambahan += 1.6;
+                                } elseif ($nilai_iki == 100) {
+                                    $total_tambahan += 1.0;
+                                } elseif ($nilai_iki >= 80 && $nilai_iki <= 99) {
+                                    $total_tambahan += 0.5;
+                                } elseif ($nilai_iki >= 60 && $nilai_iki <= 79) {
+                                    $total_tambahan += 0.3;
+                                } elseif ($nilai_iki >= 0 && $nilai_iki <= 79) {
+                                    $total_tambahan += 0.1;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $nilai_tambahan = $total_tambahan;
+            }
+
+            $sheet->setCellValue('J' . $cell, $nilai_utama + $nilai_tambahan);
+        }
+
+        $border = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '0000000'],
+                ],
+            ],
+        ];
+
+        $sheet->getStyle('A4:L' . $cell)->applyFromArray($border);
+
+        if ($type == 'excel') {
+            // Untuk download 
+            $writer = new Xlsx($spreadsheet);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="Laporan SKP ' . $data['pegawai_dinilai']['nama'] . '.xlsx"');
+        } else {
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+                ->setOddHeader('&C&H' . url()->current());
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+                ->setOddFooter('&L&B &RPage &P of &N');
+            $class = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class;
+            \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', $class);
+            header('Content-Type: application/pdf');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Pdf');
+        }
+
+        $writer->save('php://output');
+    }
+
+    // Rekapitulasi skp Satuan Kerja
 
     public function exportLaporanSkp($jenis, $type, $bulan, $id_pegawai)
     {
