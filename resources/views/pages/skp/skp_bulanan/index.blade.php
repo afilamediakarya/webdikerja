@@ -266,7 +266,7 @@
             e.preventDefault()
             let params = $(this).attr('data-id');
             let params_bulan = $(this).attr('data-bulan');
-            // alert(params_bulan);
+            console.log(params);
             Swal.fire({
                 title: 'Apakah kamu yakin akan menghapus data ini ?',
                 text: "Data akan di hapus permanen",

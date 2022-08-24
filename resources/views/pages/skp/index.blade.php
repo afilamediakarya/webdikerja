@@ -181,12 +181,12 @@
                             if (res.status !== false) {
                                 Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
                                     .then(function() {
-                                        window.location.href = '/skp/bulanan';
+                                        window.location.href = '/skp/tahunan';
                                     });
                             } else {
                                 swal.fire({
                                     title: "SKP tidak dapat di hapus. ",
-                                    text: "SKP digunakan oleh bawahaan. ",
+                                    text: "SKP digunakan oleh bawahaan atau SKP digunakan dalam target bulanan. ",
                                     icon: "warning",
                                 });
                             }
