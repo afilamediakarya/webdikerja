@@ -143,15 +143,24 @@
 
             $('#export-excel').on('click', function() {
 
-
                 let jenis_skp = $('#jenis-skp-select').val();
                 let bulan = $('#bulan').val();
+                let id_pegawai = (level == 'admin_opd' || level == 'super_admin') ? $('#pegawai').val() :
+                    {!! json_encode($id_pegawai) !!};
+
+                let pegawai = $('#pegawai').val();
                 if (jenis_skp !== null && bulan !== null) {
                     if (level == 'admin_opd') {
-                        url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}`;
+                        if (id_pegawai == 0) {
+                            url = `/laporan/export/rekapitulasiSkp/${jenis_skp}/excel/${bulan}`;
+                            window.open(url);
+                        }
+                        url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}/${id_pegawai}`;
                         window.open(url);
+
                     } else {
-                        url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}`;
+                        // url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}`;
+                        url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}/${id_pegawai}`;
                         window.open(url);
                     }
                 } else {

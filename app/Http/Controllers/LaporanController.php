@@ -21,14 +21,18 @@ class LaporanController extends Controller
         $page_title = 'Laporan';
         $page_description = 'Daftar Sasaran Kinerja Pegawai';
         $breadcumb = ['Absen'];
-        $satuan_kerja = null;
+
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
 
         if ($TypeRole == 'super_admin') {
-            $url = env('API_URL');
-            $token = session()->get('user.access_token');
             $data = Http::withToken($token)->get($url . "/satuan_kerja/list");
             $satuan_kerja = $data['data'];
+        } else {
+            $data = Http::withToken($token)->get($url . "/satuan_kerja/byAdminOpd");
+            $satuan_kerja = $data['data'];
         }
+        // return $satuan_kerja;
         return view('pages.laporan.absen', compact('page_title', 'page_description', 'breadcumb', 'TypeRole', 'satuan_kerja'));
     }
 
@@ -336,7 +340,7 @@ class LaporanController extends Controller
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="Laporan SKP ' . $data['pegawai_dinilai']['nama'] . '.xlsx"');
+            header('Content-Disposition: attachment;filename="Laporan SKP ' . $data['satuan_kerja']['nama_satuan_kerja'] . '.xlsx"');
         } else {
             $spreadsheet->getActiveSheet()->getHeaderFooter()
                 ->setOddHeader('&C&H' . url()->current());
@@ -365,10 +369,10 @@ class LaporanController extends Controller
         } else {
             $level = 'pegawai';
         }
-        // return $level;
 
         // $data = $this->getSkp($level);
         $data = $this->getSkp($level, $bulan, $id_pegawai);
+        // return $data;
 
         if ($data['status'] == true) {
             $res = $data['data'];
@@ -518,8 +522,7 @@ class LaporanController extends Controller
                     $cell++;
                 }
             }
-        }
-        if (count($data['skp']['tambahan']) <= 0) {
+        } else {
             $sheet->setCellValue('A' . $cell, 'Data masih kosong')->mergeCells('A' . $cell . ':H' . $cell);
         }
 
@@ -548,9 +551,10 @@ class LaporanController extends Controller
                     $cell++;
                 }
             }
+        } else {
+            $sheet->setCellValue('A' . $cell, 'Data masih kosong')->mergeCells('A' . $cell . ':H' . $cell);
         }
         // if (count($data['skp']['tambahan']) <= 0) {
-        //     $sheet->setCellValue('A' . $cell, 'Data masih kosong')->mergeCells('A' . $cell . ':H' . $cell);
         // }
 
 
@@ -692,7 +696,7 @@ class LaporanController extends Controller
         $sheet->setCellValue('F12', 'INDIKATOR KINERJA INDIVIDU')->mergeCells('F12:G12');
         $sheet->getColumnDimension('F')->setWidth(5);
         $sheet->getColumnDimension('G')->setWidth(40);
-        $sheet->setCellValue('H12', 'TARGET')->mergeCells('H12:G12');
+        $sheet->setCellValue('H12', 'TARGET')->mergeCells('H12:H12');
         $sheet->getColumnDimension('H')->setWidth(25);
 
 
@@ -992,6 +996,14 @@ class LaporanController extends Controller
                 $sheet->setCellValue('J' . ($cell - $jumlah_data - 1), $nilai_utama = round($sum_nilai_iki / $jumlah_data, 1))->mergeCells('J' . ($cell - $jumlah_data - 1) . ':J' . $cell);
                 $cell++;
             }
+
+            $sheet->getStyle('B' . $cell . ':I' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
+            $sheet->getStyle('J' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
+            $sheet->getStyle('B' . $cell . ':J' . $cell)->getFont()->setBold(true);
+
+            $sheet->setCellValue('B' . $cell, 'NILAI KINERJA UTAMA')->mergeCells('B' . $cell . ':I' . $cell);
+            $sheet->setCellValue('J' . $cell, $sum_nilai_iki);
+            $cell++;
         }
 
         //TAMBAHAN
@@ -1072,8 +1084,8 @@ class LaporanController extends Controller
                     $cell++;
                 }
             }
-            $sheet->getStyle('F' . $cell . ':J' . ($cell + 1))->getAlignment()->setVertical('top')->setHorizontal('center');
-            $sheet->getStyle('B' . $cell . ':J' . ($cell + 1))->getAlignment()->setVertical('top')->setHorizontal('right');
+            $sheet->getStyle('B' . $cell . ':J' . ($cell + 1))->getAlignment()->setVertical('top')->setHorizontal('center');
+            $sheet->getStyle('I' . ($cell + 1))->getAlignment()->setVertical('top')->setHorizontal('right');
             $sheet->getStyle('B' . $cell . ':J' . ($cell + 1))->getFont()->setBold(true);
             $sheet->setCellValue('B' . $cell, 'NILAI KINERJA TAMBAHAN')->mergeCells('B' . $cell . ':I' . $cell);
             $sheet->setCellValue('J' . $cell, $nilai_tambahan = $total_tambahan);
@@ -1121,7 +1133,6 @@ class LaporanController extends Controller
 
     public function exportRealisasi($data, $bulan, $type, $level)
     {
-        // return $data;
 
         $spreadsheet = new Spreadsheet();
 
@@ -1230,7 +1241,7 @@ class LaporanController extends Controller
         $sheet->getColumnDimension('J')->setWidth(12);
         $sheet->setCellValue('K13', 'Nilai');
         $sheet->getColumnDimension('K')->setWidth(12);
-        $sheet->setCellValue('L12', 'Nilai Timnbang')->mergeCells('L12:L13');
+        $sheet->setCellValue('L12', 'Nilai Timbang')->mergeCells('L12:L13');
         $sheet->getColumnDimension('L')->setWidth(12);
 
 
@@ -1239,12 +1250,14 @@ class LaporanController extends Controller
         $nilai_tambahan = 0;
         //$data_column = $data['skp']['utama'];
         //UTAMA ATASAN
+        // return $data['skp']['utama'];
         if (isset($data['skp']['utama'])) {
-            $sheet->setCellValue('B' . $cell, 'A. KINERJA UTAMA')->mergeCells('B' . $cell . ':K' . $cell);
-            $sheet->getStyle('B' . $cell . ':K' . $cell)->getFont()->setBold(true);
+            $sheet->setCellValue('A' . $cell, 'A. KINERJA UTAMA')->mergeCells('A' . $cell . ':K' . $cell);
+            $sheet->getStyle('A' . $cell . ':K' . $cell)->getFont()->setBold(true);
             $cell++;
             $total_utama = 0;
             $data_utama = 1;
+            $index_data = 0;
             foreach ($data['skp']['utama'] as $index => $value) {
                 $data_utama++;
                 $sheet->setCellValue('A' . $cell, $index);
@@ -1255,6 +1268,7 @@ class LaporanController extends Controller
                 }
 
                 foreach ($value['skp_child'] as $key => $res) {
+                    $index_data++;
 
                     $sheet->setCellValue('C' . $cell, $res['rencana_kerja'])->mergeCells('C' . $cell . ':C' . ($cell + 2));
                     $sum_capaian = 0;
@@ -1328,22 +1342,36 @@ class LaporanController extends Controller
                         $total_utama += 25;
                     }
 
-                    $sheet->setCellValue('A' . ($cell - 3), $key + 1)->mergeCells('A' . ($cell - 3) . ':A' . ($cell - 1));
+                    $sheet->setCellValue('A' . ($cell - 3), $index_data)->mergeCells('A' . ($cell - 3) . ':A' . ($cell - 1));
                     if (!$key == 0)
                         $sheet->setCellValue('B' . ($cell - 3), '')->mergeCells('B' . ($cell - 3) . ':B' . ($cell - 1));
                 }
                 $cell++;
-                $sheet->getStyle('B' . $cell . ':K' . $cell)->getAlignment()->setVertical('top')->setHorizontal('right');
-                $sheet->getStyle('L' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
-                $sheet->getStyle('B' . $cell . ':L' . $cell)->getFont()->setBold(true);
-                $sheet->setCellValue('B' . $cell, 'NILAI KINERJA UTAMA')->mergeCells('B' . $cell . ':K' . $cell);
-                $sheet->setCellValue('L' . $cell, $nilai_utama = $total_utama / $data_utama);
             }
+
+            $sheet->getStyle('B' . $cell . ':K' . $cell)->getAlignment()->setVertical('top')->setHorizontal('right');
+            $sheet->getStyle('L' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
+            $sheet->getStyle('B' . $cell . ':L' . $cell)->getFont()->setBold(true);
+            $sheet->setCellValue('B' . $cell, 'NILAI KINERJA UTAMA')->mergeCells('B' . $cell . ':K' . $cell);
+            $sheet->setCellValue('L' . $cell, $nilai_utama = $total_utama / $data_utama);
+            $cell++;
         } else {
-            $sheet->setCellValue('A' . $cell, 'Data masih kosong')->mergeCells('A' . $cell . ':L' . $cell);
+            $nilai_utama = 0;
+            $sheet->setCellValue('A' . $cell, 'A. KINERJA UTAMA')->mergeCells('A' . $cell . ':K' . $cell);
+            $sheet->getStyle('A' . $cell . ':K' . $cell)->getFont()->setBold(true);
+            $cell++;
+            $sheet->setCellValue('A' . $cell, 'Data Kinerja Utama masih kosong')->mergeCells('A' . $cell . ':L' . $cell);
+            $sheet->getStyle('A' . $cell . ':L' . ($cell + 1))->getFont()->setBold(true);
+            $cell++;
+            $sheet->getStyle('B' . $cell . ':K' . $cell)->getAlignment()->setVertical('top')->setHorizontal('right');
+            $sheet->getStyle('L' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
+            $sheet->getStyle('B' . $cell . ':L' . $cell)->getFont()->setBold(true);
+            $sheet->setCellValue('B' . $cell, 'NILAI KINERJA UTAMA')->mergeCells('B' . $cell . ':K' . $cell);
+            $sheet->setCellValue('L' . $cell, $nilai_utama);
+            $cell++;
         }
 
-        // UTAMA
+        // UTAMA OLD
         // if (isset($data['skp']['utama'])) {
         //     $cell++;
         //     $sheet->setCellValue('B' . $cell, 'A. KINERJA UTAMA')->mergeCells('B' . $cell . ':K' . $cell);
@@ -1441,14 +1469,16 @@ class LaporanController extends Controller
         // } else {
         //     $sheet->setCellValue('A' . $cell, 'Data masih kosong')->mergeCells('A' . $cell . ':L' . $cell);
         // }
+        // return $cell;
         // TAMBAHAN
         if (isset($data['skp']['tambahan'])) {
             $cell++;
-            $sheet->setCellValue('B' . $cell, 'B. KINERJA TAMBAHAN')->mergeCells('B' . $cell . ':K' . $cell);
-            $sheet->getStyle('B' . $cell . ':K' . $cell)->getFont()->setBold(true);
-            $cell++;
+            $sheet->setCellValue('A' . $cell, 'B. KINERJA TAMBAHAN')->mergeCells('A' . $cell . ':K' . $cell);
+            $sheet->getStyle('A' . $cell . ':K' . $cell)->getFont()->setBold(true);
+
             $total_tambahan = 0;
             foreach ($data['skp']['tambahan'] as $keyy => $values) {
+                $cell++;
                 $sheet->setCellValue('A' . $cell, $keyy + 1)->mergeCells('A' . $cell . ':A' . ($cell + 2));
                 $sheet->setCellValue('B' . $cell, ' ')->mergeCells('B' . $cell . ':B' . ($cell + 2));
                 $sheet->setCellValue('C' . $cell, $values['rencana_kerja'])->mergeCells('C' . $cell . ':C' . ($cell + 2));
@@ -1526,18 +1556,33 @@ class LaporanController extends Controller
                 $sheet->setCellValue('A' . ($cell - 3), $keyy + 1)->mergeCells('A' . ($cell - 3) . ':A' . ($cell - 1));
                 if (!$keyy == 0)
                     $sheet->setCellValue('B' . ($cell - 3), '')->mergeCells('B' . ($cell - 3) . ':B' . ($cell - 1));
+                $cell++;
             }
+
+            $sheet->getStyle('F' . $cell . ':L' . ($cell + 1))->getAlignment()->setVertical('top')->setHorizontal('center');
+            $sheet->getStyle('B' . $cell . ':K' . ($cell + 1))->getAlignment()->setVertical('top')->setHorizontal('right');
+            $sheet->getStyle('B' . $cell . ':L' . ($cell + 1))->getFont()->setBold(true);
+            $sheet->setCellValue('B' . $cell, 'NILAI KINERJA TAMBAHAN')->mergeCells('B' . $cell . ':K' . $cell);
+            $sheet->setCellValue('L' . $cell, $nilai_tambahan = $total_tambahan);
+        } else {
+            $total_tambahan = 0;
+            $sheet->setCellValue('A' . $cell, 'B. KINERJA TAMBAHAN')->mergeCells('A' . $cell . ':K' . $cell);
+            $sheet->getStyle('A' . $cell . ':K' . $cell)->getFont()->setBold(true);
+            $cell++;
+            $sheet->getStyle('A' . $cell . ':L' . ($cell + 1))->getFont()->setBold(true);
+            $sheet->setCellValue('A' . $cell, 'Data Kinerja Tambahan masih kosong')->mergeCells('A' . $cell . ':L' . $cell);
             $cell++;
             $sheet->getStyle('F' . $cell . ':L' . ($cell + 1))->getAlignment()->setVertical('top')->setHorizontal('center');
             $sheet->getStyle('B' . $cell . ':K' . ($cell + 1))->getAlignment()->setVertical('top')->setHorizontal('right');
             $sheet->getStyle('B' . $cell . ':L' . ($cell + 1))->getFont()->setBold(true);
             $sheet->setCellValue('B' . $cell, 'NILAI KINERJA TAMBAHAN')->mergeCells('B' . $cell . ':K' . $cell);
             $sheet->setCellValue('L' . $cell, $nilai_tambahan = $total_tambahan);
-            $cell++;
-        } else {
-            $sheet->setCellValue('A' . $cell, 'Data masih kosong')->mergeCells('A' . $cell . ':L' . $cell);
         }
         //if(isset($nilai_utama))
+        $cell++;
+        $sheet->getStyle('F' . $cell . ':L' . ($cell + 1))->getAlignment()->setVertical('top')->setHorizontal('center');
+        $sheet->getStyle('B' . $cell . ':K' . ($cell + 1))->getAlignment()->setVertical('top')->setHorizontal('right');
+        $sheet->getStyle('B' . $cell . ':L' . ($cell + 1))->getFont()->setBold(true);
         $sheet->setCellValue('B' . $cell, 'NILAI SKP')->mergeCells('B' . $cell . ':K' . $cell);
         $sheet->setCellValue('L' . $cell, $nilai_utama + $nilai_tambahan);
 
