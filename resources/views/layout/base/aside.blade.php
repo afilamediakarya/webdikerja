@@ -95,7 +95,7 @@
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
-                                        <span class="menu-text text-capitalize">Target tahunan</span>
+                                        <span class="menu-text text-capitalize">Target SKP Tahunan</span>
                                     </a>
                                 </li>
                                 <li class="menu-item" aria-haspopup="true">
@@ -103,7 +103,7 @@
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
-                                        <span class="menu-text text-capitalize">Target bulanan</span>
+                                        <span class="menu-text text-capitalize">Target SKP Bulanan</span>
                                     </a>
                                 </li>
 
@@ -208,7 +208,7 @@
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
-                                        <span class="menu-text text-capitalize">Review Target Realisasi</span>
+                                        <span class="menu-text text-capitalize">Review Realisasi SKP</span>
                                     </a>
                                 </li>
                                 <!-- <li class="menu-item" aria-haspopup="true">
