@@ -134,7 +134,7 @@
                         [0, 'asc']
                     ],
                     processing: true,
-                    ajax: `/get_data/penilaian/${type}`,
+                    ajax: `/get_data/penilaian/${type}?bulan=${bulan}`,
                     columns: [{
                         data: null,
                         render: function(data, type, row, meta) {
