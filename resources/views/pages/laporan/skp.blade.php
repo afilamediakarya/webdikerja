@@ -53,7 +53,7 @@
                                 <div class="form-group col-3">
                                     <label>Pilih Pegawai</label>
                                     <select id="pegawai" class="form-control form-control-solid">
-                                        <option disabled selected>Pilih Jenis Laporan</option>
+                                        <option disabled selected>Pilih Pegawai</option>
                                         <option value="0">Semua Pegawai</option>
                                         @foreach ($pegawai as $item)
                                             <option value="{{ $item['id'] }}">{{ $item['value'] }}</option>
