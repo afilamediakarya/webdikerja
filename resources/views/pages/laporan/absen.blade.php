@@ -77,7 +77,7 @@
 @section('script')
     <script>
         jQuery(document).ready(function() {
-            console.log($('#satuan_kerja').val());
+            // console.log($('#satuan_kerja').val());
 
             $('#satuan_kerja').select2();
 
@@ -90,14 +90,21 @@
             }
 
             $('#kt_daterangepicker_2').daterangepicker({
-                buttonClasses: ' btn',
-                applyClass: 'btn-primary',
-                cancelClass: 'btn-danger',
-            }, function(start, end, label) {
-                $('#kt_daterangepicker_2 .form-control').val(start.format('YYYY-MM-DD') + ' / ' + end
-                    .format('YYYY-MM-DD'));
-            });
+                    buttonClasses: ' btn',
+                    applyClass: 'btn-primary',
+                    cancelClass: 'btn-danger',
+                },
+                // function(start, end, label) {
+                //     $('#kt_daterangepicker_2 .form-control').val(start.format('YYYY-MM-DD') + ' / ' + end
+                //         .format('YYYY-MM-DD'));
+                // }
+            );
 
+            $('#kt_daterangepicker_2').on('apply.daterangepicker', function(ev, picker) {
+                // $(this).val(picker.startDate.format('L'));
+                $('#kt_daterangepicker_2 .form-control').val(picker.startDate.format('YYYY-MM-DD') + ' / ' +
+                    picker.endDate.format('YYYY-MM-DD'));
+            });
 
             $('#preview-excel').on('click', function() {
                 let val_range = $('#kt_daterangepicker_2 input').val();
@@ -111,12 +118,9 @@
                         'satuanKerja': $('#satuan_kerja').val()
                     };
 
-
                     let dataParams = JSON.stringify(params);
-                    console.log(params.startDate);
-                    // url = '/laporan/export/rekapitulasi_pegawai/' + dataParams;
-                    // window.open(url);
-                    $('#kt_daterangepicker_2 .form-control').val(params.startDate + ' / 2022-08-02');
+                    url = '/laporan/export/rekapitulasi_pegawai/' + dataParams;
+                    window.open(url);
                 } else {
                     Swal.fire(
                         "Perhatian",
