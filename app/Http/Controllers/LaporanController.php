@@ -431,7 +431,7 @@ class LaporanController extends Controller
         $sheet->setCellValue('A5', $data['pegawai_dinilai']['nama_satuan_kerja'])->mergeCells('A5:C5');
 
         $tahun = ""  . session('tahun_penganggaran') . "-" . $bulan . "";
-        $periode = date("01", strtotime($tahun)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+        $periode = date("01", strtotime($tahun)) . ' ' . strftime('%B', mktime(0, 0, 0, $bulan + 1, 0)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
         $sheet->setCellValue('D5', $periode)->mergeCells('D5:F5');
 
         $sheet->setCellValue('A6', 'PEGAWAI YANG DINILAI')->mergeCells('A6:C6');
@@ -591,6 +591,21 @@ class LaporanController extends Controller
 
         $sheet->getStyle('A6:F' . $cell)->applyFromArray($border);
 
+        $cell++;
+        $sheet->setCellValue('B' . $cell, '')->mergeCells('B' . $cell . ':F' . $cell);
+
+        $tgl_cetak = date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+
+        $sheet->setCellValue('E' . ++$cell, 'Bulukumba, ' . $tgl_cetak)->mergeCells('E' . $cell . ':F' . $cell);
+        $sheet->getStyle('E' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->setCellValue('E' . ++$cell, 'Pejabat Penilai Kinerja')->mergeCells('E' . $cell . ':F' . $cell);
+        $sheet->getStyle('E' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $cell = $cell + 3;
+        $sheet->setCellValue('E' . ++$cell, $data['atasan']['nama'])->mergeCells('E' . $cell . ':F' . $cell);
+        $sheet->getStyle('E' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->setCellValue('E' . ++$cell, $data['atasan']['nip'])->mergeCells('E' . $cell . ':F' . $cell);
+        $sheet->getStyle('E' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
         if ($type == 'excel') {
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
@@ -650,7 +665,7 @@ class LaporanController extends Controller
         $sheet->setCellValue('A5', $data['pegawai_dinilai']['nama_satuan_kerja'])->mergeCells('A5:D5');
 
         $tahun = ""  . session('tahun_penganggaran') . "-" . $bulan . "";
-        $periode = date("01", strtotime($tahun)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+        $periode = date("01", strtotime($tahun)) . ' ' . strftime('%B', mktime(0, 0, 0, $bulan + 1, 0)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
         $sheet->setCellValue('E5', $periode)->mergeCells('E5:H5');
 
         $sheet->setCellValue('A6', 'PEGAWAI YANG DINILAI')->mergeCells('A6:D6');
@@ -803,7 +818,7 @@ class LaporanController extends Controller
             $sheet->getStyle('B' . $cell . ':H' . $cell)->getFont()->setBold(true);
             $cell++;
             $sheet->setCellValue('B' . $cell, '-')->mergeCells('B' . $cell . ':C' . $cell);
-            $sheet->setCellValue('D' . $cell, '-')->mergeCells('D' . $cell . ':D' . ($cell + 2));
+            $sheet->setCellValue('D' . $cell, '-')->mergeCells('D' . $cell . ':D' . ($cell));
             $sheet->getStyle('E' . $cell . ':E' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
             $sheet->setCellValue('E' . $cell, '-');
             $sheet->setCellValue('F' . $cell, '-')->mergeCells('F' . $cell . ':G' . $cell);
@@ -811,8 +826,6 @@ class LaporanController extends Controller
             $sheet->setCellValue('H' . $cell, '-');
             $sheet->setCellValue('A' . $cell, 1)->mergeCells('A' . $cell . ':A' . ($cell - 1));
         }
-
-
 
 
         $border = [
@@ -825,6 +838,21 @@ class LaporanController extends Controller
         ];
 
         $sheet->getStyle('A6:H' . $cell)->applyFromArray($border);
+
+        $cell++;
+        $sheet->setCellValue('B' . $cell, '')->mergeCells('B' . $cell . ':F' . $cell);
+
+        $tgl_cetak = date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+
+        $sheet->setCellValue('G' . ++$cell, 'Bulukumba, ' . $tgl_cetak)->mergeCells('G' . $cell . ':K' . $cell);
+        $sheet->getStyle('G' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->setCellValue('G' . ++$cell, 'Pejabat Penilai Kinerja')->mergeCells('G' . $cell . ':K' . $cell);
+        $sheet->getStyle('G' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $cell = $cell + 3;
+        $sheet->setCellValue('G' . ++$cell, $data['atasan']['nama'])->mergeCells('G' . $cell . ':K' . $cell);
+        $sheet->getStyle('G' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->setCellValue('G' . ++$cell, $data['atasan']['nip'])->mergeCells('G' . $cell . ':K' . $cell);
+        $sheet->getStyle('G' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         $sheet->getStyle('A1:H2')->getAlignment()->setVertical('center')->setHorizontal('center');
         $sheet->getStyle('A1:H2')->getFont()->setSize(12);
@@ -892,7 +920,7 @@ class LaporanController extends Controller
         $sheet->setCellValue('A5', $data['pegawai_dinilai']['nama_satuan_kerja'])->mergeCells('A5:C5');
 
         $tahun = ""  . session('tahun_penganggaran') . "-" . $bulan . "";
-        $periode = date("01", strtotime($tahun)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+        $periode = date("01", strtotime($tahun)) . ' ' . strftime('%B', mktime(0, 0, 0, $bulan + 1, 0)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
         $sheet->setCellValue('D5', $periode)->mergeCells('D5:J5');
 
         $sheet->setCellValue('A6', 'PEGAWAI YANG DINILAI')->mergeCells('A6:C6');
@@ -974,7 +1002,7 @@ class LaporanController extends Controller
         $cell = 13;
         $nilai_utama = 0;
         $nilai_tambahan = 0;
-        //TAMBAHAN
+        //UTAMA
         if (count($data['skp']['utama'])) {
             $sheet->setCellValue('B' . $cell, 'A. KINERJA UTAMA')->mergeCells('B' . $cell . ':J' . $cell);
             $sheet->getStyle('B' . $cell . ':J' . $cell)->getFont()->setBold(true);
@@ -982,6 +1010,7 @@ class LaporanController extends Controller
             $jumlah_data = 0;
             $sum_nilai_iki = 0;
             foreach ($data['skp']['utama'] as $index => $value) {
+                $sheet->getStyle('A' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
                 $sheet->setCellValue('A' . $cell, $index + 1);
                 $sheet->setCellValue('B' . $cell, $value['rencana_kerja']);
 
@@ -996,7 +1025,7 @@ class LaporanController extends Controller
 
                             $sheet->setCellValue('F' . $cell, round($single_rate, 0) . ' %');
                             if ($single_rate > 110) {
-                                $sheet->setCellValue('G' . $cell, '110');
+                                $sheet->setCellValue('G' . $cell, '110 %');
                                 $sheet->setCellValue('H' . $cell, 'Sangat Baik');
                                 $nilai_iki = 110 + ((120 - 110) / (110 - 101)) * (110 - 101);
                                 $sheet->setCellValue('I' . $cell, round($nilai_iki, 1));
@@ -1032,16 +1061,16 @@ class LaporanController extends Controller
                         }
                     }
                 }
-                $sheet->setCellValue('J' . ($cell - $jumlah_data - 1), $nilai_utama = round($sum_nilai_iki / $jumlah_data, 1))->mergeCells('J' . ($cell - $jumlah_data - 1) . ':J' . $cell);
+                $sheet->setCellValue('J' . ($cell - $jumlah_data - 1), '');
                 $cell++;
             }
 
-            $sheet->getStyle('B' . $cell . ':I' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
+            $sheet->getStyle('B' . $cell . ':I' . $cell)->getAlignment()->setVertical('top')->setHorizontal('right');
             $sheet->getStyle('J' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
             $sheet->getStyle('B' . $cell . ':J' . $cell)->getFont()->setBold(true);
-
+            // $cell++;
             $sheet->setCellValue('B' . $cell, 'NILAI KINERJA UTAMA')->mergeCells('B' . $cell . ':I' . $cell);
-            $sheet->setCellValue('J' . $cell, $nilai_utama);
+            $sheet->setCellValue('J' . $cell, $nilai_utama = round($sum_nilai_iki / $jumlah_data, 1));
             $cell++;
         } else {
             $sheet->setCellValue('B' . $cell, 'A. KINERJA UTAMA')->mergeCells('B' . $cell . ':J' . $cell);
@@ -1182,8 +1211,8 @@ class LaporanController extends Controller
         $sheet->setCellValue('J' . $cell, $nilai_utama + $nilai_tambahan);
         $cell++;
 
-        $sheet->getStyle('A12:J12')->getAlignment()->setVertical('center')->setHorizontal('center');
-        $sheet->getStyle('B13:C12')->getAlignment()->setVertical('center')->setHorizontal('left');
+        $sheet->getStyle('A12:J' . $cell)->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('B13:C' . $cell)->getAlignment()->setVertical('center')->setHorizontal('left');
 
 
         $border = [
@@ -1196,6 +1225,21 @@ class LaporanController extends Controller
         ];
 
         $sheet->getStyle('A6:J' . $cell)->applyFromArray($border);
+
+        $cell++;
+        $sheet->setCellValue('B' . $cell, '')->mergeCells('B' . $cell . ':K' . $cell);
+
+        $tgl_cetak = date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+
+        $sheet->setCellValue('H' . ++$cell, 'Bulukumba, ' . $tgl_cetak)->mergeCells('H' . $cell . ':K' . $cell);
+        $sheet->getStyle('H' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->setCellValue('H' . ++$cell, 'Pejabat Penilai Kinerja')->mergeCells('H' . $cell . ':K' . $cell);
+        $sheet->getStyle('H' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $cell = $cell + 3;
+        $sheet->setCellValue('H' . ++$cell, $data['atasan']['nama'])->mergeCells('H' . $cell . ':K' . $cell);
+        $sheet->getStyle('H' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->setCellValue('H' . ++$cell, $data['atasan']['nip'])->mergeCells('H' . $cell . ':K' . $cell);
+        $sheet->getStyle('H' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
 
         if ($type == 'excel') {
@@ -1258,7 +1302,7 @@ class LaporanController extends Controller
         $sheet->setCellValue('A5', $data['pegawai_dinilai']['nama_satuan_kerja'])->mergeCells('A5:E5');
 
         $tahun = ""  . session('tahun_penganggaran') . "-" . $bulan . "";
-        $periode = date("01", strtotime($tahun)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+        $periode = date("01", strtotime($tahun)) . ' ' . strftime('%B', mktime(0, 0, 0, $bulan + 1, 0)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
         $sheet->setCellValue('F5', $periode)->mergeCells('F5:L5');
 
         $sheet->setCellValue('A6', 'PEGAWAI YANG DINILAI')->mergeCells('A6:E6');
@@ -1721,7 +1765,21 @@ class LaporanController extends Controller
         ];
 
         $sheet->getStyle('A6:L' . $cell)->applyFromArray($border);
+        $cell++;
+        $sheet->setCellValue('B' . $cell, '
+        ')->mergeCells('B' . $cell . ':K' . $cell);
 
+        $tgl_cetak = date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+
+        $sheet->setCellValue('H' . ++$cell, 'Bulukumba, ' . $tgl_cetak)->mergeCells('H' . $cell . ':K' . $cell);
+        $sheet->getStyle('H' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->setCellValue('H' . ++$cell, 'Pejabat Penilai Kinerja')->mergeCells('H' . $cell . ':K' . $cell);
+        $sheet->getStyle('H' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $cell = $cell + 3;
+        $sheet->setCellValue('H' . ++$cell, $data['atasan']['nama'])->mergeCells('H' . $cell . ':K' . $cell);
+        $sheet->getStyle('H' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->setCellValue('H' . ++$cell, $data['atasan']['nip'])->mergeCells('H' . $cell . ':K' . $cell);
+        $sheet->getStyle('H' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
 
 
