@@ -89,9 +89,10 @@
     <script>
         let level = {!! json_encode($level) !!};
         // let id_pegawai = {!! json_encode($id_pegawai) !!};
-        console.log(level);
 
         jQuery(document).ready(function() {
+
+            console.log($('#jenis-skp-select').val());
 
             $('#kt_datepicker_3').datepicker({
                 todayBtn: "linked",
@@ -126,11 +127,16 @@
                         }
                         url = `/laporan/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
                         window.open(url);
+                        $('#pegawai').val(null).trigger("change");
+                        $('#jenis-skp-select').val(null).trigger("change");
+                        $('#bulan').val(null).trigger("change");
 
                     } else {
                         // url = `/laporan/export/laporanSkp/${jenis_skp}/pdf/${bulan}`;
                         url = `/laporan/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
                         window.open(url);
+                        $('#jenis-skp-select').val(null).trigger("change");
+                        $('#bulan').val(null).trigger("change");
                     }
                 } else {
                     Swal.fire(
@@ -157,11 +163,16 @@
                         }
                         url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}/${id_pegawai}`;
                         window.open(url);
+                        $('#pegawai').val(null).trigger("change");
+                        $('#jenis-skp-select').val(null).trigger("change");
+                        $('#bulan').val(null).trigger("change");
 
                     } else {
                         // url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}`;
                         url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}/${id_pegawai}`;
                         window.open(url);
+                        $('#jenis-skp-select').val(null).trigger("change");
+                        $('#bulan').val(null).trigger("change");
                     }
                 } else {
                     Swal.fire(

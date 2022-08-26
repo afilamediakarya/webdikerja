@@ -92,7 +92,7 @@
             $('#kt_daterangepicker_2').daterangepicker({
                 buttonClasses: ' btn',
                 applyClass: 'btn-primary',
-                cancelClass: 'btn-secondary'
+                cancelClass: 'btn-danger',
             }, function(start, end, label) {
                 $('#kt_daterangepicker_2 .form-control').val(start.format('YYYY-MM-DD') + ' / ' + end
                     .format('YYYY-MM-DD'));
@@ -111,9 +111,12 @@
                         'satuanKerja': $('#satuan_kerja').val()
                     };
 
+
                     let dataParams = JSON.stringify(params);
-                    url = '/laporan/export/rekapitulasi_pegawai/' + dataParams;
-                    window.open(url);
+                    console.log(params.startDate);
+                    // url = '/laporan/export/rekapitulasi_pegawai/' + dataParams;
+                    // window.open(url);
+                    $('#kt_daterangepicker_2 .form-control').val(params.startDate + ' / 2022-08-02');
                 } else {
                     Swal.fire(
                         "Perhatian",
