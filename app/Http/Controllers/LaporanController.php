@@ -1349,7 +1349,7 @@ class LaporanController extends Controller
             $data_utama = 0;
             $index_data = 0;
             foreach ($data['skp']['utama'] as $index => $value) {
-                $data_utama++;
+
                 $sheet->setCellValue('A' . $cell, $index);
                 if (isset($value['atasan']['rencana_kerja'])) {
                     $sheet->setCellValue('B' . $cell, $value['atasan']['rencana_kerja'])->mergeCells('B' . $cell . ':B' . ($cell + 2));
@@ -1359,7 +1359,7 @@ class LaporanController extends Controller
 
                 foreach ($value['skp_child'] as $key => $res) {
                     $index_data++;
-
+                    $data_utama++;
                     $sheet->setCellValue('C' . $cell, $res['rencana_kerja'])->mergeCells('C' . $cell . ':C' . ($cell + 2));
                     $sum_capaian = 0;
                     foreach ($res['aspek_skp'] as $k => $v) {
