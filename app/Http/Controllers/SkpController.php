@@ -172,6 +172,10 @@ class SkpController extends Controller
         $result = [];
         $cek = [];
 
+        if (is_null($params->sasaran_kinerja)) {
+            $result['sasaran_kinerja'][] = 'Sasaran Kinerja is field required';
+        }
+
         if (is_null($params->rencana_kerja)) {
             $result['rencana_kerja'][] = 'Rencana Kerja is field required';
         }
@@ -232,6 +236,8 @@ class SkpController extends Controller
         foreach ($params->target as $key => $ikis) {
             if (is_null($ikis)) {
                 $result['target_' . $key][] = 'Target is field required';
+            } elseif ($ikis <= 0) {
+                $result['target_' . $key][] = 'Require minimal 1 target';
             }
         }
 
@@ -339,6 +345,8 @@ class SkpController extends Controller
                 foreach ($value as $x => $v) {
                     if (is_null($v)) {
                         $result['target_' . $key . '_' . $x] = 'Target is field required';
+                    } elseif ($v <= 0) {
+                        $result['target_' . $key . '_' . $x] = 'Require minimal 1 target';
                     }
                 }
             }
