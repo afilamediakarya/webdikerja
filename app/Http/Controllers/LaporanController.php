@@ -46,7 +46,7 @@ class LaporanController extends Controller
         $breadcumb = ['SKP'];
 
         $level = session()->get('user.role');
-        $id_pegawai = session()->get('user.current.id');
+        $id_pegawai = session()->get('user.current.id_pegawai');
         $pegawai = Http::withToken($token)->get($url . "/jabatan/pegawaiBySatuanKerja")->collect();
 
         return view('pages.laporan.skp', compact('page_title', 'page_description', 'breadcumb', 'level', 'pegawai', 'id_pegawai'));
@@ -231,9 +231,6 @@ class LaporanController extends Controller
         $sheet->getStyle('J5:J' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center')->setHorizontal('center');
         $sheet->getStyle('A1')->getAlignment()->setVertical('center')->setHorizontal('center');
 
-        $nilai_utama = 0;
-        $nilai_tambahan = 0;
-        // return $data;
         foreach ($data['list_pegawai'] as $index => $value) {
             $cell++;
 
@@ -241,18 +238,88 @@ class LaporanController extends Controller
             $sheet->setCellValue('B' . $cell, $value['nama'] . ' / ' . $value['nip'] . ' / ' . $value['golongan'])->mergeCells('B' . $cell . ':C' . $cell);
             $sheet->setCellValue('D' . $cell, $value['nama_jabatan']);
 
-            if (isset($value['skp_utama'])) {
+            $nilai_utama = 0;
+            $total_utama = 0;
+            $total_tambahan = 0;
+            $data_utama = 0;
+            $index_data = 0;
 
-                $jumlah_data = 0;
-                $sum_nilai_iki = 0;
-                foreach ($value['skp_utama'] as $key => $val) {
+            foreach ($value['skp_utama'] as $key => $val) {
+                if (isset($val['skp_child'])) {
+                    // realisasi pegawai
+                    if (count($val['skp_child']) > 0) {
 
+                        $index_data++;
+                        $data_utama++;
+
+                        $sum_capaian = 0;
+
+                        foreach ($val['skp_child']['aspek_skp'] as $k => $v) {
+
+                            foreach ($v['target_skp'] as $mk => $rr) {
+                                $kategori_ = '';
+                                if ($rr['bulan'] ==  $bulan) {
+                                    // return $rr['bulan'];
+
+                                    $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+
+                                    if ($capaian_iki >= 101) {
+
+                                        $nilai_iki = 16;
+                                    } elseif ($capaian_iki == 100) {
+
+                                        $nilai_iki = 13;
+                                    } elseif ($capaian_iki >= 80 && $capaian_iki <= 99) {
+
+                                        $nilai_iki = 8;
+                                    } elseif ($capaian_iki >= 60 && $capaian_iki <= 79) {
+
+                                        $nilai_iki = 3;
+                                    } elseif ($capaian_iki >= 0 && $capaian_iki <= 79) {
+
+                                        $nilai_iki = 1;
+                                    }
+                                    $sum_capaian += $nilai_iki;
+                                }
+                            }
+                        }
+
+                        if ($sum_capaian > 42) {
+
+                            $total_utama += 120;
+                        } elseif ($sum_capaian >= 34) {
+
+                            $total_utama += 100;
+                        } elseif ($sum_capaian >= 19) {
+
+                            $total_utama += 80;
+                        } elseif ($sum_capaian >= 7) {
+
+                            $total_utama += 60;
+                        } elseif ($sum_capaian >= 3) {
+
+                            $total_utama += 25;
+                        } elseif ($sum_capaian >= 0) {
+
+                            $total_utama += 25;
+                        }
+
+                        $nilai_utama = $total_utama / $data_utama;
+                    } else {
+                        $nilai_utama = 0;
+                    }
+                } else {
+                    // realisasi kepala
+                    $jumlah_data = 0;
+                    $sum_nilai_iki = 0;
                     foreach ($val['aspek_skp'] as $k => $v) {
 
                         foreach ($v['target_skp'] as $mk => $rr) {
                             $kategori_ = '';
                             if ($rr['bulan'] ==  $bulan) {
+
                                 $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+
 
                                 if ($single_rate > 110) {
                                     $nilai_iki = 110 + ((120 - 110) / (110 - 101)) * (110 - 101);
@@ -267,18 +334,19 @@ class LaporanController extends Controller
                                 } elseif ($single_rate >= 0 && $single_rate <= 79) {
                                     $nilai_iki = (49 / 59) * $single_rate;
                                 }
+
                                 $sum_nilai_iki += $nilai_iki;
                                 $jumlah_data++;
                             }
                         }
+                        // return $val['aspek_skp'];
                     }
 
                     $nilai_utama = round($sum_nilai_iki / $jumlah_data, 1);
                 }
             }
 
-            if (isset($value['skp_tambahan'])) {
-                $total_tambahan = 0;
+            if (count($value['skp_tambahan']) > 0) {
                 foreach ($value['skp_tambahan'] as $key => $val) {
 
                     foreach ($val['aspek_skp'] as $k => $v) {
@@ -319,11 +387,10 @@ class LaporanController extends Controller
                         }
                     }
                 }
-
-                $nilai_tambahan = $total_tambahan;
             }
 
-            $sheet->setCellValue('J' . $cell, $nilai_utama + $nilai_tambahan);
+            $total_nilai = $nilai_utama + $total_tambahan;
+            $sheet->setCellValue('J' . $cell, $total_nilai);
         }
 
         $border = [
@@ -1382,9 +1449,8 @@ class LaporanController extends Controller
         $cell = 14;
         $nilai_utama = 0;
         $nilai_tambahan = 0;
-        //$data_column = $data['skp']['utama'];
+
         //UTAMA ATASAN
-        // return $data['skp']['utama'];
         if (isset($data['skp']['utama'])) {
             $sheet->setCellValue('A' . $cell, 'A. KINERJA UTAMA')->mergeCells('A' . $cell . ':K' . $cell);
             $sheet->getStyle('A' . $cell . ':K' . $cell)->getFont()->setBold(true);
@@ -1412,10 +1478,12 @@ class LaporanController extends Controller
                         $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
                         $sheet->setCellValue('E' . $cell, $v['iki']);
                         foreach ($v['target_skp'] as $mk => $rr) {
+                            // return  $data;
                             $kategori_ = '';
                             if ($rr['bulan'] ==  $bulan) {
                                 $sheet->setCellValue('F' . $cell, $rr['target'] . ' ' . $v['satuan']);
                                 $sheet->setCellValue('G' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'] . ' ' . $v['satuan']);
+
                                 $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
 
                                 if ($capaian_iki >= 101) {
