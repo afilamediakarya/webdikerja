@@ -1078,8 +1078,10 @@ class LaporanController extends Controller
             $sum_nilai_iki = 0;
             foreach ($data['skp']['utama'] as $index => $value) {
                 $sheet->getStyle('A' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
-                $sheet->setCellValue('A' . $cell, $index + 1);
-                $sheet->setCellValue('B' . $cell, $value['rencana_kerja']);
+                $sheet->setCellValue('A' . $cell, $index + 1)->mergeCells('A' . $cell . ':A' . ($cell + count($value['aspek_skp']) - 1));
+                // return $cell + count($value['aspek_skp']) - 1;
+                // return $cell;
+                $sheet->setCellValue('B' . $cell, $value['rencana_kerja'])->mergeCells('B' . $cell . ':B' . ($cell + count($value['aspek_skp']) - 1));
 
                 foreach ($value['aspek_skp'] as $k => $v) {
                     $sheet->setCellValue('C' . $cell, $v['iki']);
@@ -1127,9 +1129,9 @@ class LaporanController extends Controller
                             $jumlah_data++;
                         }
                     }
+                    $sheet->setCellValue('J' . ($cell - $jumlah_data - 1), '');
+                    $cell++;
                 }
-                $sheet->setCellValue('J' . ($cell - $jumlah_data - 1), '');
-                $cell++;
             }
 
             $sheet->getStyle('B' . $cell . ':I' . $cell)->getAlignment()->setVertical('top')->setHorizontal('right');
@@ -1478,7 +1480,7 @@ class LaporanController extends Controller
                         $sheet->setCellValue('D' . $cell, $v['aspek_skp']);
                         $sheet->setCellValue('E' . $cell, $v['iki']);
                         foreach ($v['target_skp'] as $mk => $rr) {
-                            // return  $data;
+
                             $kategori_ = '';
                             if ($rr['bulan'] ==  $bulan) {
                                 $sheet->setCellValue('F' . $cell, $rr['target'] . ' ' . $v['satuan']);

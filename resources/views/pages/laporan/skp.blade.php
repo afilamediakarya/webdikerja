@@ -25,8 +25,8 @@
                                 <label>Jenis SKP</label>
                                 <select id="jenis-skp-select" class="form-control form-control-solid">
                                     <option disabled selected>Pilih Jenis Laporan</option>
-                                    <option value="realisasi">Realisasi</option>
-                                    <option value="skp">SKP</option>
+                                    <option value="skp">Target SKP</option>
+                                    <option value="realisasi">Realisasi SKP</option>
                                 </select>
                             </div>
                             <div class="form-group col-3">
@@ -92,7 +92,6 @@
 
         jQuery(document).ready(function() {
 
-            console.log($('#jenis-skp-select').val());
 
             $('#kt_datepicker_3').datepicker({
                 todayBtn: "linked",
@@ -117,6 +116,7 @@
                 let bulan = $('#bulan').val();
                 let id_pegawai = (level == 'admin_opd' || level == 'super_admin') ? $('#pegawai').val() :
                     {!! json_encode($id_pegawai) !!};
+                console.log(id_pegawai);
 
                 let pegawai = $('#pegawai').val();
                 if (jenis_skp !== null && bulan !== null) {
