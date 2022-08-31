@@ -104,7 +104,7 @@
                         $('.text-danger').html('');
                         $('.form-control').removeClass('is-invalid');
                         $.each(xhr.responseJSON, function(key, value) {
-                            console.log(key + ' - ' + value)
+                            // console.log(key + ' - ' + value)
                             $(`.${key}_error`).html(value);
                             $(`#${key}`).addClass('is-invalid');
                         })
@@ -114,7 +114,7 @@
 
             $(document).on('change', '#rencana_kerja', function() {
                 // alert($(this).val())
-                console.log($(this).val());
+                // console.log($(this).val());
                 $.ajax({
                     url: '/skp/show/' + $(this).val(),
                     method: 'GET',
@@ -122,6 +122,7 @@
                         let value = JSON.parse(res);
                         let html = '';
                         if (value.message == "Success") {
+
                             $.each(value.data['aspek_skp'], function(x, y) {
                                 html += `<div class="form-group">
                             <label for="exampleTextarea">Aspek</label>
@@ -145,7 +146,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Target bulan ${bulan}</label>
-                                <input type="text" class="form-control" name="target[${x}]" id="target">
+                                <input type="text" class="form-control" min="1" name="target[${x}]" id="target">
                                 <div class="text-danger target_${x}_error"></div>
                             </div>
                             </div>

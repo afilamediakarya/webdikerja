@@ -579,7 +579,9 @@ class SkpController extends Controller
         if (isset($request->target)) {
             foreach ($request->target as $key => $ikis) {
                 if (is_null($ikis)) {
-                    $result['target_' . $key][] = 'Target is field required';
+                    $result['target_' . $key][] = 'Target is field required, ';
+                } elseif ($ikis <= 0) {
+                    $result['target_' . $key][] = 'Require minimal 1 target';
                 }
             }
         }
