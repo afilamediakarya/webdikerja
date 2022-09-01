@@ -231,6 +231,8 @@ class LaporanController extends Controller
         $sheet->getStyle('J5:J' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center')->setHorizontal('center');
         $sheet->getStyle('A1')->getAlignment()->setVertical('center')->setHorizontal('center');
 
+        // return $data;
+
         foreach ($data['list_pegawai'] as $index => $value) {
             $cell++;
 
