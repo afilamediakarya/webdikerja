@@ -573,7 +573,7 @@ class SkpController extends Controller
     {
         $url = env('API_URL');
         $token = session()->get('user.access_token');
-        $response = Http::withToken($token)->get($url . "/skp/show/" . $params);
+        $response = Http::withToken($token)->get($url . "/skp/show/" . $params . "?bulan=" . request('bulan'));
         return $response;
     }
 

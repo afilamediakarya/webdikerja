@@ -18,7 +18,7 @@
                 <div class="card-body">
                     <!--begin::Form-->
                     <form class="form" id="skp-form">
-
+                        {{-- @dd($get_sasaran_kinerja) --}}
                         <div id="sasaran_">
                             <div class="form-group">
                                 <label for="sasaran_kinerja">Sasaran Kinerja </label>
@@ -114,45 +114,57 @@
 
             $(document).on('change', '#rencana_kerja', function() {
                 // alert($(this).val())
-                // console.log($(this).val());
+                let bulan = {!! json_encode($bulan) !!}
+                // console.log(bulan);
                 $.ajax({
-                    url: '/skp/show/' + $(this).val(),
+                    url: '/skp/show/' + $(this).val() + '?bulan=' + bulan,
                     method: 'GET',
                     success: function(res) {
+                        console.log(res);
                         let value = JSON.parse(res);
                         let html = '';
                         if (value.message == "Success") {
 
                             $.each(value.data['aspek_skp'], function(x, y) {
                                 html += `<div class="form-group">
-                            <label for="exampleTextarea">Aspek</label>
-                            <p class="text-dark font-weight-bolder">${y.aspek_skp}</p>
-                        </div>
-                        <input type="hidden" value="${y.aspek_skp}" name="type_aspek[${x}]">
-                        <input type="hidden" value="${y.id}" name="id_aspek[${x}]">
-                        <div class="row">
-                            <div class="col-lg-8">
-                                <div class="form-group">
-                                    <label for="indikator_kerja_individu_${x}">Indikator Kerja Individu </label>
-                                    <textarea class="form-control" disabled name="indikator_kerja_individu[${x}]" id="indikator_kerja_individu_${x}" rows="5">${y.iki}</textarea>
-                           
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                            <div class="form-group">
-                                <label for="satuan_${x}">Jenis Satuan</label>
-                                <input type="text" class="form-control" disabled value="${y.satuan}" name="satuan[${x}]">
-                            
-                            </div>
-                            <div class="form-group">
-                                <label>Target bulan ${bulan}</label>
-                                <input type="text" class="form-control" min="1" name="target[${x}]" id="target">
-                                <div class="text-danger target_${x}_error"></div>
-                            </div>
-                            </div>
-                        </div>`;
+                                            <label for="exampleTextarea">Aspek</label>
+                                            <p class="text-dark font-weight-bolder">${y.aspek_skp}</p>
+                                        </div>
+                                        <input type="hidden" value="${y.aspek_skp}" name="type_aspek[${x}]">
+                                        <input type="hidden" value="${y.id}" name="id_aspek[${x}]">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <div class="form-group">
+                                                    <label for="indikator_kerja_individu_${x}">Indikator Kerja Individu </label>
+                                                    <textarea class="form-control" disabled name="indikator_kerja_individu[${x}]" id="indikator_kerja_individu_${x}" rows="5">${y.iki}</textarea>
+                                        
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="satuan_${x}">Jenis Satuan</label>
+                                                <input type="text" class="form-control" disabled value="${y.satuan}" name="satuan[${x}]">
+                                            
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Target bulan ${bulan}</label>
+                                                <input type="text" class="form-control" min="1" name="target[${x}]" id="target">
+                                                <div class="text-danger target_${x}_error"></div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        `;
                             });
                             $('#content_aspek').html(html);
+                        } else {
+                            swal.fire({
+                                    title: "Target SKP sudah ada!",
+                                    text: "Silakan pilih sasaran kinerja yang lain.",
+                                    icon: "warning",
+                                })
+                                .then(function() {
+                                    $('#content_aspek').html('');
+                                });;
                         }
                     },
                     error: function(xhr) {
