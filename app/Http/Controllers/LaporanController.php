@@ -1557,7 +1557,8 @@ class LaporanController extends Controller
             $sheet->getStyle('L' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
             $sheet->getStyle('B' . $cell . ':L' . $cell)->getFont()->setBold(true);
             $sheet->setCellValue('B' . $cell, 'NILAI KINERJA UTAMA')->mergeCells('B' . $cell . ':K' . $cell);
-            $sheet->setCellValue('L' . $cell, $nilai_utama = $total_utama / $data_utama);
+            // $sheet->setCellValue('L' . $cell, $nilai_utama = $total_utama / $data_utama);
+            $sheet->setCellValue('L' . $cell, $nilai_utama = round($total_utama / $data_utama, 1));
             $cell++;
         } else {
             $nilai_utama = 0;
@@ -1946,6 +1947,7 @@ class LaporanController extends Controller
         $sheet->getStyle('A1:G4')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A1:G4')->getFont()->setSize(14);
 
+
         $sheet->setCellValue('A5', 'Jumlah hari kerja')->mergeCells('A5:B5');
         $sheet->setCellValue('C5', ': ' . $data['data']['jml_hari_kerja'])->mergeCells('C5:G5');
         $sheet->setCellValue('A6', 'Kehadiran kerja')->mergeCells('A6:B6');
@@ -1983,6 +1985,7 @@ class LaporanController extends Controller
         $sheet->getRowDimension(12)->setRowHeight(30);
         $cell = 13;
 
+        // return $data;
 
         foreach ($data['data']['data_absen'] as $index => $value) {
             $sheet->getRowDimension($cell)->setRowHeight(30);
@@ -2071,7 +2074,7 @@ class LaporanController extends Controller
 
     public function exportrekapOpd($data, $type, $startDate, $endDate)
     {
-        // return $data;
+        // return "ok";
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
