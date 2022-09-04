@@ -879,6 +879,7 @@ class LaporanController extends Controller
 
 
         $cell = 13;
+        $number = 1;
         //UTAMA
 
         // return isset($data['skp']['utama']);
@@ -906,14 +907,15 @@ class LaporanController extends Controller
                         }
                         $cell++;
                     }
-                    if (!$key == 0) {
-
+                    if (!$key == 0)
                         $sheet->setCellValue('B' . ($cell - 3), '')->mergeCells('B' . ($cell - 3) . ':C' . ($cell - 1));
-                        // $sheet->setCellValue('A' . ($cell - 3), $key + 1)->mergeCells('A' . ($cell - 3) . ':A' . ($cell - 1));
-                        $sheet->setCellValue('A' . ($cell - 3), $index + $key)->mergeCells('A' . ($cell - 3) . ':A' . ($cell - 1));
-                    } else {
-                        $sheet->setCellValue('A' . ($cell - 3), $index + $key + 1)->mergeCells('A' . ($cell - 3) . ':A' . ($cell - 1));
-                    }
+                    $sheet->setCellValue('A' . ($cell - 3), $number)->mergeCells('A' . ($cell - 3) . ':A' . ($cell - 1));
+                    $number++;
+                    // $sheet->setCellValue('A' . ($cell - 3), $key + 1)->mergeCells('A' . ($cell - 3) . ':A' . ($cell - 1));
+                    // return $key;
+                    // } else {
+                    //     $sheet->setCellValue('A' . ($cell - 3), $index + $key + 1)->mergeCells('A' . ($cell - 3) . ':A' . ($cell - 1));
+                    // }
                 }
             }
         } else {
