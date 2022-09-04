@@ -38,7 +38,7 @@
                                 <label for="sasaran_kinerja">Sasaran Kerja </label>
                                 <!-- <input type="email" class="form-control" placeholder=""> -->
                                 <select class="form-control" type="text" name="sasaran_kinerja" id="sasaran_kinerja">
-                                    <option selected disabled>Pilih Sasaran Kerja</option>
+                                    <option selected disabled>Pilih Sasaran Kerja Tasan Langsung</option>
                                     @foreach ($sasaran_kinerja_atasan as $key => $value)
                                         <option value="{{ $value['id'] }}">{{ $value['value'] }}</option>
                                     @endforeach
