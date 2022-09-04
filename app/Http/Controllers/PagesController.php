@@ -8,27 +8,28 @@ use Illuminate\Support\Facades\Http;
 class PagesController extends Controller
 {
 
-    public function index_(){
+    public function index_()
+    {
         if (session()->has('user')) {
             return redirect('/');
-        }else {
+        } else {
             return redirect('/login');
         }
     }
 
-    public function getDataDashboard($params){
+    public function getDataDashboard($params)
+    {
         // return $type;
         $url = env('API_URL');
         $token = session()->get('user.access_token');
         $response = '';
 
         if ($params == 'pegawai') {
-            $response = Http::withToken($token)->get($url."/dashboard/pegawai");
-          
-        }elseif($params == 'admin'){
-            $response = Http::withToken($token)->get($url."/dashboard/admin_opd");
-        }else{
-            $response = Http::withToken($token)->get($url."/dashboard/super_admin");
+            $response = Http::withToken($token)->get($url . "/dashboard/pegawai");
+        } elseif ($params == 'admin') {
+            $response = Http::withToken($token)->get($url . "/dashboard/admin_opd");
+        } else {
+            $response = Http::withToken($token)->get($url . "/dashboard/super_admin");
         }
         return $response;
     }
@@ -42,22 +43,23 @@ class PagesController extends Controller
 
         if ($type == 'pegawai') {
             $data = $this->getDataDashboard($type);
-          
-            return view('pages.dashboard.index', compact('page_title', 'page_description','breadcumb','data'));   
-        }elseif($type == 'admin'){
+            // return $data;
+
+            return view('pages.dashboard.index', compact('page_title', 'page_description', 'breadcumb', 'data'));
+        } elseif ($type == 'admin') {
             $data = $this->getDataDashboard($type);
-            return view('pages.dashboard.admin', compact('page_title', 'page_description','breadcumb','data'));
-        }else{
+            return view('pages.dashboard.admin', compact('page_title', 'page_description', 'breadcumb', 'data'));
+        } else {
             $data = $this->getDataDashboard($type);
-            return view('pages.dashboard.super_admin', compact('page_title', 'page_description','breadcumb','data'));
+            return view('pages.dashboard.super_admin', compact('page_title', 'page_description', 'breadcumb', 'data'));
         }
     }
 
-    public function pegawai_dinilai(){
+    public function pegawai_dinilai()
+    {
         $url = env('API_URL');
         $token = session()->get('user.access_token');
-        $response = Http::withToken($token)->get($url."/dashboard/pegawai/level");
+        $response = Http::withToken($token)->get($url . "/dashboard/pegawai/level");
         return $response;
     }
-
 }
