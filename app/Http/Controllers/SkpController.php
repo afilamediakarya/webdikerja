@@ -173,11 +173,11 @@ class SkpController extends Controller
         $cek = [];
 
         // check if jenis_kinerja == utama, set sasaran_kinerja is required
-        if ($params->jenis_kinerja == "utama") {
-            if (is_null($params->sasaran_kinerja)) {
-                $result['sasaran_kinerja'][] = 'Sasaran Kinerja is field required';
-            }
-        }
+        // if ($params->jenis_kinerja == "utama") {
+        //     if (is_null($params->sasaran_kinerja)) {
+        //         $result['sasaran_kinerja'][] = 'Sasaran Kinerja is field required';
+        //     }
+        // }
 
         if (is_null($params->rencana_kerja)) {
             $result['rencana_kerja'][] = 'Rencana Kerja is field required';
@@ -427,6 +427,7 @@ class SkpController extends Controller
 
     public function update($params, Request $request)
     {
+        // return $request;
 
         $validated = $this->customValidate($request);
 

@@ -184,7 +184,7 @@
                         width: '10rem',
                         class: "wrapok",
                         render: function(data, type, row, full, meta) {
-                            console.log(row.id);
+                            // console.log(row.id);
                             return `
                             <a role="button" href="/skp/edit/${row.id_skp}?type=tahunan" class="btn btn-success btn-sm">Ubah</a>
                             <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="${row.id_skp}">Hapus</button>
@@ -234,14 +234,15 @@
                             let res = JSON.parse(response);
                             console.log(res.status);
                             if (res.status !== false) {
-                                Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+                                Swal.fire('Deleted!',
+                                        'Data Target SKP Tahunan berhasil dihapus.', 'success')
                                     .then(function() {
                                         window.location.href = '/skp/tahunan';
                                     });
                             } else {
                                 swal.fire({
-                                    title: "SKP tidak dapat di hapus. ",
-                                    text: "SKP digunakan oleh bawahaan. ",
+                                    title: "Failed!",
+                                    text: `${res.message}`,
                                     icon: "warning",
                                 });
                             }

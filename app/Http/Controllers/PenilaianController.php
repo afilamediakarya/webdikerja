@@ -45,6 +45,15 @@ class PenilaianController extends Controller
         return $level;
     }
 
+    public function checkLevelByIdPegawai($id_pegawai)
+    {
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        // $level = session()->get('user.level_jabatan');
+        $level = Http::withToken($token)->get($url . "/laporan/skp/cekLevel/" . $id_pegawai);
+        return $level;
+    }
+
     public function datatable()
     {
 
@@ -65,11 +74,12 @@ class PenilaianController extends Controller
     public function create()
     {
         $id_pegawai = request('id_pegawai');
+        $level = json_decode($this->checkLevelByIdPegawai($id_pegawai))->level_jabatan;
         $bulan = request('bulan');
         $page_title = 'Penilaian';
         $page_description = 'Daftar Pegawai yang dinilai';
-        $breadcumb = ['Daftar Pegawai yang dinilai', 'tambah Realisasi'];
-        return view('pages.penilaian.' . request('type'), compact('page_title', 'page_description', 'breadcumb', 'id_pegawai', 'bulan'));
+        $breadcumb = ['Daftar Pegawai yang dinilai', 'Tambah Realisasi'];
+        return view('pages.penilaian.' . request('type'), compact('page_title', 'page_description', 'breadcumb', 'id_pegawai', 'level', 'bulan'));
     }
 
     public function createRealisasi($type, $id, $bulan)

@@ -6,20 +6,24 @@
 
 
 @section('button')
-    <!-- <a href="{{ url('skp/tambah') }}" class="btn btn-primary font-weight-bolder">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1"/>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000) " x="4" y="11" width="16" height="2" rx="1"/>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </g>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </svg></span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Tambah SKP
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </a> -->
+    {{-- <a href="{{ url('skp/tambah') }}" class="btn btn-primary font-weight-bolder">
+        <span class="svg-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                height="24px" viewBox="0 0 24 24" version="1.1">
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1" />
+                    <rect fill="#000000" opacity="0.3"
+                        transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000) "
+                        x="4" y="11" width="16" height="2" rx="1" />
+                </g>
+            </svg></span>
+        Tambah SKP
+    </a> --}}
 @endsection
 
 
 @section('content')
     <!--begin::Entry-->
+    {{-- @dd($id_pegawai) --}}
     <div class="d-flex flex-column-fluid">
         <!--begin::Container-->
         <div class="container">
@@ -75,6 +79,9 @@
     <script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
     <script>
         let idpegawai = {!! json_encode($id_pegawai) !!}
+        let level = {!! json_encode($level) !!}
+        let table = $('#kt_datatable');
+
         $(function() {
 
             var currentNumber = null;
@@ -82,7 +89,7 @@
             var current = null;
             var cnt = 0;
 
-            $('#kt_datatable').DataTable({
+            table.DataTable({
 
                 responsive: true,
                 pageLength: 10,
@@ -130,6 +137,11 @@
                 columnDefs: [{
                         targets: [1, 2],
                         visible: false
+                    },
+                    {
+                        targets: [4],
+                        visible: (level == 1 || level == 2) ? false : true
+
                     },
                     {
                         targets: -1,
@@ -232,5 +244,6 @@
             })
 
         })
+        // console.log($('#kt_datatable').column(4).data())
     </script>
 @endsection

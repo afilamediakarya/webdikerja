@@ -185,8 +185,8 @@
                                     });
                             } else {
                                 swal.fire({
-                                    title: "SKP tidak dapat di hapus. ",
-                                    text: "SKP digunakan oleh bawahaan atau SKP digunakan dalam target bulanan. ",
+                                    title: "Failed!",
+                                    text: `${res.message}`,
                                     icon: "warning",
                                 });
                             }
