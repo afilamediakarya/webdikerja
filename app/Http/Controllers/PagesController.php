@@ -19,13 +19,12 @@ class PagesController extends Controller
 
     public function getDataDashboard($params)
     {
-        // return $type;
         $url = env('API_URL');
         $token = session()->get('user.access_token');
         $response = '';
 
         if ($params == 'pegawai') {
-            $response = Http::withToken($token)->get($url . "/dashboard/pegawai");
+            $response = Http::withToken($token)->get($url . "/dashboard/pegawai?bulan=" . session('bulan'));
         } elseif ($params == 'admin') {
             $response = Http::withToken($token)->get($url . "/dashboard/admin_opd");
         } else {
@@ -40,18 +39,22 @@ class PagesController extends Controller
         $page_title = 'Dashboard';
         $page_description = 'Some description for the page';
         $breadcumb = ['Daftar Sasaran Kinerja Pegawai'];
+        $nama_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        $bulan = (!request('bulan')) ? (int)date("m") : request('bulan');
 
         if ($type == 'pegawai') {
+            session(['bulan' => $bulan]);
             $data = $this->getDataDashboard($type);
             // return $data;
 
-            return view('pages.dashboard.index', compact('page_title', 'page_description', 'breadcumb', 'data'));
+            session()->forget('bulan');
+            return view('pages.dashboard.index', compact('page_title', 'page_description', 'breadcumb', 'data', 'nama_bulan', 'bulan'));
         } elseif ($type == 'admin') {
             $data = $this->getDataDashboard($type);
-            return view('pages.dashboard.admin', compact('page_title', 'page_description', 'breadcumb', 'data'));
+            return view('pages.dashboard.admin', compact('page_title', 'page_description', 'breadcumb', 'data', 'nama_bulan', 'bulan'));
         } else {
             $data = $this->getDataDashboard($type);
-            return view('pages.dashboard.super_admin', compact('page_title', 'page_description', 'breadcumb', 'data'));
+            return view('pages.dashboard.super_admin', compact('page_title', 'page_description', 'breadcumb', 'data', 'nama_bulan', 'bulan'));
         }
     }
 
