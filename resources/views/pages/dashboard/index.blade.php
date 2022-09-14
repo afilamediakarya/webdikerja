@@ -111,10 +111,8 @@
                                     <div class="col bg-white px-6 py-8 rounded-xl mr-3 mb-7">
                                         <a href="#" class="text-dark font-weight-bold font-size-lg">SKP</a>
                                         <div class="align-items-end d-flex h-100 justify-content-between w-100">
-                                            <p class="font-size-h1 mb-0"> 0 <small
+                                            <p class="font-size-h1 mb-0"> {{ $data['jumlah_skp'] }} <small
                                                     class="text-muted font-size-sm">Data</small> </p>
-                                            {{-- <p class="font-size-h1 mb-0"> {{ $data['jumlah_skp'] }} <small
-                                                    class="text-muted font-size-sm">Data</small> </p> --}}
                                             <span
                                                 class="align-items-end d-block svg-icon svg-icon-3x svg-icon-warning text-right">
                                                 <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Media/Equalizer.svg-->
@@ -142,10 +140,8 @@
                                         <a href="#" class="text-dark font-weight-bold font-size-lg">SKP
                                             Terealisasi</a>
                                         <div class="align-items-end d-flex h-100 justify-content-between w-100">
-                                            <p class="font-size-h1 mb-0"> 0 <small
+                                            <p class="font-size-h1 mb-0"> {{ $data['jumlah_realisasi_skp'] }} <small
                                                     class="text-muted font-size-sm">Data</small> </p>
-                                            {{-- <p class="font-size-h1 mb-0"> {{ $data['jumlah_realisasi_skp'] }} <small
-                                                    class="text-muted font-size-sm">Data</small> </p> --}}
                                             <span
                                                 class="align-items-end d-block svg-icon svg-icon-3x svg-icon-warning text-right">
                                                 <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Media/Equalizer.svg-->
@@ -175,10 +171,8 @@
                                     <div class="col bg-white px-6 py-8 rounded-xl mr-3 mb-7">
                                         <a href="#" class="text-dark font-weight-bold font-size-lg">Aktivitas</a>
                                         <div class="align-items-end d-flex h-100 justify-content-between w-100">
-                                            <p class="font-size-h1 mb-0"> 0 <small
+                                            <p class="font-size-h1 mb-0"> {{ $data['aktivitas'] }} <small
                                                     class="text-muted font-size-sm">Data</small> </p>
-                                            {{-- <p class="font-size-h1 mb-0"> {{ $data['aktivitas'] }} <small
-                                                    class="text-muted font-size-sm">Data</small> </p> --}}
                                             <span
                                                 class="align-items-end d-block svg-icon svg-icon-3x svg-icon-warning text-right">
                                                 <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Media/Equalizer.svg-->
@@ -204,10 +198,8 @@
                                         <a href="#" class="text-dark font-weight-bold font-size-lg">Pegawai yang
                                             Dinilai</a>
                                         <div class="align-items-end d-flex h-100 justify-content-between w-100">
-                                            <p class="font-size-h1 mb-0"> 0 <small
+                                            <p class="font-size-h1 mb-0"> {{ $data['pegawai_diniai'] }} <small
                                                     class="text-muted font-size-sm">Data</small> </p>
-                                            {{-- <p class="font-size-h1 mb-0"> {{ $data['pegawai_diniai'] }} <small
-                                                    class="text-muted font-size-sm">Data</small> </p> --}}
                                             <span
                                                 class="align-items-end d-block svg-icon svg-icon-3x svg-icon-warning text-right">
                                                 <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Media/Equalizer.svg-->
@@ -260,8 +252,7 @@
                                     <span class="text-muted">Besaran TPP</span>
                                 </div>
                                 <div class="font-weight-bold">
-                                    <span class="text-dark">Rp. 0</span>
-                                    {{-- <span class="text-dark">Rp. {{ $data['informasi_tpp']['besaran_tpp'] }}</span> --}}
+                                    <span class="text-dark">Rp. {{ $data['informasi_tpp']['besaran_tpp'] }}</span>
                                 </div>
                             </div>
 
@@ -270,9 +261,8 @@
                                     <span class="text-muted">Tunjangan Prestasi Kerja (60%)</span>
                                 </div>
                                 <div class="font-weight-bold">
-                                    <span class="text-dark">Rp.0</span>
-                                    {{-- <span
-                                        class="text-dark">Rp.{{ $data['informasi_tpp']['tunjangan_prestasi_kerja'] }}</span> --}}
+                                    <span
+                                        class="text-dark">Rp.{{ $data['informasi_tpp']['tunjangan_prestasi_kerja'] }}</span>
                                 </div>
                             </div>
 
@@ -281,8 +271,8 @@
                                     <span class="text-muted">Tunjangan Kehadiran Kerja (40%)</span>
                                 </div>
                                 <div class="font-weight-bold">
-                                    <span class="text-dark">Rp.0</span>
-                                    {{-- class="text-dark">Rp.{{ $data['informasi_tpp']['tunjangan_prestasi_kehadiran'] }}</span> --}}
+                                    <span
+                                        class="text-dark">Rp.{{ $data['informasi_tpp']['tunjangan_prestasi_kehadiran'] }}</span>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center justify-content-between pb-5 mb-5 border-bottom">
@@ -324,8 +314,7 @@
                                     <span class="text-muted">Nama</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">0</span>
-                                    {{-- <span class="text-dark">{{ $data['informasi_pegawai']['nama'] }}</span> --}}
+                                    <span class="text-dark">{{ $data['informasi_pegawai']['nama'] }}</span>
                                 </div>
                             </div>
 
@@ -334,8 +323,7 @@
                                     <span class="text-muted">NIP</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">0</span>
-                                    {{-- <span class="text-dark">{{ $data['informasi_pegawai']['nip'] }}</span> --}}
+                                    <span class="text-dark">{{ $data['informasi_pegawai']['nip'] }}</span>
                                 </div>
                             </div>
 
@@ -345,12 +333,11 @@
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
                                     <span class="text-dark">
-                                        {{-- @if ($data['informasi_pegawai']['pangkat'] != null)
+                                        @if ($data['informasi_pegawai']['pangkat'] != null)
                                             {{ $data['informasi_pegawai']['pangkat'] }}
                                         @else
                                             -
-                                        @endif --}}
-                                        -
+                                        @endif
                                     </span>
                                 </div>
                             </div>
@@ -360,12 +347,11 @@
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
                                     <span class="text-dark">
-                                        {{-- @if ($data['informasi_pegawai']['jabatan'] != null)
+                                        @if ($data['informasi_pegawai']['jabatan'] != null)
                                             {{ $data['informasi_pegawai']['jabatan'] }}
                                         @else
                                             -
-                                        @endif --}}
-                                        -
+                                        @endif
                                     </span>
                                 </div>
                             </div>
@@ -375,8 +361,7 @@
                                     <span class="text-muted">Instansi</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-right">
-                                    <span class="text-dark">0</span>
-                                    {{-- <span class="text-dark">{{ $data['informasi_pegawai']['Instansi'] }}</span> --}}
+                                    <span class="text-dark">{{ $data['informasi_pegawai']['Instansi'] }}</span>
                                 </div>
                             </div>
                         </div>
@@ -401,12 +386,11 @@
                                     <span class="text-muted">Nama</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    {{-- @if ($data['informasi_penilai'] !== null)
+                                    @if ($data['informasi_penilai'] !== null)
                                         <span class="text-dark">{{ $data['informasi_penilai']['nama'] }}</span>
                                     @else
                                         <span class="text-dark">-</span>
-                                        @endif --}}
-                                    <span class="text-dark">-</span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -415,12 +399,11 @@
                                     <span class="text-muted">NIP</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    {{-- @if ($data['informasi_penilai'] !== null)
+                                    @if ($data['informasi_penilai'] !== null)
                                         <span class="text-dark">{{ $data['informasi_penilai']['nip'] }}</span>
                                     @else
                                         <span class="text-dark">-</span>
-                                        @endif --}}
-                                    <span class="text-dark">-</span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -430,14 +413,13 @@
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
                                     <span class="text-dark">
-                                        {{-- @if ($data['informasi_penilai'] !== null)
+                                        @if ($data['informasi_penilai'] !== null)
                                             @if ($data['informasi_penilai']['pangkat'] != null)
                                                 {{ $data['informasi_penilai']['pangkat'] }}
                                             @else
                                                 -
                                             @endif
-                                        @endif --}}
-                                        -
+                                        @endif
                                     </span>
                                 </div>
                             </div>
@@ -447,14 +429,13 @@
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
                                     <span class="text-dark">
-                                        {{-- @if ($data['informasi_penilai'] != null)
+                                        @if ($data['informasi_penilai'] != null)
                                             @if ($data['informasi_penilai']['jabatan'] != null)
                                                 {{ $data['informasi_penilai']['jabatan'] }}
                                             @else
                                                 -
                                             @endif
-                                        @endif --}}
-                                        -
+                                        @endif
                                     </span>
                                 </div>
                             </div>
@@ -465,12 +446,9 @@
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-right">
                                     <span class="text-dark">
-                                        {{-- @if ($data['informasi_penilai'] !== null)
+                                        @if ($data['informasi_penilai'] !== null)
                                             {{ $data['informasi_penilai']['Instansi'] }}
-                                        @else
-                                            -
-                                        @endif --}}
-                                        -
+                                        @endif
                                     </span>
                                 </div>
                             </div>
@@ -541,54 +519,54 @@
         //     alert('dsfsdf');
         // }
 
-        // var dataRow = function() {
+        var dataRow = function() {
 
-        //     var init = function() {
-        //         var table = $('#kt_datatable');
+            var init = function() {
+                var table = $('#kt_datatable');
 
-        //         table.DataTable({
-        //             responsive: true,
-        //             pageLength: 10,
-        //             order: [
-        //                 [0, 'asc']
-        //             ],
-        //             processing: true,
-        //             ajax: "/dashboard/pegawai/level",
-        //             columns: [{
-        //                 data: null,
-        //                 render: function(data, type, row, meta) {
-        //                     return meta.row + meta.settings._iDisplayStart + 1;
-        //                 }
-        //             }, {
-        //                 data: 'nama'
-        //             }, {
-        //                 data: 'nip'
-        //             }, {
-        //                 data: 'nama_jabatan'
-        //             }],
-        //         });
+                table.DataTable({
+                    responsive: true,
+                    pageLength: 10,
+                    order: [
+                        [0, 'asc']
+                    ],
+                    processing: true,
+                    ajax: "/dashboard/pegawai/level",
+                    columns: [{
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    }, {
+                        data: 'nama'
+                    }, {
+                        data: 'nip'
+                    }, {
+                        data: 'nama_jabatan'
+                    }],
+                });
 
-        //     };
+            };
 
-        //     var destroy = function() {
-        //         var table = $('#kt_datatable').DataTable();
-        //         table.destroy();
-        //     }
+            var destroy = function() {
+                var table = $('#kt_datatable').DataTable();
+                table.destroy();
+            }
 
-        //     return {
-        //         init: function() {
-        //             init();
-        //         },
-        //         destroy: function() {
-        //             destroy();
-        //         }
+            return {
+                init: function() {
+                    init();
+                },
+                destroy: function() {
+                    destroy();
+                }
 
-        //     };
+            };
 
-        // }();
+        }();
 
         jQuery(document).ready(function() {
-            // dataRow.init();
+            dataRow.init();
             // KTDatatablesAdvancedRowGrouping.init();
 
             $('.periode-bulan').on('click', function(e) {
