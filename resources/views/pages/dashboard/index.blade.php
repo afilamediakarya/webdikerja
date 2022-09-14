@@ -270,8 +270,9 @@
                                     <span class="text-muted">Tunjangan Prestasi Kerja (60%)</span>
                                 </div>
                                 <div class="font-weight-bold">
-                                    <span
-                                        class="text-dark">Rp.{{ $data['informasi_tpp']['tunjangan_prestasi_kerja'] }}</span>
+                                    <span class="text-dark">Rp.0</span>
+                                    {{-- <span
+                                        class="text-dark">Rp.{{ $data['informasi_tpp']['tunjangan_prestasi_kerja'] }}</span> --}}
                                 </div>
                             </div>
 
@@ -323,7 +324,8 @@
                                     <span class="text-muted">Nama</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">{{ $data['informasi_pegawai']['nama'] }}</span>
+                                    <span class="text-dark">0</span>
+                                    {{-- <span class="text-dark">{{ $data['informasi_pegawai']['nama'] }}</span> --}}
                                 </div>
                             </div>
 
@@ -332,7 +334,8 @@
                                     <span class="text-muted">NIP</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-righ">
-                                    <span class="text-dark">{{ $data['informasi_pegawai']['nip'] }}</span>
+                                    <span class="text-dark">0</span>
+                                    {{-- <span class="text-dark">{{ $data['informasi_pegawai']['nip'] }}</span> --}}
                                 </div>
                             </div>
 
@@ -370,7 +373,8 @@
                                     <span class="text-muted">Instansi</span>
                                 </div>
                                 <div class="font-weight-bold max-w-70 text-right">
-                                    <span class="text-dark">{{ $data['informasi_pegawai']['Instansi'] }}</span>
+                                    <span class="text-dark">0</span>
+                                    {{-- <span class="text-dark">{{ $data['informasi_pegawai']['Instansi'] }}</span> --}}
                                 </div>
                             </div>
                         </div>
@@ -457,6 +461,8 @@
                                     <span class="text-dark">
                                         @if ($data['informasi_penilai'] !== null)
                                             {{ $data['informasi_penilai']['Instansi'] }}
+                                        @else
+                                            -
                                         @endif
                                     </span>
                                 </div>
