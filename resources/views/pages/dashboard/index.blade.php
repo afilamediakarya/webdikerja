@@ -204,8 +204,10 @@
                                         <a href="#" class="text-dark font-weight-bold font-size-lg">Pegawai yang
                                             Dinilai</a>
                                         <div class="align-items-end d-flex h-100 justify-content-between w-100">
-                                            <p class="font-size-h1 mb-0"> {{ $data['pegawai_diniai'] }} <small
+                                            <p class="font-size-h1 mb-0"> 0 <small
                                                     class="text-muted font-size-sm">Data</small> </p>
+                                            {{-- <p class="font-size-h1 mb-0"> {{ $data['pegawai_diniai'] }} <small
+                                                    class="text-muted font-size-sm">Data</small> </p> --}}
                                             <span
                                                 class="align-items-end d-block svg-icon svg-icon-3x svg-icon-warning text-right">
                                                 <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Media/Equalizer.svg-->
@@ -258,7 +260,8 @@
                                     <span class="text-muted">Besaran TPP</span>
                                 </div>
                                 <div class="font-weight-bold">
-                                    <span class="text-dark">Rp. {{ $data['informasi_tpp']['besaran_tpp'] }}</span>
+                                    <span class="text-dark">Rp. 0</span>
+                                    {{-- <span class="text-dark">Rp. {{ $data['informasi_tpp']['besaran_tpp'] }}</span> --}}
                                 </div>
                             </div>
 
@@ -277,8 +280,8 @@
                                     <span class="text-muted">Tunjangan Kehadiran Kerja (40%)</span>
                                 </div>
                                 <div class="font-weight-bold">
-                                    <span
-                                        class="text-dark">Rp.{{ $data['informasi_tpp']['tunjangan_prestasi_kehadiran'] }}</span>
+                                    <span class="text-dark">Rp.0</span>
+                                    {{-- class="text-dark">Rp.{{ $data['informasi_tpp']['tunjangan_prestasi_kehadiran'] }}</span> --}}
                                 </div>
                             </div>
                             <div class="d-flex align-items-center justify-content-between pb-5 mb-5 border-bottom">
