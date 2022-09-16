@@ -507,15 +507,19 @@ class LaporanController extends Controller
         $level = $this->checkLevel($id_pegawai);
         $res = [];
 
-        if ($level['level_jabatan'] == 1 || $level['level_jabatan'] == 2) {
-            $level = 'kepala';
+        // return $level['messages_'];
+        if (isset($level['messages_'])) {
+            return $level['messages_'];
         } else {
-            $level = 'pegawai';
+            if ($level['level_jabatan'] == 1 || $level['level_jabatan'] == 2) {
+                $level = 'kepala';
+            } else {
+                $level = 'pegawai';
+            }
         }
 
         // $data = $this->getSkp($level);
         $data = $this->getSkp($level, $bulan, $id_pegawai);
-        // return $data;
 
         if ($data['status'] == true) {
             $res = $data['data'];
@@ -573,7 +577,12 @@ class LaporanController extends Controller
         $sheet->setCellValue('A5', $data['pegawai_dinilai']['nama_satuan_kerja'])->mergeCells('A5:C5');
 
         $tahun = ""  . session('tahun_penganggaran') . "-" . $bulan . "";
-        $periode = date("01", strtotime($tahun)) . ' ' . strftime('%B', mktime(0, 0, 0, $bulan + 1, 0)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+        if ($bulan != '0') {
+
+            $periode = date("01", strtotime($tahun)) . ' ' . strftime('%B', mktime(0, 0, 0, $bulan + 1, 0)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+        } else {
+            $periode = "Tahun " . session('tahun_penganggaran');
+        }
         $sheet->setCellValue('D5', $periode)->mergeCells('D5:F5');
 
         $sheet->setCellValue('A6', 'PEGAWAI YANG DINILAI')->mergeCells('A6:C6');
@@ -807,7 +816,12 @@ class LaporanController extends Controller
         $sheet->setCellValue('A5', $data['pegawai_dinilai']['nama_satuan_kerja'])->mergeCells('A5:D5');
 
         $tahun = ""  . session('tahun_penganggaran') . "-" . $bulan . "";
-        $periode = date("01", strtotime($tahun)) . ' ' . strftime('%B', mktime(0, 0, 0, $bulan + 1, 0)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+        if ($bulan != '0') {
+
+            $periode = date("01", strtotime($tahun)) . ' ' . strftime('%B', mktime(0, 0, 0, $bulan + 1, 0)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+        } else {
+            $periode = "Tahun " . session('tahun_penganggaran');
+        }
         $sheet->setCellValue('E5', $periode)->mergeCells('E5:H5');
 
         $sheet->setCellValue('A6', 'PEGAWAI YANG DINILAI')->mergeCells('A6:D6');
@@ -888,6 +902,7 @@ class LaporanController extends Controller
             $sheet->getStyle('B' . $cell . ':H' . $cell)->getFont()->setBold(true);
             $cell++;
             foreach ($data['skp']['utama'] as $index => $value) {
+                // return $value;
                 if (isset($value['atasan']['rencana_kerja'])) {
                     $sheet->setCellValue('B' . $cell, $value['atasan']['rencana_kerja'])->mergeCells('B' . $cell . ':C' . ($cell + 2));
                 } else {
@@ -1068,7 +1083,12 @@ class LaporanController extends Controller
         $sheet->setCellValue('A5', $data['pegawai_dinilai']['nama_satuan_kerja'])->mergeCells('A5:C5');
 
         $tahun = ""  . session('tahun_penganggaran') . "-" . $bulan . "";
-        $periode = date("01", strtotime($tahun)) . ' ' . strftime('%B', mktime(0, 0, 0, $bulan + 1, 0)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+        if ($bulan != '0') {
+
+            $periode = date("01", strtotime($tahun)) . ' ' . strftime('%B', mktime(0, 0, 0, $bulan + 1, 0)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+        } else {
+            $periode = "Tahun " . session('tahun_penganggaran');
+        }
         $sheet->setCellValue('D5', $periode)->mergeCells('D5:J5');
 
         $sheet->setCellValue('A6', 'PEGAWAI YANG DINILAI')->mergeCells('A6:C6');
@@ -1161,7 +1181,7 @@ class LaporanController extends Controller
                 $sheet->getStyle('A' . $cell)->getAlignment()->setVertical('top')->setHorizontal('center');
                 $sheet->setCellValue('A' . $cell, $index + 1)->mergeCells('A' . $cell . ':A' . ($cell + count($value['aspek_skp']) - 1));
                 // return $cell + count($value['aspek_skp']) - 1;
-                // return $cell;
+                // return $value;
                 $sheet->setCellValue('B' . $cell, $value['rencana_kerja'])->mergeCells('B' . $cell . ':B' . ($cell + count($value['aspek_skp']) - 1));
 
                 foreach ($value['aspek_skp'] as $k => $v) {
@@ -1452,7 +1472,12 @@ class LaporanController extends Controller
         $sheet->setCellValue('A5', $data['pegawai_dinilai']['nama_satuan_kerja'])->mergeCells('A5:E5');
 
         $tahun = ""  . session('tahun_penganggaran') . "-" . $bulan . "";
-        $periode = date("01", strtotime($tahun)) . ' ' . strftime('%B', mktime(0, 0, 0, $bulan + 1, 0)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+        if ($bulan != '0') {
+
+            $periode = date("01", strtotime($tahun)) . ' ' . strftime('%B', mktime(0, 0, 0, $bulan + 1, 0)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+        } else {
+            $periode = "Tahun " . session('tahun_penganggaran');
+        }
         $sheet->setCellValue('F5', $periode)->mergeCells('F5:L5');
 
         $sheet->setCellValue('A6', 'PEGAWAI YANG DINILAI')->mergeCells('A6:E6');
@@ -1570,11 +1595,13 @@ class LaporanController extends Controller
 
                                 $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
 
+                                // return $capaian_iki;
+
                                 if ($capaian_iki >= 101) {
                                     $sheet->setCellValue('H' . $cell, round($capaian_iki, 0) . ' %');
                                     $sheet->setCellValue('I' . $cell, 'Sangat Baik');
                                     $nilai_iki = 16;
-                                } elseif ($capaian_iki == 100) {
+                                } elseif ($capaian_iki >= 100 && $capaian_iki < 101) {
                                     $sheet->setCellValue('H' . $cell, round($capaian_iki, 0) . ' %');
                                     $sheet->setCellValue('I' . $cell, 'Baik');
                                     $nilai_iki = 13;
@@ -1586,7 +1613,7 @@ class LaporanController extends Controller
                                     $sheet->setCellValue('H' . $cell, round($capaian_iki, 0) . ' %');
                                     $sheet->setCellValue('I' . $cell, 'Kurang');
                                     $nilai_iki = 3;
-                                } elseif ($capaian_iki >= 0 && $capaian_iki <= 79) {
+                                } elseif ($capaian_iki >= 0 && $capaian_iki <= 59) {
                                     $sheet->setCellValue('H' . $cell, round($capaian_iki, 0) . ' %');
                                     $sheet->setCellValue('I' . $cell, 'Sangat Kurang');
                                     $nilai_iki = 1;
