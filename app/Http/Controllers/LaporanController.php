@@ -1597,11 +1597,11 @@ class LaporanController extends Controller
 
                                 // return $capaian_iki;
 
-                                if ($capaian_iki >= 101) {
+                                if ($capaian_iki > 100) {
                                     $sheet->setCellValue('H' . $cell, round($capaian_iki, 0) . ' %');
                                     $sheet->setCellValue('I' . $cell, 'Sangat Baik');
                                     $nilai_iki = 16;
-                                } elseif ($capaian_iki >= 100 && $capaian_iki < 101) {
+                                } elseif ($capaian_iki == 100) {
                                     $sheet->setCellValue('H' . $cell, round($capaian_iki, 0) . ' %');
                                     $sheet->setCellValue('I' . $cell, 'Baik');
                                     $nilai_iki = 13;
