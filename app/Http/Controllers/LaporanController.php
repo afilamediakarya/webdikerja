@@ -109,7 +109,7 @@ class LaporanController extends Controller
         } else if ($val->role == 'admin' || $val->role == 'super_admin') {
             $data = $this->getRekappegawaiByOpd($val->startDate, $val->endDate, $val->satuanKerja);
 
-            $this->exportrekapOpd($data, $val->type, $val->startDate, $val->endDate);
+            return $this->exportrekapOpd($data, $val->type, $val->startDate, $val->endDate);
         }
     }
 
@@ -2183,7 +2183,7 @@ class LaporanController extends Controller
 
     public function exportrekapOpd($data, $type, $startDate, $endDate)
     {
-        // return "ok";
+        // return $data;
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
@@ -2298,16 +2298,18 @@ class LaporanController extends Controller
             $cpk_60 = [];
             $cpk_90 = [];
             $cpk_90_keatas = [];
+            $date_val = array();
             $jml_tanpa_keterangan = 0;
+            $nums = 0;
             $sheet->setCellValue('B' . $cell, $i + 1);
             $sheet->setCellValue('C' . $cell, $val[0]['pegawai']['nama'] . ' ' . PHP_EOL . ' ' . $val[0]['pegawai']['nip']);
             $sheet->setCellValue('D' . $cell, $data['hari_kerja']);
             foreach ($val as $t => $v) {
                 if (isset($v['status'])) {
-                    if ($v['status'] == 'hadir') {
-
+                    // if ($v['status'] == 'hadir') {
+                        array_push($date_val,$v['tanggal_absen']);
                         if ($v['jenis'] == 'checkin') {
-
+                            $jml_hari_kerja[] = $v['id'];
                             $selisih_waktu = $this->konvertWaktu('checkin', $v['waktu_absen']);
 
                             if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
@@ -2320,7 +2322,7 @@ class LaporanController extends Controller
                                 $kmk_90_keatas[] =  $selisih_waktu;
                             }
                         } else {
-                            $jml_hari_kerja[] = $v['id'];
+                           
                             $selisih_waktu = $this->konvertWaktu('checkout', $v['waktu_absen']);
 
                             if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
@@ -2333,11 +2335,18 @@ class LaporanController extends Controller
                                 $cpk_90_keatas[] =  $selisih_waktu;
                             }
                         }
-                    }
+                    // }
                 }
             }
 
-            $jml_tanpa_keterangan = $data['hari_kerja'] - count($jml_hari_kerja);
+            // return $date_val;
+            foreach ($data['range'] as $k => $vv) {
+                if (in_array($vv, $date_val) == false) {
+                    $jml_tanpa_keterangan += $nums + 1;
+                }
+            }
+
+            // $jml_tanpa_keterangan = $data['hari_kerja'] - count($jml_hari_kerja);
 
 
             $sheet->setCellValue('E' . $cell, count($jml_hari_kerja));
@@ -2387,10 +2396,6 @@ class LaporanController extends Controller
         $sheet->getStyle('A:AB')->getAlignment()->setVertical('center');
         $sheet->getStyle('C7:C' . $cell)->getAlignment()->setHorizontal('rigth');
         $sheet->getStyle('A3:AB4')->getAlignment()->setHorizontal('rigth');
-
-
-
-
 
         if ($type == 'excel') {
             // Untuk download 
