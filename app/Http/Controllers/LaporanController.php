@@ -2314,7 +2314,7 @@ class LaporanController extends Controller
 
         // $jml_hari_kerja = [];
         foreach ($data['pegawai'] as $i => $val) {
-
+            // return $val;
             $sheet->getRowDimension($cell)->setRowHeight(30);
             $selisih_waktu = 0;
             $jml_hari_kerja = 0;
@@ -2334,7 +2334,11 @@ class LaporanController extends Controller
             $sheet->setCellValue('C' . $cell, $val[0]['pegawai']['nama'] . ' ' . PHP_EOL . ' ' . $val[0]['pegawai']['nip']);
             $sheet->setCellValue('D' . $cell, $data['hari_kerja']);
             foreach ($val as $t => $v) {
-            
+       
+                if (isset($v['tanggal_absen'])) {
+                    $filter_date[$v['tanggal_absen']][] = $v['tanggal_absen'];
+                }
+               
                 if (isset($v['status'])) {
                     // if ($v['status'] == 'hadir') {
                     if ($v['jenis'] == 'checkin') {
@@ -2376,9 +2380,12 @@ class LaporanController extends Controller
                 }
             }
 
+            // return $filter_date;
             foreach ($date_val as $j => $b) {
-                if (count($filter_date[$b]) == 1) {
-                    $cpk_90_keatas[] =  90;
+                if (isset($filter_date[$b])) {
+                    if (count($filter_date[$b]) == 1) {
+                        $cpk_90_keatas[] =  90;
+                    }
                 }
             }
 
