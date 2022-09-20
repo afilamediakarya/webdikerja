@@ -2183,9 +2183,7 @@ class LaporanController extends Controller
 
     public function exportrekapOpd($data, $type, $startDate, $endDate)
     {
-
-        
-     
+      
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
@@ -2344,9 +2342,11 @@ class LaporanController extends Controller
 
             // return $date_val;
             // return $data['range'];
+            
             foreach ($data['range'] as $k => $vv) {
                 if (in_array($vv, $date_val) == false) {
                     $jml_tanpa_keterangan += $nums + 1;
+              
                 }
             }
 
