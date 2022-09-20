@@ -303,7 +303,13 @@ class LaporanController extends Controller
                                 $kategori_ = '';
                                 if ($rr['bulan'] ==  $bulan) {
 
-                                    $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                    $single_rate = 0;
+
+                                    if ($rr['target'] > 0) {
+                                        // $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                        $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                    }
+
 
                                     if ($single_rate > 110) {
                                         $nilai_iki = 110 + ((120 - 110) / (110 - 101)) * (110 - 101);
@@ -367,7 +373,11 @@ class LaporanController extends Controller
                                 $kategori_ = '';
                                 if ($rr['bulan'] ==  $bulan) {
                                     // set capaian_iki based realisasi / target
-                                    $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                    $capaian_iki = 0;
+
+                                    if ($rr['target'] > 0) {
+                                        $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                    }
 
                                     // set nilai_iki based capaian_iki
                                     if ($capaian_iki >= 101) {
@@ -669,8 +679,8 @@ class LaporanController extends Controller
                         $sum_capaian = 0;
                         $kategori_ = '';
                         if ($rr['bulan'] ==  $bulan) {
-                            $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                            $sum_capaian += $capaian_iki;
+                            // $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                            // $sum_capaian += $capaian_iki;
                             $sheet->setCellValue('F' . $cell, $rr['target'] . ' ' . $v['satuan']);
                         }
                     }
@@ -704,8 +714,8 @@ class LaporanController extends Controller
                         $sum_capaian = 0;
                         $kategori_ = '';
                         if ($rr['bulan'] ==  $bulan) {
-                            $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                            $sum_capaian += $capaian_iki;
+                            // $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                            // $sum_capaian += $capaian_iki;
                             $sheet->setCellValue('F' . $cell, $rr['target'] . ' ' . $v['satuan']);
                         }
                     }
@@ -2183,7 +2193,9 @@ class LaporanController extends Controller
 
     public function exportrekapOpd($data, $type, $startDate, $endDate)
     {
-      
+
+
+
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
@@ -2307,46 +2319,44 @@ class LaporanController extends Controller
             foreach ($val as $t => $v) {
                 if (isset($v['status'])) {
                     // if ($v['status'] == 'hadir') {
-                   
-                        if ($v['jenis'] == 'checkin') {
-                            array_push($date_val,$v['tanggal_absen']);
-                            $jml_hari_kerja += 1;
-                            $selisih_waktu = $this->konvertWaktu('checkin', $v['waktu_absen']);
 
-                            if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
-                                $kmk_30[] = $selisih_waktu;
-                            } elseif ($selisih_waktu >= 31 && $selisih_waktu <= 60) {
-                                $kmk_60[] =  $selisih_waktu;
-                            } elseif ($selisih_waktu >= 61 && $selisih_waktu <= 90) {
-                                $kmk_90[] =  $selisih_waktu;
-                            } elseif ($selisih_waktu >= 91) {
-                                $kmk_90_keatas[] =  $selisih_waktu;
-                            }
-                        } else {
-                           
-                            $selisih_waktu = $this->konvertWaktu('checkout', $v['waktu_absen']);
+                    if ($v['jenis'] == 'checkin') {
+                        array_push($date_val, $v['tanggal_absen']);
+                        $jml_hari_kerja += 1;
+                        $selisih_waktu = $this->konvertWaktu('checkin', $v['waktu_absen']);
 
-                            if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
-                                $cpk_30[] = $selisih_waktu;
-                            } elseif ($selisih_waktu >= 31 && $selisih_waktu <= 60) {
-                                $cpk_60[] =  $selisih_waktu;
-                            } elseif ($selisih_waktu >= 61 && $selisih_waktu <= 90) {
-                                $cpk_90[] =  $selisih_waktu;
-                            } elseif ($selisih_waktu >= 91) {
-                                $cpk_90_keatas[] =  $selisih_waktu;
-                            }
+                        if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
+                            $kmk_30[] = $selisih_waktu;
+                        } elseif ($selisih_waktu >= 31 && $selisih_waktu <= 60) {
+                            $kmk_60[] =  $selisih_waktu;
+                        } elseif ($selisih_waktu >= 61 && $selisih_waktu <= 90) {
+                            $kmk_90[] =  $selisih_waktu;
+                        } elseif ($selisih_waktu >= 91) {
+                            $kmk_90_keatas[] =  $selisih_waktu;
                         }
+                    } else {
+
+                        $selisih_waktu = $this->konvertWaktu('checkout', $v['waktu_absen']);
+
+                        if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
+                            $cpk_30[] = $selisih_waktu;
+                        } elseif ($selisih_waktu >= 31 && $selisih_waktu <= 60) {
+                            $cpk_60[] =  $selisih_waktu;
+                        } elseif ($selisih_waktu >= 61 && $selisih_waktu <= 90) {
+                            $cpk_90[] =  $selisih_waktu;
+                        } elseif ($selisih_waktu >= 91) {
+                            $cpk_90_keatas[] =  $selisih_waktu;
+                        }
+                    }
                     // }
                 }
             }
 
             // return $date_val;
             // return $data['range'];
-            
             foreach ($data['range'] as $k => $vv) {
                 if (in_array($vv, $date_val) == false) {
                     $jml_tanpa_keterangan += $nums + 1;
-              
                 }
             }
 
