@@ -1201,7 +1201,11 @@ class LaporanController extends Controller
                         if ($rr['bulan'] ==  $bulan) {
                             $sheet->setCellValue('D' . $cell, $rr['target'] . ' ' . $v['satuan']);
                             $sheet->setCellValue('E' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'] . ' ' . $v['satuan']);
-                            $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+
+                            $single_rate = 0;
+                            if ($rr['target'] > 0) {
+                                $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                            }
 
                             $sheet->setCellValue('F' . $cell, round($single_rate, 0) . ' %');
                             if ($single_rate > 110) {
@@ -1294,7 +1298,11 @@ class LaporanController extends Controller
                         if ($rr['bulan'] ==  $bulan) {
                             $sheet->setCellValue('D' . $cell, $rr['target'] . ' ' . $v['satuan']);
                             $sheet->setCellValue('E' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'] . ' ' . $v['satuan']);
-                            $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+
+                            $single_rate = 0;
+                            if ($rr['target'] > 0) {
+                                $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                            }
 
 
                             $sheet->setCellValue('F' . $cell, round($single_rate, 0) . ' %');
@@ -1603,7 +1611,10 @@ class LaporanController extends Controller
                                 $sheet->setCellValue('F' . $cell, $rr['target'] . ' ' . $v['satuan']);
                                 $sheet->setCellValue('G' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'] . ' ' . $v['satuan']);
 
-                                $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                $capaian_iki = 0;
+                                if ($rr['target'] > 0) {
+                                    $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                }
 
                                 // return $capaian_iki;
 
@@ -1834,7 +1845,11 @@ class LaporanController extends Controller
                         if ($rr['bulan'] ==  $bulan) {
                             $sheet->setCellValue('F' . $cell, $rr['target'] . ' ' . $v['satuan']);
                             $sheet->setCellValue('G' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'] . ' ' . $v['satuan']);
-                            $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+
+                            $capaian_iki = 0;
+                            if ($rr['target'] > 0) {
+                                $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                            }
 
                             if ($capaian_iki >= 101) {
                                 $sheet->setCellValue('H' . $cell, round($capaian_iki, 0) . ' %');
