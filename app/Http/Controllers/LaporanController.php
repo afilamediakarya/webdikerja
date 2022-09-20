@@ -2314,6 +2314,7 @@ class LaporanController extends Controller
 
         // $jml_hari_kerja = [];
         foreach ($data['pegawai'] as $i => $val) {
+
             $sheet->getRowDimension($cell)->setRowHeight(30);
             $selisih_waktu = 0;
             $jml_hari_kerja = 0;
@@ -2326,15 +2327,16 @@ class LaporanController extends Controller
             $cpk_90 = [];
             $cpk_90_keatas = [];
             $date_val = array();
+            $filter_date = array();
             $jml_tanpa_keterangan = 0;
             $nums = 0;
             $sheet->setCellValue('B' . $cell, $i + 1);
             $sheet->setCellValue('C' . $cell, $val[0]['pegawai']['nama'] . ' ' . PHP_EOL . ' ' . $val[0]['pegawai']['nip']);
             $sheet->setCellValue('D' . $cell, $data['hari_kerja']);
             foreach ($val as $t => $v) {
+            
                 if (isset($v['status'])) {
                     // if ($v['status'] == 'hadir') {
-
                     if ($v['jenis'] == 'checkin') {
                         array_push($date_val, $v['tanggal_absen']);
                         $jml_hari_kerja += 1;
@@ -2367,13 +2369,33 @@ class LaporanController extends Controller
                 }
             }
 
-            // return $date_val;
-            // return $data['range'];
+    
             foreach ($data['range'] as $k => $vv) {
                 if (in_array($vv, $date_val) == false) {
                     $jml_tanpa_keterangan += $nums + 1;
                 }
             }
+
+            foreach ($date_val as $j => $b) {
+                if (count($filter_date[$b]) == 1) {
+                    $cpk_90_keatas[] =  90;
+                }
+            }
+
+            // if (count($dataAbsen) == 1) {
+            //     if ($value['date'] < date('Y-m-d')) {
+
+            //         $dataAbsen[1] = [
+            //             'jenis' => 'checkout',
+            //             'status_absen' => 'hadir',
+            //             'waktu_absen' => '14:00:00',
+            //             'keterangan' => 'cepat 90 menit'
+            //         ];
+            //         $jml_kehadiran[$dataAbsen[0]['tanggal_absen']] = 'checkout';
+            //     }
+
+            //     $temps_absensi['cpk']['cpk_90_keatas'][] = 90; 
+            // }
 
             // $jml_tanpa_keterangan = $data['hari_kerja'] - count($jml_hari_kerja);
 
