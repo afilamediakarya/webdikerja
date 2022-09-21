@@ -92,17 +92,17 @@
                 processing: true,
                 ajax: '/skp-datatable?type=tahunan',
                 columns: [{
-                    data: 'rencana_kerja',
+                    data: 'id_skp',
                     render: function(data, type, row, meta) {
-                        let id = row.rencana_kerja;
+                        let id = row.id_skp;
 
-                        if (row.rencana_kerja != currentNumber) {
-                            currentNumber = row.rencana_kerja;
+                        if (row.id_skp != currentNumber) {
+                            currentNumber = row.id_skp;
                             cntNumber++;
                         }
 
-                        if (row.rencana_kerja != current) {
-                            current = row.rencana_kerja;
+                        if (row.id_skp != current) {
+                            current = row.id_skp;
                             cnt = 1;
                         } else {
                             cnt++;
@@ -114,7 +114,7 @@
                 }, {
                     data: 'skp_atasan'
                 }, {
-                    data: 'rencana_kerja'
+                    data: 'id_skp'
                 }, {
                     data: 'aspek_skp'
                 }, {
@@ -124,11 +124,17 @@
                 }, {
                     data: 'satuan'
                 }, {
-                    data: 'rencana_kerja'
+                    data: 'id_skp'
                 }],
                 columnDefs: [{
                         targets: [1, 2],
                         visible: false
+                    },
+                    {
+                        targets: 3,
+                        render: function(data, type, row, full, meta) {
+                            return row.rencana_kerja;
+                        }
                     },
                     {
                         targets: -1,

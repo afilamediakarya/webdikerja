@@ -88,17 +88,17 @@
                 processing: true,
                 ajax: '/skp-datatable?type=tahunan',
                 columns: [{
-                    data: 'rencana_kerja',
+                    data: 'id_skp',
                     render: function(data, type, row, meta) {
-                        let id = row.rencana_kerja;
+                        let id = row.id_skp;
 
-                        if (row.rencana_kerja != currentNumber) {
-                            currentNumber = row.rencana_kerja;
+                        if (row.id_skp != currentNumber) {
+                            currentNumber = row.id_skp;
                             cntNumber++;
                         }
 
-                        if (row.rencana_kerja != current) {
-                            current = row.rencana_kerja;
+                        if (row.id_skp != current) {
+                            current = row.id_skp;
                             cnt = 1;
                         } else {
                             cnt++;
@@ -108,7 +108,7 @@
                 }, {
                     data: 'jenis'
                 }, {
-                    data: 'rencana_kerja'
+                    data: 'id_skp'
                 }, {
                     data: 'iki'
                 }, {
@@ -116,7 +116,7 @@
                 }, {
                     data: 'satuan'
                 }, {
-                    data: 'rencana_kerja'
+                    data: 'id_skp'
                 }],
                 columnDefs: [{
                         targets: 1,
@@ -162,21 +162,14 @@
 
                     //     }
                     // },
-                    // {
-                    //     targets: 5,
-                    //     render: function(data) {
+                    {
+                        targets: 2,
+                        render: function(data, type, row, full, meta) {
 
-                    //         let html = '';
-                    //         let target = 0;
-                    //         html += '<ul style="list-style:none">';
-                    //         $.each(data, function(x, y) {
-                    //             html += `<li style="margin-bottom:4rem">${y.satuan}<li>`;
-                    //         })
-                    //         html += '</ul>';
-                    //         return html;
+                            return row.rencana_kerja;
 
-                    //     }
-                    // },
+                        }
+                    },
                     {
                         targets: -1,
                         title: 'Actions',

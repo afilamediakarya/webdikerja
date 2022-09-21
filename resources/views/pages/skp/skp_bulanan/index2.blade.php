@@ -124,7 +124,7 @@
                 }, {
                     data: 'jenis'
                 }, {
-                    data: 'rencana_kerja'
+                    data: 'id'
                 }, {
                     data: 'aspek_skp'
                 }, {
@@ -137,6 +137,14 @@
                 columnDefs: [{
                         targets: 1,
                         visible: false
+                    },
+                    {
+                        targets: 2,
+                        render: function(data, type, row, meta) {
+
+                            return row.rencana_kerja;
+
+                        }
                     },
                     {
                         targets: 3,

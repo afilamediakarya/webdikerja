@@ -86,17 +86,17 @@
                     //     console.log(data);
                     //     return meta.row + meta.settings._iDisplayStart + 1;
                     // }
-                    data: 'rencana_kerja',
+                    data: 'id',
                     render: function(data, type, row, meta) {
-                        let id = row.rencana_kerja;
+                        let id = row.id;
 
-                        if (row.rencana_kerja != currentNumber) {
-                            currentNumber = row.rencana_kerja;
+                        if (row.id != currentNumber) {
+                            currentNumber = row.id;
                             cntNumber++;
                         }
 
-                        if (row.rencana_kerja != current) {
-                            current = row.rencana_kerja;
+                        if (row.id != current) {
+                            current = row.id;
                             cnt = 1;
                         } else {
                             cnt++;
@@ -108,7 +108,7 @@
                 }, {
                     data: 'skp_atasan'
                 }, {
-                    data: 'rencana_kerja'
+                    data: 'id'
                 }, {
                     data: 'aspek_skp'
                 }, {
@@ -120,7 +120,7 @@
                 }, {
                     data: 'realisasi_bulanan'
                 }, {
-                    data: 'rencana_kerja'
+                    data: 'id'
                 }],
                 // }, {
                 //     data: 'jenis'
@@ -216,26 +216,13 @@
 
                     //     }
                     // },
-                    // {
-                    //     targets: 8,
-                    //     render: function(data) {
-                    //         let html = '';
-                    //         let target = 0;
-                    //         html += '<ul style="list-style:none">';
-                    //         $.each(data, function(x, y) {
-                    //             $.each(y.realisasi_skp, function(a, b) {
-                    //                 if (b.bulan == bulan) {
-                    //                     html +=
-                    //                         `<li style="margin-bottom:4rem">${b.realisasi_bulanan}<li>`;
-                    //                 }
-                    //             })
+                    {
+                        targets: 3,
+                        render: function(data, type, row, meta) {
+                            return row.rencana_kerja;
 
-                    //         })
-                    //         html += '</ul>';
-                    //         return html;
-
-                    //     }
-                    // },
+                        }
+                    },
                     {
                         targets: -1,
                         title: 'Actions',

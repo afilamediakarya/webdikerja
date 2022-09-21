@@ -87,7 +87,7 @@
                 processing: true,
                 ajax: '/realisasi/datatable?bulan=' + bulan,
                 columns: [{
-                    data: 'rencana_kerja',
+                    data: 'id',
                     render: function(data, type, row, meta) {
                         let id = row.id;
 
@@ -107,7 +107,7 @@
                 }, {
                     data: 'jenis'
                 }, {
-                    data: 'rencana_kerja'
+                    data: 'id'
                 }, {
                     data: 'aspek_skp'
                 }, {
@@ -117,11 +117,19 @@
                 }, {
                     data: 'aspek_skp'
                 }, {
-                    data: 'rencana_kerja'
+                    data: 'id'
                 }],
                 columnDefs: [{
                         targets: 1,
                         visible: false
+                    },
+                    {
+                        targets: 2,
+                        render: function(data, type, row, meta) {
+
+                            return row.rencana_kerja;
+
+                        }
                     },
                     {
                         targets: 3,
