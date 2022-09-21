@@ -289,7 +289,7 @@
                                     <span class="text-muted">Total TPP yang diterima</span>
                                 </div>
                                 <div class="font-weight-bolder">
-                                    <span class="text-dark">Rp.0</span>
+                                    <span class="text-dark">Rp.{{ $data['informasi_tpp']['tpp_diterima'] }}</span>
                                 </div>
                             </div>
                         </div>
