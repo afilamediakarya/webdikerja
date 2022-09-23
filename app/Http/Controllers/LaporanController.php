@@ -2209,7 +2209,7 @@ class LaporanController extends Controller
     public function exportrekapOpd($data, $type, $startDate, $endDate)
     {
 
-
+        // return $data;
 
         $spreadsheet = new Spreadsheet();
 

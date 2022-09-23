@@ -46,7 +46,7 @@ class AuthController extends Controller
                 $data = $response->json();
                 // return $data;
                 session(['user' => $response->json()]);
-                session(['user_details' => $response->json()['current']['pegawai']]);
+                session(['user_details' => $response->json()['current']]);
                 // session(['atasan' => $response->json()['check_atasan']]);
                 session(['tahun' => date("Y")]);
                 if ($data['role'] == 'admin_opd') {
