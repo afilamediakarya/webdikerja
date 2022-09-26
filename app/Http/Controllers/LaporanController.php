@@ -49,6 +49,12 @@ class LaporanController extends Controller
         $id_pegawai = session()->get('user.current.id_pegawai');
         $pegawai = Http::withToken($token)->get($url . "/jabatan/pegawaiBySatuanKerja")->collect();
 
+        if ($level == 'super_admin') {
+            $dataDinas = Http::withToken($token)->get($url . "/satuan_kerja/list");
+            $getDataDinas = $dataDinas['data'];
+            return view('pages.laporan.skp', compact('page_title', 'page_description', 'breadcumb', 'level', 'pegawai', 'id_pegawai', 'getDataDinas'));
+        }
+
         return view('pages.laporan.skp', compact('page_title', 'page_description', 'breadcumb', 'level', 'pegawai', 'id_pegawai'));
     }
 
@@ -137,11 +143,11 @@ class LaporanController extends Controller
 
     public function getRekapSkp($bulan)
     {
-
         $url = env('API_URL');
         $token = session()->get('user.access_token');
         // $data = Http::withToken($token)->get($url . "/laporan/skp/" . $level);
-        $data = Http::withToken($token)->get($url . "/laporan/skp/rekapitulasi/" . $bulan);
+        // $data = Http::withToken($token)->get($url . "/laporan/skp/rekapitulasi/" . $bulan);
+        $data =  (request('dinas') !== null) ? Http::withToken($token)->get($url . "/laporan/skp/rekapitulasi/$bulan?dinas=" . request('dinas')) : Http::withToken($token)->get($url . "/laporan/skp/rekapitulasi/" . $bulan);
         return $data;
     }
 
@@ -169,7 +175,8 @@ class LaporanController extends Controller
             ->setKeywords('pdf php')
             ->setCategory('Laporan Rekapitulasi SKP Satuan Kerja');
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
 
         $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
 
@@ -196,39 +203,59 @@ class LaporanController extends Controller
         $periode = date("01", strtotime($tahun)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
         $sheet->setCellValue('C3', ': ' . $periode)->mergeCells('C3:K3');
 
+        // $sheet->setCellValue('A4', 'No')->mergeCells('A4:A4');
+        // $sheet->getColumnDimension('A')->setWidth(8);
+        // $sheet->setCellValue('B4', 'Nama / NIP / Pangkat Golongan')->mergeCells('B4:C4');
+        // $sheet->getColumnDimension('B')->setWidth(1);
+        // $sheet->getColumnDimension('C')->setWidth(30);
+        // $sheet->setCellValue('D4', 'Nama Jabatan');
+        // $sheet->getColumnDimension('D')->setWidth(30);
+        // $sheet->setCellValue('E4', 'Jumlah Pemangku');
+        // $sheet->getColumnDimension('E')->setWidth(5);
+        // $sheet->setCellValue('F4', 'Unit Kerja Eselon II');
+        // $sheet->getColumnDimension('F')->setWidth(20);
+        // $sheet->setCellValue('G4', 'Unit Kerja Eselon III');
+        // $sheet->getColumnDimension('G')->setWidth(20);
+        // $sheet->setCellValue('H4', 'Unit Kerja Eselon IV');
+        // $sheet->getColumnDimension('H')->setWidth(20);
+        // $sheet->setCellValue('I4', 'Kelas');
+        // $sheet->getColumnDimension('I')->setWidth(5);
+        // $sheet->setCellValue('J4', 'Nilai SKP Bulanan');
+        // $sheet->getColumnDimension('J')->setWidth(5);
+        // $sheet->setCellValue('K4', 'Status');
+        // $sheet->getColumnDimension('K')->setWidth(10);
+        // $sheet->setCellValue('L4', 'Keterangan');
+        // $sheet->getColumnDimension('L')->setWidth(5);
+
         $sheet->setCellValue('A4', 'No')->mergeCells('A4:A4');
         $sheet->getColumnDimension('A')->setWidth(8);
         $sheet->setCellValue('B4', 'Nama / NIP / Pangkat Golongan')->mergeCells('B4:C4');
         $sheet->getColumnDimension('B')->setWidth(1);
-        $sheet->getColumnDimension('C')->setWidth(30);
+        $sheet->getColumnDimension('C')->setWidth(40);
         $sheet->setCellValue('D4', 'Nama Jabatan');
-        $sheet->getColumnDimension('D')->setWidth(30);
-        $sheet->setCellValue('E4', 'Jumlah Pemangku');
-        $sheet->getColumnDimension('E')->setWidth(5);
-        $sheet->setCellValue('F4', 'Unit Kerja Eselon II');
-        $sheet->getColumnDimension('F')->setWidth(20);
-        $sheet->setCellValue('G4', 'Unit Kerja Eselon III');
-        $sheet->getColumnDimension('G')->setWidth(20);
-        $sheet->setCellValue('H4', 'Unit Kerja Eselon IV');
-        $sheet->getColumnDimension('H')->setWidth(20);
-        $sheet->setCellValue('I4', 'Kelas');
-        $sheet->getColumnDimension('I')->setWidth(5);
-        $sheet->setCellValue('J4', 'Nilai SKP Bulanan');
-        $sheet->getColumnDimension('J')->setWidth(5);
-        $sheet->setCellValue('K4', 'Status');
-        $sheet->getColumnDimension('K')->setWidth(10);
-        $sheet->setCellValue('L4', 'Keterangan');
-        $sheet->getColumnDimension('L')->setWidth(5);
+        $sheet->getColumnDimension('D')->setWidth(50);
+        $sheet->setCellValue('E4', 'Nilai SKP Bulanan');
+        $sheet->getColumnDimension('E')->setWidth(10);
 
         $cell = 4;
 
+        // $sheet->getStyle('A1')->getFont()->setSize(12);
+        // $sheet->getStyle('A:L')->getAlignment()->setWrapText(true);
+        // $sheet->getStyle('A4:L4')->getFont()->setBold(true);
+        // $sheet->getStyle('A4:L4')->getAlignment()->setVertical('center')->setHorizontal('center');
+        // $sheet->getStyle('A5:A' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center')->setHorizontal('center');
+        // $sheet->getStyle('D5:D' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center');
+        // $sheet->getStyle('J5:J' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center')->setHorizontal('center');
+        // $sheet->getStyle('A1')->getAlignment()->setVertical('center')->setHorizontal('center');
         $sheet->getStyle('A1')->getFont()->setSize(12);
-        $sheet->getStyle('A:L')->getAlignment()->setWrapText(true);
-        $sheet->getStyle('A4:L4')->getFont()->setBold(true);
-        $sheet->getStyle('A4:L4')->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('A:E')->getAlignment()->setWrapText(true);
+        $sheet->getStyle('A4:E4')->getFont()->setBold(true);
+        $sheet->getStyle('A4:E4')->getAlignment()->setVertical('center')->setHorizontal('center');
         $sheet->getStyle('A5:A' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('B5:B' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center');
+        $sheet->getStyle('C5:C' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center');
         $sheet->getStyle('D5:D' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center');
-        $sheet->getStyle('J5:J' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('E5:E' . (count($data['list_pegawai']) + $cell))->getAlignment()->setVertical('center')->setHorizontal('center');
         $sheet->getStyle('A1')->getAlignment()->setVertical('center')->setHorizontal('center');
 
         // return $data;
@@ -303,13 +330,7 @@ class LaporanController extends Controller
                                 $kategori_ = '';
                                 if ($rr['bulan'] ==  $bulan) {
 
-                                    $single_rate = 0;
-
-                                    if ($rr['target'] > 0) {
-                                        // $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                                        $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                                    }
-
+                                    $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
 
                                     if ($single_rate > 110) {
                                         $nilai_iki = 110 + ((120 - 110) / (110 - 101)) * (110 - 101);
@@ -373,11 +394,7 @@ class LaporanController extends Controller
                                 $kategori_ = '';
                                 if ($rr['bulan'] ==  $bulan) {
                                     // set capaian_iki based realisasi / target
-                                    $capaian_iki = 0;
-
-                                    if ($rr['target'] > 0) {
-                                        $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                                    }
+                                    $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
 
                                     // set nilai_iki based capaian_iki
                                     if ($capaian_iki >= 101) {
@@ -475,7 +492,8 @@ class LaporanController extends Controller
             }
 
             $total_nilai = round($nilai_utama + $nilai_tambahan, 1);
-            $sheet->setCellValue('J' . $cell, $total_nilai);
+            // $sheet->setCellValue('J' . $cell, $total_nilai);
+            $sheet->setCellValue('E' . $cell, $total_nilai);
         }
 
         $border = [
@@ -487,7 +505,8 @@ class LaporanController extends Controller
             ],
         ];
 
-        $sheet->getStyle('A4:L' . $cell)->applyFromArray($border);
+        // $sheet->getStyle('A4:L' . $cell)->applyFromArray($border);
+        $sheet->getStyle('A4:E' . $cell)->applyFromArray($border);
 
         if ($type == 'excel') {
             // Untuk download 
@@ -679,8 +698,8 @@ class LaporanController extends Controller
                         $sum_capaian = 0;
                         $kategori_ = '';
                         if ($rr['bulan'] ==  $bulan) {
-                            // $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                            // $sum_capaian += $capaian_iki;
+                            $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                            $sum_capaian += $capaian_iki;
                             $sheet->setCellValue('F' . $cell, $rr['target'] . ' ' . $v['satuan']);
                         }
                     }
@@ -714,8 +733,8 @@ class LaporanController extends Controller
                         $sum_capaian = 0;
                         $kategori_ = '';
                         if ($rr['bulan'] ==  $bulan) {
-                            // $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                            // $sum_capaian += $capaian_iki;
+                            $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                            $sum_capaian += $capaian_iki;
                             $sheet->setCellValue('F' . $cell, $rr['target'] . ' ' . $v['satuan']);
                         }
                     }
@@ -1201,11 +1220,7 @@ class LaporanController extends Controller
                         if ($rr['bulan'] ==  $bulan) {
                             $sheet->setCellValue('D' . $cell, $rr['target'] . ' ' . $v['satuan']);
                             $sheet->setCellValue('E' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'] . ' ' . $v['satuan']);
-
-                            $single_rate = 0;
-                            if ($rr['target'] > 0) {
-                                $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                            }
+                            $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
 
                             $sheet->setCellValue('F' . $cell, round($single_rate, 0) . ' %');
                             if ($single_rate > 110) {
@@ -1298,11 +1313,7 @@ class LaporanController extends Controller
                         if ($rr['bulan'] ==  $bulan) {
                             $sheet->setCellValue('D' . $cell, $rr['target'] . ' ' . $v['satuan']);
                             $sheet->setCellValue('E' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'] . ' ' . $v['satuan']);
-
-                            $single_rate = 0;
-                            if ($rr['target'] > 0) {
-                                $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                            }
+                            $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
 
 
                             $sheet->setCellValue('F' . $cell, round($single_rate, 0) . ' %');
@@ -1611,10 +1622,7 @@ class LaporanController extends Controller
                                 $sheet->setCellValue('F' . $cell, $rr['target'] . ' ' . $v['satuan']);
                                 $sheet->setCellValue('G' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'] . ' ' . $v['satuan']);
 
-                                $capaian_iki = 0;
-                                if ($rr['target'] > 0) {
-                                    $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                                }
+                                $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
 
                                 // return $capaian_iki;
 
@@ -1845,11 +1853,7 @@ class LaporanController extends Controller
                         if ($rr['bulan'] ==  $bulan) {
                             $sheet->setCellValue('F' . $cell, $rr['target'] . ' ' . $v['satuan']);
                             $sheet->setCellValue('G' . $cell, $v['realisasi_skp'][$mk]['realisasi_bulanan'] . ' ' . $v['satuan']);
-
-                            $capaian_iki = 0;
-                            if ($rr['target'] > 0) {
-                                $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
-                            }
+                            $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
 
                             if ($capaian_iki >= 101) {
                                 $sheet->setCellValue('H' . $cell, round($capaian_iki, 0) . ' %');
@@ -2208,9 +2212,7 @@ class LaporanController extends Controller
 
     public function exportrekapOpd($data, $type, $startDate, $endDate)
     {
-
         // return $data;
-
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
@@ -2314,10 +2316,9 @@ class LaporanController extends Controller
 
         // $jml_hari_kerja = [];
         foreach ($data['pegawai'] as $i => $val) {
-            // return $val;
             $sheet->getRowDimension($cell)->setRowHeight(30);
             $selisih_waktu = 0;
-            $jml_hari_kerja = 0;
+            $jml_hari_kerja = [];
             $kmk_30 = [];
             $kmk_60 = [];
             $kmk_90 = [];
@@ -2327,23 +2328,17 @@ class LaporanController extends Controller
             $cpk_90 = [];
             $cpk_90_keatas = [];
             $date_val = array();
-            $filter_date = array();
             $jml_tanpa_keterangan = 0;
             $nums = 0;
             $sheet->setCellValue('B' . $cell, $i + 1);
             $sheet->setCellValue('C' . $cell, $val[0]['pegawai']['nama'] . ' ' . PHP_EOL . ' ' . $val[0]['pegawai']['nip']);
             $sheet->setCellValue('D' . $cell, $data['hari_kerja']);
             foreach ($val as $t => $v) {
-       
-                if (isset($v['tanggal_absen'])) {
-                    $filter_date[$v['tanggal_absen']][] = $v['tanggal_absen'];
-                }
-               
                 if (isset($v['status'])) {
                     // if ($v['status'] == 'hadir') {
+                    array_push($date_val, $v['tanggal_absen']);
                     if ($v['jenis'] == 'checkin') {
-                        array_push($date_val, $v['tanggal_absen']);
-                        $jml_hari_kerja += 1;
+                        $jml_hari_kerja[] = $v['id'];
                         $selisih_waktu = $this->konvertWaktu('checkin', $v['waktu_absen']);
 
                         if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
@@ -2373,41 +2368,17 @@ class LaporanController extends Controller
                 }
             }
 
-    
+            // return $date_val;
             foreach ($data['range'] as $k => $vv) {
                 if (in_array($vv, $date_val) == false) {
                     $jml_tanpa_keterangan += $nums + 1;
                 }
             }
 
-            // return $filter_date;
-            foreach ($date_val as $j => $b) {
-                if (isset($filter_date[$b])) {
-                    if (count($filter_date[$b]) == 1) {
-                        $cpk_90_keatas[] =  90;
-                    }
-                }
-            }
-
-            // if (count($dataAbsen) == 1) {
-            //     if ($value['date'] < date('Y-m-d')) {
-
-            //         $dataAbsen[1] = [
-            //             'jenis' => 'checkout',
-            //             'status_absen' => 'hadir',
-            //             'waktu_absen' => '14:00:00',
-            //             'keterangan' => 'cepat 90 menit'
-            //         ];
-            //         $jml_kehadiran[$dataAbsen[0]['tanggal_absen']] = 'checkout';
-            //     }
-
-            //     $temps_absensi['cpk']['cpk_90_keatas'][] = 90; 
-            // }
-
             // $jml_tanpa_keterangan = $data['hari_kerja'] - count($jml_hari_kerja);
 
 
-            $sheet->setCellValue('E' . $cell, $jml_hari_kerja);
+            $sheet->setCellValue('E' . $cell, count($jml_hari_kerja));
             $sheet->setCellValue('F' . $cell, $jml_tanpa_keterangan);
             $sheet->setCellValue('G' . $cell, $jml_tanpa_keterangan * 3);
             $sheet->setCellValue('H' . $cell, '%');
@@ -2429,10 +2400,6 @@ class LaporanController extends Controller
             $sheet->setCellValue('X' . $cell, count($cpk_90_keatas) * 1.5);
             $sheet->setCellValue('Y' . $cell, 0);
             $sheet->setCellValue('Z' . $cell, 0);
-
-            // return $jml_tanpa_keterangan;
-
-            // return ($jml_tanpa_keterangan * 3) .' || '. (count($kmk_30) * 0.5) .' || '. (count($kmk_60)) .' || '. (count($kmk_90) * 1.25) .' || '. (count($kmk_90_keatas) * 1.5) .' || '. (count($cpk_30) * 0.5) .' || '. (count($cpk_60)) .' || '. (count($cpk_90) * 1.25) .' || '. count($cpk_90_keatas) * 1.5;
 
 
             $jml_potongan_kehadiran = ($jml_tanpa_keterangan * 3) + (count($kmk_30) * 0.5) + (count($kmk_60)) + (count($kmk_90) * 1.25) + (count($kmk_90_keatas) * 1.5) + (count($cpk_30) * 0.5) + (count($cpk_60)) + (count($cpk_90) * 1.25) + count($cpk_90_keatas) * 1.5;

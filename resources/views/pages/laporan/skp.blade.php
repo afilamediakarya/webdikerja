@@ -49,7 +49,18 @@
                                 </select>
                             </div>
 
-                            @if ($level == 'admin_opd' || $level == 'super_admin')
+                            @if ($level == 'super_admin')
+                                <div class="form-group col-3">
+                                    <label>Pilih Dinas</label>
+                                    <select id="dinas" class="form-control form-control-solid">
+                                        <option disabled selected>Pilih Dinas</option>
+                                        <option value="0">Semua Dinas</option>
+                                        @foreach ($getDataDinas as $item)
+                                            <option value="{{ $item['id'] }}">{{ $item['nama_satuan_kerja'] }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @elseif ($level == 'admin_opd')
                                 <div class="form-group col-3">
                                     <label>Pilih Pegawai</label>
                                     <select id="pegawai" class="form-control form-control-solid">
@@ -88,7 +99,6 @@
 @section('script')
     <script>
         let level = {!! json_encode($level) !!};
-        // let id_pegawai = {!! json_encode($id_pegawai) !!};
 
         jQuery(document).ready(function() {
 
@@ -102,6 +112,9 @@
 
             $('#pegawai').select2({
                 placeholder: "Pilih Pegawai"
+            });
+            $('#dinas').select2({
+                placeholder: "Pilih Dinas"
             });
             $('#bulan').select2({
                 placeholder: "Pilih Bulan"
@@ -120,7 +133,17 @@
 
                 let pegawai = $('#pegawai').val();
                 if (jenis_skp !== null && bulan !== null) {
-                    if (level == 'admin_opd') {
+                    if (level == 'super_admin') {
+                        let idDinas = $('#dinas').val();
+                        url =
+                            `/laporan/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}?dinas=${idDinas}`;
+                        window.open(url);
+                        $('#dinas').val(null).trigger("change");
+                        $('#jenis-skp-select').val(null).trigger("change");
+                        $('#bulan').val(null).trigger("change");
+
+                    } else if (level == 'admin_opd') {
+
                         if (id_pegawai == 0) {
                             url = `/laporan/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}`;
                             window.open(url);
