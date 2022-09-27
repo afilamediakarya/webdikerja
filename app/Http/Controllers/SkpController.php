@@ -262,7 +262,7 @@ class SkpController extends Controller
         } else {
             $result = [];
             $aspek = [];
-            $current_user = session()->get('user.current');
+            $current_user = session()->get('user_details');
 
             for ($i = 0; $i < count($request->indikator_kerja_individu); $i++) {
 
@@ -279,7 +279,7 @@ class SkpController extends Controller
             // 
             $result = [
                 'type_skp' => $request['type_skp'],
-                'id_satuan_kerja' => $current_user['pegawai']['id_satuan_kerja'],
+                'id_satuan_kerja' => $current_user['id_satuan_kerja'],
                 'id_skp_atasan' => $request['sasaran_kinerja'],
                 'jenis' => $request['jenis_kinerja'],
                 'rencana_kerja' => $request['rencana_kerja'],
