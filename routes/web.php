@@ -27,6 +27,8 @@ use App\Http\Controllers\Admin\Master\FaqController;
 use App\Http\Controllers\Admin\Master\SatuanController;
 use App\Http\Controllers\Admin\Master\PerilakuController;
 use App\Http\Controllers\Admin\Master\MasterController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RiwayatController;
 
 /*
 
@@ -117,6 +119,10 @@ Route::middleware('Auth')->group(function () {
         Route::get('/{id}', [bankomController::class, 'show'])->name('show-bankom');
         Route::post('/{id}', [bankomController::class, 'update'])->name('update-bankom');
         Route::delete('/{id}', [bankomController::class, 'delete'])->name('delete-bankom');
+    });
+
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'index'])->name('profile');
     });
 
 
