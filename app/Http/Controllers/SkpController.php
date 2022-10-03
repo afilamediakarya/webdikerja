@@ -9,6 +9,7 @@ class SkpController extends Controller
 {
     public function checkLevel()
     {
+        dd(session()->get('user'));
         $level = session()->get('user.level_jabatan');
         return $level;
     }
@@ -156,6 +157,7 @@ class SkpController extends Controller
         $data = $dataById['data'];
 
         $level = $this->checkLevel();
+        return $level;
 
         if ($type == 'tahunan') {
             return view('pages.skp.edit', compact('page_title', 'page_description', 'breadcumb', 'sasaran_kinerja_atasan', 'data', 'level'));
@@ -403,9 +405,9 @@ class SkpController extends Controller
             return response()->json($validated, 422);
         } else {
             $result = [];
-            $current_user = session()->get('user.current');
+            $current_user = session()->get('user_details');
             $result = [
-                'id_satuan_kerja' => $current_user['pegawai']['id_satuan_kerja'],
+                'id_satuan_kerja' => $current_user['id_satuan_kerja'],
                 'indikator_kerja_individu' => $request->indikator_kerja_individu,
                 'jenis_kinerja' => $request->jenis_kinerja,
                 'rencana_kerja' => $request->rencana_kerja,
@@ -438,7 +440,7 @@ class SkpController extends Controller
             $result = [];
             $aspek = [];
             $aspek_additional = [];
-            $current_user = session()->get('user.current');
+            $current_user = session()->get('user_details');
 
             for ($i = 0; $i < count($request->indikator_kerja_individu); $i++) {
 
@@ -466,7 +468,7 @@ class SkpController extends Controller
 
             $result = [
                 'type_skp' => $request['type_skp'],
-                'id_satuan_kerja' => $current_user['pegawai']['id_satuan_kerja'],
+                'id_satuan_kerja' => $current_user['id_satuan_kerja'],
                 'id_skp_atasan' => $request['sasaran_kinerja'],
                 'jenis' => $request['jenis_kinerja'],
                 'rencana_kerja' => $request['rencana_kerja'],
@@ -495,7 +497,7 @@ class SkpController extends Controller
             // $aspek = [];
             // $target_bulan = [$request->target_kualitas,$request->target_kuantitas,$request->target_waktu];
             // $type_aspek = ['kuantitas','kualitas','waktu'];
-            // $current_user = session()->get('user.current');
+            // $current_user = session()->get('user_details');
 
             // for ($i=0; $i < count($request->iki); $i++) { 
 
@@ -509,7 +511,7 @@ class SkpController extends Controller
 
             // // 
             // $result = [
-            //     'id_satuan_kerja' =>$current_user['pegawai']['id_satuan_kerja'],
+            //     'id_satuan_kerja' =>$current_user['id_satuan_kerja'],
             //     'id_skp_atasan' => $request['sasaran_kinerja'],
             //     'jenis' => $request['jenis_kinerja'],
             //     'rencana_kerja' => $request['rencana_kerja'],
@@ -553,9 +555,9 @@ class SkpController extends Controller
                 $satuan[] = $request->satuan[$iki];
                 $target_[] = $request->target_[$iki];
             }
-            $current_user = session()->get('user.current');
+            $current_user = session()->get('user_details');
             $result = [
-                'id_satuan_kerja' => $current_user['pegawai']['id_satuan_kerja'],
+                'id_satuan_kerja' => $current_user['id_satuan_kerja'],
                 'indikator_kerja_individu' => $indikator_kerja_individu,
                 'jenis_kinerja' => $request->jenis_kinerja,
                 'rencana_kerja' => $request->rencana_kerja,
