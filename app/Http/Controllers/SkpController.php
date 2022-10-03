@@ -9,7 +9,7 @@ class SkpController extends Controller
 {
     public function checkLevel()
     {
-        dd(session()->get('user'));
+
         $level = session()->get('user.level_jabatan');
         return $level;
     }
@@ -157,7 +157,6 @@ class SkpController extends Controller
         $data = $dataById['data'];
 
         $level = $this->checkLevel();
-        return $level;
 
         if ($type == 'tahunan') {
             return view('pages.skp.edit', compact('page_title', 'page_description', 'breadcumb', 'sasaran_kinerja_atasan', 'data', 'level'));
