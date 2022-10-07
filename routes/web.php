@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\Master\PerilakuController;
 use App\Http\Controllers\Admin\Master\MasterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RiwayatController;
+use App\Http\Controllers\VerifikasiController;
 
 /*
 
@@ -123,6 +124,15 @@ Route::middleware('Auth')->group(function () {
 
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'index'])->name('profile');
+        Route::get('/pendidikan-formal/{id}', [ProfileController::class, 'getPendidikanFormal'])->name('get-pendidikan-formal');
+        Route::get('/list-pendidikan-formal', [ProfileController::class, 'listPendidikanFormal'])->name('list-pendidikan-formal');
+        Route::post('/add-pendidikan-formal', [ProfileController::class, 'storePendidikanFormal'])->name('add-pendidikan-formal');
+        Route::post('/update-pendidikan-formal', [ProfileController::class, 'updatePendidikanFormal'])->name('update-pendidikan-formal');
+        Route::delete('/delete-pendidikan-formal/{id}', [ProfileController::class, 'deletePendidikanFormal'])->name('delete-pendidikan-formal');
+    });
+
+    Route::prefix('verifikasi')->group(function () {
+        Route::get('/pendidikan-formal', [VerifikasiController::class, 'pendidikanFormal'])->name('pendidikan-formal');
     });
 
 

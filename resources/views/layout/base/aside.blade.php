@@ -64,6 +64,42 @@
                         </a>
                     </li>
 
+                    <li class="menu-item {{ Request::path() == 'profile' ? 'menu-item-active' : '' }}"
+                        aria-haspopup="true">
+                        <a href="{{ url('/profile') }}" class="menu-link">
+                            <span class="svg-icon menu-icon">
+                                <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo9\dist/../src/media/svg/icons\Communication\Clipboard-list.svg--><svg
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24" />
+                                        <path
+                                            d="M8,3 L8,3.5 C8,4.32842712 8.67157288,5 9.5,5 L14.5,5 C15.3284271,5 16,4.32842712 16,3.5 L16,3 L18,3 C19.1045695,3 20,3.8954305 20,5 L20,21 C20,22.1045695 19.1045695,23 18,23 L6,23 C4.8954305,23 4,22.1045695 4,21 L4,5 C4,3.8954305 4.8954305,3 6,3 L8,3 Z"
+                                            fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                        <path
+                                            d="M11,2 C11,1.44771525 11.4477153,1 12,1 C12.5522847,1 13,1.44771525 13,2 L14.5,2 C14.7761424,2 15,2.22385763 15,2.5 L15,3.5 C15,3.77614237 14.7761424,4 14.5,4 L9.5,4 C9.22385763,4 9,3.77614237 9,3.5 L9,2.5 C9,2.22385763 9.22385763,2 9.5,2 L11,2 Z"
+                                            fill="#000000" fill-rule="nonzero" />
+                                        <rect fill="#000000" fill-rule="nonzero" opacity="0.3" x="10"
+                                            y="9" width="7" height="2" rx="1" />
+                                        <rect fill="#000000" fill-rule="nonzero" opacity="0.3" x="7"
+                                            y="9" width="2" height="2" rx="1" />
+                                        <rect fill="#000000" fill-rule="nonzero" opacity="0.3" x="7"
+                                            y="13" width="2" height="2" rx="1" />
+                                        <rect fill="#000000" fill-rule="nonzero" opacity="0.3" x="10"
+                                            y="13" width="7" height="2" rx="1" />
+                                        <rect fill="#000000" fill-rule="nonzero" opacity="0.3" x="7"
+                                            y="17" width="2" height="2" rx="1" />
+                                        <rect fill="#000000" fill-rule="nonzero" opacity="0.3" x="10"
+                                            y="17" width="7" height="2" rx="1" />
+                                    </g>
+                                </svg>
+                                <!--end::Svg Icon-->
+                            </span>
+
+                            <span class="menu-text text-capitalize">Profile</span>
+                        </a>
+                    </li>
+
                     <li class="menu-item menu-item-submenu {{ str_contains(Request::path(), 'skp') ? 'menu-item-active menu-item-open' : '' }}"
                         aria-haspopup="true" data-menu-toggle="hover">
                         <a href="javascript:;" class="menu-link menu-toggle">
@@ -73,8 +109,8 @@
                                     width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                         <rect x="0" y="0" width="24" height="24" />
-                                        <rect fill="#000000" opacity="0.3" x="2" y="3" width="20"
-                                            height="18" rx="2" />
+                                        <rect fill="#000000" opacity="0.3" x="2" y="3"
+                                            width="20" height="18" rx="2" />
                                         <path
                                             d="M9.9486833,13.3162278 C9.81256925,13.7245699 9.43043041,14 9,14 L5,14 C4.44771525,14 4,13.5522847 4,13 C4,12.4477153 4.44771525,12 5,12 L8.27924078,12 L10.0513167,6.68377223 C10.367686,5.73466443 11.7274983,5.78688777 11.9701425,6.75746437 L13.8145063,14.1349195 L14.6055728,12.5527864 C14.7749648,12.2140024 15.1212279,12 15.5,12 L19,12 C19.5522847,12 20,12.4477153 20,13 C20,13.5522847 19.5522847,14 19,14 L16.118034,14 L14.3944272,17.4472136 C13.9792313,18.2776054 12.7550291,18.143222 12.5298575,17.2425356 L10.8627389,10.5740611 L9.9486833,13.3162278 Z"
                                             fill="#000000" fill-rule="nonzero" />
@@ -323,42 +359,6 @@
                             <span class="menu-text text-capitalize">Bankom</span>
                         </a>
                     </li>
-
-                    <li class="menu-item {{ Request::path() == 'profile' ? 'menu-item-active' : '' }}"
-                        aria-haspopup="true">
-                        <a href="{{ url('/profile') }}" class="menu-link">
-                            <span class="svg-icon menu-icon">
-                                <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\themes\metronic\theme\html\demo9\dist/../src/media/svg/icons\Communication\Clipboard-list.svg--><svg
-                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <rect x="0" y="0" width="24" height="24" />
-                                        <path
-                                            d="M8,3 L8,3.5 C8,4.32842712 8.67157288,5 9.5,5 L14.5,5 C15.3284271,5 16,4.32842712 16,3.5 L16,3 L18,3 C19.1045695,3 20,3.8954305 20,5 L20,21 C20,22.1045695 19.1045695,23 18,23 L6,23 C4.8954305,23 4,22.1045695 4,21 L4,5 C4,3.8954305 4.8954305,3 6,3 L8,3 Z"
-                                            fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                        <path
-                                            d="M11,2 C11,1.44771525 11.4477153,1 12,1 C12.5522847,1 13,1.44771525 13,2 L14.5,2 C14.7761424,2 15,2.22385763 15,2.5 L15,3.5 C15,3.77614237 14.7761424,4 14.5,4 L9.5,4 C9.22385763,4 9,3.77614237 9,3.5 L9,2.5 C9,2.22385763 9.22385763,2 9.5,2 L11,2 Z"
-                                            fill="#000000" fill-rule="nonzero" />
-                                        <rect fill="#000000" fill-rule="nonzero" opacity="0.3" x="10"
-                                            y="9" width="7" height="2" rx="1" />
-                                        <rect fill="#000000" fill-rule="nonzero" opacity="0.3" x="7"
-                                            y="9" width="2" height="2" rx="1" />
-                                        <rect fill="#000000" fill-rule="nonzero" opacity="0.3" x="7"
-                                            y="13" width="2" height="2" rx="1" />
-                                        <rect fill="#000000" fill-rule="nonzero" opacity="0.3" x="10"
-                                            y="13" width="7" height="2" rx="1" />
-                                        <rect fill="#000000" fill-rule="nonzero" opacity="0.3" x="7"
-                                            y="17" width="2" height="2" rx="1" />
-                                        <rect fill="#000000" fill-rule="nonzero" opacity="0.3" x="10"
-                                            y="17" width="7" height="2" rx="1" />
-                                    </g>
-                                </svg>
-                                <!--end::Svg Icon-->
-                            </span>
-
-                            <span class="menu-text text-capitalize">Profile</span>
-                        </a>
-                    </li>
                 @endif
 
                 @if (Session::get('user.role') != 'pegawai')
@@ -538,6 +538,47 @@
                             </ul>
                         </div>
                     </li>
+
+                    {{-- @if (Session::get('user.role') == 'admin_opd')
+                        <li class="menu-item menu-item-submenu {{ str_contains(Request::path(), 'admin/verifikasi') ? 'menu-item-active menu-item-open' : '' }}"
+                            aria-haspopup="true" data-menu-toggle="hover">
+                            <a href="javascript:;" class="menu-link menu-toggle">
+                                <span class="svg-icon menu-icon">
+                                    <!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-arrange.svg-->
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path
+                                                d="M4.85714286,1 L11.7364114,1 C12.0910962,1 12.4343066,1.12568431 12.7051108,1.35473959 L17.4686994,5.3839416 C17.8056532,5.66894833 18,6.08787823 18,6.52920201 L18,19.0833333 C18,20.8738751 17.9795521,21 16.1428571,21 L4.85714286,21 C3.02044787,21 3,20.8738751 3,19.0833333 L3,2.91666667 C3,1.12612489 3.02044787,1 4.85714286,1 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z"
+                                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                            <path
+                                                d="M6.85714286,3 L14.7364114,3 C15.0910962,3 15.4343066,3.12568431 15.7051108,3.35473959 L20.4686994,7.3839416 C20.8056532,7.66894833 21,8.08787823 21,8.52920201 L21,21.0833333 C21,22.8738751 20.9795521,23 19.1428571,23 L6.85714286,23 C5.02044787,23 5,22.8738751 5,21.0833333 L5,4.91666667 C5,3.12612489 5.02044787,3 6.85714286,3 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z"
+                                                fill="#000000" fill-rule="nonzero" />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-text text-capitalize">Verifikasi</span>
+                                <i class="menu-arrow"></i>
+                            </a>
+                            <div class="menu-submenu">
+                                <i class="menu-arrow"></i>
+                                <ul class="menu-subnav">
+                                    @if (Session::get('user.role') == 'admin_opd')
+                                        <li class="menu-item" aria-haspopup="true">
+                                            <a href="{{ url('/verifikasi/pendidikan-formal') }}" class="menu-link">
+                                                <i class="menu-bullet menu-bullet-dot">
+                                                    <span></span>
+                                                </i>
+                                                <span class="menu-text text-capitalize">Pendidikan Formal</span>
+                                            </a>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
+                        </li>
+                    @endif --}}
 
                     <li class="menu-item {{ str_contains(Request::path(), 'jabatan') ? 'menu-item-active' : '' }}"
                         aria-haspopup="true">
