@@ -38,7 +38,7 @@ var AxiosCall = function() {
                         $(_element)[0].reset();
                         $("#table").toggle();
                         $("#form").toggle();
-                        Panel.action('hide');
+                        PanelForm.action('hide');
                     });
                 }
             }).catch(function(){
@@ -64,7 +64,7 @@ var AxiosCall = function() {
                         $("select[name='"+key+"']").val(value);
                         $("textarea[name='"+key+"']").val(value);
                     });
-                    Panel.action('show','update');
+                    PanelForm.action('show','update');
                 }else{
                     swal.fire({
                         text: "Data tidak ditemukan",
@@ -108,7 +108,7 @@ var AxiosCall = function() {
                                 $(_element)[0].reset();
                                 $("#table").toggle();
                                 $("#form").toggle();
-                                Panel.action('hide');
+                                PanelForm.action('hide');
                             });
                         }else{
                             Swal.fire(
@@ -131,6 +131,7 @@ var AxiosCall = function() {
             });
         },
 
+        // pendidikan formal
         add_pendidikan_formal: function(_url, _data, _element) {
             console.log(_data);
             axios.post( _url, _data)
@@ -162,12 +163,12 @@ var AxiosCall = function() {
                         console.log(_element);
                         dataRow.destroy();
                         dataRow.init();
-                        Panel.action('hide');
-                        $("#createForm")[0].reset();
+                        PanelForm.action('hide');
+                        $("#formal_form")[0].reset();
                         _element[0].reset();
                         $("#document")[0].reset();
                         $("#table").toggle();
-                        $("#createForm").toggle();
+                        $("#formal_form").toggle();
                     });
                 }
             }).catch(function(res){
@@ -211,13 +212,122 @@ var AxiosCall = function() {
                         showConfirmButton:true,
                         confirmButtonText: "OK, Siip",
                     }).then(function() {
+                       console.log(_element);
                         dataRow.destroy();
                         dataRow.init();
-                        Panel.action('hide');
-                        $("#createForm")[0].reset();
+                        PanelForm.action('hide');
+                        $("#formal_form")[0].reset();
                         _element[0].reset();
+                        $("#document")[0].reset();
                         $("#table").toggle();
-                        $("#createForm").toggle();
+                        $("#formal_form").toggle();
+                    });
+                }
+            }).catch(function(res){
+                var data = res.data;
+                console.log(data);
+                swal.fire({
+                    text: "Terjadi Kesalahan Sistem",
+                    title:"Error",
+                    icon: "error",
+                    showConfirmButton:true,
+                    confirmButtonText: "OK",
+                })
+            });
+        },
+
+        // pendidikan nonformal
+        add_pendidikan_nonformal: function(_url, _data, _element) {
+            console.log(_data);
+            console.log(_url);
+            console.log(_element);
+            axios.post( _url, _data)
+            .then(function(res){
+                var data = res.data;
+                console.log(data);
+                if(data.failed){
+                    swal.fire({
+                        text: "Maaf Terjadi Kesalahan",
+                        title:"Error",
+                        timer: 2000,
+                        icon: "danger",
+                        showConfirmButton:false,
+                    });
+                }else if(data.invalid){
+                    $.each(data.invalid, function( key, value ) {
+                        console.log(key);
+                        $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                        $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                    });
+                }else if(data.success){
+                    swal.fire({
+                        text: "Data anda berhasil disimpan",
+                        title:"Sukses",
+                        icon: "success",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        console.log(_element);
+                        dataRowNonformal.destroy();
+                        dataRowNonformal.init();
+                        PanelForm.action('hide');
+                        $("#nonformal_form")[0].reset();
+                        _element[0].reset();
+                        $("#document")[0].reset();
+                        $("#table").toggle();
+                        $("#nonformal_form").toggle();
+                    });
+                }
+            }).catch(function(res){
+                var data = res.data;
+                console.log(data);
+                swal.fire({
+                    text: "Terjadi Kesalahan Sistem",
+                    title:"Error",
+                    icon: "error",
+                    showConfirmButton:true,
+                    confirmButtonText: "OK",
+                })
+            });
+        },
+
+        update_pendidikan_nonformal: function(_url, _data, _element) {
+            console.log(_url);
+            axios.post( _url, _data)
+            .then(function(res){
+                var data = res.data;
+                console.log(data);
+                if(data.failed){
+                    swal.fire({
+                        text: "Maaf Terjadi Kesalahan",
+                        title:"Error",
+                        timer: 2000,
+                        icon: "danger",
+                        showConfirmButton:false,
+                    });
+                }else if(data.invalid){
+                    $.each(data.invalid, function( key, value ) {
+                        console.log(key);
+                        $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                        $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                    });
+                }else if(data.success){
+                    swal.fire({
+                        text: "Data anda berhasil disimpan",
+                        title:"Sukses",
+                        icon: "success",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        console.log(_element);
+                        dataRowNonformal.destroy();
+                        dataRowNonformal.init();
+                        PanelForm.action('hide');
+                        $("#nonformal_form")[0].reset();
+                        _element[0].reset();
+                        $("#document")[0].reset();
+                        $("#table").toggle();
+                        $("#nonformal_form").toggle();
                     });
                 }
             }).catch(function(res){

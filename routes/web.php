@@ -124,11 +124,19 @@ Route::middleware('Auth')->group(function () {
 
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'index'])->name('profile');
-        Route::get('/pendidikan-formal/{id}', [ProfileController::class, 'getPendidikanFormal'])->name('get-pendidikan-formal');
+        // pendidikan formal
         Route::get('/list-pendidikan-formal', [ProfileController::class, 'listPendidikanFormal'])->name('list-pendidikan-formal');
+        Route::get('/pendidikan-formal/{id}', [ProfileController::class, 'getPendidikanFormal'])->name('get-pendidikan-formal');
         Route::post('/add-pendidikan-formal', [ProfileController::class, 'storePendidikanFormal'])->name('add-pendidikan-formal');
         Route::post('/update-pendidikan-formal', [ProfileController::class, 'updatePendidikanFormal'])->name('update-pendidikan-formal');
         Route::delete('/delete-pendidikan-formal/{id}', [ProfileController::class, 'deletePendidikanFormal'])->name('delete-pendidikan-formal');
+
+        // pendidikan non-formal
+        Route::get('/list-pendidikan-nonformal', [ProfileController::class, 'listPendidikanNonFormal'])->name('list-pendidikan-nonformal');
+        Route::post('/add-pendidikan-nonformal', [ProfileController::class, 'storePendidikanNonFormal'])->name('add-pendidikan-nonformal');
+        Route::get('/pendidikan-nonformal/{id}', [ProfileController::class, 'getPendidikanNonFormal'])->name('get-pendidikan-nonformal');
+        Route::post('/update-pendidikan-nonformal', [ProfileController::class, 'updatePendidikanNonFormal'])->name('update-pendidikan-nonformal');
+        Route::delete('/delete-pendidikan-nonformal/{id}', [ProfileController::class, 'deletePendidikanNonFormal'])->name('delete-pendidikan-nonformal');
     });
 
     Route::prefix('verifikasi')->group(function () {

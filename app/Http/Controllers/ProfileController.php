@@ -37,6 +37,7 @@ class ProfileController extends Controller
         return view('pages.Profile.index', compact('page_title', 'page_description', 'breadcumb', 'personalData', 'listPendidikan'));
     }
 
+    // pendidikan formal
     public function listPendidikanFormal()
     {
         $url = env('API_URL');
@@ -171,7 +172,7 @@ class ProfileController extends Controller
 
         if ($response->successful()) {
             // delete file
-            Storage::delete($response['data']['document']);
+            Storage::delete($response['data']['document_formal']);
 
             return response()->json([
                 'success' => 'Meghapus Data',
@@ -181,4 +182,154 @@ class ProfileController extends Controller
 
         return response()->json(['error' => 'Error Hapus Data']);
     }
+    // end pendidikan formal
+
+    // pendidikan non fromal
+    public function listPendidikanNonFormal()
+    {
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $response = Http::withToken($token)->get($url . "/profile/list-pendidikan-nonformal");
+        if ($response->successful()) {
+            $data = $response->json();
+            return $data;
+        } else {
+            return 'err';
+        }
+    }
+
+    public function storePendidikanNonFormal(Request $request)
+    {
+        // return $request->all();
+        $validator = Validator::make($request->all(), [
+            'foto_ijazah' => 'required|max:10000|mimes:jpeg,bmp,png,gif,svg,pdf',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['invalid' => $validator->errors()]);
+        }
+
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+
+        $data = $request->all();
+
+        $imagePath = $request->file('foto_ijazah')->store('ijazah');
+
+        $filtered = array_filter(
+            $data,
+            function ($key) {
+                if (!in_array($key, ['_token', 'id'])) {
+                    return $key;
+                };
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+        $filtered["document_nonformal"] = $imagePath;
+
+        $response = Http::withToken($token)
+            ->post($url . "/profile/store-pendidikan-nonformal", $filtered);
+
+        if ($response->successful()) {
+            $data = $response->object();
+            if (isset($data->status)) {
+                return response()->json([
+                    'success' => 'Berhasil Menambah Data',
+                    'data' => $data
+                ]);
+            } else {
+                return response()->json(['invalid' => $response->json()]);
+            }
+        } else {
+            return response()->json(['failed' => $response->json()]);
+        }
+    }
+
+    public function getPendidikanNonFormal(Request $request, $id)
+    {
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+
+        $data = Http::withToken($token)->get($url . "/profile/get-pendidikan-nonformal/" . $id);
+
+        return $data;
+    }
+
+    public function updatePendidikanNonFormal(Request $request)
+    {
+        $id = request('id');
+        $imagePath = '';
+
+        $validator = Validator::make($request->all(), [
+            'foto_ijazah' => 'max:10000|mimes:jpeg,bmp,png,gif,svg,pdf',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['invalid' => $validator->errors()]);
+        }
+
+        if (request('foto_ijazah')) {
+            Storage::delete(request('document'));
+            $imagePath = $request->file('foto_ijazah')->store('ijazah');
+        }
+
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+
+        $data = $request->all();
+
+        $filtered = array_filter(
+            $data,
+            function ($key) {
+                if (!in_array($key, ['_token', 'id'])) {
+                    return $key;
+                };
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+        $filtered["document_nonformal"] = $imagePath;
+
+
+        $response = Http::withToken($token)
+            ->post($url . "/profile/update-pendidikan-nonformal/$id", $filtered);
+
+        if ($response->successful()) {
+            $data = $response->object();
+            if (isset($data->status)) {
+                return response()->json([
+                    'success' => 'Berhasil Mengubah Data',
+                    'data' => $data
+                ]);
+            } else {
+                return response()->json(['invalid' => $response->json()]);
+            }
+        } else {
+            return response()->json(['failed' => $response->json()]);
+        }
+    }
+
+    public function deletePendidikanNonFormal(Request $request, $id)
+    {
+
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+
+        $response = Http::withToken($token)->delete($url . "/profile/delete-pendidikan-nonformal/$id");
+        $data = $response->object();
+
+        if ($response->successful()) {
+            // delete file
+            Storage::delete($response['data']['document_nonformal']);
+
+            return response()->json([
+                'success' => 'Meghapus Data',
+                'data' => $data
+            ]);
+        }
+
+        return response()->json(['error' => 'Error Hapus Data']);
+    }
+    // end pendidikan non formal
 }

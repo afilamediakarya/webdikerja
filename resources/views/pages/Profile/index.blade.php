@@ -12,7 +12,7 @@
 
 
 {{-- @section('button')
-    <button onclick="Panel.action('show','submit')" class="btn btn-primary font-weight-bolder" id="side_form_open">
+    <button onclick="PanelForm.action('show','submit')" class="btn btn-primary font-weight-bolder" id="side_form_open">
         <span class="svg-icon">
             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg
                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
@@ -59,23 +59,24 @@
                                     </li>
                                     <li class="nav-item w-100 me-0">
                                         <a class="nav-link w-100 btn btn-flex btn-active-light-danger text-left"
-                                            id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                                            aria-controls="contact" aria-selected="false">Riwayat
+                                            id="pendidikan-non-formal-tab" data-toggle="tab" href="#pendidikan_nonformal"
+                                            role="tab" aria-controls="pendidikan-non-formal"
+                                            aria-selected="false">Riwayat
                                             Pendidikan Non Formal</a>
                                     </li>
                                     <li class="nav-item w-100 me-0">
                                         <a class="nav-link w-100 btn btn-flex btn-active-light-success text-left"
-                                            id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                                            aria-controls="contact" aria-selected="false">Riwayat
+                                            id="kepangkatan-tab" data-toggle="tab" href="#kepangkatan" role="tab"
+                                            aria-controls="kepangkatan" aria-selected="false">Riwayat
                                             Kepangkatan</a>
                                     </li>
                                     <li class="nav-item w-100 me-0">
                                         <a class="nav-link w-100 btn btn-flex btn-active-light-success text-left"
-                                            id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                                            aria-controls="contact" aria-selected="false">Riwayat
+                                            id="jabatan-tab" data-toggle="tab" href="#jabatan" role="tab"
+                                            aria-controls="jabatan" aria-selected="false">Riwayat
                                             Jabatan</a>
                                     </li>
-                                    <li class="nav-item w-100 me-0">
+                                    {{-- <li class="nav-item w-100 me-0">
                                         <a class="nav-link w-100 btn btn-flex btn-active-light-success text-left"
                                             id="contact-tab" data-toggle="tab" href="#contact" role="tab"
                                             aria-controls="contact" aria-selected="false">Catatan
@@ -137,12 +138,13 @@
                                             id="contact-tab" data-toggle="tab" href="#contact" role="tab"
                                             aria-controls="contact" aria-selected="false">File
                                             Pegawai</a>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </div>
                             <!-- /.col-md-3 -->
                             <div class="col-md-10">
                                 <div class="tab-content" id="myTabContent">
+
                                     {{-- Begin Personal data --}}
                                     <div class="tab-pane fade show active ml-3" id="personal-data" role="tabpanel"
                                         aria-labelledby="personal-data-tab">
@@ -264,9 +266,8 @@
                                                         <h3 class="card-label">Riwayat Pendidikan Formal</h3>
                                                     </div>
                                                     <div class="card-toolbar">
-                                                        <button onclick="Panel.action('show','submit')"
-                                                            class="btn btn-primary font-weight-bolder"
-                                                            id="side_form_open">
+                                                        <button {{-- onclick="PanelForm.action('show','submit')" --}}
+                                                            class="btn btn-primary font-weight-bolder" id="formal_button">
                                                             <span class="svg-icon">
                                                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg
                                                                     xmlns="http://www.w3.org/2000/svg"
@@ -321,15 +322,205 @@
                                     {{-- End pendidikan formal --}}
 
                                     {{-- Begin pendidikan non-formal --}}
-                                    <div class="tab-pane fade" id="contact" role="tabpanel"
-                                        aria-labelledby="contact-tab">
-                                        <h2>Contact</h2>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, eveniet
-                                            earum. Sed accusantium eligendi molestiae quo hic velit nobis et, tempora
-                                            placeat ratione rem blanditiis voluptates vel ipsam? Facilis, earum!</p>
+                                    <div class="tab-pane fade show ml-3" id="pendidikan_nonformal" role="tabpanel"
+                                        aria-labelledby="profile-tab">
+                                        <div class="row mb-3">
 
+                                            <div class="card card-custom col-md">
+                                                <div class="card-header">
+                                                    <div class="card-title">
+                                                        <h3 class="card-label">Riwayat Pendidikan Non Formal</h3>
+                                                    </div>
+                                                    <div class="card-toolbar">
+                                                        <button {{-- onclick="KTLayoutDemoPanelForm.action('show','submit')" --}}
+                                                            class="btn btn-primary font-weight-bolder"
+                                                            id="nonformal_button">
+                                                            <span class="svg-icon">
+                                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                    width="24px" height="24px" viewBox="0 0 24 24"
+                                                                    version="1.1">
+                                                                    <g stroke="none" stroke-width="1" fill="none"
+                                                                        fill-rule="evenodd">
+                                                                        <rect fill="#000000" x="4"
+                                                                            y="11" width="16" height="2"
+                                                                            rx="1" />
+                                                                        <rect fill="#000000" opacity="0.3"
+                                                                            transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000) "
+                                                                            x="4" y="11" width="16"
+                                                                            height="2" rx="1" />
+                                                                    </g>
+                                                                </svg>
+                                                                <!--end::Svg Icon-->
+                                                            </span>
+                                                            Tambah Data
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <table class="table table-striped table-row-bordered gy-5 gs-7"
+                                            id="table_nonformal" style="margin-top: 13px !important">
+                                            <thead>
+                                                <tr>
+                                                    <th rowspan="2">No.</th>
+                                                    <th rowspan="2">Nama Kursus/Seminar/Lokakarya</th>
+                                                    <th colspan="2">Tanggal</th>
+                                                    <th colspan="3">Ijazah/Tanda Lulus/Surat Keterangan</th>
+                                                    <th rowspan="2">Instansi Penyelenggara</th>
+                                                    <th rowspan="2">Tempat</th>
+                                                    <th rowspan="2">Action</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Mulai</th>
+                                                    <th>Selesai</th>
+                                                    <th>Nomor</th>
+                                                    <th>Tanggal</th>
+                                                    <th>Nama Pejabat</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
                                     </div>
                                     {{-- End pendidikan non-formal --}}
+
+                                    {{-- Begin kepangkatan --}}
+                                    <div class="tab-pane fade show ml-3" id="kepangkatan" role="tabpanel"
+                                        aria-labelledby="profile-tab">
+                                        <div class="row mb-3">
+
+                                            <div class="card card-custom col-md">
+                                                <div class="card-header">
+                                                    <div class="card-title">
+                                                        <h3 class="card-label">Riwayat Kepangkatan</h3>
+                                                    </div>
+                                                    <div class="card-toolbar">
+                                                        <button {{-- onclick="KTLayoutDemoPanelForm.action('show','submit')" --}}
+                                                            class="btn btn-primary font-weight-bolder"
+                                                            id="kepangkatan_button">
+                                                            <span class="svg-icon">
+                                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                    width="24px" height="24px" viewBox="0 0 24 24"
+                                                                    version="1.1">
+                                                                    <g stroke="none" stroke-width="1" fill="none"
+                                                                        fill-rule="evenodd">
+                                                                        <rect fill="#000000" x="4"
+                                                                            y="11" width="16" height="2"
+                                                                            rx="1" />
+                                                                        <rect fill="#000000" opacity="0.3"
+                                                                            transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000) "
+                                                                            x="4" y="11" width="16"
+                                                                            height="2" rx="1" />
+                                                                    </g>
+                                                                </svg>
+                                                                <!--end::Svg Icon-->
+                                                            </span>
+                                                            Tambah Data
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <table class="table table-striped table-row-bordered gy-5 gs-7"
+                                            id="table_kepangkatan" style="margin-top: 13px !important">
+                                            <thead>
+                                                <tr>
+                                                    <th rowspan="2">No.</th>
+                                                    <th rowspan="2">Gol. Ruang</th>
+                                                    <th colspan="3">Masa Kerja</th>
+                                                    <th colspan="3">Surat Keputusan</th>
+                                                    <th rowspan="2">TMT</th>
+                                                    <th rowspan="2">Unit Kerja</th>
+                                                    <th rowspan="2">Action</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tahun</th>
+                                                    <th>Bulan</th>
+                                                    <th>Gaji Pokok</th>
+                                                    <th>Nomor</th>
+                                                    <th>Tanggal</th>
+                                                    <th>Jabatan Penandatanganan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {{-- End kepangkatan --}}
+
+                                    {{-- Begin jabatan --}}
+                                    <div class="tab-pane fade show ml-3" id="jabatan" role="tabpanel"
+                                        aria-labelledby="profile-tab">
+                                        <div class="row mb-3">
+
+                                            <div class="card card-custom col-md">
+                                                <div class="card-header">
+                                                    <div class="card-title">
+                                                        <h3 class="card-label">Riwayat Jabatan</h3>
+                                                    </div>
+                                                    <div class="card-toolbar">
+                                                        <button {{-- onclick="KTLayoutDemoPanelForm.action('show','submit')" --}}
+                                                            class="btn btn-primary font-weight-bolder"
+                                                            id="jabatan_button">
+                                                            <span class="svg-icon">
+                                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                    width="24px" height="24px" viewBox="0 0 24 24"
+                                                                    version="1.1">
+                                                                    <g stroke="none" stroke-width="1" fill="none"
+                                                                        fill-rule="evenodd">
+                                                                        <rect fill="#000000" x="4"
+                                                                            y="11" width="16" height="2"
+                                                                            rx="1" />
+                                                                        <rect fill="#000000" opacity="0.3"
+                                                                            transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000) "
+                                                                            x="4" y="11" width="16"
+                                                                            height="2" rx="1" />
+                                                                    </g>
+                                                                </svg>
+                                                                <!--end::Svg Icon-->
+                                                            </span>
+                                                            Tambah Data
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <table class="table table-striped table-row-bordered gy-5 gs-7"
+                                            id="table_kepangkatan" style="margin-top: 13px !important">
+                                            <thead>
+                                                <tr>
+                                                    <th rowspan="2">No.</th>
+                                                    <th rowspan="2">Nama Jabatan</th>
+                                                    <th colspan="4">Surat Keputusan</th>
+                                                    <th rowspan="2">TMT</th>
+                                                    <th rowspan="2">Unit Kerja</th>
+                                                    <th rowspan="2">Action</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Gol. Ruang</th>
+                                                    <th>Nomor</th>
+                                                    <th>Tanggal</th>
+                                                    <th>Pejabat Penandatanganan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {{-- End kepangkatan --}}
+
                                 </div>
                             </div>
                             <!-- /.col-md-9 -->
@@ -345,7 +536,8 @@
     @endsection
 
     @section('side-form')
-        <div id="pendidikan-formal" class="offcanvas offcanvas-right p-10">
+        {{-- side form pendidikan formal --}}
+        <div id="formal_create" class="offcanvas offcanvas-right p-10">
             <!--begin::Header-->
             <div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
                 <h3 class="font-weight-bold m-0">Tambah Pendidikan Formal<h3>
@@ -356,7 +548,7 @@
             <!--end::Header-->
             <!--begin::Content-->
             <div class="offcanvas-content pr-5 mr-n5">
-                <form class="form" id="createForm" enctype="multipart/form-data">
+                <form class="form formal_form" id="formal_form" enctype="multipart/form-data">
                     @csrf
 
                     <input type="hidden" name="id" />
@@ -429,7 +621,307 @@
                         <div class="invalid-feedback"></div>
 
                         <div class="ml-2 col-sm-6">
-                            <img src="" id="document" class="mt-3 img-thumbnail">
+                            <img src="" id="document_formal" class="mt-3 img-thumbnail">
+                        </div>
+
+                    </div>
+
+                    <div class="separator separator-dashed mt-8 mb-5"></div>
+                    <div class="">
+                        <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+
+                <!--begin::Separator-->
+                <!--end::Separator-->
+            </div>
+            <!--end::Content-->
+        </div>
+
+        {{-- side form pendidikan non formal --}}
+        <div id="nonformal_create" class="offcanvas offcanvas-right p-10">
+            <!--begin::Header-->
+            <div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
+                <h3 class="font-weight-bold m-0">Tambah Pendidikan Non Formal<h3>
+                        <a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="side_form_close">
+                            <i class="ki ki-close icon-xs text-muted"></i>
+                        </a>
+            </div>
+            <!--end::Header-->
+            <!--begin::Content-->
+            <div class="offcanvas-content pr-5 mr-n5">
+                <form class="form nonformal_form" id="nonformal_form" enctype="multipart/form-data">
+                    @csrf
+
+                    <input type="hidden" name="id" />
+                    <input type="hidden" name="id_pegawai" value="{{ $personalData['id'] }}" />
+                    <input type="hidden" name="jenis_pendidikan" value="nonformal" />
+                    <input type="hidden" name="document" />
+
+                    <div class="form-group">
+                        <label>Nama Kursus/Seminar/Lokakarya</label>
+                        <input class="form-control form-control-solid" type="text" name="nama_kursus" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tanggal Mulai</label>
+                        <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tanggal_mulai">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tanggal Akhir</label>
+                        <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tanggal_akhir">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nomor Ijazah</label>
+                        <input class="form-control form-control-solid" type="text" name="nomor_ijazah" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tanggal Ijazah</label>
+                        <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tanggal_ijazah">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nama Pejabat</label>
+                        <input class="form-control form-control-solid" type="text" name="nama_pejabat" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Instansi Penyelenggara</label>
+                        <input class="form-control form-control-solid" type="text" name="instansi_penyelenggara" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tempat</label>
+                        <input class="form-control form-control-solid" type="text" name="tempat" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Document Ijazah/Sertifikat/Lainnya</label>
+                        <input class="form-control" type="file" id="foto_ijazah" name="foto_ijazah">
+                        <div class="invalid-feedback"></div>
+
+                        <div class="ml-2 col-sm-6">
+                            <img src="" id="document_nonformal" class="mt-3 img-thumbnail">
+                        </div>
+
+                    </div>
+
+                    <div class="separator separator-dashed mt-8 mb-5"></div>
+                    <div class="">
+                        <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+
+                <!--begin::Separator-->
+                <!--end::Separator-->
+            </div>
+            <!--end::Content-->
+        </div>
+
+        {{-- side form kepangkatan --}}
+        <div id="kepangkatan_create" class="offcanvas offcanvas-right p-10">
+            <!--begin::Header-->
+            <div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
+                <h3 class="font-weight-bold m-0">Tambah Kepangkatan<h3>
+                        <a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="side_form_close">
+                            <i class="ki ki-close icon-xs text-muted"></i>
+                        </a>
+            </div>
+            <!--end::Header-->
+            <!--begin::Content-->
+            <div class="offcanvas-content pr-5 mr-n5">
+                <form class="form" id="kepangkatan_form" class="kepangkatan_form" enctype="multipart/form-data">
+                    @csrf
+
+                    <input type="hidden" name="id" />
+                    <input type="hidden" name="id_pegawai" value="{{ $personalData['id'] }}" />
+                    <input type="hidden" name="jenis_pendidikan" value="formal" />
+                    <input type="hidden" name="document" />
+
+                    <div class="form-group">
+                        <label>Gol. Ruang</label>
+                        <select class="form-control form-control-solid" type="text" id="id_golongan"
+                            name="id_pendidikan">
+                            <option disabled selected> Pilih Gol. Ruang </option>
+                            @foreach ($listPendidikan as $key => $value)
+                                <option value="{{ $value['id'] }}">{{ $value['nama_pendidikan'] }}</option>
+                            @endforeach
+                        </select>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tahun</label>
+                        <div class="input-group date">
+                            <input type="text" class="form-control" readonly id="tahun" name="tahun" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar-check-o"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Bulan</label>
+                        <div class="input-group date">
+                            <input type="text" class="form-control" readonly id="bulan" name="bulan" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar-check-o"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gaji Pokok</label>
+                        <input type='text' class="form-control" id="gaji_pokok" name="gaji_pokok" type="text" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nomor SK</label>
+                        <input class="form-control form-control-solid" type="text" name="nomor_sk" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tanggal SK</label>
+                        <input type="date" value="{{ date('Y-m-d') }}" class="form-control" id="tanggal_sk"
+                            name="tanggal_ijazah">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pejabat Penandatanganan</label>
+                        <input class="form-control form-control-solid" type="text" name="nama_pejabat" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>TMT</label>
+                        <input type="date" value="{{ date('Y-m-d') }}" class="form-control" id="tmt"
+                            name="tanggal_ijazah">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Unit Kerja</label>
+                        <input class="form-control form-control-solid" type="text" name="unit_kerja" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Document</label>
+                        <input class="form-control" type="file" id="foto_ijazah" name="document">
+                        <div class="invalid-feedback"></div>
+
+                        <div class="ml-2 col-sm-6">
+                            <img src="" id="document_kepangkatan" class="mt-3 img-thumbnail">
+                        </div>
+
+                    </div>
+
+                    <div class="separator separator-dashed mt-8 mb-5"></div>
+                    <div class="">
+                        <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+
+                <!--begin::Separator-->
+                <!--end::Separator-->
+            </div>
+            <!--end::Content-->
+        </div>
+
+        {{-- side form jabatan --}}
+        <div id="jabatan_create" class="offcanvas offcanvas-right p-10">
+            <!--begin::Header-->
+            <div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
+                <h3 class="font-weight-bold m-0">Tambah Jabatan<h3>
+                        <a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="side_form_close">
+                            <i class="ki ki-close icon-xs text-muted"></i>
+                        </a>
+            </div>
+            <!--end::Header-->
+            <!--begin::Content-->
+            <div class="offcanvas-content pr-5 mr-n5">
+                <form class="form" id="jabatan_form" class="jabatan_form" enctype="multipart/form-data">
+                    @csrf
+
+                    <input type="hidden" name="id" />
+                    <input type="hidden" name="id_pegawai" value="{{ $personalData['id'] }}" />
+                    <input type="hidden" name="jenis_pendidikan" value="formal" />
+                    <input type="hidden" name="document" />
+
+                    <div class="form-group">
+                        <label>Gol. Ruang</label>
+                        <select class="form-control form-control-solid" type="text" id="id_golongan"
+                            name="id_pendidikan">
+                            <option disabled selected> Pilih Gol. Ruang </option>
+                            @foreach ($listPendidikan as $key => $value)
+                                <option value="{{ $value['id'] }}">{{ $value['nama_pendidikan'] }}</option>
+                            @endforeach
+                        </select>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nomor SK</label>
+                        <input class="form-control form-control-solid" type="text" name="nomor_sk" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tanggal SK</label>
+                        <input type="date" value="{{ date('Y-m-d') }}" class="form-control" id="tanggal_sk"
+                            name="tanggal_ijazah">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pejabat Penandatanganan</label>
+                        <input class="form-control form-control-solid" type="text" name="nama_pejabat" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>TMT</label>
+                        <input type="date" value="{{ date('Y-m-d') }}" class="form-control" id="tmt"
+                            name="tanggal_ijazah">
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Unit Kerja</label>
+                        <input class="form-control form-control-solid" type="text" name="unit_kerja" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Document</label>
+                        <input class="form-control" type="file" id="foto_ijazah" name="document">
+                        <div class="invalid-feedback"></div>
+
+                        <div class="ml-2 col-sm-6">
+                            <img src="" id="document_jabatan" class="mt-3 img-thumbnail">
                         </div>
 
                     </div>
@@ -448,11 +940,116 @@
         </div>
     @endsection
 
+
     @section('script')
         <script src="{{ asset('plugins/custom/datatables/datatables.bundle.js') }}"></script>
         <script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
         <script>
             "use strict";
+
+            var PanelForm = function() {
+                // Private properties
+                var _element;
+                var _offcanvasObject;
+                var _form;
+
+                // Private functions
+                var _init = function() {
+                    var header = KTUtil.find(_element, '.offcanvas-header');
+                    var content = KTUtil.find(_element, '.offcanvas-content');
+
+                    _offcanvasObject = new KTOffcanvas(_element, {
+                        overlay: true,
+                        baseClass: 'offcanvas',
+                        placement: 'right',
+                        closeBy: 'side_form_close',
+                        toggleBy: ''
+                    });
+
+                    KTUtil.scrollInit(content, {
+                        disableForMobile: true,
+                        resetHeightOnDestroy: true,
+                        handleWindowResize: true,
+                        height: function() {
+                            var height = parseInt(KTUtil.getViewPort().height);
+
+                            if (header) {
+                                height = height - parseInt(KTUtil.actualHeight(header));
+                                height = height - parseInt(KTUtil.css(header, 'marginTop'));
+                                height = height - parseInt(KTUtil.css(header, 'marginBottom'));
+                            }
+
+                            if (content) {
+                                height = height - parseInt(KTUtil.css(content, 'marginTop'));
+                                height = height - parseInt(KTUtil.css(content, 'marginBottom'));
+                            }
+
+                            height = height - parseInt(KTUtil.css(_element, 'paddingTop'));
+                            height = height - parseInt(KTUtil.css(_element, 'paddingBottom'));
+
+                            height = height - 2;
+
+                            return height;
+                        }
+                    });
+                }
+
+                // Public methods
+                return {
+                    init: function(id) {
+                        // console.log($(`#${id}`));
+                        // console.log($(`#${id}`).find('form'));
+                        _form = $(`#${id}`).find('form');
+                        _element = KTUtil.getById(id);
+
+                        if (!_element) {
+                            return;
+                        }
+
+                        // Initialize
+                        _init();
+                    },
+
+                    action: function(data, type = null) {
+                        if (data == 'show') {
+                            _form[0].reset();
+                            $("input").removeClass('is-invalid');
+                            $("select").removeClass('is-invalid');
+                            $("textarea").removeClass('is-invalid');
+                            _offcanvasObject.show();
+                        } else if (data == 'hide') {
+                            _offcanvasObject.hide();
+                        }
+                        _form.attr('data-type', type);
+
+                    },
+                    getElement: function() {
+                        return _element;
+                    }
+                };
+            }();
+
+            var inputFile = function(id) {
+
+                return {
+                    init: function(id) {
+                        $('input[type="file"]').change(function(e) {
+                            var fileName = e.target.files[0].name;
+                            $("#file").val(fileName);
+
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                // get loaded data and render thumbnail.
+                                document.getElementById(id).src = e.target.result;
+                            };
+                            // read the image file as a data URL.
+                            reader.readAsDataURL(this.files[0]);
+                        });
+                    },
+                }
+
+
+            }();
 
             var dataRow = function() {
                 var init = function() {
@@ -509,9 +1106,9 @@
                             class: "wrapok",
                             render: function(data, type, row, full, meta) {
                                 return `
-                                <a role="button" href="javascript:;" type="button" data-id="${row.id}" class="btn btn-warning btn-sm button-update">Ubah</a>
-                                <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="${row.id}">Hapus</button>
-                                `;
+                        <a role="button" href="javascript:;" type="button" data-id="${row.id}" class="btn btn-warning btn-sm formal_update">Ubah</a>
+                        <button type="button" class="btn btn-danger btn-sm btn-delete formal_delete" data-id="${row.id}">Hapus</button>
+                        `;
                             },
                         }],
                     });
@@ -534,26 +1131,132 @@
                 };
             }();
 
-            // clear img document preview
-            $(document).on('click', '#side_form_open', function() {
-                $('#document').attr("src", null);
+            var dataRowNonformal = function() {
+                var init = function() {
+                    let table = $('#table_nonformal');
+                    table.DataTable({
+                        dom: 'tr',
+                        processing: true,
+                        scrollY: "300px",
+                        scrollX: true,
+                        scrollCollapse: true,
+                        order: [
+                            [0, 'asc']
+                        ],
+                        ajax: "{{ route('list-pendidikan-nonformal') }}",
+                        columns: [{
+                                data: null,
+                                render: function(data, type, row, meta) {
+                                    return meta.row + meta.settings._iDisplayStart + 1;
+                                }
+                            },
+                            {
+                                data: 'nama_kursus'
+                            },
+                            {
+                                data: 'tanggal_mulai'
+                            },
+                            {
+                                data: 'tanggal_akhir'
+                            },
+                            {
+                                data: 'nomor_ijazah'
+                            },
+                            {
+                                data: 'tanggal_ijazah'
+                            },
+                            {
+                                data: 'nama_pejabat'
+                            },
+                            {
+                                data: 'instansi_penyelenggara'
+                            },
+                            {
+                                data: 'tempat'
+                            },
+                            {
+                                data: 'id'
+                            }
+                        ],
+                        columnDefs: [{
+                            targets: -1,
+                            title: 'Actions',
+                            orderable: false,
+                            width: '10rem',
+                            class: "wrapok",
+                            render: function(data, type, row, full, meta) {
+                                return `
+                        <a role="button" href="javascript:;" type="button" data-id="${row.id}" class="btn btn-warning btn-sm nonformal_update">Ubah</a>
+                        <button type="button" class="btn btn-danger btn-sm btn-delete nonformal_delete" data-id="${row.id}">Hapus</button>
+                        `;
+                            },
+                        }],
+                    });
+
+                };
+
+                var destroy = function() {
+                    var table = $('#table_nonformal').DataTable();
+                    table.destroy();
+                };
+
+                return {
+                    init: function() {
+                        init();
+                    },
+                    destroy: function() {
+                        destroy();
+                    }
+
+                };
+            }();
+
+            // trigger button add data
+            $(document).on('click', '#formal_button', function() {
+                PanelForm.init('formal_create');
+                PanelForm.action('show', 'submit');
+                $('#document_formal').attr("src", null);
+                inputFile.init('document_formal');
             });
 
-            // add pendidikan
-            $(document).on('submit', "#createForm[data-type='submit']", function(e) {
+            $(document).on('click', '#nonformal_button', function() {
+                PanelForm.init('nonformal_create');
+                PanelForm.action('show', 'submit');
+                $('#document_nonformal').attr("src", null);
+                inputFile.init('document_nonformal');
+            });
+
+            $(document).on('click', '#kepangkatan_button', function() {
+                PanelForm.init('kepangkatan_create');
+                PanelForm.action('show', 'submit');
+                $('#document_kepangkatan').attr("src", null);
+                inputFile.init('document_kepangkatan');
+            });
+
+            $(document).on('click', '#jabatan_button', function() {
+                PanelForm.init('jabatan_create');
+                PanelForm.action('show', 'submit');
+                $('#document_jabatan').attr("src", null);
+                inputFile.init('document_jabatan');
+            });
+            // end trigger button add data
+
+
+            // process pendidikan formal
+            $(document).on('submit', "#formal_form[data-type='submit']", function(e) {
                 e.preventDefault();
 
                 var form = document.querySelector('form');
                 var formData = new FormData(this);
 
                 AxiosCall.add_pendidikan_formal("{{ route('add-pendidikan-formal') }}", formData,
-                    "#createForm");
+                    "#formal_form");
             });
 
-            // edit
-            $(document).on('click', '.button-update', function() {
+            $(document).on('click', '.formal_update', function() {
 
-                Panel.action('show', 'update');
+                PanelForm.init('formal_create');
+                PanelForm.action('show', 'update');
                 var key = $(this).data('id');
                 console.log(key);
 
@@ -570,25 +1273,27 @@
 
                                 $("select[name='" + key + "']").val(value);
                                 $("input[name='" + key + "']").val(value);
-                                $(`#${key}`).attr("src", `{{ asset('storage/${value}') }}`);
+                                $(`#${key}`).attr("src",
+                                    `{{ asset('storage/${value}') }}`);
                             });
                         }
                     }
                 });
             })
 
-            // update
-            $(document).on('submit', "#createForm[data-type='update']", function(e) {
+            $(document).on('submit', "#formal_form[data-type='update']", function(e) {
                 e.preventDefault();
+                console.log($(this));
+
                 var _id = $("input[name='id']").val();
                 var form = document.querySelector('form');
                 var formData = new FormData(this);
 
                 AxiosCall.update_pendidikan_formal("{{ route('update-pendidikan-formal') }}", formData,
-                    "#createForm");
+                    "#formal_form");
             });
 
-            $(document).on('click', '.btn-delete', function(e) {
+            $(document).on('click', '.formal_delete', function(e) {
                 e.preventDefault()
                 let id = $(this).attr('data-id');
                 console.log(id);
@@ -631,34 +1336,142 @@
                         })
                     }
                 })
-            })
+            });
+
+            // process pendidikan nonformal
+            $(document).on('submit', "#nonformal_form[data-type='submit']", function(e) {
+                e.preventDefault();
+
+                var form = document.querySelector('form');
+                var formData = new FormData(this);
+
+                AxiosCall.add_pendidikan_nonformal("{{ route('add-pendidikan-nonformal') }}", formData,
+                    "#nonformal_form");
+            });
+
+            $(document).on('click', '.nonformal_update', function() {
+
+                PanelForm.init('nonformal_create');
+                PanelForm.action('show', 'update');
+                var key = $(this).data('id');
+                console.log(key);
+
+                $.ajax({
+                    url: `profile/pendidikan-nonformal/${key}`,
+                    method: "GET",
+                    success: function(data) {
+                        let result = JSON.parse(data);
+
+                        if (result.status) {
+                            var res = result.data;
+
+                            $.each(res, function(key, value) {
+                                console.log(key + " | " + value);
+                                console.log($(`#${key}`));
+                                $("select[name='" + key + "']").val(value);
+                                $("input[name='" + key + "']").val(value);
+                                $(`#${key}`).attr("src",
+                                    `{{ asset('storage/${value}') }}`);
+                            });
+                        }
+                    }
+                });
+            });
+
+            $(document).on('submit', "#nonformal_form[data-type='update']", function(e) {
+                e.preventDefault();
+                console.log($(this));
+
+                var _id = $("input[name='id']").val();
+                var form = document.querySelector('form');
+                var formData = new FormData(this);
+
+                AxiosCall.update_pendidikan_nonformal("{{ route('update-pendidikan-nonformal') }}", formData,
+                    "#nonformal_form");
+            });
+
+            $(document).on('click', '.nonformal_delete', function(e) {
+                e.preventDefault()
+                let id = $(this).attr('data-id');
+                console.log(id);
+                Swal.fire({
+                    title: 'Apakah kamu yakin akan menghapus data ini ?',
+                    text: "Data akan di hapus permanen",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/profile/delete-pendidikan-nonformal/${id}`,
+                            type: 'POST',
+                            data: {
+                                '_method': 'DELETE',
+                                '_token': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                // let res = JSON.parse(response);
+                                // console.log(res);
+                                if (response.status !== false) {
+                                    Swal.fire('Deleted!',
+                                            'Data berhasil dihapus.',
+                                            'success')
+                                        .then(function() {
+                                            dataRowNonformal.destroy();
+                                            dataRowNonformal.init();
+                                        });
+                                } else {
+                                    swal.fire({
+                                        title: "Failed!",
+                                        text: `${res.message}`,
+                                        icon: "warning",
+                                    });
+                                }
+                            }
+                        })
+                    }
+                })
+            });
+
+
+
 
             jQuery(document).ready(function() {
 
-                Panel.init('pendidikan-formal');
                 KTLayoutAsideMenu.init('kt_aside_menu_profile');
                 var avatar1 = new KTImageInput('kt_image_1');
                 dataRow.init();
+                dataRowNonformal.init();
 
-                // $('#id_pendidikan').select2();
+                $('#tahun').datepicker({
+                    format: "yyyy",
+                    viewMode: "years",
+                    minViewMode: "years",
+                    autoclose: true,
+                });
+
+                $('#bulan').datepicker({
+                    format: "MM",
+                    viewMode: "months",
+                    minViewMode: "months",
+                    autoclose: true,
+                });
+
+                $("#gaji_pokok").inputmask('RP. 999.999.999', {
+                    numericInput: true
+                });
 
                 $('#pendidikan-tab').click(function() {
                     dataRow.destroy();
                     dataRow.init();
-                })
-
-                $('input[type="file"]').change(function(e) {
-                    var fileName = e.target.files[0].name;
-                    $("#file").val(fileName);
-
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        // get loaded data and render thumbnail.
-                        document.getElementById("document").src = e.target.result;
-                    };
-                    // read the image file as a data URL.
-                    reader.readAsDataURL(this.files[0]);
                 });
+                $('#pendidikan-non-formal-tab').click(function() {
+                    dataRowNonformal.destroy();
+                    dataRowNonformal.init();
+                });
+
 
             });
         </script>
