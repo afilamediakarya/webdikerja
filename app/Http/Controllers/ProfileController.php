@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
+use function GuzzleHttp\Promise\all;
+
 class ProfileController extends Controller
 {
     public function index()
@@ -21,6 +23,8 @@ class ProfileController extends Controller
 
         $personalData = Http::withToken($token)->get($url . "/profile/personal-data/");
         $listPendidikan = Http::withToken($token)->get($url . "/profile/get-list-pendidikan/")->collect();
+        $listGolongan = Http::withToken($token)->get($url . "/profile/get-list-golongan/")->collect();
+        $listUnitkerja = Http::withToken($token)->get($url . "/profile/get-list-unitkerja/")->collect();
         // return $listPendidikan;
         if ($personalData["code"] !== "200") {
 
@@ -34,7 +38,7 @@ class ProfileController extends Controller
             $personalData = $personalData["data"];
         }
 
-        return view('pages.Profile.index', compact('page_title', 'page_description', 'breadcumb', 'personalData', 'listPendidikan'));
+        return view('pages.Profile.index', compact('page_title', 'page_description', 'breadcumb', 'personalData', 'listPendidikan', 'listGolongan', 'listUnitkerja'));
     }
 
     // pendidikan formal
@@ -332,4 +336,302 @@ class ProfileController extends Controller
         return response()->json(['error' => 'Error Hapus Data']);
     }
     // end pendidikan non formal
+
+    // kepangkatan
+    public function listKepangkatan()
+    {
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $response = Http::withToken($token)->get($url . "/profile/list-kepangkatan");
+        if ($response->successful()) {
+            $data = $response->json();
+            return $data;
+        } else {
+            return 'err';
+        }
+    }
+
+    public function storeKepangkatan(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'sk_pangkat' => 'required|max:10000|mimes:jpeg,bmp,png,gif,svg,pdf',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['invalid' => $validator->errors()]);
+        }
+
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+
+        $data = $request->all();
+
+        $imagePath = $request->file('sk_pangkat')->store('sk');
+
+        $filtered = array_filter(
+            $data,
+            function ($key) {
+                if (!in_array($key, ['_token', 'id'])) {
+                    return $key;
+                };
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+        $filtered["bulan_kerja"] = date('m', strtotime(request('bulan_kerja')));
+        $filtered["gaji_pokok"] = intval(preg_replace('/([^0-9\/+]+)/', '', request('gaji_pokok')));
+        $filtered["document_kepangkatan"] = $imagePath;
+
+        $response = Http::withToken($token)
+            ->post($url . "/profile/store-kepangkatan", $filtered);
+
+        if ($response->successful()) {
+            $data = $response->object();
+            if (isset($data->status)) {
+                return response()->json([
+                    'success' => 'Berhasil Menambah Data',
+                    'data' => $data
+                ]);
+            } else {
+                return response()->json(['invalid' => $response->json()]);
+            }
+        } else {
+            return response()->json(['failed' => $response->json()]);
+        }
+    }
+
+    public function getKepangkatan(Request $request, $id)
+    {
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+
+        $data = Http::withToken($token)->get($url . "/profile/get-kepangkatan/" . $id);
+
+        return $data;
+    }
+
+    public function updateKepangkatan(Request $request)
+    {
+        $id = request('id');
+        $imagePath = '';
+
+        $validator = Validator::make($request->all(), [
+            'sk_pangkat' => 'max:10000|mimes:jpeg,bmp,png,gif,svg,pdf',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['invalid' => $validator->errors()]);
+        }
+
+        if (request('sk_pangkat')) {
+            Storage::delete(request('document'));
+            $imagePath = $request->file('sk_pangkat')->store('sk');
+        }
+
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+
+        $data = $request->all();
+
+        $filtered = array_filter(
+            $data,
+            function ($key) {
+                if (!in_array($key, ['_token', 'id'])) {
+                    return $key;
+                };
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+        $filtered["bulan_kerja"] = date('m', strtotime(request('bulan_kerja')));
+        $filtered["gaji_pokok"] = intval(preg_replace('/([^0-9\/+]+)/', '', request('gaji_pokok')));
+        $filtered["document_kepangkatan"] = $imagePath;
+
+        $response = Http::withToken($token)
+            ->post($url . "/profile/update-kepangkatan/$id", $filtered);
+
+        if ($response->successful()) {
+            $data = $response->object();
+            if (isset($data->status)) {
+                return response()->json([
+                    'success' => 'Berhasil Mengubah Data',
+                    'data' => $data
+                ]);
+            } else {
+                return response()->json(['invalid' => $response->json()]);
+            }
+        } else {
+            return response()->json(['failed' => $response->json()]);
+        }
+    }
+
+    public function deleteKepangkatan(Request $request, $id)
+    {
+
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+
+        $response = Http::withToken($token)->delete($url . "/profile/delete-kepangkatan/$id");
+        $data = $response->object();
+
+        if ($response->successful()) {
+            // delete file
+            Storage::delete($response['data']['document_kepangkatan']);
+
+            return response()->json([
+                'success' => 'Meghapus Data',
+                'data' => $data
+            ]);
+        }
+
+        return response()->json(['error' => 'Error Hapus Data']);
+    }
+    // end kepangkatan
+
+    // jabatan
+    public function listJabatan()
+    {
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $response = Http::withToken($token)->get($url . "/profile/list-jabatan");
+        if ($response->successful()) {
+            $data = $response->json();
+            return $data;
+        } else {
+            return 'err';
+        }
+    }
+
+    public function storeJabatan(Request $request)
+    {
+        // return $request->all();
+        $validator = Validator::make($request->all(), [
+            'sk_jabatan' => 'required|max:10000|mimes:jpeg,bmp,png,gif,svg,pdf',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['invalid' => $validator->errors()]);
+        }
+
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+
+        $data = $request->all();
+
+        $imagePath = $request->file('sk_jabatan')->store('sk');
+
+        $filtered = array_filter(
+            $data,
+            function ($key) {
+                if (!in_array($key, ['_token', 'id'])) {
+                    return $key;
+                };
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+        $filtered["document_jabatan"] = $imagePath;
+
+        $response = Http::withToken($token)
+            ->post($url . "/profile/store-jabatan", $filtered);
+
+        if ($response->successful()) {
+            $data = $response->object();
+            if (isset($data->status)) {
+                return response()->json([
+                    'success' => 'Berhasil Menambah Data',
+                    'data' => $data
+                ]);
+            } else {
+                return response()->json(['invalid' => $response->json()]);
+            }
+        } else {
+            return response()->json(['failed' => $response->json()]);
+        }
+    }
+
+    public function getJabatan(Request $request, $id)
+    {
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+
+        $data = Http::withToken($token)->get($url . "/profile/get-jabatan/" . $id);
+
+        return $data;
+    }
+
+    public function updateJabatan(Request $request)
+    {
+        $id = request('id');
+        $imagePath = '';
+
+        $validator = Validator::make($request->all(), [
+            'sk_jabatan' => 'max:10000|mimes:jpeg,bmp,png,gif,svg,pdf',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['invalid' => $validator->errors()]);
+        }
+
+        if (request('sk_jabatan')) {
+            Storage::delete(request('document'));
+            $imagePath = $request->file('sk_jabatan')->store('sk');
+        }
+
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+
+        $data = $request->all();
+
+        $filtered = array_filter(
+            $data,
+            function ($key) {
+                if (!in_array($key, ['_token', 'id'])) {
+                    return $key;
+                };
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+        $filtered["document_jabatan"] = $imagePath;
+
+        $response = Http::withToken($token)
+            ->post($url . "/profile/update-jabatan/$id", $filtered);
+
+        if ($response->successful()) {
+            $data = $response->object();
+            if (isset($data->status)) {
+                return response()->json([
+                    'success' => 'Berhasil Mengubah Data',
+                    'data' => $data
+                ]);
+            } else {
+                return response()->json(['invalid' => $response->json()]);
+            }
+        } else {
+            return response()->json(['failed' => $response->json()]);
+        }
+    }
+
+    public function deleteJabatan(Request $request, $id)
+    {
+
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+
+        $response = Http::withToken($token)->delete($url . "/profile/delete-jabatan/$id");
+        $data = $response->object();
+
+        if ($response->successful()) {
+            // delete file
+            Storage::delete($response['data']['document_jabatan']);
+
+            return response()->json([
+                'success' => 'Meghapus Data',
+                'data' => $data
+            ]);
+        }
+
+        return response()->json(['error' => 'Error Hapus Data']);
+    }
+    // end jabatan
 }

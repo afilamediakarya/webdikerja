@@ -342,5 +342,221 @@ var AxiosCall = function() {
                 })
             });
         },
+
+        // kepangkatan
+        add_kepangkatan: function(_url, _data, _element) {
+            console.log(_data);
+            console.log(_url);
+            console.log(_element);
+            axios.post( _url, _data)
+            .then(function(res){
+                var data = res.data;
+                console.log(data);
+                if(data.failed){
+                    swal.fire({
+                        text: "Maaf Terjadi Kesalahan",
+                        title:"Error",
+                        timer: 2000,
+                        icon: "danger",
+                        showConfirmButton:false,
+                    });
+                }else if(data.invalid){
+                    $.each(data.invalid, function( key, value ) {
+                        console.log(key);
+                        $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                        $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                    });
+                }else if(data.success){
+                    swal.fire({
+                        text: "Data anda berhasil disimpan",
+                        title:"Sukses",
+                        icon: "success",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        console.log(_element);
+                        dataRowKepangkatan.destroy();
+                        dataRowKepangkatan.init();
+                        PanelForm.action('hide');
+                        $("#kepangkatan_form")[0].reset();
+                        _element[0].reset();
+                        $("#document")[0].reset();
+                        $("#table").toggle();
+                        $("#kepangkatan_form").toggle();
+                    });
+                }
+            }).catch(function(res){
+                var data = res.data;
+                console.log(data);
+                swal.fire({
+                    text: "Terjadi Kesalahan Sistem",
+                    title:"Error",
+                    icon: "error",
+                    showConfirmButton:true,
+                    confirmButtonText: "OK",
+                })
+            });
+        },
+        update_kepangkatan: function(_url, _data, _element) {
+            console.log(_url);
+            console.log(_data);
+            console.log(_element);
+            axios.post( _url, _data)
+            .then(function(res){
+                var data = res.data;
+                console.log(data);
+                if(data.failed){
+                    swal.fire({
+                        text: "Maaf Terjadi Kesalahan",
+                        title:"Error",
+                        timer: 2000,
+                        icon: "danger",
+                        showConfirmButton:false,
+                    });
+                }else if(data.invalid){
+                    $.each(data.invalid, function( key, value ) {
+                        console.log(key);
+                        $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                        $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                    });
+                }else if(data.success){
+                    swal.fire({
+                        text: "Data anda berhasil disimpan",
+                        title:"Sukses",
+                        icon: "success",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        console.log(_element);
+                        dataRowKepangkatan.destroy();
+                        dataRowKepangkatan.init();
+                        PanelForm.action('hide');
+                        $("#kepangkatan_form")[0].reset();
+                        _element[0].reset();
+                        $("#document")[0].reset();
+                        $("#table").toggle();
+                        $("#kepangkatan_form").toggle();
+                    });
+                }
+            }).catch(function(res){
+                var data = res.data;
+                console.log(data);
+                swal.fire({
+                    text: "Terjadi Kesalahan Sistem",
+                    title:"Error",
+                    icon: "error",
+                    showConfirmButton:true,
+                    confirmButtonText: "OK",
+                })
+            });
+        },
+
+        // jabatan
+        add_jabatan: function(_url, _data, _element) {
+            console.log(_data);
+            console.log(_url);
+            console.log(_element);
+            axios.post( _url, _data)
+            .then(function(res){
+                var data = res.data;
+                console.log(data);
+                if(data.failed){
+                    swal.fire({
+                        text: "Maaf Terjadi Kesalahan",
+                        title:"Error",
+                        timer: 2000,
+                        icon: "danger",
+                        showConfirmButton:false,
+                    });
+                }else if(data.invalid){
+                    $.each(data.invalid, function( key, value ) {
+                        console.log(key);
+                        $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                        $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                    });
+                }else if(data.success){
+                    swal.fire({
+                        text: "Data anda berhasil disimpan",
+                        title:"Sukses",
+                        icon: "success",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        console.log(_element);
+                        dataRowJabatan.destroy();
+                        dataRowJabatan.init();
+                        PanelForm.action('hide');
+                        $("#jabatan_form")[0].reset();
+                        _element[0].reset();
+                        $("#document")[0].reset();
+                        $("#table").toggle();
+                        $("#jabatan_form").toggle();
+                    });
+                }
+            }).catch(function(res){
+                var data = res.data;
+                console.log(data);
+                swal.fire({
+                    text: "Terjadi Kesalahan Sistem",
+                    title:"Error",
+                    icon: "error",
+                    showConfirmButton:true,
+                    confirmButtonText: "OK",
+                })
+            });
+        },
+        update_jabatan: function(_url, _data, _element) {
+            console.log(_url);
+            console.log(_data);
+            console.log(_element);
+            axios.post( _url, _data)
+            .then(function(res){
+                var data = res.data;
+                console.log(data);
+                if(data.failed){
+                    swal.fire({
+                        text: "Maaf Terjadi Kesalahan",
+                        title:"Error",
+                        timer: 2000,
+                        icon: "danger",
+                        showConfirmButton:false,
+                    });
+                }else if(data.invalid){
+                    $.each(data.invalid, function( key, value ) {
+                        console.log(key);
+                        $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                        $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                    });
+                }else if(data.success){
+                    swal.fire({
+                        text: "Data anda berhasil disimpan",
+                        title:"Sukses",
+                        icon: "success",
+                        showConfirmButton:true,
+                        confirmButtonText: "OK, Siip",
+                    }).then(function() {
+                        console.log(_element);
+                        dataRowJabatan.destroy();
+                        dataRowJabatan.init();
+                        PanelForm.action('hide');
+                        $("#jabatan_form")[0].reset();
+                        _element[0].reset();
+                        $("#document")[0].reset();
+                        $("#table").toggle();
+                        $("#jabatan_form").toggle();
+                    });
+                }
+            }).catch(function(res){
+                var data = res.data;
+                console.log(data);
+                swal.fire({
+                    text: "Terjadi Kesalahan Sistem",
+                    title:"Error",
+                    icon: "error",
+                    showConfirmButton:true,
+                    confirmButtonText: "OK",
+                })
+            });
+        },
     };
 }();
