@@ -1083,7 +1083,13 @@
                                 data: 'nomor_ijazah'
                             },
                             {
-                                data: 'tanggal_ijazah'
+                                data: 'tanggal_ijazah',
+                                render: function(data, type, row) {
+                                    if (type === "sort" || type === "type") {
+                                        return data;
+                                    }
+                                    return moment(data).format("MM-DD-YYYY");
+                                }
                             },
                             {
                                 data: 'nama_kepala_sekolah'
@@ -1154,16 +1160,34 @@
                                 data: 'nama_kursus'
                             },
                             {
-                                data: 'tanggal_mulai'
+                                data: 'tanggal_mulai',
+                                render: function(data, type, row) {
+                                    if (type === "sort" || type === "type") {
+                                        return data;
+                                    }
+                                    return moment(data).format("MM-DD-YYYY");
+                                }
                             },
                             {
-                                data: 'tanggal_akhir'
+                                data: 'tanggal_akhir',
+                                render: function(data, type, row) {
+                                    if (type === "sort" || type === "type") {
+                                        return data;
+                                    }
+                                    return moment(data).format("MM-DD-YYYY");
+                                }
                             },
                             {
                                 data: 'nomor_ijazah'
                             },
                             {
-                                data: 'tanggal_ijazah'
+                                data: 'tanggal_ijazah',
+                                render: function(data, type, row) {
+                                    if (type === "sort" || type === "type") {
+                                        return data;
+                                    }
+                                    return moment(data).format("MM-DD-YYYY");
+                                }
                             },
                             {
                                 data: 'nama_pejabat'
