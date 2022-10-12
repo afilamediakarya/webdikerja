@@ -813,6 +813,19 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Jenis Kenaikan Pangkat</label>
+                    <select class="form-control form-control-solid" type="text" id="jenis_kenaikan_pangkat"
+                        name="jenis_kenaikan_pangkat">
+                        <option disabled selected> Pilih Jenis Kenaikan Pangkat </option>
+                        <option value="reguler">Reguler</option>
+                        <option value="jabatan struktural">Jabatan Struktural</option>
+                        <option value="jabatan fungsional">Jabatan Fungsional</option>
+                        <option value="penyesuaian ijazah">Penyesuaian Ijazah</option>
+                    </select>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
                     <label>Tahun</label>
                     <div class="input-group date">
                         <input type="text" class="form-control" readonly id="tahun_kerja" name="tahun_kerja" />
@@ -854,6 +867,19 @@
                     <label>Tanggal SK</label>
                     <input type="date" value="{{ date('Y-m-d') }}" class="form-control" id="tanggal_sk"
                         name="tanggal_sk">
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Nomor Nota</label>
+                    <input class="form-control form-control-solid" type="text" name="nomor_nota" />
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Nota</label>
+                    <input type="date" value="{{ date('Y-m-d') }}" class="form-control" id="tanggal_nota"
+                        name="tanggal_nota">
                     <div class="invalid-feedback"></div>
                 </div>
 
@@ -938,6 +964,55 @@
                         @foreach ($listGolongan as $key => $value)
                             <option value="{{ $value['id'] }}">{{ $value['nama_golongan'] }}</option>
                         @endforeach
+                    </select>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Pilih Keterangan Jabatan</label>
+                    <select class="form-control form-control-solid" type="text" id="keterangan_jabatan"
+                        name="keterangan_jabatan">
+                        <option disabled selected> Pilih Keterangan Jabatan </option>
+                        <option value="jabatan terbaru">Jabatan Terbaru</option>
+                        <option value="plt">PLT</option>
+                        <option value="plh">PLH</option>
+                        <option value="pj">PJ</option>
+                        <option value="jabatan lama">Jabatan Lama</option>
+                    </select>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Pilih Tipe Jabatan</label>
+                    <select class="form-control form-control-solid" type="text" id="tipe_jabatan"
+                        name="tipe_jabatan">
+                        <option disabled selected> Pilih Tipe Jabatan </option>
+                        <option value="administrasi">Administrasi</option>
+                        <option value="fungsional">Fungsional</option>
+                        <option value="pimpinan tinggi">Pimpinan Tinggi</option>
+                    </select>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Pilih Jenis Jabatan</label>
+                    <select class="form-control form-control-solid" type="text" id="jenis_jabatan"
+                        name="jenis_jabatan">
+                        <option disabled selected> Pilih Jenis Jabatan </option>
+                        <option value="jabatan administrator">Jabatan Administrator</option>
+                        <option value="jabatan pengawas">Jabatan Pengawas</option>
+                        <option value="jabatan pelaksana">Jabatan Pelaksana</option>
+                        <option value="ahli utama">Ahli Utama</option>
+                        <option value="ahli madya">Ahli Madya</option>
+                        <option value="ahli muda">Ahli Muda</option>
+                        <option value="ahli pertama">Ahli Pertama</option>
+                        <option value="penyelia">Penyelia</option>
+                        <option value="mahir">Mahir</option>
+                        <option value="terampil">Terampil</option>
+                        <option value="pemula">Pemula</option>
+                        <option value="jabatan tinggi pimppinan utama">Jabatan Tinggi Pimppinan Utama</option>
+                        <option value="jabatan tinggi pimppinan madya">Jabatan Tinggi Pimppinan Madya</option>
+                        <option value="jabatan tinggi pimppinan pratama">Jabatan Tinggi Pimppinan Pratama</option>
                     </select>
                     <div class="invalid-feedback"></div>
                 </div>
