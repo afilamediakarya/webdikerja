@@ -350,7 +350,7 @@
                                             </div>
                                         </div>
                                         <div class="card-body" style="height: 530px;">
-                                            <table class="table table-striped table-row-bordered gy-5 gs-7"
+                                            <table class="table table-striped table-bordered table-row-bordered gy-5 gs-7"
                                                 id="table-pendidikan-formal" style="margin-top: 13px !important">
                                                 <thead>
                                                     <tr>
@@ -415,7 +415,7 @@
                                             </div>
                                         </div>
                                         <div class="card-body" style="height: 530px;">
-                                            <table class="table table-striped table-row-bordered gy-5 gs-7"
+                                            <table class="table table-striped table-bordered table-row-bordered gy-5 gs-7"
                                                 id="table_nonformal" style="margin-top: 13px !important">
                                                 <thead>
                                                     <tr>
@@ -480,7 +480,7 @@
                                             </div>
                                         </div>
                                         <div class="card-body" style="height: 530px;">
-                                            <table class="table table-striped table-row-bordered gy-5 gs-7"
+                                            <table class="table table-striped table-bordered table-row-bordered gy-5 gs-7"
                                                 id="table_kepangkatan" style="margin-top: 13px !important">
                                                 <thead>
                                                     <tr>
@@ -546,7 +546,7 @@
                                             </div>
                                         </div>
                                         <div class="card-body" style="height: 530px;">
-                                            <table class="table table-striped table-row-bordered gy-5 gs-7"
+                                            <table class="table table-striped table-bordered table-row-bordered gy-5 gs-7"
                                                 id="table_jabatan" style="margin-top: 13px !important">
                                                 <thead>
                                                     <tr>
