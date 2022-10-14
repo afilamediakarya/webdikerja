@@ -171,11 +171,12 @@ Route::middleware('Auth')->group(function () {
             // oke
             Route::prefix('pegawai')->group(function () {
                 Route::get('/', [PegawaiController::class, 'index'])->name('pegawai');
+                Route::get('/by-satuankerja', [PegawaiController::class, 'pegawaiBySatuankerja'])->name('pegawai-by-satuankerja');
+                Route::get('/export', [PegawaiController::class, 'exportPegawai'])->name('export-pegawai');
                 Route::post('/', [PegawaiController::class, 'store'])->name('store-pegawai');
                 Route::get('/{id}', [PegawaiController::class, 'show'])->name('show-pegawai');
                 Route::post('/update/{id}', [PegawaiController::class, 'update'])->name('update-pegawai');
                 Route::delete('/{id}', [PegawaiController::class, 'delete'])->name('delete-pegawai');
-                Route::get('/pegawai-by-satuan-kerja/{id_dinas}', [PegawaiController::class, 'pegawai_by_satuan_kerja'])->name('pegawai-by-satuan-kerja');
                 Route::post('/reset-password/{id}', [PegawaiController::class, 'reset_password'])->name('reset-password');
             });
 
