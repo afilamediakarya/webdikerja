@@ -1078,6 +1078,29 @@
         </div>
         <!--end::Content-->
     </div>
+
+
+    {{-- modal --}}
+    <div class="modal fade" id="modal_preview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Preview Document</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="row justify-content-center">
+                            <img src="" id="img_preview_docs" class="mt-3 img-thumbnail">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 
@@ -1246,8 +1269,9 @@
                         class: "wrapok",
                         render: function(data, type, row, full, meta) {
                             return `
-                        <a role="button" href="javascript:;" type="button" data-id="${row.id}" class="btn btn-warning btn-sm formal_update">Ubah</a>
-                        <button type="button" class="btn btn-danger btn-sm btn-delete formal_delete" data-id="${row.id}">Hapus</button>
+                                <button type="button" class="btn btn-primary btn-sm formal_preview" data-toggle="modal" data-target="#modal_preview" data-id="${row.id}">Show</button>
+                                <a role="button" href="javascript:;" type="button" data-id="${row.id}" class="btn btn-warning btn-sm formal_update">Ubah</a>
+                                <button type="button" class="btn btn-danger btn-sm btn-delete formal_delete" data-id="${row.id}">Hapus</button>
                         `;
                         },
                     }],
@@ -1338,8 +1362,9 @@
                         class: "wrapok",
                         render: function(data, type, row, full, meta) {
                             return `
-                        <a role="button" href="javascript:;" type="button" data-id="${row.id}" class="btn btn-warning btn-sm nonformal_update">Ubah</a>
-                        <button type="button" class="btn btn-danger btn-sm btn-delete nonformal_delete" data-id="${row.id}">Hapus</button>
+                            <button type="button" class="btn btn-primary btn-sm nonformal_preview" data-toggle="modal" data-target="#modal_preview" data-id="${row.id}">Show</button>
+                            <a role="button" href="javascript:;" type="button" data-id="${row.id}" class="btn btn-warning btn-sm nonformal_update">Ubah</a>
+                            <button type="button" class="btn btn-danger btn-sm btn-delete nonformal_delete" data-id="${row.id}">Hapus</button>
                         `;
                         },
                     }],
@@ -1438,6 +1463,7 @@
                         class: "wrapok",
                         render: function(data, type, row, full, meta) {
                             return `
+                        <button type="button" class="btn btn-primary btn-sm kepangkatan_preview" data-toggle="modal" data-target="#modal_preview" data-id="${row.id}">Show</button>
                         <a role="button" href="javascript:;" type="button" data-id="${row.id}" class="btn btn-warning btn-sm kepangkatan_update">Ubah</a>
                         <button type="button" class="btn btn-danger btn-sm btn-delete kepangkatan_delete" data-id="${row.id}">Hapus</button>
                         `;
@@ -1521,6 +1547,7 @@
                         class: "wrapok",
                         render: function(data, type, row, full, meta) {
                             return `
+                        <button type="button" class="btn btn-primary btn-sm jabatan_preview" data-toggle="modal" data-target="#modal_preview" data-id="${row.id}">Show</button>
                         <a role="button" href="javascript:;" type="button" data-id="${row.id}" class="btn btn-warning btn-sm jabatan_update">Ubah</a>
                         <button type="button" class="btn btn-danger btn-sm btn-delete jabatan_delete" data-id="${row.id}">Hapus</button>
                         `;
@@ -1584,6 +1611,27 @@
             AxiosCall.add_pendidikan_formal("{{ route('add-pendidikan-formal') }}", formData,
                 "#formal_form");
         });
+        $(document).on('click', '.formal_preview', function() {
+
+            var key = $(this).data('id');
+            console.log(key);
+
+            $.ajax({
+                url: `profile/pendidikan-formal/${key}`,
+                method: "GET",
+                success: function(data) {
+                    let result = JSON.parse(data);
+
+                    if (result.status) {
+                        var res = result.data;
+
+                        $('#img_preview_docs').attr("src",
+                            `{{ asset('storage/${res.document_formal}') }}`);
+
+                    }
+                }
+            });
+        });
         $(document).on('click', '.formal_update', function() {
 
             PanelForm.init('formal_create');
@@ -1610,7 +1658,7 @@
                     }
                 }
             });
-        })
+        });
         $(document).on('submit', "#formal_form[data-type='update']", function(e) {
             e.preventDefault();
             console.log($(this));
@@ -1676,6 +1724,26 @@
 
             AxiosCall.add_pendidikan_nonformal("{{ route('add-pendidikan-nonformal') }}", formData,
                 "#nonformal_form");
+        });
+        $(document).on('click', '.nonformal_preview', function() {
+
+            var key = $(this).data('id');
+            console.log(key);
+
+            $.ajax({
+                url: `profile/pendidikan-nonformal/${key}`,
+                method: "GET",
+                success: function(data) {
+                    let result = JSON.parse(data);
+
+                    if (result.status) {
+                        var res = result.data;
+
+                        $('#img_preview_docs').attr("src",
+                            `{{ asset('storage/${res.document_nonformal}') }}`);
+                    }
+                }
+            });
         });
         $(document).on('click', '.nonformal_update', function() {
 
@@ -1770,6 +1838,26 @@
 
             AxiosCall.add_kepangkatan("{{ route('add-kepangkatan') }}", formData,
                 "#kepangkatan_form");
+        });
+        $(document).on('click', '.kepangkatan_preview', function() {
+
+            var key = $(this).data('id');
+            console.log(key);
+
+            $.ajax({
+                url: `profile/kepangkatan/${key}`,
+                method: "GET",
+                success: function(data) {
+                    let result = JSON.parse(data);
+
+                    if (result.status) {
+                        var res = result.data;
+
+                        $('#img_preview_docs').attr("src",
+                            `{{ asset('storage/${res.document_kepangkatan}') }}`);
+                    }
+                }
+            });
         });
         $(document).on('click', '.kepangkatan_update', function() {
 
@@ -1870,6 +1958,26 @@
 
             AxiosCall.add_jabatan("{{ route('add-jabatan') }}", formData,
                 "#jabatan_form");
+        });
+        $(document).on('click', '.jabatan_preview', function() {
+
+            var key = $(this).data('id');
+            console.log(key);
+
+            $.ajax({
+                url: `profile/jabatan/${key}`,
+                method: "GET",
+                success: function(data) {
+                    let result = JSON.parse(data);
+
+                    if (result.status) {
+                        var res = result.data;
+
+                        $('#img_preview_docs').attr("src",
+                            `{{ asset('storage/${res.document_jabatan}') }}`);
+                    }
+                }
+            });
         });
         $(document).on('click', '.jabatan_update', function() {
 
