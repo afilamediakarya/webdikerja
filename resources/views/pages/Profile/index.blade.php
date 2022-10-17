@@ -679,7 +679,7 @@
 
                 <div class="separator separator-dashed mt-8 mb-5"></div>
                 <div class="">
-                    <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
+                    <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel-formal">Batal</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
@@ -771,7 +771,7 @@
 
                 <div class="separator separator-dashed mt-8 mb-5"></div>
                 <div class="">
-                    <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
+                    <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel-nonformal">Batal</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
@@ -921,7 +921,7 @@
 
                 <div class="separator separator-dashed mt-8 mb-5"></div>
                 <div class="">
-                    <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
+                    <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel-kepangkatan">Batal</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
@@ -1068,7 +1068,7 @@
 
                 <div class="separator separator-dashed mt-8 mb-5"></div>
                 <div class="">
-                    <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
+                    <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel-jabatan">Batal</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
@@ -2107,6 +2107,11 @@
                 dataRowJabatan.destroy();
                 dataRowJabatan.init();
             });
+
+            $('.btn-cancel-formal, .btn-cancel-nonformal, .btn-cancel-kepangkatan, .btn-cancel-jabatan').on('click',
+                function() {
+                    PanelForm.action('hide');
+                });
 
 
         });
