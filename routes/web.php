@@ -87,8 +87,10 @@ Route::middleware('Auth')->group(function () {
     Route::prefix('laporan')->group(function () {
         Route::get('/absen/{type}', [LaporanController::class, 'absen'])->name('laporan-absen');
         Route::get('/skp', [LaporanController::class, 'skp'])->name('laporan-skp');
+        Route::get('/tpp/{type}', [LaporanController::class, 'tpp'])->name('laporan-tpp');
         Route::get('/aktivitas', [LaporanController::class, 'aktivitas'])->name('laporan-aktivitas');
         Route::get('/export/rekapitulasi_pegawai/{params}', [LaporanController::class, 'exportRekapAbsen'])->name('laporan-absen-pegawai');
+        Route::get('/export/rekapitulasi_tpp/{params}', [LaporanController::class, 'exportRekapTpp'])->name('laporan-tpp-pegawai');
         // Route::get('/export/laporanSkp/{jenis}/{type}/{bulan}', [LaporanController::class, 'exportLaporanSkp'])->name('laporan-skp-pegawai');
         Route::get('/export/rekapitulasiSkp/{jenis}/{type}/{bulan}', [LaporanController::class, 'exportRekapSkp'])->name('laporan-rekap-skp');
         Route::get('/export/laporanSkp/{jenis}/{type}/{bulan}/{id_pegawai}', [LaporanController::class, 'exportLaporanSkp'])->name('laporan-skp-pegawai');

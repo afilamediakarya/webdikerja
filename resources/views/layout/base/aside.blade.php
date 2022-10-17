@@ -516,6 +516,26 @@
                                     </a>
                                 </li>
 
+                                @if (Session::get('user.role') == 'super_admin')
+                                    <li class="menu-item" aria-haspopup="true">
+                                        <a href="{{ url('/laporan/tpp/super_admin') }}" class="menu-link">
+                                            <i class="menu-bullet menu-bullet-dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="menu-text text-capitalize">TPP</span>
+                                        </a>
+                                    </li>
+                                @else
+                                    <li class="menu-item" aria-haspopup="true">
+                                        <a href="{{ url('/laporan/tpp/admin') }}" class="menu-link">
+                                            <i class="menu-bullet menu-bullet-dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="menu-text text-capitalize">TPP</span>
+                                        </a>
+                                    </li>
+                                @endif
+
                                 @if (Session::get('user.role') == 'admin_opd')
                                     <li class="menu-item" aria-haspopup="true">
                                         <a href="{{ url('/laporan/bankom/admin') }}" class="menu-link">

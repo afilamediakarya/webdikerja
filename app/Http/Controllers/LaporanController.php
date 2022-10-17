@@ -58,6 +58,284 @@ class LaporanController extends Controller
         return view('pages.laporan.skp', compact('page_title', 'page_description', 'breadcumb', 'level', 'pegawai', 'id_pegawai'));
     }
 
+    /*
+    REKAP TPP
+    */
+    public function tpp($TypeRole)
+    {
+        $page_title = 'Laporan';
+        $page_description = 'Daftar Pembayaran TPP Pegawai';
+        $breadcumb = ['TPP'];
+
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+
+        if ($TypeRole == 'super_admin') {
+            $data = Http::withToken($token)->get($url . "/satuan_kerja/list");
+            $satuan_kerja = $data['data'];
+        } else {
+            $data = Http::withToken($token)->get($url . "/satuan_kerja/byAdminOpd");
+            $satuan_kerja = $data['data'];
+        }
+        // return $satuan_kerja;
+        return view('pages.laporan.tpp', compact('page_title', 'page_description', 'breadcumb', 'TypeRole', 'satuan_kerja'));
+    }
+
+    public function exportRekapTpp($params)
+    {
+        $val = json_decode($params);
+
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+
+        $response = '';
+        $response = Http::withToken($token)->get($url . "/laporan-rekapitulasi-tpp/admin-opd?satuan_kerja=$val->satuanKerja&bulan=$val->month");
+
+        $data = $response['data'];
+
+        return $this->printRekapTpp($data, $val->month, $val->type);
+    }
+
+    public function printRekapTpp($data, $bulan, $type)
+    {
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
+            ->setLastModifiedBy('BKPSDM BULUKUMBA')
+            ->setTitle('Laporan Pembayaran TPP')
+            ->setSubject('Laporan Pembayaran TPP')
+            ->setDescription('Laporan Pembayaran TPP')
+            ->setKeywords('pdf php')
+            ->setCategory('LAPORAN Pembayaran TPP');
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+
+        $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
+
+        $sheet->getRowDimension(1)->setRowHeight(17);
+        $sheet->getRowDimension(2)->setRowHeight(17);
+        $sheet->getRowDimension(3)->setRowHeight(7);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setHorizontalCentered(true);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setVerticalCentered(false);
+
+        // //Margin PDF
+        $spreadsheet->getActiveSheet()->getPageMargins()->setTop(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setRight(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.5);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
+
+        $tahun = ""  . session('tahun_penganggaran') . "-" . $bulan . "";
+        if ($bulan != '0') {
+
+            $periode = date("01", strtotime($tahun)) . ' ' . strftime('%B', mktime(0, 0, 0, $bulan + 1, 0)) . ' s/d ' . date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+        } else {
+            $periode = "Tahun " . session('tahun_penganggaran');
+        }
+
+        $sheet->setCellValue('A1', 'LAPORAN PEMBAYARAN TAMBAHAN PENGAHASILAN PEGAWAI')->mergeCells('A1:U1');
+        $sheet->setCellValue('A2', 'BULAN ' . strtoupper(date('F Y', mktime(0, 0, 0, $bulan + 1, 0))))->mergeCells('A2:U2');
+        $sheet->setCellValue('A3', 'OPD ' . strtoupper($data['satuan_kerja']))->mergeCells('A3:U3');
+
+        $sheet->setCellValue('A4', 'BULAN ' . strtoupper(date('F Y', mktime(0, 0, 0, $bulan + 1, 0))))->mergeCells('A4:U4');
+
+        $sheet->setCellValue('A5', 'NO.')->mergeCells('A5:A7');
+        $sheet->setCellValue('B5', 'NAMA & NIP')->mergeCells('B5:B7');
+        $sheet->setCellValue('C5', 'GOL.')->mergeCells('C5:C7');
+        $sheet->setCellValue('D5', 'JABATAN')->mergeCells('D5:D7');
+        $sheet->setCellValue('E5', 'JENIS JABATAN SESUAI PERBUB TPP')->mergeCells('E5:E7');
+        $sheet->setCellValue('F5', 'KELAS JABATAN')->mergeCells('F5:F7');
+        $sheet->setCellValue('G5', 'PAGU TPP')->mergeCells('G5:G7');
+        $sheet->setCellValue('H5', 'BESARAN TPP')->mergeCells('H5:N5');
+        $sheet->setCellValue('H6', 'KINERJA 60% DARI PAGU TPP')->mergeCells('H6:J6');
+        $sheet->setCellValue('K6', 'KEHADIRAN 40% DARI PAGU TPP')->mergeCells('K6:N6');
+        $sheet->setCellValue('H7', '% KINERJA');
+        $sheet->setCellValue('I7', 'NILAI SKP');
+        $sheet->setCellValue('J7', 'NILAI KINERJA');
+        $sheet->setCellValue('K7', '% KEHADIRAN');
+        $sheet->setCellValue('L7', '% PENGURANGAN KEHADIRAN');
+        $sheet->setCellValue('M7', 'NILAI PENGURANGAN KEHADIRAN');
+        $sheet->setCellValue('N7', 'JUMLAH KEHADIRAN');
+        $sheet->setCellValue('O5', 'BPJS 1%')->mergeCells('O5:O7');
+        $sheet->setCellValue('P5', 'TPP BRUTO')->mergeCells('P5:P7');
+        $sheet->setCellValue('Q5', 'PPH PSL 21')->mergeCells('Q5:Q7');
+        $sheet->setCellValue('R5', 'TPP NETTO')->mergeCells('R5:R7');
+        $sheet->setCellValue('S5', 'NILAI BRUTO SPM')->mergeCells('S5:S7');
+        $sheet->setCellValue('T5', 'NO. REK')->mergeCells('T5:T7');
+        $sheet->setCellValue('U5', 'IURAN 4% (DIBAYAR OLEH PEMDA)')->mergeCells('U5:U7');
+
+        $sheet->getColumnDimension('A')->setWidth(5);
+        $sheet->getColumnDimension('B')->setWidth(25);
+        $sheet->getColumnDimension('D')->setWidth(20);
+        $sheet->getColumnDimension('E')->setWidth(20);
+        $sheet->getColumnDimension('G')->setWidth(20);
+        $sheet->getColumnDimension('H')->setWidth(5);
+        $sheet->getColumnDimension('I')->setWidth(5);
+        $sheet->getColumnDimension('J')->setWidth(5);
+        $sheet->getColumnDimension('K')->setWidth(5);
+        $sheet->getColumnDimension('L')->setWidth(5);
+        $sheet->getColumnDimension('M')->setWidth(5);
+        $sheet->getColumnDimension('N')->setWidth(5);
+        $sheet->getColumnDimension('O')->setWidth(10);
+        $sheet->getColumnDimension('P')->setWidth(10);
+        $sheet->getColumnDimension('Q')->setWidth(10);
+        $sheet->getColumnDimension('R')->setWidth(10);
+        $sheet->getColumnDimension('S')->setWidth(15);
+
+        $sheet->getStyle('A1:A3')->getFont()->setSize(12);
+        $sheet->getStyle('A:U')->getAlignment()->setWrapText(true);
+        $sheet->getStyle('A1:A3')->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('A5:U7')->getFont()->setBold(true);
+        $sheet->getStyle('A5:U7')->getAlignment()->setVertical('center')->setHorizontal('center');
+
+        $cell = 8;
+        $jmlPaguTpp = 0;
+        $jmlNilaiKinerja = 0;
+        $jmlNilaiKehadiran = 0;
+        $jmlBpjs = 0;
+        $jmlTppBruto = 0;
+        $jmlPphPsl = 0;
+        $jmlTppNetto = 0;
+        $jmlBrutoSpm = 0;
+        $jmlIuran = 0;
+
+        foreach ($data['list_pegawai'] as $key => $value) {
+            // return $value;
+            $sheet->setCellValue('A' . $cell, $key + 1);
+            $sheet->setCellValue('B' . $cell, $value['nama'] . PHP_EOL . "'" . $value['nip']);
+            $sheet->setCellValue('C' . $cell, $value['golongan']);
+            $sheet->setCellValue('D' . $cell, $value['nama_jabatan']);
+            $sheet->setCellValue('E' . $cell, $value['jenis_jabatan']);
+            // kelas jabatan
+            $sheet->setCellValue('F' . $cell, '-');
+            $sheet->setCellValue('G' . $cell, number_format($value['nilai_jabatan']));
+            $sheet->setCellValue('H' . $cell, '60%');
+            $sheet->setCellValue('I' . $cell, $value['total_kinerja']);
+
+            $nilaiKinerja = (60 * $value['nilai_jabatan'] / 100) * ($value['total_kinerja'] / 120);
+            $sheet->setCellValue('J' . $cell, number_format($nilaiKinerja));
+
+            $persentaseKehadiran = 40 * $value['nilai_jabatan'] / 100;
+            $sheet->setCellValue('K' . $cell, number_format($persentaseKehadiran));
+            $sheet->setCellValue('L' . $cell, $value['persentase_pemotongan']);
+
+            $nilaiKehadiran = $persentaseKehadiran * $value['persentase_pemotongan'] / 100;
+            $sheet->setCellValue('M' . $cell, number_format($nilaiKehadiran));
+
+            $jumlahKehadiran = $persentaseKehadiran - $nilaiKehadiran;
+            $sheet->setCellValue('N' . $cell, number_format($jumlahKehadiran));
+
+            $bpjs = 1 * $value['nilai_jabatan'] / 100;
+            $sheet->setCellValue('O' . $cell, number_format($bpjs));
+
+            $tppBruto = $nilaiKinerja + $jumlahKehadiran - $bpjs;
+            $sheet->setCellValue('P' . $cell, number_format($tppBruto));
+
+            $pphPsl = 15 * $tppBruto / 100;
+            $sheet->setCellValue('Q' . $cell, number_format($pphPsl));
+
+            $tppNetto = $tppBruto - $pphPsl;
+            $sheet->setCellValue('R' . $cell, number_format($tppNetto));
+
+            $iuran = 4 * $value['nilai_jabatan'] / 100;
+            $brutoSpm = $nilaiKehadiran + $jumlahKehadiran + $iuran;
+            $sheet->setCellValue('S' . $cell, number_format($brutoSpm));
+
+            // norek
+            $sheet->setCellValue('T' . $cell, '-');
+
+            $sheet->setCellValue('U' . $cell, number_format($iuran));
+
+            // JUMLAH
+            $jmlPaguTpp += $value['nilai_jabatan'];
+            $jmlNilaiKinerja += $nilaiKehadiran;
+            $jmlNilaiKehadiran += $jumlahKehadiran;
+            $jmlBpjs += $bpjs;
+            $jmlTppBruto += $tppBruto;
+            $jmlPphPsl += $pphPsl;
+            $jmlTppNetto += $tppNetto;
+            $jmlBrutoSpm += $brutoSpm;
+            $jmlIuran += $iuran;
+
+            $cell++;
+        }
+
+        $sheet->setCellValue('A' . $cell, "JUMLAH")->mergeCells('A' . $cell . ':F' . $cell);
+        $sheet->setCellValue('G' . $cell, number_format($jmlPaguTpp));
+        $sheet->setCellValue('J' . $cell, number_format($jmlNilaiKinerja));
+        $sheet->setCellValue('N' . $cell, number_format($jmlNilaiKehadiran));
+        $sheet->setCellValue('O' . $cell, number_format($jmlBpjs));
+        $sheet->setCellValue('P' . $cell, number_format($jmlTppBruto));
+        $sheet->setCellValue('Q' . $cell, number_format($jmlPphPsl));
+        $sheet->setCellValue('R' . $cell, number_format($jmlTppNetto));
+        $sheet->setCellValue('S' . $cell, number_format($jmlBrutoSpm));
+        $sheet->setCellValue('U' . $cell, number_format($jmlIuran));
+
+        $sheet->getStyle('A5:U' . $cell)->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('B5:B' . $cell)->getAlignment()->setVertical('center')->setHorizontal('left');
+        $sheet->getStyle('A' . $cell . ':U' . $cell)->getFont()->setBold(true);
+
+        $border = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '0000000'],
+                ],
+            ],
+        ];
+
+        $sheet->getStyle('A5:U' . $cell)->applyFromArray($border);
+
+        $cell++;
+        $sheet->setCellValue('B' . $cell, '')->mergeCells('B' . $cell . ':U' . $cell);
+
+        $tgl_cetak = date("t", strtotime($tahun)) . ' ' . strftime('%B %Y', mktime(0, 0, 0, $bulan + 1, 0, (int)session('tahun_penganggaran')));
+
+        $sheet->setCellValue('S' . ++$cell, 'Bulukumba, ' . $tgl_cetak)->mergeCells('S' . $cell . ':U' . $cell);
+        $sheet->getStyle('E' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $cell = $cell + 2;
+        $sheet->setCellValue('C' . $cell, 'KEPALA OPD')->mergeCells('C' . $cell . ':D' . $cell);
+        $sheet->setCellValue('I' . $cell, 'BENDAHARA PENGELUARAN')->mergeCells('I' . $cell . ':L' . $cell);
+        $sheet->setCellValue('R' . $cell, 'NAMA PEMBUAT DAFTAR')->mergeCells('R' . $cell . ':T' . $cell);
+        $sheet->getStyle('C' . $cell . ':S' . $cell)->getAlignment()->setVertical('center')->setHorizontal('center');
+
+
+        $cell = $cell + 3;
+        $sheet->setCellValue('C' . $cell, 'NAMA KEPALA OPD')->mergeCells('C' . $cell . ':D' . $cell);
+        $sheet->setCellValue('I' . $cell, 'NAMA BENDAHARA')->mergeCells('I' . $cell . ':L' . $cell);
+        $sheet->setCellValue('R' . $cell, 'NAMA PEMBUAT DAFTAR')->mergeCells('R' . $cell . ':T' . $cell);
+        $sheet->getStyle('C' . $cell . ':S' . $cell)->getAlignment()->setVertical('center')->setHorizontal('center');
+        $sheet->getStyle('C' . $cell . ':S' . $cell)->getFont()->setUnderline(true);;
+
+        $cell++;
+        $sheet->setCellValue('C' . $cell, 'GOLONGAN JABATAN')->mergeCells('C' . $cell . ':D' . $cell);
+        $sheet->setCellValue('C' . $cell, 'NIP')->mergeCells('C' . $cell . ':D' . $cell);
+        $sheet->getStyle('C' . $cell . ':S' . $cell)->getAlignment()->setVertical('center')->setHorizontal('center');
+
+
+
+        if ($type == 'excel') {
+            // Untuk download 
+            $writer = new Xlsx($spreadsheet);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="Laporan SKP ' . $data['pegawai_dinilai']['nama'] . '.xlsx"');
+        } else {
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+                ->setOddHeader('&C&H' . url()->current());
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+                ->setOddFooter('&L&B &RPage &P of &N');
+            $class = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class;
+            \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', $class);
+            header('Content-Type: application/pdf');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Pdf');
+        }
+
+        $writer->save('php://output');
+    }
+
 
     public function aktivitas()
     {
