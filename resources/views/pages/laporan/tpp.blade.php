@@ -121,7 +121,31 @@
                         "warning"
                     );
                 }
-            })
+            });
+
+            $('#export-excel').on('click', function() {
+                let month = $('#month').val();
+                if (month != null) {
+                    let params = {
+                        'month': month,
+                        'type': 'excel',
+                        'role': typeRole,
+                        'satuanKerja': $('#satuan_kerja').val()
+                    };
+
+
+                    let dataParams = JSON.stringify(params);
+                    console.log(dataParams);
+                    url = '/laporan/export/rekapitulasi_tpp/' + dataParams;
+                    window.open(url);
+                } else {
+                    Swal.fire(
+                        "Perhatian",
+                        "Pilih bulan terlebih dahulu",
+                        "warning"
+                    );
+                }
+            });
 
 
 

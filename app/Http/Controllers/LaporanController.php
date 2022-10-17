@@ -249,7 +249,7 @@ class LaporanController extends Controller
 
             // JUMLAH
             $jmlPaguTpp += $value['nilai_jabatan'];
-            $jmlNilaiKinerja += $nilaiKehadiran;
+            $jmlNilaiKinerja += $nilaiKinerja;
             $jmlNilaiKehadiran += $jumlahKehadiran;
             $jmlBpjs += $bpjs;
             $jmlTppBruto += $tppBruto;
@@ -320,7 +320,7 @@ class LaporanController extends Controller
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="Laporan SKP ' . $data['pegawai_dinilai']['nama'] . '.xlsx"');
+            header('Content-Disposition: attachment;filename="Daftar Laporan TPP"' . $data['satuan_kerja'] . ' Bulan ' . ucwords(date('F Y', mktime(0, 0, 0, $bulan + 1, 0))) . ' .xlsx"');
         } else {
             $spreadsheet->getActiveSheet()->getHeaderFooter()
                 ->setOddHeader('&C&H' . url()->current());
