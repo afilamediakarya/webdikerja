@@ -260,6 +260,10 @@
                             }).then(function() {
                                 $("#createForm")[0].reset();
                                 Panel.action('hide');
+                                // calendar.addEventSource( response );
+                                kalender.refetchEvents();
+
+                                // .fullCalendar( ‘refresh’ )
                             });
                         }
                     }   
