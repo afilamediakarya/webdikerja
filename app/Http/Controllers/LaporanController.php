@@ -392,7 +392,6 @@ class LaporanController extends Controller
             $this->exportrekapPegawai($data, $val->type, 'desktop');
         } else if ($val->role == 'admin' || $val->role == 'super_admin') {
             $data = $this->getRekappegawaiByOpd($val->startDate, $val->endDate, $val->satuanKerja);
-
             return $this->exportrekapOpd($data, $val->type, $val->startDate, $val->endDate);
         }
     }
