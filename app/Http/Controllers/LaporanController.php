@@ -2557,7 +2557,6 @@ class LaporanController extends Controller
         $sheet->setCellValue('AA6', 'JUMLAH PEMOTONGAN KEHADIRAN')->mergeCells('AA6:AA10');
         $sheet->setCellValue('AB6', 'PERSENTASE PEMOTONGAN TUNJANGAN KEHADIRAN (40%)')->mergeCells('AB6:AB10');
 
-
         $sheet->setCellValue('E7', 'JUMLAH KEHADIRAN KERJA')->mergeCells('E7:E10');
         $sheet->setCellValue('F7', 'TANPA KETERANGAN')->mergeCells('F7:H7');
         $sheet->setCellValue('F8', 'JUMLAH HARI TANPA KETERANGAN')->mergeCells('F8:F10');
@@ -2586,13 +2585,9 @@ class LaporanController extends Controller
         $sheet->setCellValue('W9', '91' . PHP_EOL . 'Keatas')->mergeCells('W9:W10');
         $sheet->setCellValue('X9', 'JML' . PHP_EOL . 'POT')->mergeCells('X9:X10');
 
-
-
-
         $cell = 11;
-
-        // $jml_hari_kerja = [];
         foreach ($data['pegawai'] as $i => $val) {
+    
             $sheet->getRowDimension($cell)->setRowHeight(30);
             $selisih_waktu = 0;
             $jml_hari_kerja = [];
@@ -2607,16 +2602,28 @@ class LaporanController extends Controller
             $date_val = array();
             $jml_tanpa_keterangan = 0;
             $nums = 0;
+            
             $sheet->setCellValue('B' . $cell, $i + 1);
             $sheet->setCellValue('C' . $cell, $val[0]['pegawai']['nama'] . ' ' . PHP_EOL . ' ' . $val[0]['pegawai']['nip']);
             $sheet->setCellValue('D' . $cell, $data['hari_kerja']);
             foreach ($val as $t => $v) {
+                  $count_absen = 0;
+              
+                
                 if (isset($v['status'])) {
+                    $count_absen = array_count_values(array_column($val, 'tanggal_absen'))[$v['tanggal_absen']];
+                    if ($count_absen == 1) {
+                        $cpk_90_keatas[] =  $v['status'];
+                    }
                     // if ($v['status'] == 'hadir') {
                     array_push($date_val, $v['tanggal_absen']);
+                    $tes = [];
                     if ($v['jenis'] == 'checkin') {
                         $jml_hari_kerja[] = $v['id'];
                         $selisih_waktu = $this->konvertWaktu('checkin', $v['waktu_absen']);
+
+                        $tes[] = $selisih_waktu;
+
 
                         if ($selisih_waktu >= 1 && $selisih_waktu <= 30) {
                             $kmk_30[] = $selisih_waktu;
@@ -2678,7 +2685,12 @@ class LaporanController extends Controller
             $sheet->setCellValue('Y' . $cell, 0);
             $sheet->setCellValue('Z' . $cell, 0);
 
+            // if ($v['pegawai']['nip'] == '198305172001121003') {
+            //     return count($kmk_30);
+            //      return ($jml_tanpa_keterangan * 3) .' || '.  (count($kmk_30) * 0.5) .' || '. (count($kmk_60)) .' || '.  (count($kmk_90) * 1.25) .' || '. (count($kmk_90_keatas) * 1.5) .' || '. (count($cpk_30) * 0.5) .' || '. (count($cpk_60)) .' || '. (count($cpk_90) * 1.25) .' || '. (count($cpk_90_keatas) * 1.5);
+            // }
 
+       
             $jml_potongan_kehadiran = ($jml_tanpa_keterangan * 3) + (count($kmk_30) * 0.5) + (count($kmk_60)) + (count($kmk_90) * 1.25) + (count($kmk_90_keatas) * 1.5) + (count($cpk_30) * 0.5) + (count($cpk_60)) + (count($cpk_90) * 1.25) + count($cpk_90_keatas) * 1.5;
 
             $persentase_pemotongan_tunjangan = $jml_potongan_kehadiran * 0.4;
