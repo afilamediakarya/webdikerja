@@ -1574,6 +1574,9 @@
         }();
 
         // trigger button add data
+
+        let image_url = {!! json_encode($image_url) !!}
+
         $(document).on('click', '#formal_button', function() {
             PanelForm.init('formal_create');
             PanelForm.action('show', 'submit');
@@ -1624,9 +1627,20 @@
 
                     if (result.status) {
                         var res = result.data;
+                        // console.log(res.document_formal);
+                        // if (key == 'document_formal') {
+                        //           $(`#${key}`).attr("src",
+                        //         `${image_url}/${value}`);
+                        //     }
 
-                        $('#img_preview_docs').attr("src",
-                            `{{ asset('storage/${res.document_formal}') }}`);
+                        $.each(res, function(key, value) {
+
+                        if (key == 'document_formal') {
+                            $(`#img_preview_docs`).attr("src",
+                            `${image_url}/${value}`);
+                        }
+
+                        });
 
                     }
                 }
@@ -1643,17 +1657,23 @@
                 url: `profile/pendidikan-formal/${key}`,
                 method: "GET",
                 success: function(data) {
+              
                     let result = JSON.parse(data);
-
                     if (result.status) {
                         var res = result.data;
 
+                        console.log(res);
+
                         $.each(res, function(key, value) {
+
+                            if (key == 'document_formal') {
+                                  $(`#${key}`).attr("src",
+                                `${image_url}/${value}`);
+                            }
 
                             $("select[name='" + key + "']").val(value);
                             $("input[name='" + key + "']").val(value);
-                            $(`#${key}`).attr("src",
-                                `{{ asset('storage/${value}') }}`);
+                          
                         });
                     }
                 }
@@ -1738,10 +1758,15 @@
 
                     if (result.status) {
                         var res = result.data;
-
-                        $('#img_preview_docs').attr("src",
-                            `{{ asset('storage/${res.document_nonformal}') }}`);
+                        $.each(res, function(key, value) {
+                            if (key == 'document_nonformal') {
+                                $(`#img_preview_docs`).attr("src",
+                                `${image_url}/${value}`);
+                            }
+                        });
                     }
+
+
                 }
             });
         });
@@ -1762,12 +1787,15 @@
                         var res = result.data;
 
                         $.each(res, function(key, value) {
-                            console.log(key + " | " + value);
-                            console.log($(`#${key}`));
+                           
+                            if (key == 'document_nonformal') {
+                                  $(`#${key}`).attr("src",
+                                `${image_url}/${value}`);
+                            }
+
                             $("select[name='" + key + "']").val(value);
                             $("input[name='" + key + "']").val(value);
-                            $(`#${key}`).attr("src",
-                                `{{ asset('storage/${value}') }}`);
+                         
                         });
                     }
                 }
@@ -1853,8 +1881,12 @@
                     if (result.status) {
                         var res = result.data;
 
-                        $('#img_preview_docs').attr("src",
-                            `{{ asset('storage/${res.document_kepangkatan}') }}`);
+                        $.each(res, function(key, value) {
+                            if (key == 'document_kepangkatan') {
+                                $(`#img_preview_docs`).attr("src",
+                                `${image_url}/${value}`);
+                            }
+                        });
                     }
                 }
             });
@@ -1877,6 +1909,12 @@
 
                         $.each(res, function(key, value) {
                             $("select[name='" + key + "']").val(value);
+
+                            if (key == 'document_kepangkatan') {
+                                  $(`#${key}`).attr("src",
+                                `${image_url}/${value}`);
+                            }
+
                             if (key == 'bulan_kerja') {
                                 var months = ['January', 'February', 'March', 'April', 'May',
                                     'June', 'July', 'August', 'September', 'October',
@@ -1886,8 +1924,8 @@
                                 $("input[name='bulan__kerja']").val("value");
                             }
                             $("input[name='" + key + "']").val(value);
-                            $(`#${key}`).attr("src",
-                                `{{ asset('storage/${value}') }}`);
+                            // $(`#${key}`).attr("src",
+                            //     `{{ asset('storage/${value}') }}`);
                         });
                     }
                 }
@@ -1972,9 +2010,12 @@
 
                     if (result.status) {
                         var res = result.data;
-
-                        $('#img_preview_docs').attr("src",
-                            `{{ asset('storage/${res.document_jabatan}') }}`);
+                        $.each(res, function(key, value) {
+                            if (key == 'document_jabatan') {
+                                $(`#img_preview_docs`).attr("src",
+                                `${image_url}/${value}`);
+                            }
+                        });
                     }
                 }
             });
@@ -1996,10 +2037,16 @@
                         var res = result.data;
 
                         $.each(res, function(key, value) {
+
+                            if (key == 'document_jabatan') {
+                                  $(`#${key}`).attr("src",
+                                `${image_url}/${value}`);
+                            }
+
                             $("select[name='" + key + "']").val(value);
                             $("input[name='" + key + "']").val(value);
-                            $(`#${key}`).attr("src",
-                                `{{ asset('storage/${value}') }}`);
+                            // $(`#${key}`).attr("src",
+                            //     `{{ asset('storage/${value}') }}`);
                         });
                     }
                 }
