@@ -54,12 +54,36 @@
             <div class="card card-custom col-md">
                 <div class="card-body">
                     <div class="row" style="margin-bottom: 1rem">
+                    <div id="container-filter-dinas" class="col-lg-4 mb-5">
+                            <label for="filter-valid" class="form-label">Satuan Dinas</label>
+                            <select class="form-control font-weight-bolder" type="text" id="filter-satuan-kerja">
+                                <!-- <option disabled selected> Pilih Satuan Kerja </option> -->
+                                <option value="semua" selected> Semua</option>
+                                @if ($role == 'super_admin')
+                                    @foreach ($dinas as $key => $value)
+                                        <option value="{{ $value['id'] }}"
+                                            @if ($value['id'] == 1) selected @endif>
+                                            {{ $value['nama_satuan_kerja'] }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
                         <div class="col-lg-4 mb-5">
-                            <label for="filter-valid" class="form-label">Jenis Kelamin</label>
-                            <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
+                            <label for="filter-valid" class="form-label">Gol. Pangkat</label>
+                            <select class="form-control" id="gol_pangkat" name="gol_pangkat">
                                 <option value="semua" selected>Semua</option>
-                                <option value="laki-laki">Laki-laki</option>
-                                <option value="perempuan">Perempuan</option>
+                                @foreach ($pangkat as $key => $value)
+                                    <option value="{{ $value['value'] }}">{{ $value['value'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-4 mb-5">
+                            <label for="filter-valid" class="form-label">Pendidikan</label>
+                            <select class="form-control" id="pendidikan" name="pendidikan">
+                                <option value="semua" selected>Semua</option>
+                                @foreach ($pendidikan as $key => $value)
+                                    <option value="{{ $value['value'] }}">{{ $value['value'] }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-lg-4 mb-5">
@@ -81,37 +105,15 @@
                             </select>
                         </div>
                         <div class="col-lg-4 mb-5">
-                            <label for="filter-valid" class="form-label">Pendidikan</label>
-                            <select class="form-control" id="pendidikan" name="pendidikan">
+                            <label for="filter-valid" class="form-label">Jenis Kelamin</label>
+                            <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
                                 <option value="semua" selected>Semua</option>
-                                @foreach ($pendidikan as $key => $value)
-                                    <option value="{{ $value['value'] }}">{{ $value['value'] }}</option>
-                                @endforeach
+                                <option value="laki-laki">Laki-laki</option>
+                                <option value="perempuan">Perempuan</option>
                             </select>
                         </div>
-                        <div class="col-lg-4 mb-5">
-                            <label for="filter-valid" class="form-label">Gol. Pangkat</label>
-                            <select class="form-control" id="gol_pangkat" name="gol_pangkat">
-                                <option value="semua" selected>Semua</option>
-                                @foreach ($pangkat as $key => $value)
-                                    <option value="{{ $value['value'] }}">{{ $value['value'] }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div id="container-filter-dinas" class="col-lg-4 mb-5">
-                            <label for="filter-valid" class="form-label">Satuan Dinas</label>
-                            <select class="form-control font-weight-bolder" type="text" id="filter-satuan-kerja">
-                                <!-- <option disabled selected> Pilih Satuan Kerja </option> -->
-                                <option value="semua" selected> Semua</option>
-                                @if ($role == 'super_admin')
-                                    @foreach ($dinas as $key => $value)
-                                        <option value="{{ $value['id'] }}"
-                                            @if ($value['id'] == 1) selected @endif>
-                                            {{ $value['nama_satuan_kerja'] }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
+                        
+                    
 
                         <div class="col-lg-8 row">
                             <div class="col">
@@ -311,6 +313,15 @@
         let pendidikan = $('#pendidikan').val();
         let gol_pangkat = $('#gol_pangkat').val();
 
+        
+
+        // $('#filter-satuan-kerja, #jenis_kelamin, #status_pernikahan, #agama, #pendidikan,#gol_pangkat').change(function () {
+        //     console.log(id_satuan_kerja+' | '+jenis_kelamin+' | '+status_pernikahan+'  | '+agama+' | '+pendidikan+' | '+gol_pangkat);
+        //     // alert(id_satuan_kerja+' | '+jenis_kelamin+' | '+status_pernikahan+'  | '+agama+' | '+pendidikan+' | '+gol_pangkat); 
+        // })
+
+        
+
 
 
         if (role != 'super_admin') {
@@ -350,7 +361,6 @@
                                     <a href="javascript:;" type="button" data-id="${data}" class="btn btn-secondary button-update" role="button" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i></a>
                                     <a href="javascript:;" type="button" data-id="${data}" class="btn btn-danger button-delete" data-toggle="tooltip" title="Hapus"><i class="fa fa-trash"></i></a>
                                     <a href="javascript:;" type="button" data-id="${data}" class="btn btn-warning button-reset-pass" data-toggle="tooltip" title="Reset Password"><i class="fas fa-user-lock"></i></a>
-                                    
                                 `;
                         }
                     }];
@@ -381,12 +391,12 @@
                         {
                             data: 'nama_jabatan',
                             render: function(data) {
-                                // console.log(data);
+                                console.log(data);
                                 return data !== null ? data : '-'
                             }
                         },
                         {
-                            data: 'id',
+                            data: 'id_pegawai',
                         }
                     ],
                     filter: function(data) {
@@ -433,6 +443,28 @@
             $("#table").toggle();
             $("#form").toggle();
             $(".open_form").toggle();
+        })
+
+        $('select').change(function () {
+            let id_ele = $(this).attr("id");
+      
+            if (id_ele == 'filter-satuan-kerja') {
+                id_satuan_kerja = this.value;
+            }else if(id_ele == 'jenis_kelamin'){
+                jenis_kelamin = this.value;
+            }else if(id_ele == 'status_pernikahan'){
+                status_pernikahan = this.value;
+            }else if(id_ele == 'agama'){
+                agama = this.value;
+            }else if(id_ele == 'pendidikan'){
+                pendidikan = this.value;
+            }else{
+                gol_pangkat = this.value;
+            }   
+
+                    console.log(id_satuan_kerja+' | '+jenis_kelamin+' | '+status_pernikahan+'  | '+agama+' | '+pendidikan+' | '+gol_pangkat);
+            dataRow.destroy();
+            dataRow.init();
         })
 
         $(document).on('submit', "#createForm[data-type='submit']", function(e) {
