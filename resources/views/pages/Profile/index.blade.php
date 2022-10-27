@@ -1650,6 +1650,8 @@
 
             PanelForm.init('formal_create');
             PanelForm.action('show', 'update');
+            $('#document_formal').attr("src", null);
+            inputFile.init('document_formal');
             var key = $(this).data('id');
             console.log(key);
 
@@ -1667,7 +1669,7 @@
                         $.each(res, function(key, value) {
 
                             if (key == 'document_formal') {
-                                  $(`#${key}`).attr("src",
+                                $(`#${key}`).attr("src",
                                 `${image_url}/${value}`);
                             }
 
@@ -1774,6 +1776,8 @@
 
             PanelForm.init('nonformal_create');
             PanelForm.action('show', 'update');
+            $('#document_nonformal').attr("src", null);
+            inputFile.init('document_nonformal');
             var key = $(this).data('id');
             console.log(key);
 
@@ -1895,6 +1899,8 @@
 
             PanelForm.init('kepangkatan_create');
             PanelForm.action('show', 'update');
+            $('#document_kepangkatan').attr("src", null);
+            inputFile.init('document_kepangkatan');
             var key = $(this).data('id');
             console.log(key);
 
@@ -2024,6 +2030,8 @@
 
             PanelForm.init('jabatan_create');
             PanelForm.action('show', 'update');
+            $('#document_jabatan').attr("src", null);
+            inputFile.init('document_jabatan');
             var key = $(this).data('id');
             console.log(key);
 
