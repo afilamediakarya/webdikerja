@@ -76,13 +76,12 @@ class ProfileController extends Controller
             return response()->json(['invalid' => $validator->errors()]);
         }
 
+        $imagePath = $request->file('foto_ijazah')->store('public/ijazah');
+
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
 
         $data = $request->all();
-
-        // $imagePath = $request->file('foto_ijazah')->store('ijazah');
-
         $filtered = array_filter(
             $data,
             function ($key) {
@@ -92,9 +91,9 @@ class ProfileController extends Controller
             },
             ARRAY_FILTER_USE_KEY
         );
-
-        $image = $request->file('foto_ijazah');
-        $response = Http::withToken($token)->attach('foto_ijazah', file_get_contents($image), $request->foto_ijazah->getClientOriginalName())->post($url."/profile/store-pendidikan-formal", $filtered);
+        $filtered["foto_ijazah"] = substr($imagePath,14);
+        $response = Http::withToken($token)
+        ->post($url . "/profile/store-pendidikan-formal", $filtered);
 
         if ($response->successful()) {
             $data = $response->object();
@@ -124,10 +123,6 @@ class ProfileController extends Controller
             return response()->json(['invalid' => $validator->errors()]);
         }
 
-        if (request('foto_ijazah')) {
-            Storage::delete(request('document'));
-            $imagePath = $request->file('foto_ijazah')->store('ijazah');
-        }
 
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
@@ -144,10 +139,16 @@ class ProfileController extends Controller
             ARRAY_FILTER_USE_KEY
         );
 
-        // $response = Http::withToken($token)
-        //     ->post($url . "/profile/update-pendidikan-formal/$id", $filtered);
-        $image = $request->file('foto_ijazah');
-        $response = Http::withToken($token)->attach('foto_ijazah', file_get_contents($image), $request->foto_ijazah->getClientOriginalName())->post($url . "/profile/update-pendidikan-formal/$id", $filtered);
+        if (request('foto_ijazah')) {
+            Storage::delete(request('document'));
+            $imagePath = $request->file('foto_ijazah')->store('public/ijazah');
+            $filtered["foto_ijazah"] = substr($imagePath,14);
+        }
+
+        $response = Http::withToken($token)
+            ->post($url . "/profile/update-pendidikan-formal/$id", $filtered);
+        // $image = $request->file('foto_ijazah');
+        // $response = Http::withToken($token)->attach('foto_ijazah', file_get_contents($image), $request->foto_ijazah->getClientOriginalName())->post($url . "/profile/update-pendidikan-formal/$id", $filtered);
 
         // return $response;
 
@@ -218,8 +219,7 @@ class ProfileController extends Controller
         $token = $request->session()->get('user.access_token');
 
         $data = $request->all();
-
-        $imagePath = $request->file('foto_ijazah')->store('ijazah');
+        $imagePath = $request->file('foto_ijazah')->store('public/ijazah');
 
         $filtered = array_filter(
             $data,
@@ -231,8 +231,12 @@ class ProfileController extends Controller
             ARRAY_FILTER_USE_KEY
         );
 
-        $image = $request->file('foto_ijazah');
-        $response = Http::withToken($token)->attach('foto_ijazah', file_get_contents($image), $request->foto_ijazah->getClientOriginalName())->post($url."/profile/store-pendidikan-nonformal", $filtered);
+        // $image = $request->file('foto_ijazah');
+        // $response = Http::withToken($token)->attach('foto_ijazah', file_get_contents($image), $request->foto_ijazah->getClientOriginalName())->post($url."/profile/store-pendidikan-nonformal", $filtered);
+
+        $filtered["foto_ijazah"] = substr($imagePath,14);
+        $response = Http::withToken($token)
+        ->post($url . "/profile/store-pendidikan-nonformal", $filtered);
 
         if ($response->successful()) {
             $data = $response->object();
@@ -274,7 +278,7 @@ class ProfileController extends Controller
 
         if (request('foto_ijazah')) {
             Storage::delete(request('document'));
-            $imagePath = $request->file('foto_ijazah')->store('ijazah');
+            $imagePath = $request->file('foto_ijazah')->store('public/ijazah');
         }
 
         $url = env('API_URL');
@@ -292,14 +296,10 @@ class ProfileController extends Controller
             ARRAY_FILTER_USE_KEY
         );
 
-        // $filtered["document_nonformal"] = $imagePath;
+        $filtered["foto_ijazah"] = substr($imagePath,14);
+        $response = Http::withToken($token)
+            ->post($url . "/profile/update-pendidikan-nonformal/$id", $filtered);
 
-
-        // $response = Http::withToken($token)
-        //     ->post($url . "/profile/update-pendidikan-nonformal/$id", $filtered);
-
-        $image = $request->file('foto_ijazah');
-        $response = Http::withToken($token)->attach('foto_ijazah', file_get_contents($image), $request->foto_ijazah->getClientOriginalName())->post($url."/profile/update-pendidikan-nonformal/$id", $filtered);
 
         if ($response->successful()) {
             $data = $response->object();
@@ -369,6 +369,7 @@ class ProfileController extends Controller
         $data = $request->all();
 
         // $imagePath = $request->file('sk_pangkat')->store('sk');
+        $imagePath = $request->file('sk_pangkat')->store('public/sk_pangkat');
 
         $filtered = array_filter(
             $data,
@@ -381,13 +382,13 @@ class ProfileController extends Controller
         );
         $filtered["bulan_kerja"] = date('m', strtotime(request('bulan_kerja')));
         $filtered["gaji_pokok"] = intval(preg_replace('/([^0-9\/+]+)/', '', request('gaji_pokok')));
-        // $filtered["document_kepangkatan"] = $imagePath;
 
-        // $response = Http::withToken($token)
-        //     ->post($url . "/profile/store-kepangkatan", $filtered);
+        $filtered["sk_pangkat"] = substr($imagePath,17);
+        $response = Http::withToken($token)
+            ->post($url . "/profile/store-kepangkatan", $filtered);
 
-        $image = $request->file('sk_pangkat');
-        $response = Http::withToken($token)->attach('sk_pangkat', file_get_contents($image), $request->sk_pangkat->getClientOriginalName())->post($url."/profile/store-kepangkatan", $filtered);
+        // $image = $request->file('sk_pangkat');
+        // $response = Http::withToken($token)->attach('sk_pangkat', file_get_contents($image), $request->sk_pangkat->getClientOriginalName())->post($url."/profile/store-kepangkatan", $filtered);
 
         if ($response->successful()) {
             $data = $response->object();
@@ -427,10 +428,7 @@ class ProfileController extends Controller
             return response()->json(['invalid' => $validator->errors()]);
         }
 
-        if (request('sk_pangkat')) {
-            Storage::delete(request('document'));
-            $imagePath = $request->file('sk_pangkat')->store('sk');
-        }
+
 
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
@@ -447,16 +445,21 @@ class ProfileController extends Controller
             ARRAY_FILTER_USE_KEY
         );
 
+        if (request('sk_pangkat')) {
+            Storage::delete(request('document'));
+            $imagePath = $request->file('sk_pangkat')->store('public/sk_pangkat');
+            $filtered["sk_pangkat"] = substr($imagePath,17);
+        }
+
         $filtered["bulan_kerja"] = date('m', strtotime(request('bulan_kerja')));
         $filtered["gaji_pokok"] = intval(preg_replace('/([^0-9\/+]+)/', '', request('gaji_pokok')));
-        // $filtered["document_kepangkatan"] = $imagePath;
-
-        // $response = Http::withToken($token)
-        //     ->post($url . "/profile/update-kepangkatan/$id", $filtered);
 
 
-        $image = $request->file('sk_pangkat');
-        $response = Http::withToken($token)->attach('sk_pangkat', file_get_contents($image), $request->sk_pangkat->getClientOriginalName())->post($url."/profile/update-kepangkatan/$id", $filtered);
+        $response = Http::withToken($token)
+            ->post($url . "/profile/update-kepangkatan/$id", $filtered);
+
+        // $image = $request->file('sk_pangkat');
+        // $response = Http::withToken($token)->attach('sk_pangkat', file_get_contents($image), $request->sk_pangkat->getClientOriginalName())->post($url."/profile/update-kepangkatan/$id", $filtered);
 
         if ($response->successful()) {
             $data = $response->object();
@@ -527,6 +530,7 @@ class ProfileController extends Controller
         $data = $request->all();
 
         // $imagePath = $request->file('sk_jabatan')->store('sk');
+        $imagePath = $request->file('sk_jabatan')->store('public/sk_jabatan');
 
         $filtered = array_filter(
             $data,
@@ -538,13 +542,13 @@ class ProfileController extends Controller
             ARRAY_FILTER_USE_KEY
         );
 
-        // $filtered["document_jabatan"] = $imagePath;
+        $filtered["sk_jabatan"] = substr($imagePath,18);
 
-        // $response = Http::withToken($token)
-        //     ->post($url . "/profile/store-jabatan", $filtered);
+        $response = Http::withToken($token)
+            ->post($url . "/profile/store-jabatan", $filtered);
 
-        $image = $request->file('sk_jabatan');
-        $response = Http::withToken($token)->attach('sk_jabatan', file_get_contents($image), $request->sk_jabatan->getClientOriginalName())->post($url."/profile/store-jabatan", $filtered);
+        // $image = $request->file('sk_jabatan');
+        // $response = Http::withToken($token)->attach('sk_jabatan', file_get_contents($image), $request->sk_jabatan->getClientOriginalName())->post($url."/profile/store-jabatan", $filtered);
 
         if ($response->successful()) {
             $data = $response->object();
@@ -584,11 +588,6 @@ class ProfileController extends Controller
             return response()->json(['invalid' => $validator->errors()]);
         }
 
-        // if (request('sk_jabatan')) {
-        //     Storage::delete(request('document'));
-        //     $imagePath = $request->file('sk_jabatan')->store('sk');
-        // }
-
         $url = env('API_URL');
         $token = $request->session()->get('user.access_token');
 
@@ -604,13 +603,17 @@ class ProfileController extends Controller
             ARRAY_FILTER_USE_KEY
         );
 
-        // $filtered["document_jabatan"] = $imagePath;
+        if (request('sk_jabatan')) {
+            Storage::delete(request('sk_jabatan'));
+            $imagePath = $request->file('sk_jabatan')->store('public/sk_jabatan');
+            $filtered["sk_jabatan"] = substr($imagePath,18);
+        }
 
-        // $response = Http::withToken($token)
-        //     ->post($url . "/profile/update-jabatan/$id", $filtered);
+        $response = Http::withToken($token)
+            ->post($url . "/profile/update-jabatan/$id", $filtered);
 
-        $image = $request->file('sk_jabatan');
-        $response = Http::withToken($token)->attach('sk_jabatan', file_get_contents($image), $request->sk_jabatan->getClientOriginalName())->post($url."/profile/update-jabatan/$id", $filtered);
+        // $image = $request->file('sk_jabatan');
+        // $response = Http::withToken($token)->attach('sk_jabatan', file_get_contents($image), $request->sk_jabatan->getClientOriginalName())->post($url."/profile/update-jabatan/$id", $filtered);
 
         if ($response->successful()) {
             $data = $response->object();

@@ -729,19 +729,19 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Nomor Ijazah</label>
+                    <label>Nomor Sertifikat</label>
                     <input class="form-control form-control-solid" type="text" name="nomor_ijazah" />
                     <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="form-group">
-                    <label>Tanggal Ijazah</label>
+                    <label>Tanggal Sertifikat</label>
                     <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="tanggal_ijazah">
                     <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="form-group">
-                    <label>Nama Pejabat</label>
+                    <label>Nama Pejabat Penyelenggara</label>
                     <input class="form-control form-control-solid" type="text" name="nama_pejabat" />
                     <div class="invalid-feedback"></div>
                 </div>
@@ -1627,21 +1627,12 @@
 
                     if (result.status) {
                         var res = result.data;
-                        // console.log(res.document_formal);
-                        // if (key == 'document_formal') {
-                        //           $(`#${key}`).attr("src",
-                        //         `${image_url}/${value}`);
-                        //     }
-
                         $.each(res, function(key, value) {
-
-                        if (key == 'document_formal') {
-                            $(`#img_preview_docs`).attr("src",
-                            `${image_url}/${value}`);
-                        }
-
+                            if (key == 'document_formal') {
+                                $(`#img_preview_docs`).attr("src",
+                                `/storage/ijazah/${value}`);
+                            }
                         });
-
                     }
                 }
             });
@@ -1670,7 +1661,7 @@
 
                             if (key == 'document_formal') {
                                 $(`#${key}`).attr("src",
-                                `${image_url}/${value}`);
+                                `/storage/ijazah/${value}`);
                             }
 
                             $("select[name='" + key + "']").val(value);
@@ -1763,7 +1754,7 @@
                         $.each(res, function(key, value) {
                             if (key == 'document_nonformal') {
                                 $(`#img_preview_docs`).attr("src",
-                                `${image_url}/${value}`);
+                                `/storage/ijazah/${value}`);
                             }
                         });
                     }
@@ -1794,7 +1785,7 @@
                            
                             if (key == 'document_nonformal') {
                                   $(`#${key}`).attr("src",
-                                `${image_url}/${value}`);
+                                `/storage/ijazah/${value}`);
                             }
 
                             $("select[name='" + key + "']").val(value);
@@ -1888,7 +1879,7 @@
                         $.each(res, function(key, value) {
                             if (key == 'document_kepangkatan') {
                                 $(`#img_preview_docs`).attr("src",
-                                `${image_url}/${value}`);
+                                `/storage/sk_pangkat/${value}`);
                             }
                         });
                     }
@@ -1918,7 +1909,7 @@
 
                             if (key == 'document_kepangkatan') {
                                   $(`#${key}`).attr("src",
-                                `${image_url}/${value}`);
+                                `/storage/sk_pangkat/${value}`);
                             }
 
                             if (key == 'bulan_kerja') {
@@ -2019,7 +2010,7 @@
                         $.each(res, function(key, value) {
                             if (key == 'document_jabatan') {
                                 $(`#img_preview_docs`).attr("src",
-                                `${image_url}/${value}`);
+                                `/storage/sk_jabatan/${value}`);
                             }
                         });
                     }
@@ -2048,7 +2039,7 @@
 
                             if (key == 'document_jabatan') {
                                   $(`#${key}`).attr("src",
-                                `${image_url}/${value}`);
+                                `/storage/sk_jabatan/${value}`);
                             }
 
                             $("select[name='" + key + "']").val(value);
