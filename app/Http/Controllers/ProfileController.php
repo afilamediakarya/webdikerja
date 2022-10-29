@@ -26,7 +26,13 @@ class ProfileController extends Controller
         $listPendidikan = Http::withToken($token)->get($url . "/profile/get-list-pendidikan/")->collect();
         $listGolongan = Http::withToken($token)->get($url . "/profile/get-list-golongan/")->collect();
         $listUnitkerja = Http::withToken($token)->get($url . "/profile/get-list-unitkerja/")->collect();
-        // return $listPendidikan;
+
+        $numb_arr = array();
+        for ($i=1; $i < 36; $i++) { 
+            $numb_arr[] = str_pad($i, 2, '0', STR_PAD_LEFT);
+        }
+        
+
         if ($personalData["code"] !== "200") {
 
             $personalData = [
@@ -39,7 +45,7 @@ class ProfileController extends Controller
             $personalData = $personalData["data"];
         }
 
-        return view('pages.Profile.index', compact('page_title', 'page_description', 'breadcumb', 'personalData', 'listPendidikan', 'listGolongan', 'listUnitkerja','image_url'));
+        return view('pages.Profile.index', compact('page_title', 'page_description', 'breadcumb', 'personalData', 'listPendidikan', 'listGolongan', 'listUnitkerja','image_url','numb_arr'));
     }
 
     // pendidikan formal

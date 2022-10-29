@@ -642,7 +642,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Tanggal Ijazah Ijazah</label>
+                    <label>Tanggal Ijazah</label>
                     <input type="date" value="{{ date('Y-m-d') }}" class="form-control" id="tanggal_ijazah"
                         name="tanggal_ijazah">
                     <div class="invalid-feedback"></div>
@@ -667,7 +667,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Foto Ijzah</label>
+                    <label>Foto Ijazah</label>
                     <input class="form-control" type="file" id="foto_ijazah" name="foto_ijazah">
                     <div class="invalid-feedback"></div>
 
@@ -759,7 +759,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Document Ijazah/Sertifikat/Lainnya</label>
+                    <label>Document Sertifikat/Lainnya</label>
                     <input class="form-control" type="file" id="foto_ijazah" name="foto_ijazah">
                     <div class="invalid-feedback"></div>
 
@@ -827,27 +827,54 @@
 
                 <div class="form-group">
                     <label>Tahun</label>
-                    <div class="input-group date">
+                    <!-- <div class="input-group date">
                         <input type="text" class="form-control" readonly id="tahun_kerja" name="tahun_kerja" />
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="la la-calendar-check-o"></i>
                             </span>
                         </div>
-                    </div>
+                    </div> -->
+                    <select class="form-control form-control-solid" type="text" id="tahun_kerja"
+                        name="tahun_kerja">
+                        <option disabled selected> Pilih Masa Kerja Tahun </option>
+                       @foreach($numb_arr as $numb)
+                            <option value="{{$numb}}">{{$numb}}</option>
+                       @endforeach
+                        <!-- <option value="01">01</option>
+                        <option value="jabatan struktural">Jabatan Struktural</option>
+                        <option value="jabatan fungsional">Jabatan Fungsional</option>
+                        <option value="penyesuaian ijazah">Penyesuaian Ijazah</option> -->
+                    </select>
                     <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="form-group">
                     <label>Bulan</label>
-                    <div class="input-group date">
+                    <!-- <div class="input-group date">
                         <input type="text" class="form-control" readonly id="bulan_kerja" name="bulan_kerja" />
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="la la-calendar-check-o"></i>
                             </span>
                         </div>
-                    </div>
+                    </div> -->
+                    <select class="form-control form-control-solid" type="text" id="tahun_kerja"
+                        name="tahun_kerja">
+                        <option disabled selected> Pilih Masa Kerja Bulan </option>
+                       @foreach($numb_arr as $i => $numb)
+                            <option value="{{$numb}}">{{$numb}}</option>
+                            @if($i == 10)
+                                @php
+                                     break
+                                @endphp
+                            @endif
+                       @endforeach
+                        <!-- <option value="01">01</option>
+                        <option value="jabatan struktural">Jabatan Struktural</option>
+                        <option value="jabatan fungsional">Jabatan Fungsional</option>
+                        <option value="penyesuaian ijazah">Penyesuaian Ijazah</option> -->
+                    </select>
                     <div class="invalid-feedback"></div>
                 </div>
 
@@ -1013,6 +1040,20 @@
                         <option value="jabatan tinggi pimppinan utama">Jabatan Tinggi Pimppinan Utama</option>
                         <option value="jabatan tinggi pimppinan madya">Jabatan Tinggi Pimppinan Madya</option>
                         <option value="jabatan tinggi pimppinan pratama">Jabatan Tinggi Pimppinan Pratama</option>
+                    </select>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Pilih Tingkatan Jabatan</label>
+                    <select class="form-control form-control-solid" type="text" id="tingkatan_jabatan"
+                        name="tingkatan_jabatan">
+                        <option disabled selected> Pilih Jenis Jabatan </option>
+                        <option value="Eselon I">Eselon I</option>
+                        <option value="Eselon II">Eselon II</option>
+                        <option value="Eselon III">Eselon III</option>
+                        <option value="Eselon IV">Eselon IV</option>
+                        <option value="Non eselon">Non eselon</option>
                     </select>
                     <div class="invalid-feedback"></div>
                 </div>
@@ -2118,20 +2159,20 @@
             dataRowKepangkatan.init();
             dataRowJabatan.init();
 
-            $('#tahun_kerja').datepicker({
-                format: "yyyy",
-                viewMode: "years",
-                minViewMode: "years",
-                autoclose: true,
-            });
+            // $('#tahun_kerja').datepicker({
+            //     format: "yyyy",
+            //     viewMode: "years",
+            //     minViewMode: "years",
+            //     autoclose: true,
+            // });
 
-            $('#bulan_kerja').datepicker({
-                format: "MM",
-                value: "mm",
-                viewMode: "months",
-                minViewMode: "months",
-                autoclose: true,
-            });
+            // $('#bulan_kerja').datepicker({
+            //     format: "MM",
+            //     value: "mm",
+            //     viewMode: "months",
+            //     minViewMode: "months",
+            //     autoclose: true,
+            // });
 
             $("#gaji_pokok").inputmask('RP. 999.999.999', {
                 numericInput: true
