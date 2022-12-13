@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\Master\FaqController;
 use App\Http\Controllers\Admin\Master\SatuanController;
 use App\Http\Controllers\Admin\Master\PerilakuController;
 use App\Http\Controllers\Admin\Master\MasterController;
+use App\Http\Controllers\Admin\Master\KelompokJabatanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\VerifikasiController;
@@ -218,6 +219,12 @@ Route::middleware('Auth')->group(function () {
                     Route::get('/lokasi/{id}', [lokasiController::class, 'show'])->name('show-lokasi');
                     Route::post('/lokasi/{id}', [lokasiController::class, 'update'])->name('update-lokasi');
                     Route::delete('/lokasi/{id}', [lokasiController::class, 'delete'])->name('delete-lokasi');
+
+                    Route::get('/kelompok-jabatan', [KelompokJabatanController::class, 'index'])->name('kelompok-jabatan');
+                    Route::post('/kelompok-jabatan', [KelompokJabatanController::class, 'store'])->name('post-kelompok-jabatan');
+                    Route::get('/kelompok-jabatan/{id}', [KelompokJabatanController::class, 'show'])->name('show-kelompok-jabatan');
+                    Route::post('/kelompok-jabatan/{id}', [KelompokJabatanController::class, 'update'])->name('update-kelompok-jabatan');
+                    Route::delete('/kelompok-jabatan/{id}', [KelompokJabatanController::class, 'delete'])->name('delete-kelompok-jabatan');
 
                     Route::get('/data-satuan', [MasterController::class, 'get_satuan'])->name('data_master_satuan');
 

@@ -63,6 +63,7 @@ var Panel = function() {
                     $("input").removeClass('is-invalid');
                     $("select").removeClass('is-invalid');
                     $("textarea").removeClass('is-invalid');
+                    $('.text-danger').html('')
                     _offcanvasObject.show();
                 }else if (data == 'hide') {
                     _offcanvasObject.hide();
