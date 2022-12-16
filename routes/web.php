@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\Master\SatuanController;
 use App\Http\Controllers\Admin\Master\PerilakuController;
 use App\Http\Controllers\Admin\Master\MasterController;
 use App\Http\Controllers\Admin\Master\KelompokJabatanController;
+use App\Http\Controllers\Admin\Master\MasterAktivitasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\VerifikasiController;
@@ -189,6 +190,14 @@ Route::middleware('Auth')->group(function () {
                 Route::get('/{id}', [InformasiController::class, 'show'])->name('show-informasi');
                 Route::post('/{id}', [InformasiController::class, 'update'])->name('update-informasi');
                 Route::delete('/{id}', [InformasiController::class, 'delete'])->name('delete-informasi');
+            });
+
+            Route::prefix('master')->group(function () {
+                Route::get('/master-aktivititas', [MasterAktivitasController::class, 'index'])->name('master-aktivititas');
+                Route::post('/master-aktivititas', [MasterAktivitasController::class, 'store'])->name('post-master-aktivititas');
+                Route::get('/master-aktivititas/{id}', [MasterAktivitasController::class, 'show'])->name('show-master-aktivititas');
+                Route::post('/master-aktivititas/{id}', [MasterAktivitasController::class, 'update'])->name('update-master-aktivititas');
+                Route::delete('/master-aktivititas/{id}', [MasterAktivitasController::class, 'delete'])->name('delete-master-aktivititas');
             });
 
             Route::middleware('roles:super_admin')->group(function () {

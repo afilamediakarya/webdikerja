@@ -14,15 +14,13 @@
             <!--begin::Card-->
             <div class="card card-custom">
 
+         
+
                 <div class="card-body">
-                    <select id="bulan_" class="form-control" style="position: relative;bottom: 11px;width: 12rem;">
-                        <option selected disabled> Pilih bulan </option>
-                        <option value="0">Tahunan</option>
-                        @foreach ($nama_bulan as $in => $month)
-                            <option value="{{ $in + 1 }}" @if ($in + 1 == date('m')) selected @endif>
-                                {{ $month }}</option>
-                        @endforeach
-                    </select>
+
+                @if($current_jadwal['status'] == true)    
+                    <span class="label label-warning label-pill label-inline mr-2 mb-4"> Jadwal Penginputan : {{ Carbon\Carbon::parse($current_jadwal['data']['tanggal_awal'])->format('d/m/y') }} - {{ Carbon\Carbon::parse($current_jadwal['data']['tanggal_akhir'])->format('d/m/y') }} </span>
+                @endif
                     <!--begin: Datatable-->
                     <table class="table table-group table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
@@ -65,6 +63,8 @@
             bulan = date.getMonth() + 1;
         }
 
+        let current_jadwal = {!! json_encode($current_jadwal) !!}
+
         $(function() {
             datatable_(bulan);
         })
@@ -85,7 +85,8 @@
                     [2, 'desc']
                 ],
                 processing: true,
-                ajax: '/realisasi/datatable?bulan=' + bulan,
+                // ajax: '/realisasi/datatable?bulan=' + bulan,
+                ajax: '/realisasi/datatable?bulan=0',
                 columns: [{
                     data: 'id',
                     render: function(data, type, row, meta) {
@@ -205,8 +206,12 @@
                         width: '10rem',
                         class: "wrapok",
                         render: function(data, type, row, full, meta) {
+                            let disabled_ = '';
+                            if (current_jadwal['status'] == true) {
+                                disabled_ = 'disabled'
+                            }
                             let params = row.id + ',' + row.skp_atasan + ',' + bulan
-                            return `<a role="button" class="btn btn-secondary btn-sm btn-realisasi" data-params="${params}">Realisasi</a><br>
+                            return `<a role="button" class="btn btn-secondary btn-sm btn-realisasi ${disabled_}" data-params="${params}">Realisasi</a><br>
                            <small>Status</small><br>
                             <span class="badge badge-${row.color}">${row.status_review}</span><br>
                             <small class="text-muted">${row.keterangan}</small>`;

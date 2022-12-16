@@ -37,12 +37,14 @@ class RealisasiController extends Controller
         $url = env('API_URL');
         $token = session()->get('user.access_token');
 
-        $nama_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        // $nama_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        $current_jadwal = Http::withToken($token)->get($url . "/jadwal/check_jadwal?tahapan=Tahapan Target")->json();
+
         $level = $this->checkLevel();
         if ($level == 1 || $level == 2) {
-            return view('pages.realisasi.index2', compact('page_title', 'page_description', 'breadcumb', 'nama_bulan'));
+            return view('pages.realisasi.index2', compact('page_title', 'page_description', 'breadcumb','current_jadwal'));
         } else {
-            return view('pages.realisasi.index', compact('page_title', 'page_description', 'breadcumb', 'nama_bulan'));
+            return view('pages.realisasi.index', compact('page_title', 'page_description', 'breadcumb','current_jadwal'));
         }
     }
 

@@ -37,9 +37,18 @@ class AktivitasController extends Controller
 
     public function index(Request $request)
     {
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+
         $page_title = 'Aktivitas';
         $page_description = 'Daftar Aktivitas';
         $breadcumb = ['Daftar Aktivitas'];
+
+        $status_absen = '';
+        $checkAbsen = Http::withToken($token)->get($url."/absen/check-absen-today")->json();
+        $masterAktivitas = Http::withToken($token)->get($url."/master_aktivitas/option")->json();
+
+
         if($request->ajax()){
             $url = env('API_URL');
             $token = $request->session()->get('user.access_token');
@@ -53,9 +62,7 @@ class AktivitasController extends Controller
         }
 
         $sasaran_kinerja = $this->getSasaranKinerja();
-        $satuan = $this->getSatuan();
-
-        return view('pages.aktivitas.index', compact('page_title', 'page_description','breadcumb','sasaran_kinerja','satuan'));
+        return view('pages.aktivitas.index', compact('page_title', 'page_description','breadcumb','sasaran_kinerja','checkAbsen','masterAktivitas'));
     }
 
     public function aktivitas(Request $request)
@@ -103,7 +110,6 @@ class AktivitasController extends Controller
             },
             ARRAY_FILTER_USE_KEY
         );
-
         $response = Http::withToken($token)->post($url."/aktivitas/store", $filtered);
         // return $response;
         if($response->successful()){

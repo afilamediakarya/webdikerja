@@ -129,6 +129,18 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Kelompok Jabatan</label>
+                    <select class="form-control form-control-solid" type="text" name="kelompok_jabatan"
+                        id="kelompok_jabatan">
+                        <option disabled selected>Pilih Kelompok Jabatan</option>
+                        @foreach ($kelompokJabatan as $k_jabatan)
+                            <option value="{{ $k_jabatan['id'] }}">{{ $k_jabatan['value'] }}</option>
+                        @endforeach
+                    </select>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
                     <label>Jenis Jabatan</label>
                     <select class="form-control form-control-solid" type="text" name="id_jenis_jabatan"
                         id="id_jenis_jabatan">

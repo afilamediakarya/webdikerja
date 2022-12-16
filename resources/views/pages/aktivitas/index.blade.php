@@ -76,7 +76,7 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleSelect1">Sasaran Kinerja</label>
-                        <select class="form-control" name="id_skp" id="exampleSelect1">
+                        <select class="form-control select2" name="id_skp" id="exampleSelect1">
                             <option disabled selected>Pilih Sasaran Kinerja</option>
                            @foreach($sasaran_kinerja as $key => $va)
                                 <option value="{{$va['id']}}">{{$va['value']}}</option>
@@ -85,7 +85,13 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Nama aktivitas</label>
-                        <input type="text" class="form-control" id="exampleInputPassword1" name="nama_aktivitas" placeholder="Nama Aktivitas">
+                        <!-- <input type="text" class="form-control" id="exampleInputPassword1" name="nama_aktivitas" placeholder="Nama Aktivitas"> -->
+                        <select name="nama_aktivitas" id="nama-aktivitas" class="form-control select2" >
+                            <option disabled selected> Pilih Aktivitas </option>
+                            @foreach($masterAktivitas as $masters)
+                                <option data-id="{{$masters['id']}}" value="{{$masters['value']}}">{{$masters['value']}}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="row">
                         <div class="form-group col">
@@ -94,14 +100,21 @@
                         </div>
                         <div class="form-group col">
                             <label for="exampleSelect1">Satuan</label>
-                            <select class="form-control" name="satuan" id="exampleSelect1">
-                                <option disabled selected>Pilih Satuan</option>
-                                @foreach($satuan as $x => $y)
-                                    <option value="{{$y['value']}}">{{$y['value']}}</option>
-                                @endforeach
-                            </select>
+                            <input type="text" class="form-control" id="satuan" name="satuan" readonly>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <label>Waktu</label>
+                            <input type="number" min="0" id="waktu" name="waktu" class="form-control" readonly>
+                        </div>
+                        <div class="form-group col">
+                            <label>Jenis</label>
+                            <input type="text" class="form-control" id="jenis" readonly name="jenis" readonly>
+                        </div>
+                    </div>
+
                     <div class="form-group mb-1">
                         <label for="exampleTextarea">Keterangan</label>
                         <textarea class="form-control" name="keterangan" id="exampleTextarea" rows="3"></textarea>
@@ -125,13 +138,50 @@
 @section('script')
     <script src="{{asset('plugins/custom/fullcalendar/fullcalendar.bundle.js')}}"></script>
     <script>
+
+        function checkAbsen(params) {
+     
+            if (params['status'] == true) {
+                if (params['data']['status'] !== 'hadir' || params['data']['status'] !== 'izin' || params['data']['status'] !== 'sakit') {
+                    $('#kt_quick_user_toggle').prop('disabled', false);
+                }
+            }
+        }
+        
         
         jQuery(document).ready(function() {
             Panel.init('side_form');
 
+            $('.select2').select2({
+            placeholder: "Pilih"
+        });
+
             $(document).on('click','.btn-cancel', function(){
                 Panel.action('hide');
             });
+
+            $('#nama-aktivitas').on('change', function () {
+                let params = $('option:selected', this).attr('data-id');
+                $.ajax({
+                    url:"admin/master/master-aktivititas/"+params,
+                    method : 'GET',
+                    success: function(res) {
+                        if (res.success) {
+                            $('#satuan').val(res.success.data.satuan);
+                            $('#waktu').val(res.success.data.waktu);
+                            $('#jenis').val(res.success.data.jenis);
+                        }
+                    },
+                    error: function(xhr) {
+                        alert(xhr);
+                    }
+
+                });
+            })
+
+            let dataabsen = {!! json_encode($checkAbsen) !!};
+            checkAbsen(dataabsen);
+
 
             var dataActivity = [];
             var todayDate = moment().startOf('day');
@@ -166,7 +216,7 @@
             kalender.on('eventClick', function(data) {
                 let id = data.event['_def']['publicId'];
                 // alert(id);
-                Panel.action('show','update');
+       
                 $.ajax({
                     url : '/aktivitas/detail/'+id,
                     method:"GET",
@@ -175,11 +225,21 @@
                         console.log(data);
                         if (data.status == true) {
                             data = data.data;
-                            $.each(data, function( key, value ) {
-                                $("input[name='"+key+"']").val(value);
-                                $("select[name='"+key+"']").val(value);
-                                $("textarea[name='"+key+"']").val(value);
-                            });
+         
+                            if (data.range <= 5) {
+                                Panel.action('show','update');
+                                $.each(data, function( key, value ) {
+                                    $("input[name='"+key+"']").val(value);
+                                    $("select[name='"+key+"']").val(value);
+                                    $("textarea[name='"+key+"']").val(value);
+                                });
+                                $('.select2').trigger('change');
+                            }else{
+                                $.notify("Anda tidak dapat mengupdate aktivitas", "danger");
+                            }
+                  
+
+                       
                         }
                     //   if(data.success){
                     //     console.log(data.success);

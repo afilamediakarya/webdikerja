@@ -49,8 +49,10 @@ class SkpController extends Controller
         $token = session()->get('user.access_token');
 
         $level = $this->checkLevel();
-
+        
         $jadwalList = Http::withToken($token)->get($url . "/jadwal/list/");
+        $current_jadwal = Http::withToken($token)->get($url . "/jadwal/check_jadwal?tahapan=Tahapan Target")->json();
+
         $jadwal = array();
 
         if (!$jadwalList['data']) {
@@ -71,21 +73,28 @@ class SkpController extends Controller
             // return $jadwal;
         }
 
-        if ($params == 'tahunan') {
-            if ($level == 1 || $level == 2) {
-                return view('pages.skp.index2', compact('page_title', 'page_description', 'breadcumb'));
-            } else {
-                return view('pages.skp.index', compact('page_title', 'page_description', 'breadcumb'));
-            }
-        } else {
-            $nama_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-            if ($level == 1 || $level == 2) {
-                return view('pages.skp.skp_bulanan.index2', compact('page_title', 'page_description', 'breadcumb', 'nama_bulan', 'jadwal'));
-            } else {
-                return view('pages.skp.skp_bulanan.index', compact('page_title', 'page_description', 'breadcumb', 'nama_bulan', 'jadwal'));
-            }
+        if ($level == 1 || $level == 2) {
+            return view('pages.skp.index2', compact('page_title', 'page_description', 'breadcumb','current_jadwal'));
+        } else {
+            return view('pages.skp.index', compact('page_title', 'page_description', 'breadcumb','current_jadwal'));
         }
+
+        // if ($params == 'tahunan') {
+        //     if ($level == 1 || $level == 2) {
+        //         return view('pages.skp.index2', compact('page_title', 'page_description', 'breadcumb'));
+        //     } else {
+        //         return view('pages.skp.index', compact('page_title', 'page_description', 'breadcumb'));
+        //     }
+        // } else {
+        //     $nama_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+        //     if ($level == 1 || $level == 2) {
+        //         return view('pages.skp.skp_bulanan.index2', compact('page_title', 'page_description', 'breadcumb', 'nama_bulan', 'jadwal'));
+        //     } else {
+        //         return view('pages.skp.skp_bulanan.index', compact('page_title', 'page_description', 'breadcumb', 'nama_bulan', 'jadwal'));
+        //     }
+        // }
     }
 
     public function getSasaranKinerjaAtasan()
