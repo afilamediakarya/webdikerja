@@ -192,12 +192,44 @@ Route::middleware('Auth')->group(function () {
                 Route::delete('/{id}', [InformasiController::class, 'delete'])->name('delete-informasi');
             });
 
-            Route::prefix('master')->group(function () {
-                Route::get('/master-aktivititas', [MasterAktivitasController::class, 'index'])->name('master-aktivititas');
-                Route::post('/master-aktivititas', [MasterAktivitasController::class, 'store'])->name('post-master-aktivititas');
-                Route::get('/master-aktivititas/{id}', [MasterAktivitasController::class, 'show'])->name('show-master-aktivititas');
-                Route::post('/master-aktivititas/{id}', [MasterAktivitasController::class, 'update'])->name('update-master-aktivititas');
-                Route::delete('/master-aktivititas/{id}', [MasterAktivitasController::class, 'delete'])->name('delete-master-aktivititas');
+            Route::prefix('master-aktivitas')->group(function () {
+                Route::get('/master-aktivitas', [MasterAktivitasController::class, 'index'])->name('master-aktivitas');
+                Route::post('/master-aktivitas', [MasterAktivitasController::class, 'store'])->name('post-master-aktivitas');
+                Route::get('/master-aktivitas/{id}', [MasterAktivitasController::class, 'show'])->name('show-master-aktivitas');
+                Route::post('/master-aktivitas/{id}', [MasterAktivitasController::class, 'update'])->name('update-master-aktivitas');
+                Route::delete('/master-aktivitas/{id}', [MasterAktivitasController::class, 'delete'])->name('delete-master-aktivitas');
+
+                Route::get('/kelompok-jabatan', [KelompokJabatanController::class, 'index'])->name('kelompok-jabatan');
+                Route::post('/kelompok-jabatan', [KelompokJabatanController::class, 'store'])->name('post-kelompok-jabatan');
+                Route::get('/kelompok-jabatan/{id}', [KelompokJabatanController::class, 'show'])->name('show-kelompok-jabatan');
+                Route::post('/kelompok-jabatan/{id}', [KelompokJabatanController::class, 'update'])->name('update-kelompok-jabatan');
+                Route::delete('/kelompok-jabatan/{id}', [KelompokJabatanController::class, 'delete'])->name('delete-kelompok-jabatan');
+
+            });
+
+                Route::get('/hari-libur', [MasterController::class, 'harilibur'])->name('master_harilibur');
+                Route::post('/store/hari-libur', [MasterController::class, 'store_harilibur'])->name('store_master_harilibur');
+                Route::get('/show/hari-libur/{params}', [MasterController::class, 'show_harilibur'])->name('show_master_harilibur');
+                Route::post('/update/hari-libur/{params}', [MasterController::class, 'update_harilibur'])->name('update_master_harilibur');
+
+      
+
+            Route::prefix('satuan-kerja')->group(function () {
+ 
+                Route::prefix('satker')->group(function () {
+                    Route::get('/', [SatkerController::class, 'index'])->name('satker');
+                    Route::post('/', [SatkerController::class, 'store'])->name('post-satker');
+                    Route::get('/{id}', [SatkerController::class, 'show'])->name('show-satker');
+                    Route::post('/{id}', [SatkerController::class, 'update'])->name('update-satker');
+                    Route::delete('/{id}', [SatkerController::class, 'delete'])->name('delete-satker');
+                });
+
+                Route::get('/lokasi', [lokasiController::class, 'index'])->name('lokasi');
+                Route::post('/lokasi', [lokasiController::class, 'store'])->name('post-lokasi');
+                Route::get('/lokasi/{id}', [lokasiController::class, 'show'])->name('show-lokasi');
+                Route::post('/lokasi/{id}', [lokasiController::class, 'update'])->name('update-lokasi');
+                Route::delete('/lokasi/{id}', [lokasiController::class, 'delete'])->name('delete-lokasi');
+
             });
 
             Route::middleware('roles:super_admin')->group(function () {
@@ -221,27 +253,11 @@ Route::middleware('Auth')->group(function () {
                     Route::post('/satuan', [SatuanController::class, 'store'])->name('post-satuan');
                     Route::get('/satuan/{id}', [SatuanController::class, 'show'])->name('show-satuan');
                     Route::post('/satuan/{id}', [SatuanController::class, 'update'])->name('update-satuan');
-                    Route::delete('/satuan/{id}', [SatuanController::class, 'delete'])->name('delete-satuan');
-
-                    Route::get('/lokasi', [lokasiController::class, 'index'])->name('lokasi');
-                    Route::post('/lokasi', [lokasiController::class, 'store'])->name('post-lokasi');
-                    Route::get('/lokasi/{id}', [lokasiController::class, 'show'])->name('show-lokasi');
-                    Route::post('/lokasi/{id}', [lokasiController::class, 'update'])->name('update-lokasi');
-                    Route::delete('/lokasi/{id}', [lokasiController::class, 'delete'])->name('delete-lokasi');
-
-                    Route::get('/kelompok-jabatan', [KelompokJabatanController::class, 'index'])->name('kelompok-jabatan');
-                    Route::post('/kelompok-jabatan', [KelompokJabatanController::class, 'store'])->name('post-kelompok-jabatan');
-                    Route::get('/kelompok-jabatan/{id}', [KelompokJabatanController::class, 'show'])->name('show-kelompok-jabatan');
-                    Route::post('/kelompok-jabatan/{id}', [KelompokJabatanController::class, 'update'])->name('update-kelompok-jabatan');
-                    Route::delete('/kelompok-jabatan/{id}', [KelompokJabatanController::class, 'delete'])->name('delete-kelompok-jabatan');
+                    Route::delete('/satuan/{id}', [SatuanController::class, 'delete'])->name('delete-satuan');         
 
                     Route::get('/data-satuan', [MasterController::class, 'get_satuan'])->name('data_master_satuan');
 
                     Route::get('/perilaku', [MasterController::class, 'perilaku'])->name('master_perilaku');
-                    Route::get('/hari-libur', [MasterController::class, 'harilibur'])->name('master_harilibur');
-                    Route::post('/store/hari-libur', [MasterController::class, 'store_harilibur'])->name('store_master_harilibur');
-                    Route::get('/show/hari-libur/{params}', [MasterController::class, 'show_harilibur'])->name('show_master_harilibur');
-                    Route::post('/update/hari-libur/{params}', [MasterController::class, 'update_harilibur'])->name('update_master_harilibur');
                 });
             });
 
@@ -269,15 +285,6 @@ Route::middleware('Auth')->group(function () {
                 Route::post('/kelas/{id}', [JabatanController::class, 'update_kelas'])->name('update-kelas');
                 Route::delete('/kelas/{id}', [JabatanController::class, 'delete_kelas'])->name('delete-kelas');
                 Route::get('/getParent/{params}', [JabatanController::class, 'getParent'])->name('getParent');
-            });
-
-
-            Route::prefix('satker')->group(function () {
-                Route::get('/', [SatkerController::class, 'index'])->name('satker');
-                Route::post('/', [SatkerController::class, 'store'])->name('post-satker');
-                Route::get('/{id}', [SatkerController::class, 'show'])->name('show-satker');
-                Route::post('/{id}', [SatkerController::class, 'update'])->name('update-satker');
-                Route::delete('/{id}', [SatkerController::class, 'delete'])->name('delete-satker');
             });
 
             Route::prefix('absen')->group(function () {

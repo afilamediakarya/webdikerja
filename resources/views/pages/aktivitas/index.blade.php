@@ -163,7 +163,7 @@
             $('#nama-aktivitas').on('change', function () {
                 let params = $('option:selected', this).attr('data-id');
                 $.ajax({
-                    url:"admin/master/master-aktivititas/"+params,
+                    url:"admin/master/master-aktivitas/"+params,
                     method : 'GET',
                     success: function(res) {
                         if (res.success) {

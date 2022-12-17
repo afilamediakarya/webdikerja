@@ -28,8 +28,8 @@ class AbsenController extends Controller
     {
         $url = env('API_URL');
         $page_title = 'Absen';
-        $page_description = 'Daftar Absen Pegawai';
-        $breadcumb = ['Daftar Absen Pegawai'];
+        $page_description = 'Daftar Kehadiran Pegawai';
+        $breadcumb = ['Daftar Kehadiran Pegawai'];
         $token = session()->get('user.access_token');
         $role = session()->get('user.role');
 

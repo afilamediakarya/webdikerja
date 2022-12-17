@@ -147,7 +147,7 @@
                 pageLength: 10,
                 order: [[0, 'asc']],
                 processing:true,
-                ajax: "{{ route('master-aktivititas') }}",
+                ajax: "{{ route('master-aktivitas') }}",
                 columns:[{ 
                         data : null, 
                         render: function (data, type, row, meta) {
@@ -223,10 +223,10 @@
                 var _id = $("input[name='id']").val();
                 if(type == 'submit'){
                     console.log('ini tambah '+type)
-                    _url = "{{route('post-master-aktivititas')}}";
+                    _url = "{{route('post-master-aktivitas')}}";
                 }else{
                     console.log('ini update '+type)
-                    _url = "admin/master/master-aktivititas/"+_id;
+                    _url = "admin/master/master-aktivitas/"+_id;
                 }
 
                 $.ajax({
@@ -281,7 +281,7 @@
           
                 var key = $(this).data('id');
                 $.ajax({
-                    url:"admin/master/master-aktivititas/"+key,
+                    url:"admin/master/master-aktivitas/"+key,
                     method:"GET",
                     success: function(data){
                       if(data.success){
@@ -328,7 +328,7 @@
                     if (result.value) {
                         $.ajax({
                             method: 'delete',
-                            url: 'admin/master/master-aktivititas/'+key,
+                            url: 'admin/master/master-aktivitas/'+key,
                             data:{
                                 "_token": "{{ csrf_token() }}"
                             }

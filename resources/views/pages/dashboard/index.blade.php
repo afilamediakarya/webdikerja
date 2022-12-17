@@ -105,8 +105,6 @@
                             </div>
                             <!--begin::Stats-->
                             <div class="card-spacer mt-n25">
-                                <!--begin::Row-->
-
                                 <div class="row m-0">
                                     <div class="col bg-white px-6 py-8 rounded-xl mr-3 mb-7">
                                         <a href="#" class="text-dark font-weight-bold font-size-lg">SKP</a>
@@ -132,7 +130,6 @@
                                                             width="3" height="6" rx="1.5" />
                                                     </g>
                                                 </svg>
-                                                <!--end::Svg Icon-->
                                             </span>
                                         </div>
                                     </div>
