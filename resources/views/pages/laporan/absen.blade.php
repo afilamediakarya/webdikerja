@@ -94,10 +94,7 @@
                     applyClass: 'btn-primary',
                     cancelClass: 'btn-danger',
                 },
-                // function(start, end, label) {
-                //     $('#kt_daterangepicker_2 .form-control').val(start.format('YYYY-MM-DD') + ' / ' + end
-                //         .format('YYYY-MM-DD'));
-                // }
+           
             );
 
             $('#kt_daterangepicker_2').on('apply.daterangepicker', function(ev, picker) {

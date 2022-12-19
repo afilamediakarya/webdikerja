@@ -205,7 +205,7 @@ $path = explode('/', Request::path());
                                 </svg>
                                 <!--end::Svg Icon-->
                             </span>
-                            <span class="menu-text text-capitalize">Laporans</span>
+                            <span class="menu-text text-capitalize">Laporan</span>
                             <i class="menu-arrow"></i>
                         </a>
 
@@ -233,6 +233,15 @@ $path = explode('/', Request::path());
                                         <span class="menu-text text-capitalize">Kehadiran</span>
                                     </a>
                                 </li>
+
+                                <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'kinerja' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
+                                        <a href="{{ route('laporan-kinerja') }}" class="menu-link">
+                                            <i class="menu-bullet menu-bullet-dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="menu-text text-capitalize">Kinerja</span>
+                                        </a>
+                                    </li>
 
 
                                 <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'skp' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
@@ -449,14 +458,7 @@ $path = explode('/', Request::path());
                                     </li>
                                 @endif
 
-                                <li class="menu-item" aria-haspopup="true">
-                                        <a href="{{ url('/laporan/tpp/super_admin') }}" class="menu-link">
-                                            <i class="menu-bullet menu-bullet-dot">
-                                                <span></span>
-                                            </i>
-                                            <span class="menu-text text-capitalize">Kinerja</span>
-                                        </a>
-                                    </li>
+                           
 
                                 @if (Session::get('user.role') == 'super_admin')
                                     <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'tpp' && $path[2] == 'super_admin' ? 'menu-item-active' : '' }}" aria-haspopup="true">

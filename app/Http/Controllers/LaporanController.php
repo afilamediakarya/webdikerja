@@ -36,6 +36,28 @@ class LaporanController extends Controller
         return view('pages.laporan.absen', compact('page_title', 'page_description', 'breadcumb', 'TypeRole', 'satuan_kerja'));
     }
 
+    public function kinerja()
+    {
+        $page_title = 'Laporan';
+        $page_description = 'Laporan Kinerja Pegawai';
+        $breadcumb = ['Kinerja'];
+
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+
+        $level = session()->get('user.role');
+        $getDataDinas = array();
+
+        if ($level == 'super_admin') {
+            $dataDinas = Http::withToken($token)->get($url . "/satuan_kerja/list");
+            $getDataDinas = $dataDinas['data'];
+        }
+
+        $id_pegawai = session()->get('user.current.id_pegawai');
+     
+        return view('pages.laporan.kinerja', compact('page_title', 'page_description', 'breadcumb','getDataDinas','level','id_pegawai'));
+    }
+
     public function skp(Request $request)
     {
         $url = env('API_URL');
@@ -57,6 +79,277 @@ class LaporanController extends Controller
 
         return view('pages.laporan.skp', compact('page_title', 'page_description', 'breadcumb', 'level', 'pegawai', 'id_pegawai'));
     }
+
+    public function export_kinerja(){
+        $url = env('API_URL');
+        $tipe = request('tipe');
+        $level = session()->get('user.role');
+        $bulan = request('bulan');
+        $tahun = session('tahun_penganggaran');
+        $nama_bulan = request('nama_bulan');
+        $token = session()->get('user.access_token');
+        $data = array();
+        $fungsi = '';
+        if ($level == 'pegawai' || $level == 'admin_opd') {
+            $data_kinerja_pegawai = Http::withToken($token)->get($url . "/laporan/kinerja?bulan=".$bulan);
+            $data = $data_kinerja_pegawai->json();
+
+     
+    
+        }else{
+            return 'belum ada format';
+            // return $this->{$fungsi}($tipe,$data,$dinas,$tahun);
+        }
+
+        $fungsi = 'export_kinerja_'.$tipe;
+        // return $data;
+        return $this->{$fungsi}($tipe,$data,$tahun,$nama_bulan);
+
+    }
+
+    // KINERJA PEGAWAI
+    public function export_kinerja_pegawai($tipe,$data,$tahun,$nama_bulan){
+   
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
+            ->setLastModifiedBy('BKPSDM BULUKUMBA')
+            ->setTitle('Laporan Pembayaran TPP')
+            ->setSubject('Laporan Pembayaran TPP')
+            ->setDescription('Laporan Pembayaran TPP')
+            ->setKeywords('pdf php')
+            ->setCategory('LAPORAN Pembayaran TPP');
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+
+        $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
+
+        $sheet->getRowDimension(1)->setRowHeight(17);
+        $sheet->getRowDimension(2)->setRowHeight(17);
+        $sheet->getRowDimension(3)->setRowHeight(7);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setHorizontalCentered(true);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setVerticalCentered(false);
+
+        // //Margin PDF
+        $spreadsheet->getActiveSheet()->getPageMargins()->setTop(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setRight(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.5);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
+        $spreadsheet->getActiveSheet()->getStyle('A5:D5')->getFont()->setBold(true);
+        $spreadsheet->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
+
+        $sheet->setCellValue('A1', 'LAPORAN KINERJA PEGAWAI')->mergeCells('A1:F1');
+        $sheet->setCellValue('A3', 'Unit Kerja')->mergeCells('A3:C3')->getColumnDimension('B')->setWidth(40);
+        $sheet->setCellValue('D3', 'PERIODE PENILAIAN')->mergeCells('D3:F3')->getColumnDimension('D')->setWidth(40);
+        $sheet->setCellValue('A4', $data['pegawai_dinilai']['unit_kerja'])->mergeCells('A4:C4');
+        $sheet->setCellValue('D4', $nama_bulan)->mergeCells('D4:F4');
+
+
+        $sheet->setCellValue('A5', 'PEGAWAI YANG DINILAI')->mergeCells('A5:C5');
+        $sheet->setCellValue('D5', 'PEJABAT PENILAI PEKERJA')->mergeCells('D5:F5');
+
+        $sheet->setCellValue('A6', 'Nama')->mergeCells('A6:B6');
+        $sheet->setCellValue('C6', $data['pegawai_dinilai']['nama']);
+
+        $sheet->setCellValue('D6', 'Nama');
+        $sheet->setCellValue('E6', $data['pegawai_penilai']['nama'])->mergeCells('E6:F6');
+
+        $sheet->setCellValue('A7', 'NIP')->mergeCells('A7:B7');
+        $sheet->setCellValue('C7', $data['pegawai_dinilai']['nip']);
+
+        $sheet->setCellValue('D7', 'NIP');
+        $sheet->setCellValue('E7', $data['pegawai_penilai']['nip'])->mergeCells('E7:F7');
+
+        $golongan_pegawai = '';
+        $golongan_atasan = '';
+
+        $data['pegawai_dinilai']['golongan'] !== null ? $golongan_pegawai = $data['pegawai_dinilai']['golongan'] : $golongan_pegawai = '-';
+        $data['pegawai_dinilai']['golongan'] !== null ? $golongan_atasan = $data['pegawai_dinilai']['golongan'] : $golongan_atasan = '-';
+
+        $sheet->setCellValue('A8', 'Pangkat / Gol Ruang')->mergeCells('A8:B8');
+        $sheet->setCellValue('C8', $golongan_pegawai);
+
+        $sheet->setCellValue('D8', 'Pangkat / Gol Ruang');
+        $sheet->setCellValue('E8', $golongan_atasan)->mergeCells('E8:F8');
+
+        $sheet->setCellValue('A9', 'Jabatan')->mergeCells('A9:B9');
+        $sheet->setCellValue('C9', $data['pegawai_dinilai']['jabatan']);
+
+        $sheet->setCellValue('D9', 'Jabatan');
+        $sheet->setCellValue('E9', $data['pegawai_penilai']['jabatan'])->mergeCells('E9:F9');
+
+        $sheet->setCellValue('A9', 'Unit kerja')->mergeCells('A9:B9');
+        $sheet->setCellValue('C9', $data['pegawai_dinilai']['unit_kerja']);
+
+        $sheet->setCellValue('D9', 'Unit kerja');
+        $sheet->setCellValue('E9', $data['pegawai_penilai']['unit_kerja'])->mergeCells('E9:F9');
+
+
+        $border_header = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '0000000'],
+                ],
+            ],
+        ];
+
+        $sheet->getStyle('A5:F9')->applyFromArray($border_header);
+
+        $sheet->setCellValue('A12', 'No');
+        $sheet->setCellValue('B12', 'Sasaran Kinerja & Aktivitas')->mergeCells('B12:D12');
+        $sheet->setCellValue('E12', 'Output');
+        $sheet->setCellValue('F12', 'Waktu (Menit)');
+
+        $cell = 13;
+
+        $capaian_prod_kinerja = 0;
+      
+        foreach ($data['kinerja'] as $key => $value) {
+            // return count($value['aktivitas']);
+            if (count($value['aktivitas']) > 0) {
+                $sheet->setCellValue('A' . $cell, $key+1);
+                $sheet->setCellValue('B'. $cell,  $value['rencana_kerja'])->mergeCells('B'.$cell.':D'.$cell);
+
+                $cell++;
+
+                $index1 = $key+1;
+                $index2 = 0;
+
+                foreach ($value['aktivitas'] as $k => $v) {
+                    $index2 = $k+1;
+                    $capaian_prod_kinerja += $v['waktu'];
+                    $sheet->setCellValue('A' . $cell, $index1.'.'.$index2);
+                    $sheet->setCellValue('B'. $cell,  $v['nama_aktivitas'])->mergeCells('B'.$cell.':D'.$cell);
+                    $sheet->setCellValue('E' . $cell, $v['hasil'].' '.$v['satuan']);
+                    $sheet->setCellValue('F' . $cell, $v['waktu']);
+                            $sheet->getStyle('F'.$cell)->getAlignment()->setHorizontal('center');
+                            $sheet->getStyle('E'.$cell)->getAlignment()->setHorizontal('center');
+                    $cell++;
+                }
+               
+            }
+
+          
+        }
+
+        $target_produktivitas_kerja = 6750;
+
+        $nilai_produktivitas_kerja = ($capaian_prod_kinerja / $target_produktivitas_kerja) * 100;
+
+        for ($i=0; $i < 3 ; $i++) { 
+            if ($i == 0) {
+                $sheet->setCellValue('B'.$cell, 'Capaian Produktivitas Kerja (Menit)')->mergeCells('B'.$cell.':E'.$cell);
+                $sheet->setCellValue('F'.$cell, $capaian_prod_kinerja); 
+                        $sheet->getStyle('F'.$cell)->getAlignment()->setHorizontal('center');
+            }elseif ($i == 1) {
+                $sheet->setCellValue('B'.$cell, 'Target Produktivitas Kerja (Menit)')->mergeCells('B'.$cell.':E'.$cell); 
+                $sheet->setCellValue('F'.$cell, $target_produktivitas_kerja); 
+                        $sheet->getStyle('F'.$cell)->getAlignment()->setHorizontal('center');
+            }else{
+                $sheet->setCellValue('B'.$cell, 'Nilai Produktifitas Kerja (%)')->mergeCells('B'.$cell.':E'.$cell);  
+                $sheet->setCellValue('F'.$cell, round($nilai_produktivitas_kerja,2)); 
+                        $sheet->getStyle('F'.$cell)->getAlignment()->setHorizontal('center');
+            }
+            $cell++;
+        }
+
+        // $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+        // $sheet->getStyle('A'.$cell)->getAlignment()->setHorizontal('center');
+
+        // $sheet->getStyle('F'.$cell.':F' . $cell)->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+        // $sheet->getStyle('F'.$cell.':F' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        // $sheet->getStyle('B7:F' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $border_row = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '0000000'],
+                ],
+            ],
+        ];
+
+        $sheet->getStyle('A12:F'.$cell)->applyFromArray($border_row);
+
+
+
+        if ($tipe == 'excel') {
+            // Untuk download 
+            $writer = new Xlsx($spreadsheet);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="Daftar Laporan TPP"' . $data['satuan_kerja'] . ' Bulan ' . ucwords(date('F Y', mktime(0, 0, 0, $bulan + 1, 0))) . ' .xlsx"');
+        } else {
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+                ->setOddHeader('&C&H' . url()->current());
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+                ->setOddFooter('&L&B &RPage &P of &N');
+            $class = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class;
+            \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', $class);
+            header('Content-Type: application/pdf');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Pdf');
+        }
+
+        $writer->save('php://output');
+    }    
+    // end kinerje pegawai
+
+    //kinerja rekaptulasi
+
+    public function export_kinerja_rekapitulasi(){
+        $spreadsheet = new Spreadsheet();
+
+        $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
+            ->setLastModifiedBy('BKPSDM BULUKUMBA')
+            ->setTitle('Laporan Pembayaran TPP')
+            ->setSubject('Laporan Pembayaran TPP')
+            ->setDescription('Laporan Pembayaran TPP')
+            ->setKeywords('pdf php')
+            ->setCategory('LAPORAN Pembayaran TPP');
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+
+        $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_FOLIO);
+
+        $sheet->getRowDimension(1)->setRowHeight(17);
+        $sheet->getRowDimension(2)->setRowHeight(17);
+        $sheet->getRowDimension(3)->setRowHeight(7);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
+        $spreadsheet->getDefaultStyle()->getFont()->setSize(10);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setHorizontalCentered(true);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setVerticalCentered(false);
+
+        // //Margin PDF
+        $spreadsheet->getActiveSheet()->getPageMargins()->setTop(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setRight(0.3);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.5);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
+
+
+        if ($type == 'excel') {
+            // Untuk download 
+            $writer = new Xlsx($spreadsheet);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="Daftar Laporan TPP"' . $data['satuan_kerja'] . ' Bulan ' . ucwords(date('F Y', mktime(0, 0, 0, $bulan + 1, 0))) . ' .xlsx"');
+        } else {
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+                ->setOddHeader('&C&H' . url()->current());
+            $spreadsheet->getActiveSheet()->getHeaderFooter()
+                ->setOddFooter('&L&B &RPage &P of &N');
+            $class = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class;
+            \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', $class);
+            header('Content-Type: application/pdf');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Pdf');
+        }
+
+        $writer->save('php://output');
+    }
+
+    //end kinerja rekapitulasi
 
     /*
     REKAP TPP
