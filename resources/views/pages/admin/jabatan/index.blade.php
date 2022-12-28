@@ -123,6 +123,18 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Kelas Jabatan</label>
+                    <select class="form-control form-control-solid" type="text" id="kelas_jabatan"
+                        name="kelas_jabatan">
+                        <option disabled selected> Pilih Kelas Jabatan </option>
+                        @for ($x=0; $x <= 14; $x++)
+                            <option value="{{ $x }}">{{ $x }}</option>
+                        @endfor
+                    </select>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
                     <label>Nama Jabatan</label>
                     <input class="form-control form-control-solid" type="text" name="nama_jabatan" />
                     <div class="invalid-feedback"></div>
@@ -201,6 +213,13 @@
                     </div>
                     <div class="invalid-feedback"></div>
                 </div>
+
+                <div class="form-group">
+                    <label>Target Waktu</label>
+                    <input type="number" class="form-control form-control-solid" value="6750" name="target_waktu">
+                    <div class="invalid-feedback"></div>
+                </div>
+
 
                 <div class="form-group">
                     <label>Atasan langsung</label>

@@ -57,7 +57,7 @@
                         <div class="col-5">
                             <div class="form-group">
                                 <label>Tanggal Kegiatan </label>
-                                <input type="date" class="form-control" name="tanggal"/>
+                                <input type="date" id="tanggal" class="form-control" name="tanggal"/>
                             </div>
                         </div>
                         <input type="text" style="display:none" name="id">
@@ -148,6 +148,21 @@
             }
         }
         
+        function maxdate() {
+            var dtToday = new Date();
+            var month = dtToday.getMonth() + 1;
+            var day = dtToday.getDate() - 5;
+            var year = dtToday.getFullYear();
+            //  date.setMonth (date.getMonth () - 12);
+            if(month < 10)
+                month = '0' + month.toString();
+            if(day < 10)
+                day = '0' + day.toString();
+            
+            var maxDate = year + '-' + month + '-' + day;
+
+            $('#tanggal').attr('min', maxDate);
+        }
         
         jQuery(document).ready(function() {
             Panel.init('side_form');
@@ -155,6 +170,10 @@
             $('.select2').select2({
             placeholder: "Pilih"
         });
+
+        maxdate();
+
+        
 
             $(document).on('click','.btn-cancel', function(){
                 Panel.action('hide');
@@ -193,6 +212,8 @@
             // var calendarEl = document.getElementById('kt_calendar');
             var calendarEl = document.getElementById('kalender');
 
+ 
+
             var kalender = new FullCalendar.Calendar(calendarEl, {
                 plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list' ],
                 themeSystem: 'bootstrap',
@@ -200,7 +221,14 @@
                 defaultDate: TODAY,
                 editable: true,
                 eventLimit: true, // allow "more" link when too many events
-                events: "{{route('get-aktivitas')}}"
+                 selectable: true,
+                selectHelper: true,
+                events: "{{route('get-aktivitas')}}",
+                selectAllow: function(event)
+                {
+                    return moment(event.start).utcOffset(false).isSame(moment(event.end).subtract(1, 'second').utcOffset(false), 'day');
+                }, 
+
                 });
             // kalender.on('dateClick', function(info) {
             //     console.log(info);
@@ -214,9 +242,7 @@
             // });
 
             kalender.on('eventClick', function(data) {
-                let id = data.event['_def']['publicId'];
-                // alert(id);
-       
+                let id = data.event['_def']['publicId']; 
                 $.ajax({
                     url : '/aktivitas/detail/'+id,
                     method:"GET",
@@ -226,7 +252,6 @@
                         if (data.status == true) {
                             data = data.data;
          
-                            if (data.range <= 5) {
                                 Panel.action('show','update');
                                 $.each(data, function( key, value ) {
                                     $("input[name='"+key+"']").val(value);
@@ -234,25 +259,73 @@
                                     $("textarea[name='"+key+"']").val(value);
                                 });
                                 $('.select2').trigger('change');
-                            }else{
-                                $.notify("Anda tidak dapat mengupdate aktivitas", "danger");
-                            }
-                  
-
-                       
                         }
-                    //   if(data.success){
-                    //     console.log(data.success);
-                    //     var res = data.success.data;
-                    //     $.each(res, function( key, value ) {
-                    //         $("input[name='"+key+"']").val(value);
-                    //         $("select[name='"+key+"']").val(value);
-                    //     });
-                    //   }
                     }
                 });
                 // $('#kt_quick_user').modal('show');
             });
+
+            // kalender.on('dateClick', function (data) {
+            //     // let dates = new Date(data.dateStr);
+            //     // alert(dates);
+            //     // var d = todayDate.format('DD/MM//YYYY');
+            //     Panel.action('show','submit');
+            //     $("#tanggal").val(data.dateStr);
+            // })
+
+            // dayRender: function (date, cell) {
+            //             var today = new Date();
+            //             var end = new Date();
+            //             end.setDate(today.getDate()+7);
+                        
+            //             if (date.getDate() === today.getDate()) {
+            //                 cell.css("background-color", "red");
+            //             }
+                        
+            //             if(date > today && date <= end) {
+            //                 cell.css("background-color", "yellow");
+            //             }
+                    
+            //         }  
+        
+            // kalender.on('dayRender',function (event) {
+            //     // console.log($(event.el).attr('data-date'));
+            //  var today = new Date();
+            //  var thismonth = today.getMonth() + 1;
+            // var thisday = today.getDate();
+            // var thisyear = today.getFullYear();
+            // let daydown = today.getDate() - 5;
+            // let thisdate = thisyear + '-' + thismonth + '-' + thisday;
+            
+            // // let array_5_hari = [];
+            // // for (let index = daydown; index >= 5; index++) {
+            // //     array_5_hari[index] = index;
+            // // }
+
+            // // let tanggal_lima_hari_belakang = today.getDate();
+            // console.log(array_5_hari);
+
+            //  // var month = today.getMonth() + 1;
+            // // var day = today.getDate() - 5;
+            // // var year = today.getFullYear();
+
+            // // if (thisdate == $(event.el).attr('data-date')) {
+            // //      $(event.el).css("background-color", "red");
+            // // }
+                 
+            //         // var today = new Date();
+            //         //     var end = new Date();
+            //         //     let element = event.el;
+            //         //     // console.log(element);
+            //         //     end.setDate(today.getDate()+7);       
+            //         //     if (today.getDate() == date('d')) {
+            //         //         $(event.el).css("background-color", "red");
+            //         //     }
+            //             // if(date > today && date <= end) {
+            //             //     cell.css("background-color", "yellow");
+            //             // }
+            // })
+
             kalender.render();
 
             // let calender =  $('kalender').FullCalendar({
@@ -305,10 +378,21 @@
                             });
                         }else if(res.invalid){
                             $.each(res.invalid, function( key, value ) {
+                                console.log(key);
+                                if (key == 'error') {
+                                        swal.fire({
+                                            text: value,
+                                            title:"Error",
+                                            timer: 2000,
+                                            icon: "warning",
+                                            showConfirmButton:false,
+                                        });
+                                }else{
+                                    $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                                    $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                                    $("textarea[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
+                                }
                          
-                                $("input[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
-                                $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
-                                $("textarea[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
                             });
                         }else if(res.success){
                             swal.fire({

@@ -48,7 +48,6 @@ class AktivitasController extends Controller
         $checkAbsen = Http::withToken($token)->get($url."/absen/check-absen-today")->json();
         $masterAktivitas = Http::withToken($token)->get($url."/master_aktivitas/option")->json();
 
-
         if($request->ajax()){
             $url = env('API_URL');
             $token = $request->session()->get('user.access_token');

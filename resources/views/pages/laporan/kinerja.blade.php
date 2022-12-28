@@ -95,7 +95,6 @@
 
         jQuery(document).ready(function() {
 
-
             $('#kt_daterangepicker_2').daterangepicker({
                     buttonClasses: ' btn',
                     applyClass: 'btn-primary',
@@ -126,11 +125,13 @@
             $('#preview-excel').on('click', function() {
                 let bulan = $('#bulan').val();
                 let nama_bulan = $('#bulan option:selected').text();
+                let dinas = $('#dinas option:selected').val();
+                let tipe = '';
 
-                // let val_range = $('#kt_daterangepicker_2 input').val();
+                level == 'super_admin' ? tipe = 'rekapitulasi' : tipe = 'pegawai';
             
                 if (bulan != '') {
-                    url = '/laporan/export/kinerja?bulan='+bulan+'&tipe=pegawai'+'&nama_bulan='+nama_bulan;
+                    url = '/laporan/export/kinerja?bulan='+bulan+`&tipe=${tipe}`+'&nama_bulan='+nama_bulan+'&dinas='+dinas;
                     window.open(url);
                 } else {
                     Swal.fire(

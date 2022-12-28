@@ -209,18 +209,6 @@ $path = explode('/', Request::path());
                             <i class="menu-arrow"></i>
                         </a>
 
-                        <!-- Draft Menu -->
-
-                        <!-- <li class="menu-item" aria-haspopup="true">
-                                <a href="{{ url('/laporan/absen/super_admin') }}" class="menu-link">
-                                    <i class="menu-bullet menu-bullet-dot">
-                                        <span></span>
-                                    </i>
-                                    <span class="menu-text text-capitalize">Absen</span>
-                                </a>
-                            </li> -->
-
-                        <!--  -->
                         <div class="menu-submenu">
                             <i class="menu-arrow"></i>
                             <ul class="menu-subnav">
@@ -445,6 +433,14 @@ $path = explode('/', Request::path());
                                                 <span></span>
                                             </i>
                                             <span class="menu-text text-capitalize">Kehadiran</span>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'kinerja' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
+                                        <a href="{{ route('laporan-kinerja') }}" class="menu-link">
+                                            <i class="menu-bullet menu-bullet-dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="menu-text text-capitalize">Kinerja</span>
                                         </a>
                                     </li>
                                 @else

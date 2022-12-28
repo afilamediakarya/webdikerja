@@ -470,12 +470,62 @@
                         render: function(data, type, full, meta) {
                             let params = data.id+','+data.tanggal_absen+','+data.validation;
                            
-                            return `<a href="javascript:;" type="button" data-id="${params}" class="btn btn-secondary button-update">ubah</a>`;
+                            return `
+                            <a href="javascript:;" type="button" data-id="${params}" class="btn btn-secondary button-update">ubah</a>
+                                     <a href="javascript:;" type="button" data-id="${params}" data-valid="1" class="btn btn-success button-valid btn-sm"> <i class="fa fa-check-circle" aria-hidden="true"></i> Accept</a> 
+                            <a href="javascript:;" type="button" data-id="${params}" data-valid="0" class="btn btn-danger button-valid btn-sm"> <i class="fa fa-times-circle" aria-hidden="true"></i> Reject</a>
+                            `;
                         },
                     }
                 ]
             });
         }
+
+         $(document).on('click','.button-valid', function (e) {
+            e.preventDefault();
+            let nilai_valid = $(this).attr('data-valid');
+            let key = $(this).attr('data-id');
+            let params = key.split(",");
+
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            $.ajax({
+                url : "{{route('change-validation')}}",
+                method : 'POST',
+                data: {
+                    'id_pegawai' : params[0],
+                    'tanggal' : params[1],
+                    'valid' : nilai_valid
+                },
+                success : function (res) {
+                    console.log(res);
+                    if (res.success) {
+                        swal.fire({
+                            text: 'Absen berhasil di validasi',
+                            icon: "success",
+                            showConfirmButton:true,
+                            confirmButtonText: "OK, Siip",
+                        }).then(function() {
+                            datatable_();
+                        });      
+                    }else{
+                        
+                    }
+                
+                },
+                error : function (xhr) {
+                    Swal.fire({
+                            icon: 'error',
+                            title: 'Maaf, terjadi kesalahan',
+                            text: 'Silahkan Hubungi Admin'
+                        })
+                }
+            });
+        })
 
         jQuery(document).ready(function() {
             Panel.init('side_form');
