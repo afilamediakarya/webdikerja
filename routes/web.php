@@ -86,7 +86,7 @@ Route::middleware('Auth')->group(function () {
         Route::post('/store', [RealisasiController::class, 'store'])->name('store-realisasi');
     });
 
-    Route::prefix('laporan')->group(function () {
+    Route::prefix('laporan-pegawai')->group(function () {
         Route::get('/absen/{type}', [LaporanController::class, 'absen'])->name('laporan-absen');
         Route::get('/skp', [LaporanController::class, 'skp'])->name('laporan-skp');
         Route::get('/kinerja', [LaporanController::class, 'kinerja'])->name('laporan-kinerja');
@@ -99,6 +99,21 @@ Route::middleware('Auth')->group(function () {
         Route::get('/export/laporanSkp/{jenis}/{type}/{bulan}/{id_pegawai}', [LaporanController::class, 'exportLaporanSkp'])->name('laporan-skp-pegawai');
         Route::get('/bankom/{type}', [LaporanController::class, 'bankom'])->name('laporan-bankom');
         Route::get('/export/bankom/{tahun}/{type}/{id_pegawai}', [LaporanController::class, 'exportbankom'])->name('export-bankom');
+    });
+
+        Route::prefix('laporan-admin')->group(function () {
+        Route::get('/absen/{type}', [LaporanController::class, 'absen'])->name('laporan-absen-admin');
+        Route::get('/skp', [LaporanController::class, 'skp'])->name('laporan-skp-admin');
+        Route::get('/kinerja', [LaporanController::class, 'kinerja'])->name('laporan-kinerja-admin');
+        Route::get('/tpp/{type}', [LaporanController::class, 'tpp'])->name('laporan-tpp-admin');
+        Route::get('/aktivitas', [LaporanController::class, 'aktivitas'])->name('laporan-aktivitas-admin');
+        Route::get('/export/rekapitulasi_pegawai/{params}', [LaporanController::class, 'exportRekapAbsen'])->name('laporan-absen-pegawai-admin');
+        Route::get('/export/kinerja', [LaporanController::class, 'export_kinerja'])->name('laporan-kinerja-pegawai-admin');
+        Route::get('/export/rekapitulasi_tpp/{params}', [LaporanController::class, 'exportRekapTpp'])->name('laporan-tpp-pegawai-admin');
+        Route::get('/export/rekapitulasiSkp/{jenis}/{type}/{bulan}', [LaporanController::class, 'exportRekapSkp'])->name('laporan-rekap-skp-admin');
+        Route::get('/export/laporanSkp/{jenis}/{type}/{bulan}/{id_pegawai}', [LaporanController::class, 'exportLaporanSkp'])->name('laporan-skp-pegawai-admin');
+        Route::get('/bankom/{type}', [LaporanController::class, 'bankom'])->name('laporan-bankom-admin');
+        Route::get('/export/bankom/{tahun}/{type}/{id_pegawai}', [LaporanController::class, 'exportbankom'])->name('export-bankom-admin');
     });
 
     Route::get('/penilaian/{type}', [PenilaianController::class, 'index'])->name('penilaian');

@@ -112,7 +112,7 @@
 
                     let dataParams = JSON.stringify(params);
                     console.log(dataParams);
-                    url = '/laporan/export/rekapitulasi_tpp/' + dataParams;
+                    url = '/laporan-admin/export/rekapitulasi_tpp/' + dataParams;
                     window.open(url);
                 } else {
                     Swal.fire(

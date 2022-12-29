@@ -131,7 +131,7 @@
                 level == 'super_admin' ? tipe = 'rekapitulasi' : tipe = 'pegawai';
             
                 if (bulan != '') {
-                    url = '/laporan/export/kinerja?bulan='+bulan+`&tipe=${tipe}`+'&nama_bulan='+nama_bulan+'&dinas='+dinas;
+                    url = '/laporan-pegawai/export/kinerja?bulan='+bulan+`&tipe=${tipe}`+'&nama_bulan='+nama_bulan+'&dinas='+dinas;
                     window.open(url);
                 } else {
                     Swal.fire(

@@ -116,7 +116,7 @@
                     };
 
                     let dataParams = JSON.stringify(params);
-                    url = '/laporan/export/rekapitulasi_pegawai/' + dataParams;
+                    url = '/laporan-pegawai/export/rekapitulasi_pegawai/' + dataParams;
                     window.open(url);
                 } else {
                     Swal.fire(
@@ -139,7 +139,7 @@
                         'satuanKerja': $('#satuan_kerja').val()
                     };
                     let dataParams = JSON.stringify(params);
-                    url = '/laporan/export/rekapitulasi_pegawai/' + dataParams;
+                    url = '/laporan-pegawai/export/rekapitulasi_pegawai/' + dataParams;
                     window.open(url);
                 } else {
                     Swal.fire(

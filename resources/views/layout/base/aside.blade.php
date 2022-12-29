@@ -186,7 +186,7 @@ $path = explode('/', Request::path());
 
 
 
-                    <li class="menu-item menu-item-submenu {{ $path[0] == 'laporan' ? 'menu-item-active menu-item-open' : '' }}"
+                    <li class="menu-item menu-item-submenu {{ $path[0] == 'laporan-pegawai' ? 'menu-item-active menu-item-open' : '' }}"
                         aria-haspopup="true" data-menu-toggle="hover">
                         <a href="javascript:;" class="menu-link menu-toggle">
                             <span class="svg-icon menu-icon">
@@ -213,8 +213,8 @@ $path = explode('/', Request::path());
                             <i class="menu-arrow"></i>
                             <ul class="menu-subnav">
 
-                                <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'absen' && $path[2] == 'pegawai' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
-                                    <a href="{{ url('/laporan/absen/pegawai') }}" class="menu-link">
+                                <li class="menu-item {{ $path[0] == 'laporan-pegawai' && $path[1] == 'absen' && $path[2] == 'pegawai' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
+                                    <a href="{{ url('/laporan-pegawai/absen/pegawai') }}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
@@ -222,17 +222,16 @@ $path = explode('/', Request::path());
                                     </a>
                                 </li>
 
-                                <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'kinerja' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
-                                        <a href="{{ route('laporan-kinerja') }}" class="menu-link">
-                                            <i class="menu-bullet menu-bullet-dot">
-                                                <span></span>
-                                            </i>
-                                            <span class="menu-text text-capitalize">Kinerja</span>
-                                        </a>
-                                    </li>
+                                <li class="menu-item {{ $path[0] == 'laporan-pegawai' && $path[1] == 'kinerja' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
+                                    <a href="{{ route('laporan-kinerja') }}" class="menu-link">
+                                        <i class="menu-bullet menu-bullet-dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="menu-text text-capitalize">Kinerja</span>
+                                    </a>
+                                </li>
 
-
-                                <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'skp' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
+                                <li class="menu-item {{ $path[0] == 'laporan-pegawai' && $path[1] == 'skp' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
                                     <a href="{{ route('laporan-skp') }}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
@@ -241,14 +240,16 @@ $path = explode('/', Request::path());
                                     </a>
                                 </li>
 
-                                <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'bankom' && $path[2] == 'pegawai' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
-                                    <a href="{{ url('/laporan/bankom/pegawai') }}" class="menu-link">
+                                <li class="menu-item {{ $path[0] == 'laporan-pegawai' && $path[1] == 'bankom' && $path[2] == 'pegawai' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
+                                    <a href="{{ url('/laporan-pegawai/bankom/pegawai') }}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
                                         <span class="menu-text text-capitalize">Bankom</span>
                                     </a>
                                 </li>
+
+
                             </ul>
                         </div>
                     </li>
@@ -384,18 +385,17 @@ $path = explode('/', Request::path());
                                             fill="#000000" fill-rule="nonzero" />
                                     </g>
                                 </svg>
-                                <!--end::Svg Icon-->
+                                
                             </span>
                             <span class="menu-text text-capitalize">Kehadiran</span>
                         </a>
                     </li>
 
 
-                    <li class="menu-item menu-item-submenu {{ $path[0] == 'laporan' ? 'menu-item-open' : '' }}"
+                    <li class="menu-item menu-item-submenu {{ $path[0] == 'laporan-admin' ? 'menu-item-open' : '' }}"
                         aria-haspopup="true" data-menu-toggle="hover">
                         <a href="javascript:;" class="menu-link menu-toggle">
                             <span class="svg-icon menu-icon">
-                                <!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-arrange.svg-->
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                     width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -417,35 +417,27 @@ $path = explode('/', Request::path());
                             <i class="menu-arrow"></i>
                             <ul class="menu-subnav">
 
-                                <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'skp' ? 'menu-item-active' : '' }}" aria-haspopup="true">
-                                    <a href="{{ route('laporan-skp') }}" class="menu-link">
+                                <li class="menu-item {{ $path[0] == 'laporan-admin' && $path[1] == 'skp' ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                                    <a href="{{ route('laporan-skp-admin') }}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
-                                        <span class="menu-text text-capitalize">SKP</span>
+                                        <span class="menu-text text-capitaslize">SKP</span>
                                     </a>
                                 </li>
 
                                 @if (Session::get('user.role') == 'super_admin')
-                                    <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'absen' && $path[2] == 'super_admin' ? 'menu-item-active' : '' }}" aria-haspopup="true">
-                                        <a href="{{ url('/laporan/absen/super_admin') }}" class="menu-link">
+                                    <li class="menu-item {{ $path[0] == 'laporan-admin' && $path[1] == 'absen' && $path[2] == 'super_admin' ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                                        <a href="{{ url('/laporan-admin/absen/super_admin') }}" class="menu-link">
                                             <i class="menu-bullet menu-bullet-dot">
                                                 <span></span>
                                             </i>
                                             <span class="menu-text text-capitalize">Kehadiran</span>
                                         </a>
                                     </li>
-                                    <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'kinerja' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
-                                        <a href="{{ route('laporan-kinerja') }}" class="menu-link">
-                                            <i class="menu-bullet menu-bullet-dot">
-                                                <span></span>
-                                            </i>
-                                            <span class="menu-text text-capitalize">Kinerja</span>
-                                        </a>
-                                    </li>
                                 @else
-                                    <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'absen' && $path[2] == 'admin' ? 'menu-item-active' : '' }}" aria-haspopup="true">
-                                        <a href="{{ url('/laporan/absen/admin') }}" class="menu-link">
+                                    <li class="menu-item {{ $path[0] == 'laporan-admin' && $path[1] == 'absen' && $path[2] == 'admin' ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                                        <a href="{{ url('/laporan-admin/absen/admin') }}" class="menu-link">
                                             <i class="menu-bullet menu-bullet-dot">
                                                 <span></span>
                                             </i>
@@ -454,11 +446,18 @@ $path = explode('/', Request::path());
                                     </li>
                                 @endif
 
-                           
+                                <li class="menu-item {{ $path[0] == 'laporan-admin' && $path[1] == 'kinerja' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
+                                    <a href="{{ route('laporan-kinerja-admin') }}" class="menu-link">
+                                        <i class="menu-bullet menu-bullet-dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="menu-text text-capitalize">Kinerja</span>
+                                    </a>
+                                </li>
 
                                 @if (Session::get('user.role') == 'super_admin')
-                                    <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'tpp' && $path[2] == 'super_admin' ? 'menu-item-active' : '' }}" aria-haspopup="true">
-                                        <a href="{{ url('/laporan/tpp/super_admin') }}" class="menu-link">
+                                    <li class="menu-item {{ $path[0] == 'laporan-admin' && $path[1] == 'tpp' && $path[2] == 'super_admin' ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                                        <a href="{{ url('/laporan-admin/tpp/super_admin') }}" class="menu-link">
                                             <i class="menu-bullet menu-bullet-dot">
                                                 <span></span>
                                             </i>
@@ -466,8 +465,8 @@ $path = explode('/', Request::path());
                                         </a>
                                     </li>
                                 @else
-                                    <li class="menu-item {{ $path[0] == 'laporan' && $path[1] == 'tpp' && $path[2] == 'admin' ? 'menu-item-active' : '' }}" aria-haspopup="true">
-                                        <a href="{{ url('/laporan/tpp/admin') }}" class="menu-link">
+                                    <li class="menu-item {{ $path[0] == 'laporan-admin' && $path[1] == 'tpp' && $path[2] == 'admin' ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                                        <a href="{{ url('/laporan-admin/tpp/admin') }}" class="menu-link">
                                             <i class="menu-bullet menu-bullet-dot">
                                                 <span></span>
                                             </i>

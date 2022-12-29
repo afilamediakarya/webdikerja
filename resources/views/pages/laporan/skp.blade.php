@@ -136,7 +136,7 @@
                     if (level == 'super_admin') {
                         let idDinas = $('#dinas').val();
                         url =
-                            `/laporan/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}?dinas=${idDinas}`;
+                            `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}?dinas=${idDinas}`;
                         window.open(url);
                         $('#dinas').val(null).trigger("change");
                         $('#jenis-skp-select').val(null).trigger("change");
@@ -145,10 +145,10 @@
                     } else if (level == 'admin_opd') {
 
                         if (id_pegawai == 0) {
-                            url = `/laporan/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}`;
+                            url = `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}`;
                             window.open(url);
                         }
-                        url = `/laporan/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
+                        url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
                         window.open(url);
                         $('#pegawai').val(null).trigger("change");
                         $('#jenis-skp-select').val(null).trigger("change");
@@ -156,7 +156,7 @@
 
                     } else {
                         // url = `/laporan/export/laporanSkp/${jenis_skp}/pdf/${bulan}`;
-                        url = `/laporan/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
+                        url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
                         window.open(url);
                         $('#jenis-skp-select').val(null).trigger("change");
                         $('#bulan').val(null).trigger("change");
@@ -181,7 +181,7 @@
                 if (jenis_skp !== null && bulan !== null) {
                     if (level == 'admin_opd') {
                         if (id_pegawai == 0) {
-                            url = `/laporan/export/rekapitulasiSkp/${jenis_skp}/excel/${bulan}`;
+                            url = `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/excel/${bulan}`;
                             window.open(url);
                         }
                         url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}/${id_pegawai}`;
@@ -192,7 +192,7 @@
 
                     } else {
                         // url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}`;
-                        url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}/${id_pegawai}`;
+                        url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/excel/${bulan}/${id_pegawai}`;
                         window.open(url);
                         $('#jenis-skp-select').val(null).trigger("change");
                         $('#bulan').val(null).trigger("change");
