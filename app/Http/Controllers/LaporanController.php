@@ -360,7 +360,7 @@ class LaporanController extends Controller
             count($value['aktivitas']) > 0 ? $capaian_menit = $value['aktivitas'][0]['count'] : $capaian_menit = 0;
             $value['target_waktu'] !== null ? $target_nilai = $value['target_waktu'] : $target_nilai = 0;
 
-            if ($value['kelas_jabatan'] == 1 || $value['kelas_jabatan'] == 3 || $value['kelas_jabatan'] == 4) {
+            if ($value['kelas_jabatan'] == 1 || $value['kelas_jabatan'] == 3 || $value['kelas_jabatan'] == 15) {
                 $nilai_kinerja = 100;
             }else{
                 if ($capaian_menit > 0 || $target_nilai > 0) {
@@ -620,7 +620,7 @@ class LaporanController extends Controller
             if ($capaian_prod > 0 || $target_prod > 0) {
                 $nilaiKinerjaByAktivitas = ($capaian_prod / $target_prod) * 100;
             }else {
-                  if ($value['kelas_jabatan'] == 1 || $value['kelas_jabatan'] == 3 || $value['kelas_jabatan'] == 14) {
+                  if ($value['kelas_jabatan'] == 1 || $value['kelas_jabatan'] == 3 || $value['kelas_jabatan'] == 15) {
                 $nilaiKinerjaByAktivitas = 100;
             }else{
                 $nilaiKinerjaByAktivitas = 0;
@@ -2821,17 +2821,7 @@ class LaporanController extends Controller
         $sheet->getStyle('A1:G4')->getFont()->setSize(14);
 
 
-        $sheet->setCellValue('A5', 'Jumlah hari kerja')->mergeCells('A5:B5');
-        $sheet->setCellValue('C5', ': ' . $data['data']['jml_hari_kerja'])->mergeCells('C5:G5');
-        $sheet->setCellValue('A6', 'Kehadiran kerja')->mergeCells('A6:B6');
-        $sheet->setCellValue('C6', ': ' . $data['data']['kehadiran'])->mergeCells('C6:G6');
-        $sheet->setCellValue('A7', 'Tanpa keterangan')->mergeCells('A7:B7');
-        $sheet->setCellValue('C7', ': ' . $data['data']['tanpa_keterangan'])->mergeCells('C7:G7');
-        $sheet->setCellValue('A8', 'Jumlah potongan kehadiran')->mergeCells('A8:B8');
-        $sheet->setCellValue('C8', ': ' . $data['data']['potongan_kehadiran'])->mergeCells('C8:G8');
-        $sheet->setCellValue('A9', 'Persentase pemotongan')->mergeCells('A9:B9');
-        $sheet->setCellValue('C9', ': ' . $data['data']['persentase_pemotongan'])->mergeCells('C9:G9');
-        $sheet->getStyle('A5:G9')->getFont()->setSize(12);
+      
 
         $sheet->setCellValue('A10', ' ')->mergeCells('A10:G10');
 
@@ -2907,6 +2897,27 @@ class LaporanController extends Controller
             $cell++;
         }
 
+
+        $cell_bottom = $cell;
+                // return $cell;
+        
+        for ($cl=0; $cl < 1; $cl++) { 
+            $sheet->setCellValue('A'.$cell++, 'Jumlah hari kerja')->mergeCells('A'.$cell++.':B'.$cell++);         
+        }        
+                
+        // $sheet->setCellValue('A'.$cell++, 'Jumlah hari kerja')->mergeCells('A'.$cell++.':B'.$cell++);
+        // $sheet->setCellValue('C5', ': ' . $data['data']['jml_hari_kerja'])->mergeCells('C5:G5');
+        // $sheet->setCellValue('A6', 'Kehadiran kerja')->mergeCells('A6:B6');
+        // $sheet->setCellValue('C6', ': ' . $data['data']['kehadiran'])->mergeCells('C6:G6');
+        // $sheet->setCellValue('A7', 'Tanpa keterangan')->mergeCells('A7:B7');
+        // $sheet->setCellValue('C7', ': ' . $data['data']['tanpa_keterangan'])->mergeCells('C7:G7');
+        // $sheet->setCellValue('A8', 'Jumlah potongan kehadiran')->mergeCells('A8:B8');
+        // $sheet->setCellValue('C8', ': ' . $data['data']['potongan_kehadiran'])->mergeCells('C8:G8');
+        // $sheet->setCellValue('A9', 'Persentase pemotongan')->mergeCells('A9:B9');
+        // $sheet->setCellValue('C9', ': ' . $data['data']['persentase_pemotongan'])->mergeCells('C9:G9');
+
+        $sheet->getStyle('A5:G9')->getFont()->setSize(12);
+
         $border = [
             'borders' => [
                 'allBorders' => [
@@ -2917,11 +2928,6 @@ class LaporanController extends Controller
         ];
 
         $sheet->getStyle('A11:G' . $cell)->applyFromArray($border);
-
-
-
-
-
         $sheet->getStyle('A11:G' . $cell)->getAlignment()->setVertical('center')->setHorizontal('center');
 
 
@@ -3145,8 +3151,8 @@ class LaporanController extends Controller
             $sheet->setCellValue('F' . $cell, $jml_tanpa_keterangan);
             $sheet->setCellValue('G' . $cell, $jml_tanpa_keterangan * 3);
 
-            $total_potongan_persen_keterlambatan = count($kmk_30) + count($kmk_60) + count($kmk_90) + count($kmk_90_keatas);
-            $total_potongan_persen_pulang_kerja = count($cpk_30) + count($cpk_60) + count($cpk_90) + count($cpk_90_keatas);
+            $total_potongan_persen_keterlambatan = (count($kmk_30) * 0.5) + (count($kmk_60) * 1) + (count($kmk_90) * 1.25) + (count($kmk_90_keatas) * 1.5);
+            $total_potongan_persen_pulang_kerja = (count($cpk_30) * 0.5) + (count($cpk_60) * 1) + (count($cpk_90) * 1.25) + (count($cpk_90_keatas) * 1.5);
 
             $sheet->setCellValue('H' . $cell, count($kmk_30));
             $sheet->setCellValue('I' . $cell, count($kmk_30) * 0.5);
