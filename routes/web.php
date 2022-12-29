@@ -169,9 +169,9 @@ Route::middleware('Auth')->group(function () {
         Route::post('/pegawai/{id}', [PegawaiController::class, 'update'])->name('update-profil');
         Route::get('/bantuan', [AkunController::class, 'bantuan'])->name('bantuan');
     });
-    Route::middleware('roles:super_admin|admin_opd')->group(function () {
+    Route::middleware('roles:super_admin|admin_opd|pegawai')->group(function () {
         Route::prefix('admin')->group(function () {
-            // oke
+
             Route::prefix('pegawai')->group(function () {
                 Route::get('/', [PegawaiController::class, 'index'])->name('pegawai');
                 Route::get('/by-satuankerja', [PegawaiController::class, 'pegawaiBySatuankerja'])->name('pegawai-by-satuankerja');
@@ -192,6 +192,7 @@ Route::middleware('Auth')->group(function () {
             });
 
             Route::prefix('master-aktivitas')->group(function () {
+
                 Route::get('/master-aktivitas', [MasterAktivitasController::class, 'index'])->name('master-aktivitas');
                 Route::post('/master-aktivitas', [MasterAktivitasController::class, 'store'])->name('post-master-aktivitas');
                 Route::get('/master-aktivitas/{id}', [MasterAktivitasController::class, 'show'])->name('show-master-aktivitas');
