@@ -30,8 +30,11 @@ class JabatanController extends Controller
         $datadinas = Http::withToken($token)->get($url . "/satuan_kerja/list");
         $dinas = $datadinas->collect('data');
 
-        $dataJenisJabatan = Http::withToken($token)->get($url . "/jabatan/get-option-jenis-jabatan");
-        $jenisJabatan = $dataJenisJabatan->json();
+        $jenisJabatan = Http::withToken($token)->get($url . "/jabatan/get-option-jenis-jabatan")->collect();
+        // return $dataJenisJabatan;
+        // $jenisJabatan = $dataJenisJabatan->json();
+
+        // return $jenisJabatan;
 
         // $dataKelompokJabatan = Http::withToken($token)->get($url . "/kelompok_jabatan/get-option");
         // $kelompokJabatan = $dataKelompokJabatan->json();

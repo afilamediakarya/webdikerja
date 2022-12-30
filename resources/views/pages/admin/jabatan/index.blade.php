@@ -454,7 +454,7 @@
         })
 
         function kelompok_jabatan_select(params, value = null) {
-            alert(value);
+            // alert(value);
          $('#kelompok_jabatan').html('').trigger('change');
             $.ajax({
                 url : '/admin/master-aktivitas/kelompok-jabatan/get-option/'+params,
