@@ -140,17 +140,7 @@
                     <div class="invalid-feedback"></div>
                 </div>
 
-                <div class="form-group">
-                    <label>Kelompok Jabatan</label>
-                    <select class="form-control form-control-solid" type="text" name="kelompok_jabatan"
-                        id="kelompok_jabatan">
-                        <option disabled selected>Pilih Kelompok Jabatan</option>
-                        @foreach ($kelompokJabatan as $k_jabatan)
-                            <option value="{{ $k_jabatan['id'] }}">{{ $k_jabatan['value'] }}</option>
-                        @endforeach
-                    </select>
-                    <div class="invalid-feedback"></div>
-                </div>
+              
 
                 <div class="form-group">
                     <label>Jenis Jabatan</label>
@@ -160,6 +150,16 @@
                         @foreach ($jenisJabatan as $item)
                             <option value="{{ $item['id'] }}">{{ $item['value'] }}</option>
                         @endforeach
+                    </select>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                  <div class="form-group">
+                    <label>Kelompok Jabatan</label>
+                    <select class="form-control form-control-solid select_" type="text" name="kelompok_jabatan"
+                        id="kelompok_jabatan">
+    
+                     
                     </select>
                     <div class="invalid-feedback"></div>
                 </div>
@@ -186,7 +186,7 @@
                 <div class="form-group">
 
                     <label>Nama Pejabat</label>
-                    <select class="form-control form-control-solid" type="text" name="id_pegawai" id="pegawai">
+                    <select class="form-control form-control-solid select_" type="text" name="id_pegawai" id="pegawai">
                         <option selected disabled>Pilih pegawai</option>
                         <option>-</option>
                         <!-- <option value="">Kosong</option> -->
@@ -373,8 +373,6 @@
                 ];
             }
 
-            console.log(columns);
-
             // begin first table
             if (role == 'super_admin') {
                 $('#kt_datatable').DataTable({
@@ -427,6 +425,7 @@
         $(document).on('submit', "#createForm[data-type='submit']", function(e) {
             e.preventDefault();
             AxiosCall.post("{{ route('post-jabatan') }}", $(this).serialize(), "#createForm");
+                    Panel.action("hide");
         });
 
         $(document).on('change', '#id_satuan_kerja', function() {
@@ -434,11 +433,17 @@
             pegawaiBysatuanKerja(val);
         })
 
+        $(document).on('change','#id_jenis_jabatan',function () {
+           let params = $(this).val();
+            kelompok_jabatan_select(params);
+        })
+
 
         $(document).on('submit', "#createForm[data-type='update']", function(e) {
             e.preventDefault();
             var _id = $("input[name='id']").val();
             AxiosCall.post(`admin/jabatan/jabatan/${_id}`, $(this).serialize(), "#createForm");
+                             Panel.action("hide");
         });
 
         $(document).on('click', '.button-delete', function(e) {
@@ -448,6 +453,31 @@
             AxiosCall.delete(`admin/jabatan/jabatan/${key}`);
         })
 
+        function kelompok_jabatan_select(params, value = null) {
+            alert(value);
+         $('#kelompok_jabatan').html('').trigger('change');
+            $.ajax({
+                url : '/admin/master-aktivitas/kelompok-jabatan/get-option/'+params,
+                method : 'GET',
+                success : function (res) {
+                // $('#kelompok_jabatan').append(newOption).trigger('change');
+                //   $('#kelompok_jabatan').val(null).trigger('change');
+               
+                    let newOption = ''; 
+                   $.each(res, function(indexInArray, valueOfElement) {
+                        newOption += `<option value="${valueOfElement.id}">${valueOfElement.value}</option>`;
+                    });
+
+                    //    if (parent !== '') {
+                    //             $('#parent').val(parent);
+                    //             $("#parent").trigger('change');
+                    //         }
+
+                        $('#kelompok_jabatan').append(newOption).trigger('change');
+                }
+            })
+        }
+
         jQuery(document).ready(function() {
             Panel.init('side_form');
             // dataRow.init();
@@ -456,6 +486,10 @@
             });
             $('#pegawai').select2({
                 placeholder: "Pilih Pegawai"
+            });
+
+             $('#kelompok_jabatan').select2({
+                placeholder: "Pilih Kelompok Jabatan"
             });
 
             $('#id_lokasi').select2();
@@ -506,8 +540,10 @@
                                 $("input[value='" + value + "']").prop("checked", true);
                             } else if (key == 'pembayaran_tpp') {
                                 $("input[value='" + value + "']").prop("checked", true);
-                            } else if (key == 'id_jenis_jabatan') {
-                                $("select[name='" + key + "']").val(value);
+                            } else if (key == 'nested_jabatan') {
+                                kelompok_jabatan_select(value.id_jenis_jabatan,value.kelompok_jabatan);
+                                $("select[name='id_jenis_jabatan']").val(value.id_jenis_jabatan);
+                                // $("select[name='id_jenis_jabatan']").val(value.id_jenis_jabatan);
                             } else if (key == 'parent_id') {
 
                                 jenis_jabatan(value.jenis_jabatan, value.parent_id);
@@ -549,8 +585,6 @@
                     type: "GET",
                     url: "/admin/jabatan/getParent/" + val,
                     success: function(response) {
-                        console.log(response);
-                        // $('#parent').val(null).trigger('change');
                         $('#parent').empty();
                         if (response != '') {
 

@@ -119,4 +119,12 @@ class KelompokJabatanController extends Controller
      
         return response()->json(['error'=> 'Error Hapus Data']);
     }
+
+    public function get_option($params){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $dataKelompokJabatan = Http::withToken($token)->get($url . "/kelompok_jabatan/get-option/".$params);
+        $kelompokJabatan = $dataKelompokJabatan->json();
+        return $kelompokJabatan;
+    }
 }

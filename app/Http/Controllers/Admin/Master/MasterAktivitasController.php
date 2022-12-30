@@ -16,7 +16,7 @@ class MasterAktivitasController extends Controller
         $url = env('API_URL');
         // Get data jenis jabatan
         $token = $request->session()->get('user.access_token');
-        $dataKelompokJabatan = Http::withToken($token)->get($url . "/kelompok_jabatan/get-option");
+        $dataKelompokJabatan = Http::withToken($token)->get($url . "/kelompok_jabatan/get-option/general");
         $dataSatuan = Http::withToken($token)->get($url."/skp/get-option-satuan");
         $satuan = $dataSatuan->json();
         $kelompokJabatan = $dataKelompokJabatan->json();

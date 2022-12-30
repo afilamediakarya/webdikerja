@@ -2898,12 +2898,7 @@ class LaporanController extends Controller
         }
 
 
-        $cell_bottom = $cell;
-                // return $cell;
-        
-        for ($cl=0; $cl < 1; $cl++) { 
-            $sheet->setCellValue('A'.$cell++, 'Jumlah hari kerja')->mergeCells('A'.$cell++.':B'.$cell++);         
-        }        
+    
                 
         // $sheet->setCellValue('A'.$cell++, 'Jumlah hari kerja')->mergeCells('A'.$cell++.':B'.$cell++);
         // $sheet->setCellValue('C5', ': ' . $data['data']['jml_hari_kerja'])->mergeCells('C5:G5');
@@ -2929,6 +2924,41 @@ class LaporanController extends Controller
 
         $sheet->getStyle('A11:G' . $cell)->applyFromArray($border);
         $sheet->getStyle('A11:G' . $cell)->getAlignment()->setVertical('center')->setHorizontal('center');
+
+        $cell++;
+
+        $cell = $cell + 2;
+        $sheet->setCellValue('A'.$cell, 'Jumlah hari kerja')->mergeCells('A'.$cell.':B'.$cell);     
+        $sheet->setCellValue('C'.$cell, ': ' . $data['data']['jml_hari_kerja']); 
+        $cell = $cell + 1;
+        $sheet->setCellValue('A'.$cell, 'Kehadiran kerja')->mergeCells('A'.$cell.':B'.$cell);     
+        $sheet->setCellValue('C'.$cell, ': ' . $data['data']['kehadiran']);
+        $cell = $cell + 1;
+        $sheet->setCellValue('A'.$cell, 'Tanpa keterangan')->mergeCells('A'.$cell.':B'.$cell);
+        $sheet->setCellValue('C'.$cell, ': ' . $data['data']['tanpa_keterangan']);
+        $cell = $cell + 1;
+        $sheet->setCellValue('A'.$cell, 'Potongan tanpa keterangan')->mergeCells('A'.$cell.':B'.$cell);
+        $sheet->setCellValue('C'.$cell, ': ' . $data['data']['potongan_tanpa_keterangan']);
+        $cell = $cell + 1;
+        $sheet->setCellValue('A'.$cell, 'Potongan masuk kerja')->mergeCells('A'.$cell.':B'.$cell);
+        $sheet->setCellValue('C'.$cell, ': ' . $data['data']['potongan_masuk_kerja']);
+        $cell = $cell + 1;
+        $sheet->setCellValue('A'.$cell, 'Potongan pulang kerja')->mergeCells('A'.$cell.':B'.$cell);
+        $sheet->setCellValue('C'.$cell, ': ' . $data['data']['potongan_pulang_kerja']);
+        $cell = $cell + 1;
+        $sheet->setCellValue('A'.$cell, 'Potongan apel')->mergeCells('A'.$cell.':B'.$cell);
+        $sheet->setCellValue('C'.$cell, ': ' . $data['data']['potongan_apel']);
+               $cell = $cell + 1;
+        $sheet->setCellValue('A'.$cell, 'Total potongan')->mergeCells('A'.$cell.':B'.$cell);
+        $sheet->setCellValue('C'.$cell, ': ' . $data['data']['jml_potongan_kehadiran_kerja']);
+        // abdillah
+
+              // $cell_bottom = $cell+1;
+        //         // return $cell;
+        
+        // for ($cl=0; $cl < 1; $cl++) { 
+        //     $sheet->setCellValue('A'.$cl, 'Jumlah hari kerja')->mergeCells('A'.$cl++.':B'.$cell++);         
+        // }    
 
 
         if ($type == 'excel') {
@@ -3095,6 +3125,7 @@ class LaporanController extends Controller
                   if (isset($v['jumlah_apel'])) {
                                 //    return ((int)$data['count_monday'] - (int)$v['jumlah_apel']);
                    $jumlah_tidak_hadir_apel = ((int)$data['count_monday'] - (int)$v['jumlah_apel']); 
+                   $jumlah_tidak_hadir_apel -= 1;
                   }
 
 

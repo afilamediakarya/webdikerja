@@ -33,8 +33,8 @@ class JabatanController extends Controller
         $dataJenisJabatan = Http::withToken($token)->get($url . "/jabatan/get-option-jenis-jabatan");
         $jenisJabatan = $dataJenisJabatan->json();
 
-        $dataKelompokJabatan = Http::withToken($token)->get($url . "/kelompok_jabatan/get-option");
-        $kelompokJabatan = $dataKelompokJabatan->json();
+        // $dataKelompokJabatan = Http::withToken($token)->get($url . "/kelompok_jabatan/get-option");
+        // $kelompokJabatan = $dataKelompokJabatan->json();
 
         $pegawai = Http::withToken($token)->get($url . "/jabatan/pegawaiBySatuanKerja")->collect();
         $lokasiKerja = $this->getLokasiKerja();
@@ -67,7 +67,7 @@ class JabatanController extends Controller
             }
         }
 
-        return view('pages.admin.jabatan.index', compact('page_title', 'page_description', 'breadcumb', 'kelas', 'dinas', 'pegawai', 'jenisJabatan', 'role', 'lokasiKerja','kelompokJabatan'));
+        return view('pages.admin.jabatan.index', compact('page_title', 'page_description', 'breadcumb', 'kelas', 'dinas', 'pegawai', 'jenisJabatan', 'role', 'lokasiKerja'));
     }
 
     public function getParent($params)

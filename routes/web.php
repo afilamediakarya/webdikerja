@@ -219,6 +219,7 @@ Route::middleware('Auth')->group(function () {
                 Route::get('/kelompok-jabatan/{id}', [KelompokJabatanController::class, 'show'])->name('show-kelompok-jabatan');
                 Route::post('/kelompok-jabatan/{id}', [KelompokJabatanController::class, 'update'])->name('update-kelompok-jabatan');
                 Route::delete('/kelompok-jabatan/{id}', [KelompokJabatanController::class, 'delete'])->name('delete-kelompok-jabatan');
+                Route::get('/kelompok-jabatan/get-option/{id}', [KelompokJabatanController::class, 'get_option'])->name('option-kelompok-jabatan');
 
             });
 
