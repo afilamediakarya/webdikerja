@@ -96,7 +96,7 @@ class LaporanController extends Controller
             $data_kinerja_pegawai = Http::withToken($token)->get($url . "/laporan/kinerja?bulan=".$bulan);
             $data = $data_kinerja_pegawai->json();
         }else{
-            $data_kinerja_rekap = Http::withToken($token)->get($url . "/laporan/kinerjaByOpd?bulan=".$bulan);
+            $data_kinerja_rekap = Http::withToken($token)->get($url . "/laporan/kinerjaByOpd?bulan=".$bulan.'&satuan_kerja='.$dinas);
             $data = $data_kinerja_rekap->json();
         }
 
@@ -363,7 +363,7 @@ class LaporanController extends Controller
             if ($value['kelas_jabatan'] == 1 || $value['kelas_jabatan'] == 3 || $value['kelas_jabatan'] == 15) {
                 $nilai_kinerja = 100;
             }else{
-                if ($capaian_menit > 0 || $target_nilai > 0) {
+                if ($capaian_menit > 0 && $target_nilai > 0) {
                     $nilai_kinerja = ( $capaian_menit / $target_nilai ) * 100;
                 }else {
                     $nilai_kinerja = 0;
