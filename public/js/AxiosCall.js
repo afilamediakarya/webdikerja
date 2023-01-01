@@ -45,7 +45,7 @@ var AxiosCall = (function () {
                             $(_element)[0].reset();
                             $("#table").toggle();
                             $("#form").toggle();
-                            Panel.action("hide");
+                            PanelForm.action("hide");
                         });
                     }
                 })
@@ -73,7 +73,7 @@ var AxiosCall = (function () {
                             $("select[name='" + key + "']").val(value);
                             $("textarea[name='" + key + "']").val(value);
                         });
-                        Panel.action("show", "update");
+                        PanelForm.action("show", "update");
                     } else {
                         swal.fire({
                             text: "Data tidak ditemukan",
@@ -121,7 +121,7 @@ var AxiosCall = (function () {
                                     $(_element)[0].reset();
                                     $("#table").toggle();
                                     $("#form").toggle();
-                                    Panel.action("hide");
+                                    PanelForm.action("hide");
                                 });
                             } else {
                                 Swal.fire(
@@ -183,7 +183,7 @@ var AxiosCall = (function () {
                             console.log(_element);
                             dataRow.destroy();
                             dataRow.init();
-                            Panel.action("hide");
+                            PanelForm.action("hide");
                             $("#formal_form")[0].reset();
                             _element[0].reset();
                             $("#document")[0].reset();
@@ -243,7 +243,7 @@ var AxiosCall = (function () {
                             console.log(_element);
                             dataRow.destroy();
                             dataRow.init();
-                            Panel.action("hide");
+                            PanelForm.action("hide");
                             $("#formal_form")[0].reset();
                             _element[0].reset();
                             $("#document")[0].reset();
@@ -306,7 +306,7 @@ var AxiosCall = (function () {
                             console.log(_element);
                             dataRowNonformal.destroy();
                             dataRowNonformal.init();
-                            Panel.action("hide");
+                            PanelForm.action("hide");
                             $("#nonformal_form")[0].reset();
                             _element[0].reset();
                             $("#document")[0].reset();
@@ -366,7 +366,7 @@ var AxiosCall = (function () {
                             console.log(_element);
                             dataRowNonformal.destroy();
                             dataRowNonformal.init();
-                            Panel.action("hide");
+                            PanelForm.action("hide");
                             $("#nonformal_form")[0].reset();
                             _element[0].reset();
                             $("#document")[0].reset();
@@ -429,7 +429,7 @@ var AxiosCall = (function () {
                             console.log(_element);
                             dataRowKepangkatan.destroy();
                             dataRowKepangkatan.init();
-                            Panel.action("hide");
+                            PanelForm.action("hide");
                             $("#kepangkatan_form")[0].reset();
                             _element[0].reset();
                             $("#document")[0].reset();
@@ -490,7 +490,7 @@ var AxiosCall = (function () {
                             console.log(_element);
                             dataRowKepangkatan.destroy();
                             dataRowKepangkatan.init();
-                            Panel.action("hide");
+                            PanelForm.action("hide");
                             $("#kepangkatan_form")[0].reset();
                             _element[0].reset();
                             $("#document")[0].reset();
@@ -553,7 +553,7 @@ var AxiosCall = (function () {
                             console.log(_element);
                             dataRowJabatan.destroy();
                             dataRowJabatan.init();
-                            Panel.action("hide");
+                            PanelForm.action("hide");
                             $("#jabatan_form")[0].reset();
                             _element[0].reset();
                             $("#document")[0].reset();
@@ -614,7 +614,7 @@ var AxiosCall = (function () {
                             console.log(_element);
                             dataRowJabatan.destroy();
                             dataRowJabatan.init();
-                            Panel.action("hide");
+                            PanelForm.action("hide");
                             $("#jabatan_form")[0].reset();
                             _element[0].reset();
                             $("#document")[0].reset();

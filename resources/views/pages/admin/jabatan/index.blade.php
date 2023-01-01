@@ -454,7 +454,6 @@
         })
 
         function kelompok_jabatan_select(params, value = null) {
-            // alert(value);
          $('#kelompok_jabatan').html('').trigger('change');
             $.ajax({
                 url : '/admin/master-aktivitas/kelompok-jabatan/get-option/'+params,
@@ -463,17 +462,17 @@
                 // $('#kelompok_jabatan').append(newOption).trigger('change');
                 //   $('#kelompok_jabatan').val(null).trigger('change');
                
-                    let newOption = ''; 
+                    let newOption = '<option selected disabled> Pilih kelompok jabatan </option>'; 
                    $.each(res, function(indexInArray, valueOfElement) {
                         newOption += `<option value="${valueOfElement.id}">${valueOfElement.value}</option>`;
                     });
-
-                    //    if (parent !== '') {
-                    //             $('#parent').val(parent);
-                    //             $("#parent").trigger('change');
-                    //         }
-
                         $('#kelompok_jabatan').append(newOption).trigger('change');
+                       if (value !== null) {
+                                $('#kelompok_jabatan').val(value);
+                                $("#kelompok_jabatan").trigger('change');
+                            }
+
+                        
                 }
             })
         }
