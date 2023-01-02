@@ -21,7 +21,7 @@
                     <form class="form">
 
                         <div class="row">
-                             @if ($level == 'pegawai')
+                             @if ($type == 'pegawai')
                             <div class="form-group col-8">
                             @else
                             <div class="form-group col-3">
@@ -53,7 +53,7 @@
                                 </select>
                             </div> -->
 
-                            @if ($level == 'super_admin')
+                            @if ($level == 'super_admin' && $type == 'admin')
                                 <div class="form-group col-3">
                                     <label>Pilih Dinas</label>
                                     <select id="dinas" class="form-control form-control-solid">
@@ -64,7 +64,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            @elseif ($level == 'admin_opd')
+                            @elseif ($level == 'admin_opd' && $type == 'admin')
                                 <div class="form-group col-3">
                                     <label>Pilih Pegawai</label>
                                     <select id="pegawai" class="form-control form-control-solid">
@@ -103,6 +103,7 @@
 @section('script')
     <script>
         let level = {!! json_encode($level) !!};
+        let type = {!! json_encode($type) !!};
 
         jQuery(document).ready(function() {
 
@@ -131,24 +132,52 @@
 
                 let jenis_skp = $('#jenis-skp-select').val();
                 let bulan = 0;
-                let id_pegawai = (level == 'admin_opd' || level == 'super_admin') ? $('#pegawai').val() :
+                let id_pegawai = (type == 'admin') ? $('#pegawai').val() :
                     {!! json_encode($id_pegawai) !!};
-                console.log(id_pegawai);
 
                 let pegawai = $('#pegawai').val();
                 if (jenis_skp !== null && bulan !== null) {
-                    if (level == 'super_admin') {
-                        let idDinas = $('#dinas').val();
-                        url =
-                            `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}?dinas=${idDinas}`;
-                        window.open(url);
-                        $('#dinas').val(null).trigger("change");
-                        $('#jenis-skp-select').val(null).trigger("change");
-                        $('#bulan').val(null).trigger("change");
+                    // if (level == 'super_admin') {
+                    //     alert('super_admin : '+id_pegawai);
+                    //     // let idDinas = $('#dinas').val();
+                    //     // url =
+                    //     //     `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}?dinas=${idDinas}`;
+                    //     // window.open(url);
+                    //     // $('#dinas').val(null).trigger("change");
+                    //     // $('#jenis-skp-select').val(null).trigger("change");
+                    //     // $('#bulan').val(null).trigger("change");
 
-                    } else if (level == 'admin_opd') {
+                    // } else if (level == 'admin_opd') {
+                    //   alert('admin_opd : '+id_pegawai);
+                    //     // if (id_pegawai == 0) {
+                    //     //     url = `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}`;
+                    //     //     window.open(url);
+                    //     // }
+                    //     // url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
+                    //     // window.open(url);
+                    //     // $('#pegawai').val(null).trigger("change");
+                    //     // $('#jenis-skp-select').val(null).trigger("change");
+                    //     // $('#bulan').val(null).trigger("change");
 
-                        if (id_pegawai == 0) {
+                    // } else {
+                    //    alert('pegwai : '+id_pegawai);
+                    //     // url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
+                    //     // window.open(url);
+                    //     // $('#jenis-skp-select').val(null).trigger("change");
+                    //     // $('#bulan').val(null).trigger("change");
+                    // }
+
+                    if (type == 'admin') {
+                        if (level == 'super_admin') {
+                                 let idDinas = $('#dinas').val();
+                                url =
+                                    `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}?dinas=${idDinas}`;
+                                window.open(url);
+                                $('#dinas').val(null).trigger("change");
+                                $('#jenis-skp-select').val(null).trigger("change");
+                                $('#bulan').val(null).trigger("change");
+                        }else{
+                                  if (id_pegawai == 0) {
                             url = `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}`;
                             window.open(url);
                         }
@@ -157,14 +186,15 @@
                         $('#pegawai').val(null).trigger("change");
                         $('#jenis-skp-select').val(null).trigger("change");
                         $('#bulan').val(null).trigger("change");
-
-                    } else {
-                        // url = `/laporan/export/laporanSkp/${jenis_skp}/pdf/${bulan}`;
+                        }
+                    }else{
                         url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
                         window.open(url);
                         $('#jenis-skp-select').val(null).trigger("change");
                         $('#bulan').val(null).trigger("change");
                     }
+
+
                 } else {
                     Swal.fire(
                         "Perhatian",

@@ -68,6 +68,7 @@ class LaporanController extends Controller
         $page_title = 'Laporan';
         $page_description = 'Daftar Sasaran Kinerja Pegawai';
         $breadcumb = ['SKP'];
+        $type = request('type');
 
         $level = session()->get('user.role');
         $id_pegawai = session()->get('user.current.id_pegawai');
@@ -76,10 +77,10 @@ class LaporanController extends Controller
         if ($level == 'super_admin') {
             $dataDinas = Http::withToken($token)->get($url . "/satuan_kerja/list");
             $getDataDinas = $dataDinas['data'];
-            return view('pages.laporan.skp', compact('page_title', 'page_description', 'breadcumb', 'level', 'pegawai', 'id_pegawai', 'getDataDinas'));
+            return view('pages.laporan.skp', compact('page_title', 'page_description', 'breadcumb', 'level', 'pegawai', 'id_pegawai', 'getDataDinas','type'));
         }
 
-        return view('pages.laporan.skp', compact('page_title', 'page_description', 'breadcumb', 'level', 'pegawai', 'id_pegawai'));
+        return view('pages.laporan.skp', compact('page_title', 'page_description', 'breadcumb', 'level', 'pegawai', 'id_pegawai','type'));
     }
 
     public function export_kinerja(){
