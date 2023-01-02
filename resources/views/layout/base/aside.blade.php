@@ -223,7 +223,7 @@ $path = explode('/', Request::path());
                                 </li>
 
                                 <li class="menu-item {{ $path[0] == 'laporan-pegawai' && $path[1] == 'kinerja' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
-                                    <a href="{{ route('laporan-kinerja') }}" class="menu-link">
+                                    <a href="{{ url('laporan-pegawai/kinerja?type=pegawai') }}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
@@ -447,7 +447,7 @@ $path = explode('/', Request::path());
                                 @endif
 
                                 <li class="menu-item {{ $path[0] == 'laporan-admin' && $path[1] == 'kinerja' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
-                                    <a href="{{ route('laporan-kinerja-admin') }}" class="menu-link">
+                                    <a href="{{ url('laporan-admin/kinerja?type=rekapitulasi') }}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>

@@ -73,6 +73,15 @@ class PegawaiController extends Controller
         return $data;
     }
 
+    public function pegawaiByPerangkatDaerah($params){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $data = array();
+        $data = Http::withToken($token)->get($url . "/pegawai/BySatuanKerja/".$params);
+
+        return $data->json();
+    }
+
     public function exportPegawai(Request $request)
     {
         $id_satuan_kerja = request('id_satuan_kerja');

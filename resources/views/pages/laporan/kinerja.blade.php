@@ -37,7 +37,6 @@
                                 <label>Bulan</label>
                                 <select id="bulan" class="form-control form-control-solid">
                                     <option disabled selected>Pilih Bulan</option>
-                                    <option value="0">Semua</option>
                                     <option value="1">Januari</option>
                                     <option value="2">Februari</option>
                                     <option value="3">Maret</option>
@@ -53,7 +52,7 @@
                                 </select>
                             </div>
 
-                            @if ($level == 'super_admin')
+                            @if ($level['current']['role'] == 'super_admin')
                                 <div class="form-group col-3">
                                     <label>Pilih Dinas</label>
                                     <select id="dinas" class="form-control form-control-solid">
@@ -91,10 +90,11 @@
 
 @section('script')
     <script>
+        let type = {!! json_encode($type) !!};
         let level = {!! json_encode($level) !!};
 
         jQuery(document).ready(function() {
-
+       
             $('#kt_daterangepicker_2').daterangepicker({
                     buttonClasses: ' btn',
                     applyClass: 'btn-primary',
@@ -125,13 +125,20 @@
             $('#preview-excel').on('click', function() {
                 let bulan = $('#bulan').val();
                 let nama_bulan = $('#bulan option:selected').text();
-                let dinas = $('#dinas option:selected').val();
-                let tipe = '';
+                let dinas = $('#dinas').val();
+                let nama_dinas = $('#dinas option:selected').text();
+                
 
-                level == 'super_admin' ? tipe = 'rekapitulasi' : tipe = 'pegawai';
+
+                if (level['role'] == 'admin_opd' && type == 'rekapitulasi') {
+                    dinas = level.current.id_satuan_kerja;
+                    nama_dinas = level.current.nama_satuan_kerja;
+                };
             
                 if (bulan != '') {
-                    url = '/laporan-pegawai/export/kinerja?bulan='+bulan+`&tipe=${tipe}`+'&nama_bulan='+nama_bulan+'&dinas='+dinas;
+              
+                    url = '/laporan-pegawai/export/kinerja?bulan='+bulan+`&tipe=${type}`+'&nama_bulan='+nama_bulan+'&dinas='+dinas+'&nama_dinas='+nama_dinas;
+                    // alert(url);
                     window.open(url);
                 } else {
                     Swal.fire(

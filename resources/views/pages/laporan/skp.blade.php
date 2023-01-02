@@ -21,7 +21,11 @@
                     <form class="form">
 
                         <div class="row">
+                             @if ($level == 'pegawai')
+                            <div class="form-group col-8">
+                            @else
                             <div class="form-group col-3">
+                            @endif
                                 <label>Jenis SKP</label>
                                 <select id="jenis-skp-select" class="form-control form-control-solid">
                                     <option disabled selected>Pilih Jenis Laporan</option>
@@ -29,7 +33,7 @@
                                     <option value="realisasi">Realisasi SKP</option>
                                 </select>
                             </div>
-                            <div class="form-group col-3">
+                            <!-- <div class="form-group col-3">
                                 <label>Bulan</label>
                                 <select id="bulan" class="form-control form-control-solid">
                                     <option disabled selected>Pilih Bulan</option>
@@ -47,7 +51,7 @@
                                     <option value="11">November</option>
                                     <option value="12">Desember</option>
                                 </select>
-                            </div>
+                            </div> -->
 
                             @if ($level == 'super_admin')
                                 <div class="form-group col-3">
@@ -126,7 +130,7 @@
             $('#preview-excel').on('click', function() {
 
                 let jenis_skp = $('#jenis-skp-select').val();
-                let bulan = $('#bulan').val();
+                let bulan = 0;
                 let id_pegawai = (level == 'admin_opd' || level == 'super_admin') ? $('#pegawai').val() :
                     {!! json_encode($id_pegawai) !!};
                 console.log(id_pegawai);

@@ -24,6 +24,7 @@ class LaporanController extends Controller
 
         $url = env('API_URL');
         $token = session()->get('user.access_token');
+        $current = session()->get('user.current');
 
         if ($TypeRole == 'super_admin') {
             $data = Http::withToken($token)->get($url . "/satuan_kerja/list");
@@ -33,7 +34,7 @@ class LaporanController extends Controller
             $satuan_kerja = $data['data'];
         }
         // return $satuan_kerja;
-        return view('pages.laporan.absen', compact('page_title', 'page_description', 'breadcumb', 'TypeRole', 'satuan_kerja'));
+        return view('pages.laporan.absen', compact('page_title', 'page_description', 'breadcumb', 'TypeRole', 'satuan_kerja','current'));
     }
 
     public function kinerja()
@@ -45,17 +46,18 @@ class LaporanController extends Controller
         $url = env('API_URL');
         $token = session()->get('user.access_token');
 
-        $level = session()->get('user.role');
+        $level = session()->get('user');
+        $type = request('type');
         $getDataDinas = array();
 
-        if ($level == 'super_admin') {
+        if ($level['current']['role'] == 'super_admin') {
             $dataDinas = Http::withToken($token)->get($url . "/satuan_kerja/list");
             $getDataDinas = $dataDinas['data'];
         }
 
         $id_pegawai = session()->get('user.current.id_pegawai');
      
-        return view('pages.laporan.kinerja', compact('page_title', 'page_description', 'breadcumb','getDataDinas','level','id_pegawai'));
+        return view('pages.laporan.kinerja', compact('page_title', 'page_description', 'breadcumb','getDataDinas','level','type','id_pegawai'));
     }
 
     public function skp(Request $request)
@@ -88,26 +90,29 @@ class LaporanController extends Controller
         $tahun = session('tahun_penganggaran');
         $nama_bulan = request('nama_bulan');
         $dinas = request('dinas');
+        $nama_dinas = request('nama_dinas');
 
         $token = session()->get('user.access_token');
         $data = array();
         $fungsi = '';
-        if ($level == 'pegawai' || $level == 'admin_opd') {
+
+        if ($tipe == 'pegawai') {
             $data_kinerja_pegawai = Http::withToken($token)->get($url . "/laporan/kinerja?bulan=".$bulan);
             $data = $data_kinerja_pegawai->json();
         }else{
-            $data_kinerja_rekap = Http::withToken($token)->get($url . "/laporan/kinerjaByOpd?bulan=".$bulan);
+            $data_kinerja_rekap = Http::withToken($token)->get($url . "/laporan/kinerjaByOpd?bulan=".$bulan.'&satuan_kerja='.$dinas);
             $data = $data_kinerja_rekap->json();
         }
 
+
         $fungsi = 'export_kinerja_'.$tipe;
         // return $data;
-        return $this->{$fungsi}($tipe,$data,$tahun,$nama_bulan);
+        return $this->{$fungsi}($tipe,$data,$tahun,$nama_bulan,$nama_dinas);
 
     }
 
     // kinerja Pegawai
-    public function export_kinerja_pegawai($tipe,$data,$tahun,$nama_bulan){
+    public function export_kinerja_pegawai($tipe,$data,$tahun,$nama_bulan,$nama_dinas){
    
         $spreadsheet = new Spreadsheet();
         $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
@@ -322,7 +327,7 @@ class LaporanController extends Controller
     // end kinerje pegawai
 
     // rekaptulasi kinerja
-    public function export_kinerja_rekapitulasi($tipe,$data,$tahun,$nama_bulan){
+    public function export_kinerja_rekapitulasi($tipe,$data,$tahun,$nama_bulan,$nama_dinas){
     
         $spreadsheet = new Spreadsheet();
 
@@ -353,7 +358,7 @@ class LaporanController extends Controller
         $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
 
         $sheet->setCellValue('A1', 'REKAPITULASI CAPAIAN PRODUKTIFITAS KERJA (AKTIVITAS)')->mergeCells('A1:G1');
-        $sheet->setCellValue('A2', 'DINAS ..............')->mergeCells('A2:G2');
+        $sheet->setCellValue('A2', 'DINAS '.strtoupper($nama_dinas))->mergeCells('A2:G2');
 
         $sheet->getStyle('A4:G4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('E1F5FE');
 
@@ -372,6 +377,7 @@ class LaporanController extends Controller
         $capaian_menit = 0;
         $nilai_kinerja = 0;
         $keterangan = '';
+        $pegawai_ttd = array();
         foreach ($data as $key => $value) {
             $value['golongan'] !== null ? $golongan = $value['golongan'] : $golongan = '';
             count($value['aktivitas']) > 0 ? $capaian_menit = $value['aktivitas'][0]['count'] : $capaian_menit = 0;
@@ -385,6 +391,13 @@ class LaporanController extends Controller
                 }else {
                     $nilai_kinerja = 0;
                 }
+            }
+
+            if ($value['nama_jabatan'] == 'KEPALA DINAS') {
+                $pegawai_ttd['nama_jabatan'] = 'Kepala Dinas '.$nama_dinas;
+                $pegawai_ttd['golongan'] = $value['golongan'];
+                $pegawai_ttd['nip'] = $value['nip'];
+                $pegawai_ttd['nama'] = $value['nama'];
             }
 
             $nilai_kinerja < 50 ? $keterangan = 'TMS' : $keterangan = 'MS';
@@ -434,14 +447,14 @@ class LaporanController extends Controller
 
             $sheet->setCellValue('D' . ++$cell, 'Kabupaten Bulukumba ' . date('d/m/Y'))->mergeCells('D' . $cell . ':G' . $cell);
             $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $sheet->setCellValue('D' . ++$cell, 'Nama Jabatan')->mergeCells('D' . $cell . ':G' . $cell);
+            $sheet->setCellValue('D' . ++$cell, $pegawai_ttd['nama_jabatan'])->mergeCells('D' . $cell . ':G' . $cell);
             $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
             $cell = $cell + 3;
-            $sheet->setCellValue('D' . ++$cell, 'Nama bertanda tangan')->mergeCells('D' . $cell . ':G' . $cell);
+            $sheet->setCellValue('D' . ++$cell, $pegawai_ttd['nama'])->mergeCells('D' . $cell . ':G' . $cell);
             $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $sheet->setCellValue('D' . ++$cell, 'Pangkat/Golongan : ' )->mergeCells('D' . $cell . ':G' . $cell);
+            $sheet->setCellValue('D' . ++$cell, 'Pangkat/Golongan : '.$pegawai_ttd['golongan'] )->mergeCells('D' . $cell . ':G' . $cell);
             $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $sheet->setCellValue('D' . ++$cell, 'NIP : ')->mergeCells('D' . $cell . ':G' . $cell);
+            $sheet->setCellValue('D' . ++$cell, 'NIP : '.$pegawai_ttd['nip'])->mergeCells('D' . $cell . ':G' . $cell);
             $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
         if ($tipe == 'excel') {
@@ -857,13 +870,13 @@ class LaporanController extends Controller
         return view('pages.laporan.aktivitas', compact('page_title', 'page_description', 'breadcumb'));
     }
 
-    public function getRekapPegawai($params1, $params2)
+    public function getRekapPegawai($params1, $params2,$pegawai)
     {
 
         $url = env('API_URL');
         $token = session()->get('user.access_token');
 
-        $response = Http::withToken($token)->get($url . "/laporan-rekapitulasi-absen/rekapByUser/" . $params1 . "/" . $params2);
+        $response = Http::withToken($token)->get($url . "/laporan-rekapitulasi-absen/rekapByUser/" . $params1 . "/" . $params2 .'?pegawai='.$pegawai);
 
         if ($response->successful() && isset($response->object()->data)) {
             return $response->json();
@@ -894,15 +907,16 @@ class LaporanController extends Controller
 
     public function exportRekapAbsen($params)
     {
+        $pegawai = request('pegawai');
         $val = json_decode($params);
+        $perangkat_daerah = request('perangkat_daerah');
 
         if ($val->role == 'pegawai') {
-
-            $data = $this->getRekapPegawai($val->startDate, $val->endDate);
+            $data = $this->getRekapPegawai($val->startDate, $val->endDate,$pegawai);
             $this->exportrekapPegawai($data, $val->type, 'desktop');
-        } else if ($val->role == 'admin' || $val->role == 'super_admin') {
+        } else if ($val->role == 'rekapitulasi') {
             $data = $this->getRekappegawaiByOpd($val->startDate, $val->endDate, $val->satuanKerja);
-            return $this->exportrekapOpd($data, $val->type, $val->startDate, $val->endDate);
+            return $this->exportrekapOpd($data, $val->type, $val->startDate, $val->endDate, $perangkat_daerah);
         }
     }
 
@@ -1064,6 +1078,7 @@ class LaporanController extends Controller
 
                     $jumlah_data = 0;
                     $sum_nilai_iki = 0;
+                    $single_rate = 0;
                     foreach ($value['skp_utama'] as $key => $val) {
 
                         foreach ($val['aspek_skp'] as $k => $v) {
@@ -1072,7 +1087,9 @@ class LaporanController extends Controller
                                 $kategori_ = '';
                                 if ($rr['bulan'] ==  $bulan) {
 
-                                    $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                    if ($rr['target'] > 0) {
+                                        $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                    }
 
                                     if ($single_rate > 110) {
                                         $nilai_iki = 110 + ((120 - 110) / (110 - 101)) * (110 - 101);
@@ -1173,6 +1190,7 @@ class LaporanController extends Controller
                         $data_utama++;
 
                         $sum_capaian = 0;
+                        $capaian_iki = 0;
 
                         foreach ($val['aspek_skp'] as $k => $v) {
 
@@ -1181,7 +1199,10 @@ class LaporanController extends Controller
                                 $kategori_ = '';
                                 if ($rr['bulan'] ==  $bulan) {
                                     // set capaian_iki based realisasi / target
-                                    $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                    if ($rr['target'] > 0) {
+                                        $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                    }
+                                    
 
                                     // set nilai_iki based capaian_iki
                                     if ($capaian_iki >= 101) {
@@ -1234,12 +1255,15 @@ class LaporanController extends Controller
                     foreach ($value['skp_tambahan'] as $key => $val) {
 
                         $sum_capaian = 0;
+                        $capaian_iki = 0;
                         foreach ($val['aspek_skp'] as $k => $v) {
 
                             foreach ($v['target_skp'] as $mk => $rr) {
                                 if ($rr['bulan'] ==  $bulan) {
 
-                                    $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                    if ($rr['target'] > 0) {
+                                        $capaian_iki = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
+                                    }
 
                                     if ($capaian_iki >= 101) {
                                         $nilai_iki = 16;
@@ -3033,7 +3057,7 @@ class LaporanController extends Controller
         $writer->save('php://output');
     }
 
-    public function exportrekapOpd($data, $type, $startDate, $endDate)
+    public function exportrekapOpd($data, $type, $startDate, $endDate, $perangkat_daerah)
     {
         // return $data;
         $spreadsheet = new Spreadsheet();
@@ -3065,8 +3089,8 @@ class LaporanController extends Controller
 
         $sheet->setCellValue('A3', 'PERANGKAT DAERAH');
         $sheet->mergeCells('A3:B3');
-        $sheet->setCellValue('C3', ':');
-        $sheet->setCellValue('D3', $data['satuan_kerja'])->mergeCells('D3:AB3');
+        $sheet->setCellValue('C3', ': ');
+        $sheet->setCellValue('D3', $perangkat_daerah)->mergeCells('D3:AB3');
 
         $sheet->setCellValue('A4', 'PERIODE');
         $sheet->mergeCells('A4:B4');
@@ -3166,7 +3190,7 @@ class LaporanController extends Controller
                   if (isset($v['jumlah_apel'])) {
                                 //    return ((int)$data['count_monday'] - (int)$v['jumlah_apel']);
                    $jumlah_tidak_hadir_apel = ((int)$data['count_monday'] - (int)$v['jumlah_apel']); 
-                   $jumlah_tidak_hadir_apel -= 1;
+                //    $jumlah_tidak_hadir_apel -= 1;
                   }
 
 

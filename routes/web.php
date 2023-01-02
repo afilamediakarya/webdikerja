@@ -101,7 +101,7 @@ Route::middleware('Auth')->group(function () {
         Route::get('/export/bankom/{tahun}/{type}/{id_pegawai}', [LaporanController::class, 'exportbankom'])->name('export-bankom');
     });
 
-        Route::prefix('laporan-admin')->group(function () {
+    Route::prefix('laporan-admin')->group(function () {
         Route::get('/absen/{type}', [LaporanController::class, 'absen'])->name('laporan-absen-admin');
         Route::get('/skp', [LaporanController::class, 'skp'])->name('laporan-skp-admin');
         Route::get('/kinerja', [LaporanController::class, 'kinerja'])->name('laporan-kinerja-admin');
@@ -190,6 +190,7 @@ Route::middleware('Auth')->group(function () {
             Route::prefix('pegawai')->group(function () {
                 Route::get('/', [PegawaiController::class, 'index'])->name('pegawai');
                 Route::get('/by-satuankerja', [PegawaiController::class, 'pegawaiBySatuankerja'])->name('pegawai-by-satuankerja');
+                Route::get('/byPerangkatDaerah/{params}', [PegawaiController::class, 'pegawaiByPerangkatDaerah'])->name('pegawaiByPerangkatDaerah');
                 Route::get('/export', [PegawaiController::class, 'exportPegawai'])->name('export-pegawai');
                 Route::post('/', [PegawaiController::class, 'store'])->name('store-pegawai');
                 Route::get('/{id}', [PegawaiController::class, 'show'])->name('show-pegawai');

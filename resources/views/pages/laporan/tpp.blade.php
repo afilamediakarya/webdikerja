@@ -43,7 +43,6 @@
                                     <label>Bulan</label>
                                     <select id="month" class="form-control form-control-solid">
                                         <option disabled selected>Pilih Bulan</option>
-                                        <option value="0">Semua</option>
                                         <option value="1">Januari</option>
                                         <option value="2">Februari</option>
                                         <option value="3">Maret</option>

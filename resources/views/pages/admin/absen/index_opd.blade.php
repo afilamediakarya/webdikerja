@@ -370,7 +370,7 @@
                         $('#pegawai').append(newOption).trigger('change');
                         // if (params !== null) {
                             $('#pegawai').val(params).trigger('change');
-                            $('#id_satuan_kerja').val(value).trigger('change.select2');;
+                            // $('#id_satuan_kerja').val(value).trigger('change.select2');
                             // $docInput.val(null).trigger('change.select2');
                         // }
                         
