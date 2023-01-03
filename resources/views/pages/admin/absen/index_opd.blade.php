@@ -260,7 +260,7 @@
                         width: '20rem',
                         class:"wrapok",
                         render: function(data, type, full, meta) {
-                            let params = data.id+','+data.tanggal_absen;
+                               let params = data.id+','+data.tanggal_absen+','+data.validation;
                             return `
                               <a href="javascript:;" type="button" data-id="${params}" class="btn btn-secondary button-update">ubah</a>
                             <a href="javascript:;" type="button" data-id="${params}" data-valid="1" class="btn btn-success button-valid btn-sm"> <i class="fa fa-check-circle" aria-hidden="true"></i> Accept</a> 
@@ -515,7 +515,6 @@
         //     day = '0' + day.toString();
         
         var maxDate = year + '-' + month + '-' + dtToday.getDate();
-        alert(dtToday);
         // let maxDate = date('Y-m-d', strtotime('-7 days', strtotime( date )))
         // or instead:
         // var maxDate = dtToday.toISOString().substr(0, 10);

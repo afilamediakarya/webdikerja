@@ -148,7 +148,7 @@
                     buttonClasses: ' btn',
                     applyClass: 'btn-primary',
                     cancelClass: 'btn-danger',
-                    minDate: '1/1/'+maxdate()
+                    // minDate: '1/1/'+maxdate()
                 },
            
             );
@@ -185,7 +185,7 @@
                     }
                     if (satuan_kerja == null && pegawai == 0) {
                      type = 'rekapitulasi';  
-                     satuan_kerja = current_satuan_kerja; 
+                     satuan_kerja = current.id_satuan_kerja; 
                     }
                 }
 

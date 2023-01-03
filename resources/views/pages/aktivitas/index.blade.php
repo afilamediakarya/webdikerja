@@ -97,7 +97,7 @@
                             <label>Waktu</label>
                             <input type="number" min="0" id="waktu" name="waktu" class="form-control" readonly>
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col" style="display:none">
                             <label>Jenis</label>
                             <input type="text" class="form-control" id="jenis" readonly name="jenis" readonly>
                         </div>
@@ -142,17 +142,17 @@
         let dataabsen = {!! json_encode($checkAbsen) !!};
 
         $(document).on('click','#kt_quick_user_toggle', function () {
-            if (dataabsen.status == true) {
+            // if (dataabsen.status == true) {
                 Panel.action('show','submit')                
-            }else{
-                  swal.fire({
-                    text: "Anda belum bisa menambah aktivitas",
-                    title:"Maaf Anda belum Absen",
-                    timer: 2000,
-                    icon: "warning",
-                    showConfirmButton:false,
-                });
-            }
+            // }else{
+            //       swal.fire({
+            //         text: "Anda belum bisa menambah aktivitas",
+            //         title:"Maaf Anda belum Absen",
+            //         timer: 2000,
+            //         icon: "warning",
+            //         showConfirmButton:false,
+            //     });
+            // }
         })
 
         

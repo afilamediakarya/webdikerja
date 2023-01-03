@@ -98,9 +98,11 @@ class LaporanController extends Controller
         $fungsi = '';
 
         if ($tipe == 'pegawai') {
+            // return 'tes1';
             $data_kinerja_pegawai = Http::withToken($token)->get($url . "/laporan/kinerja?bulan=".$bulan);
             $data = $data_kinerja_pegawai->json();
         }else{
+            //   return $dinas;
             $data_kinerja_rekap = Http::withToken($token)->get($url . "/laporan/kinerjaByOpd?bulan=".$bulan.'&satuan_kerja='.$dinas);
             $data = $data_kinerja_rekap->json();
         }
@@ -394,12 +396,18 @@ class LaporanController extends Controller
                 }
             }
 
-            if ($value['nama_jabatan'] == 'KEPALA DINAS') {
-                $pegawai_ttd['nama_jabatan'] = 'Kepala Dinas '.$nama_dinas;
-                $pegawai_ttd['golongan'] = $value['golongan'];
-                $pegawai_ttd['nip'] = $value['nip'];
-                $pegawai_ttd['nama'] = $value['nama'];
+            if ($value['level'] == 2 || $value['level'] == 1) {
+                // return $value['nama_jabatan'];
+                
+                if (str_contains(strtoupper($value['nama_jabatan']), 'KEPALA DINAS') || str_contains(strtoupper($value['nama_jabatan']), 'SEKERTARIS DAERAH')) {
+                    $pegawai_ttd['nama_jabatan'] = $value['nama_jabatan'].' '.$nama_dinas;
+                    $pegawai_ttd['golongan'] = $value['golongan'];
+                    $pegawai_ttd['nip'] = $value['nip'];
+                    $pegawai_ttd['nama'] = $value['nama'];
+                }  
             }
+
+            // return $pegawai_ttd;
 
             $nilai_kinerja < 50 ? $keterangan = 'TMS' : $keterangan = 'MS';
 
@@ -446,17 +454,19 @@ class LaporanController extends Controller
 
         $cell++;
 
-            $sheet->setCellValue('D' . ++$cell, 'Kabupaten Bulukumba ' . date('d/m/Y'))->mergeCells('D' . $cell . ':G' . $cell);
-            $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $sheet->setCellValue('D' . ++$cell, $pegawai_ttd['nama_jabatan'])->mergeCells('D' . $cell . ':G' . $cell);
-            $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $cell = $cell + 3;
-            $sheet->setCellValue('D' . ++$cell, $pegawai_ttd['nama'])->mergeCells('D' . $cell . ':G' . $cell);
-            $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $sheet->setCellValue('D' . ++$cell, 'Pangkat/Golongan : '.$pegawai_ttd['golongan'] )->mergeCells('D' . $cell . ':G' . $cell);
-            $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-            $sheet->setCellValue('D' . ++$cell, 'NIP : '.$pegawai_ttd['nip'])->mergeCells('D' . $cell . ':G' . $cell);
-            $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            if (count($pegawai_ttd) > 0) {
+                $sheet->setCellValue('D' . ++$cell, 'Kabupaten Bulukumba ' . date('d/m/Y'))->mergeCells('D' . $cell . ':G' . $cell);
+                $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                $sheet->setCellValue('D' . ++$cell, $pegawai_ttd['nama_jabatan'])->mergeCells('D' . $cell . ':G' . $cell);
+                $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                $cell = $cell + 3;
+                $sheet->setCellValue('D' . ++$cell, $pegawai_ttd['nama'])->mergeCells('D' . $cell . ':G' . $cell);
+                $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                $sheet->setCellValue('D' . ++$cell, 'Pangkat/Golongan : '.$pegawai_ttd['golongan'] )->mergeCells('D' . $cell . ':G' . $cell);
+                $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                $sheet->setCellValue('D' . ++$cell, 'NIP : '.$pegawai_ttd['nip'])->mergeCells('D' . $cell . ':G' . $cell);
+                $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            }
 
         if ($tipe == 'excel') {
             // Untuk download 
