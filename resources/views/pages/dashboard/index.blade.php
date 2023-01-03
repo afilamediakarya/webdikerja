@@ -273,6 +273,18 @@
                                 </div>
                             </div>
 
+                              <div class="d-flex align-items-center justify-content-between pb-5 mb-5 border-bottom">
+                                <div class="d-flex flex-column flex-grow-1 font-weight-bold">
+                                    <span class="text-muted">Potongan (BPJS & PPH 21)</span>
+                                </div>
+                                <div class="font-weight-bold">
+                                    <span
+                                        class="text-dark">Rp. {{$data['informasi_tpp']['potongan_bpjs_pph21']}}</span>
+                                </div>
+                            </div>
+
+                            
+
                             <div class="d-flex align-items-center mb-10 border-b-1">
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
                                     <span class="text-muted">Total TPP yang diterima</span>

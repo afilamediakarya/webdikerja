@@ -57,11 +57,11 @@
                                 <div class="col-12 row">
 
                                     <div class="col">
-                                        <button type="reset" id="export-excel" class="btn btn-block btn-success"><i
+                                        <button type="reset" id="export-excel" data-type="excel" class="btn btn-block btn-success"><i
                                                 class="flaticon2-pie-chart"></i>Export Excel</button>
                                     </div>
                                     <div class="col">
-                                        <button type="reset" id="preview-excel" class="btn btn-block btn-danger"><i
+                                        <button type="reset" id="preview-excel" data-type="pdf" class="btn btn-block btn-danger"><i
                                                 class="flaticon2-pie-chart"></i>Tampilkan Data</button>
                                     </div>
                                 </div>
@@ -105,7 +105,7 @@
                 $('#satuan_kerja__').css('display', 'none');
             }
 
-            $('#preview-excel').on('click', function() {
+            $('#preview-excel, #export-excel').on('click', function() {
                 let month = $('#month').val();
                 let satuan_kerja = $('#satuan_kerja').val();
                      let nama_satuan_kerja = $('#satuan_kerja option:selected').text();
@@ -119,7 +119,7 @@
                 if (month != null) {
                     let params = {
                         'month': month,
-                        'type': 'pdf',
+                        'type': $(this).attr('data-type'),
                         'role': typeRole,
                         'satuanKerja': satuan_kerja
                     };
@@ -141,29 +141,29 @@
                 }
             });
 
-            $('#export-excel').on('click', function() {
-                let month = $('#month').val();
-                if (month != null) {
-                    let params = {
-                        'month': month,
-                        'type': 'excel',
-                        'role': typeRole,
-                        'satuanKerja': $('#satuan_kerja').val()
-                    };
+            // $('#export-excel').on('click', function() {
+            //     let month = $('#month').val();
+            //     if (month != null) {
+            //         let params = {
+            //             'month': month,
+            //             'type': 'excel',
+            //             'role': typeRole,
+            //             'satuanKerja': $('#satuan_kerja').val()
+            //         };
 
 
-                    let dataParams = JSON.stringify(params);
-                    console.log(dataParams);
-                    url = '/laporan/export/rekapitulasi_tpp/' + dataParams;
-                    window.open(url);
-                } else {
-                    Swal.fire(
-                        "Perhatian",
-                        "Pilih bulan terlebih dahulu",
-                        "warning"
-                    );
-                }
-            });
+            //         let dataParams = JSON.stringify(params);
+            //         console.log(dataParams);
+            //         url = '/laporan/export/rekapitulasi_tpp/' + dataParams;
+            //         window.open(url);
+            //     } else {
+            //         Swal.fire(
+            //             "Perhatian",
+            //             "Pilih bulan terlebih dahulu",
+            //             "warning"
+            //         );
+            //     }
+            // });
 
 
 

@@ -59,11 +59,11 @@
                                 <div class="col-12 row">
 
                                     <div class="col">
-                                        <button type="reset" id="export-excel" class="btn btn-block btn-success"><i
+                                        <button type="reset" id="export-excel" data-type="excel" class="btn btn-block btn-success"><i
                                                 class="flaticon2-pie-chart"></i>Export Excel</button>
                                     </div>
                                     <div class="col">
-                                        <button type="reset" id="preview-excel" class="btn btn-block btn-danger"><i
+                                        <button type="reset" id="preview-excel" data-type="pdf" class="btn btn-block btn-danger"><i
                                                 class="flaticon2-pie-chart"></i>Tampilkan Data</button>
                                     </div>
                                 </div>
@@ -163,7 +163,7 @@
                 pegawaiBySatuanKerja($(this).val());
             })
 
-            $('#preview-excel').on('click', function() {
+            $('#preview-excel, #export-excel').on('click', function() {
                 let val_range = $('#kt_daterangepicker_2 input').val();
                 let perangkat_daerah = $('#satuan_kerja option:selected').text();
                 let satuan_kerja = $('#satuan_kerja').val();
@@ -202,11 +202,13 @@
                     let params = {
                         'startDate': val[0].trim(),
                         'endDate': val[1].trim(),
-                        'type': 'pdf',
+                        'type': $(this).attr('data-type'),
                         'role': type,
                         'satuanKerja': satuan_kerja,
                         // 'perangkat_daerah':perangkat_daerah
                     };
+
+                   console.log(params);
 
                     let dataParams = JSON.stringify(params);
                     url = '/laporan-pegawai/export/rekapitulasi_pegawai/' + dataParams+'?perangkat_daerah='+perangkat_daerah+'&pegawai='+pegawai;
@@ -214,43 +216,6 @@
                          $('#pegawai').val(null).trigger('change');
                     window.open(url);
                        $('#pegawai').val('').trigger('change');
-                } else {
-                    Swal.fire(
-                        "Perhatian",
-                        "Pilih range tanggal terlebih dahulu",
-                        "warning"
-                    );
-                }
-            })
-
-            $('#export-excel').on('click', function() {
-                let val_range = $('#kt_daterangepicker_2 input').val();
-                let perangkat_daerah = $('#satuan_kerja option:selected').text();
-                let pegawai = $("#pegawai").val();
-                let type = '';
-
-                if (pegawai !== 0 && satuan_kerja !== null) {
-                    type = 'pegawai'
-                }
-                
-                if(pegawai == 0 && satuan_kerja !== null){
-                    type = 'rekapitulasi';
-                }
-
-                $('#pegawai').val('').trigger('change');
-                if (val_range != '') {
-                    let val = val_range.split('/');
-                    let params = {
-                        'startDate': val[0].trim(),
-                        'endDate': val[1].trim(),
-                        'type': 'excel',
-                        'role': type,
-                        'satuanKerja': satuan_kerja,
-                        'perangkat_daerah':perangkat_daerah
-                    };
-                    let dataParams = JSON.stringify(params);
-                    url = '/laporan-pegawai/export/rekapitulasi_pegawai/' + dataParams +'?perangkat_daerah='+perangkat_daerah+'&pegawai='+pegawai;
-                    window.open(url);
                 } else {
                     Swal.fire(
                         "Perhatian",

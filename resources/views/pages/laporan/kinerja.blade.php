@@ -64,11 +64,11 @@
 
                             <div class="col-8 row">
                                 <div class="col">
-                                    <button type="reset" id="export-excel" class="btn btn-block btn-success"><i
+                                    <button type="reset" id="export-excel" data-type="excel" class="btn btn-block btn-success"><i
                                             class="flaticon2-pie-chart"></i>Export Excel</button>
                                 </div>
                                 <div class="col">
-                                    <button type="reset" id="preview-excel" class="btn btn-block btn-danger"><i
+                                    <button type="reset" id="preview-excel" data-type="pdf" class="btn btn-block btn-danger"><i
                                             class="flaticon2-pie-chart"></i>Tampilkan Data</button>
                                 </div>
                             </div>
@@ -121,13 +121,12 @@
                 placeholder: "Pilih Jenis"
             });
 
-            $('#preview-excel').on('click', function() {
+            $('#preview-excel,#export-excel').on('click', function() {
                 let bulan = $('#bulan').val();
                 let nama_bulan = $('#bulan option:selected').text();
                 let dinas = $('#dinas').val();
                 let nama_dinas = $('#dinas option:selected').text();
-                
-
+                let export_type = $(this).attr('data-type');
 
                 if (level['role'] == 'admin_opd' && type == 'rekapitulasi') {
                     dinas = level.current.id_satuan_kerja;
@@ -136,7 +135,7 @@
             
                 if (bulan != '') {
               
-                    url = '/laporan-pegawai/export/kinerja?bulan='+bulan+`&tipe=${type}`+'&nama_bulan='+nama_bulan+'&dinas='+dinas+'&nama_dinas='+nama_dinas;
+                    url = '/laporan-pegawai/export/kinerja?bulan='+bulan+`&tipe=${type}`+'&nama_bulan='+nama_bulan+'&dinas='+dinas+'&nama_dinas='+nama_dinas+'&export_type='+export_type;
                             $('#bulan').val(null).trigger('change');
                          $('#dinas').val(null).trigger('change');
                     window.open(url);

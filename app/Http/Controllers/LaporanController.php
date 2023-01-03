@@ -92,6 +92,7 @@ class LaporanController extends Controller
         $nama_bulan = request('nama_bulan');
         $dinas = request('dinas');
         $nama_dinas = request('nama_dinas');
+        $export_type = request('export_type');
 
         $token = session()->get('user.access_token');
         $data = array();
@@ -110,12 +111,12 @@ class LaporanController extends Controller
 
         $fungsi = 'export_kinerja_'.$tipe;
         // return $data;
-        return $this->{$fungsi}($tipe,$data,$tahun,$nama_bulan,$nama_dinas);
+        return $this->{$fungsi}($tipe,$data,$tahun,$nama_bulan,$nama_dinas,$export_type);
 
     }
 
     // kinerja Pegawai
-    public function export_kinerja_pegawai($tipe,$data,$tahun,$nama_bulan,$nama_dinas){
+    public function export_kinerja_pegawai($tipe,$data,$tahun,$nama_bulan,$nama_dinas,$export_type){
    
         $spreadsheet = new Spreadsheet();
         $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
@@ -308,7 +309,7 @@ class LaporanController extends Controller
         $sheet->getStyle('B13:B' . $cell)->getAlignment()->setVertical('center')->setHorizontal('left');
 
 
-        if ($tipe == 'excel') {
+        if ($export_type == 'excel') {
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -330,7 +331,7 @@ class LaporanController extends Controller
     // end kinerje pegawai
 
     // rekaptulasi kinerja
-    public function export_kinerja_rekapitulasi($tipe,$data,$tahun,$nama_bulan,$nama_dinas){
+    public function export_kinerja_rekapitulasi($tipe,$data,$tahun,$nama_bulan,$nama_dinas,$export_type){
     
         $spreadsheet = new Spreadsheet();
 
@@ -468,11 +469,11 @@ class LaporanController extends Controller
                 $sheet->getStyle('D' . $cell)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
             }
 
-        if ($tipe == 'excel') {
+        if ($export_type == 'excel') {
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="Daftar Laporan TPP"' . $data['satuan_kerja'] . ' Bulan ' . ucwords(date('F Y', mktime(0, 0, 0, $bulan + 1, 0))) . ' .xlsx"');
+            header('Content-Disposition: attachment;filename="Daftar Laporan TPP"' . $nama_dinas  . ' .xlsx"');
         } else {
             $spreadsheet->getActiveSheet()->getHeaderFooter()
                 ->setOddHeader('&C&H' . url()->current());
@@ -706,13 +707,14 @@ class LaporanController extends Controller
 
             
 
-           $nilaiKinerjaByAktivitas <= 50 ? $nilai_kinerja = 0 : $nilai_kinerja = $value['nilai_jabatan']* 60/100; 
+            $nilai_kinerja = $value['nilai_jabatan']* 60/100; 
 
             $sheet->setCellValue('H' . $cell, number_format($nilai_kinerja));
             $sheet->setCellValue('I' . $cell, round($nilaiKinerjaByAktivitas,2));
 
             // $nilaiKinerja = (60 * $value['nilai_jabatan'] / 100) * ($value['total_kinerja'] / 120);
-            $nilaiKinerja = $nilaiKinerjaByAktivitas * $nilai_kinerja / 100;
+            
+               $nilaiKinerjaByAktivitas <= 50 ? $nilaiKinerja = 0 : $nilaiKinerja = $nilaiKinerjaByAktivitas * $nilai_kinerja / 100; 
             $sheet->setCellValue('J' . $cell, number_format($nilaiKinerja));
 
             $persentaseKehadiran = 40 * $value['nilai_jabatan'] / 100;
@@ -923,6 +925,7 @@ class LaporanController extends Controller
     {
         $pegawai = request('pegawai');
         $val = json_decode($params);
+        return $val;
         $perangkat_daerah = request('perangkat_daerah');
 
         if ($val->role == 'pegawai') {
