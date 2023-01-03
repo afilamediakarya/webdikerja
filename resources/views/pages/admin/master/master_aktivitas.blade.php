@@ -328,7 +328,7 @@
                     if (result.value) {
                         $.ajax({
                             method: 'delete',
-                            url: 'admin/master/master-aktivitas/'+key,
+                            url: 'admin/master-aktivitas/master-aktivitas/'+key,
                             data:{
                                 "_token": "{{ csrf_token() }}"
                             }

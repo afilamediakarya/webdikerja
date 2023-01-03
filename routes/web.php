@@ -228,7 +228,7 @@ Route::middleware('Auth')->group(function () {
                 Route::post('/store/hari-libur', [MasterController::class, 'store_harilibur'])->name('store_master_harilibur');
                 Route::get('/show/hari-libur/{params}', [MasterController::class, 'show_harilibur'])->name('show_master_harilibur');
                 Route::post('/update/hari-libur/{params}', [MasterController::class, 'update_harilibur'])->name('update_master_harilibur');
-
+                Route::delete('/delete/hari-libur/{params}', [MasterController::class, 'delete_harilibur'])->name('delete_master_harilibur');
       
 
             Route::prefix('satuan-kerja')->group(function () {

@@ -280,7 +280,7 @@
                     _url = "{{route('post-lokasi')}}";
                 }else{
                     console.log('ini update '+type)
-                    _url = "admin/master/lokasi/"+_id;
+                    _url = "admin/satuan-kerja/lokasi/"+_id;
                 }
 
                 $.ajax({
@@ -332,7 +332,7 @@
                 // $('#title').html('Update Satuan');   
                 var key = $(this).data('id');
                 $.ajax({
-                    url:"admin/master/lokasi/"+key,
+                    url:"admin/satuan-kerja/lokasi/"+key,
                     method:"GET",
                     success: function(data){
                      

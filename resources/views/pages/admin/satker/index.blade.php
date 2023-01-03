@@ -116,78 +116,219 @@
    
     <script>
         "use strict";
-        var dataRow = function() {
+        // var dataRow = function() {
 
-        var init = function() {
-            var table = $('#kt_datatable');
+        //     var init = function() {
+        //         var table = $('#kt_datatable');
 
-            // begin first table
-            table.DataTable({
-                responsive: true,
-                pageLength: 10,
-                order: [[0, 'asc']],
-                processing:true,
-                ajax: "{{ route('satker') }}",
-                columns:[{ 
-                        data : 'kode_satuan_kerja'
-                    },{
-                        data:'inisial_satuan_kerja'
-                    },{
-                        data:'nama_satuan_kerja'
-                    },{
-                        data:'id',
-                    }
-                ],
-                columnDefs: [
-                    {
-                        targets: -1,
-                        title: 'Actions',
-                        orderable: false,
-                        render: function(data, type, full, meta) {
-                            return '\
-                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
-                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>\
-                            ';
+        //         // begin first table
+        //         table.DataTable({
+        //             responsive: true,
+        //             pageLength: 10,
+        //             order: [[0, 'asc']],
+        //             processing:true,
+        //             ajax: "{{ route('satker') }}",
+        //             columns:[{ 
+        //                     data : 'kode_satuan_kerja'
+        //                 },{
+        //                     data:'inisial_satuan_kerja'
+        //                 },{
+        //                     data:'nama_satuan_kerja'
+        //                 },{
+        //                     data:'id',
+        //                 }
+        //             ],
+        //             columnDefs: [
+        //                 {
+        //                     targets: -1,
+        //                     title: 'Actions',
+        //                     orderable: false,
+        //                     render: function(data, type, full, meta) {
+        //                         return '\
+        //                             <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
+        //                             <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>\
+        //                         ';
+        //                     },
+        //                 },
+        //             ],
+        //         });
+        //     };
+
+        //     var destroy = function(){
+        //         var table = $('#kt_datatable').DataTable();
+        //         table.destroy();
+        //     }
+
+        //     return {
+        //         init: function() {
+        //             init();
+        //         },
+        //         destroy:function(){
+        //             destroy();
+        //         }
+
+        //     };
+
+        // }();
+
+             function datatable_() {
+            $('#kt_datatable').dataTable().fnDestroy();
+            $('#kt_datatable').DataTable({
+                  responsive: true,
+                    pageLength: 10,
+                    order: [[0, 'asc']],
+                    processing:true,
+                    ajax: "{{ route('satker') }}",
+                    columns:[{ 
+                            data : 'kode_satuan_kerja'
+                        },{
+                            data:'inisial_satuan_kerja'
+                        },{
+                            data:'nama_satuan_kerja'
+                        },{
+                            data:'id',
+                        }
+                    ],
+                    columnDefs: [
+                        {
+                            targets: -1,
+                            title: 'Actions',
+                            orderable: false,
+                            render: function(data, type, full, meta) {
+                                return '\
+                                    <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
+                                    <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>\
+                                ';
+                            },
                         },
-                    },
-                ],
+                    ],
             });
-        };
-
-        var destroy = function(){
-            var table = $('#kt_datatable').DataTable();
-            table.destroy();
         }
 
-        return {
-            init: function() {
-                init();
-            },
-            destroy:function(){
-                destroy();
-            }
+        // $(document).on('submit', "#createForm[data-type='submit']", function(e){
+        //     e.preventDefault();
+        //     AxiosCall.post("{{route('post-satker')}}", $(this).serialize(), "#createForm");
+        // });
+        
+        
 
-        };
-
-        }();
+        // $(document).on('submit', "#createForm[data-type='update']", function(e){
+        //     e.preventDefault();
+        //     var _id = $("input[name='id']").val();
+        //     AxiosCall.post(`admin/satuan-kerja/satker/${_id}`, $(this).serialize(), "#createForm");
+        // });
 
         $(document).on('submit', "#createForm[data-type='submit']", function(e){
             e.preventDefault();
-            AxiosCall.post("{{route('post-satker')}}", $(this).serialize(), "#createForm");
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            $.ajax({
+                url : "{{route('post-satker')}}",
+                method : 'POST',
+                data: $('#createForm').serialize(),
+                success : function (res) {
+                        $('.text_danger').html('');
+                        console.log(res);
+                        if (res.success) {
+                            swal.fire({
+                                text: 'Satuan kerja berhasil di tambahkan',
+                                icon: "success",
+                                showConfirmButton:true,
+                                confirmButtonText: "OK, Siip",
+                            }).then(function() {
+                                $("#createForm")[0].reset();
+                                Panel.action('hide');
+                                $('.text_danger').html('');
+                                datatable_();
+                                // $('#kt_datatable').DataTable().ajax.reload();
+                            });      
+                        }else if(res.failed){
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Maaf, Anda gagal',
+                                text: res.failed
+                            })
+                        }else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Maaf, terjadi kesalahan',
+                                text: 'Silahkan Hubungi Admin'
+                            })
+                        }
+                    
+                    },
+                    error : function (xhr) {
+                        $('.text_danger').html('');
+                        let error = xhr.responseJSON.errors;
+                        $.each( error, function( key, value ) {
+                            $(`.${key}_error`).html(value)
+                        }); 
+                    }
+            });
         });
-        
-        
 
         $(document).on('submit', "#createForm[data-type='update']", function(e){
+            let _id = $("input[name='id']").val();
             e.preventDefault();
-            var _id = $("input[name='id']").val();
-            AxiosCall.post(`admin/satker/${_id}`, $(this).serialize(), "#createForm");
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            $.ajax({
+                url : `admin/satuan-kerja/satker/${_id}`,
+                method : 'POST',
+                data: $('#createForm').serialize(),
+                success : function (res) {
+                        $('.text_danger').html('');
+                        console.log(res);
+                        if (res.success) {
+                            swal.fire({
+                                text: 'Satuan kerja berhasil di update',
+                                icon: "success",
+                                showConfirmButton:true,
+                                confirmButtonText: "OK, Siip",
+                            }).then(function() {
+                                $("#createForm")[0].reset();
+                                Panel.action('hide');
+                                $('.text_danger').html('');
+                                datatable_();
+                                // $('#kt_datatable').DataTable().ajax.reload();
+                            });      
+                        }else if(res.failed){
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Maaf, Anda gagal',
+                                text: res.failed
+                            })
+                        }else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Maaf, terjadi kesalahan',
+                                text: 'Silahkan Hubungi Admin'
+                            })
+                        }
+                    
+                    },
+                    error : function (xhr) {
+                        $('.text_danger').html('');
+                        let error = xhr.responseJSON.errors;
+                        $.each( error, function( key, value ) {
+                            $(`.${key}_error`).html(value)
+                        }); 
+                    }
+            });
         });
 
         $(document).on('click', '.button-delete', function (e) {
             e.preventDefault();
             var key = $(this).data('id');
-            AxiosCall.delete(`admin/satker/${key}`);
+            AxiosCall.delete(`admin/satuan-kerja/satker/${key}`);
         })
 
         // $(document).on('click', '.button-update', function(){
@@ -200,7 +341,7 @@
             var key = $(this).data('id');
 
             $.ajax({
-                url:"admin//"+key,
+                url:"admin/satuan-kerja/satker/"+key,
                 method:"GET",
                 success: function(data){
                     if(data.success){
@@ -230,7 +371,8 @@
         jQuery(document).ready(function() {
 
             Panel.init('side_form');
-            dataRow.init();
+            // dataRow.init();
+             datatable_();
             $('#kt_datepicker_3').datepicker({format:'dd-mm-yyyy'});
             $(document).on('click','.btn-cancel', function(){
                 Panel.action('hide');

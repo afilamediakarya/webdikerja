@@ -84,4 +84,15 @@ class MasterController extends Controller
             return response()->json(['failed'=> $response->body()]);
          }
   }
+
+  public function delete_harilibur($id){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $response = Http::withToken($token)->delete($url."/harilibur/delete/".$id);
+        if($response->successful()){
+            return response()->json(['success'=> 'Meghapus Data']);
+        }
+     
+        return response()->json(['error'=> 'Error Hapus Data']);
+  }
 }

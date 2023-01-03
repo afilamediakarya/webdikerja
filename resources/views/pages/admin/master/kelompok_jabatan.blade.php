@@ -183,7 +183,7 @@
                     _url = "{{route('post-kelompok-jabatan')}}";
                 }else{
                     console.log('ini update '+type)
-                    _url = "admin/master/kelompok-jabatan/"+_id;
+                    _url = "admin/master-aktivitas/kelompok-jabatan/"+_id;
                 }
 
                 $.ajax({
@@ -237,7 +237,7 @@
                 // $('#title').html('Update Satuan');   
                 var key = $(this).data('id');
                 $.ajax({
-                    url:"admin/master/kelompok-jabatan/"+key,
+                    url:"admin/master-aktivitas/kelompok-jabatan/"+key,
                     method:"GET",
                     success: function(data){
                       if(data.success){
@@ -272,7 +272,7 @@
                     if (result.value) {
                         $.ajax({
                             method: 'delete',
-                            url: 'admin/master/kelompok-jabatan/'+key,
+                            url: 'admin/master-aktivitas/kelompok-jabatan/'+key,
                             data:{
                                 "_token": "{{ csrf_token() }}"
                             }

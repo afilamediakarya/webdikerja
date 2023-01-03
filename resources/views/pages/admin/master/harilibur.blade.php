@@ -144,85 +144,192 @@
         "use strict";
         var dataRow = function() {
 
-        var init = function() {
-            var table = $('#kt_datatable');
+            var init = function() {
+                var table = $('#kt_datatable');
 
-            // begin first table
-            table.DataTable({
-                responsive: true,
-                pageLength: 10,
-                order: [[0, 'asc']],
-                processing:true,
-                ajax: "{{ route('master_harilibur') }}",
-                columns:[{ 
-                        data : null, 
-                        render: function (data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                        }  
-                    },{
-                        data:'nama_libur'
-                    },{
-                        data:'start_end'
-                    },{
-                        data:'end_date'
-                    },{
-                        data:'id',
-                    }
-                ],
-                columnDefs: [
-                    {
-                        targets: -1,
-                        title: 'Actions',
-                        orderable: false,
-                        render: function(data, type, full, meta) {
-                            return '\
-                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
-                                <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>\
-                            ';
-                        },
-                    }
-                ],
-            });
-        };
+                // begin first table
+                table.DataTable({
+                    responsive: true,
+                    pageLength: 10,
+                    order: [[0, 'asc']],
+                    processing:true,
+                    ajax: "{{ route('master_harilibur') }}",
+                    columns:[{ 
+                            data : null, 
+                            render: function (data, type, row, meta) {
+                                    return meta.row + meta.settings._iDisplayStart + 1;
+                            }  
+                        },{
+                            data:'nama_libur'
+                        },{
+                            data:'start_end'
+                        },{
+                            data:'end_date'
+                        },{
+                            data:'id',
+                        }
+                    ],
+                    columnDefs: [
+                        {
+                            targets: -1,
+                            title: 'Actions',
+                            orderable: false,
+                            render: function(data, type, full, meta) {
+                                return '\
+                                    <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-secondary button-update">ubah</a>\
+                                    <a href="javascript:;" type="button" data-id="'+data+'" class="btn btn-danger button-delete">Hapus</a>\
+                                ';
+                            },
+                        }
+                    ],
+                });
+            };
 
-        var destroy = function(){
-            var table = $('#kt_datatable').DataTable();
-            table.destroy();
-        }
-
-        return {
-            init: function() {
-                init();
-            },
-            destroy:function(){
-                destroy();
+            var destroy = function(){
+                var table = $('#kt_datatable').DataTable();
+                table.destroy();
             }
 
-        };
+            return {
+                init: function() {
+                    init();
+                },
+                destroy:function(){
+                    destroy();
+                }
+
+            };
 
         }();
 
 
-        $(document).on('submit', "#createForm[data-type='submit']", function(e){
+        // $(document).on('submit', "#createForm[data-type='submit']", function(e){
+        //     e.preventDefault();
+        //     AxiosCall.post("{{route('store_master_harilibur')}}", $(this).serialize(), "#createForm");
+        //      Panel.action("hide");
+        //        dataRow.init();
+        // });
+
+        // $(document).on('submit', "#createForm[data-type='update']", function(e){
+        //     e.preventDefault();
+        //     var _id = $("input[name='id']").val();
+        //     AxiosCall.post(`admin/update/hari-libur/${_id}`, $(this).serialize(), "#createForm");
+        // });
+
+           $(document).on('submit', "#createForm[data-type='submit']", function(e){
             e.preventDefault();
-            AxiosCall.post("{{route('store_master_harilibur')}}", $(this).serialize(), "#createForm");
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            $.ajax({
+                url : "{{route('store_master_harilibur')}}",
+                method : 'POST',
+                data: $('#createForm').serialize(),
+                success : function (res) {
+                        $('.text_danger').html('');
+                        console.log(res);
+                        if (res.success) {
+                            swal.fire({
+                                text: 'Hari libur berhasil di tambahkan',
+                                icon: "success",
+                                showConfirmButton:true,
+                                confirmButtonText: "OK, Siip",
+                            }).then(function() {
+                                $("#createForm")[0].reset();
+                                Panel.action('hide');
+                                $('.text_danger').html('');
+                                 dataRow.destroy();
+                                dataRow.init();
+                                // $('#kt_datatable').DataTable().ajax.reload();
+                            });      
+                        }else if(res.failed){
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Maaf, Anda gagal',
+                                text: res.failed
+                            })
+                        }else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Maaf, terjadi kesalahan',
+                                text: 'Silahkan Hubungi Admin'
+                            })
+                        }
+                    
+                    },
+                    error : function (xhr) {
+                        $('.text_danger').html('');
+                        let error = xhr.responseJSON.errors;
+                        $.each( error, function( key, value ) {
+                            $(`.${key}_error`).html(value)
+                        }); 
+                    }
+            });
         });
-        
-        // $(document).on('click', '.button-update', function(){
-        //     var key = $(this).data('id');
-        //     AxiosCall.show(`admin/jadwal/${key}`);
-        // })
 
         $(document).on('submit', "#createForm[data-type='update']", function(e){
+            let _id = $("input[name='id']").val();
             e.preventDefault();
-            var _id = $("input[name='id']").val();
-            AxiosCall.post(`admin/master/update/hari-libur/${_id}`, $(this).serialize(), "#createForm");
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            $.ajax({
+                url : `admin/update/hari-libur/${_id}`,
+                method : 'POST',
+                data: $('#createForm').serialize(),
+                success : function (res) {
+                        $('.text_danger').html('');
+                        console.log(res);
+                        if (res.success) {
+                            swal.fire({
+                                text: 'Hari libur berhasil di update',
+                                icon: "success",
+                                showConfirmButton:true,
+                                confirmButtonText: "OK, Siip",
+                            }).then(function() {
+                                $("#createForm")[0].reset();
+                                Panel.action('hide');
+                                $('.text_danger').html('');
+                                 dataRow.destroy();
+                                dataRow.init();
+                                // $('#kt_datatable').DataTable().ajax.reload();
+                            });      
+                        }else if(res.failed){
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Maaf, Anda gagal',
+                                text: res.failed
+                            })
+                        }else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Maaf, terjadi kesalahan',
+                                text: 'Silahkan Hubungi Admin'
+                            })
+                        }
+                    
+                    },
+                    error : function (xhr) {
+                        $('.text_danger').html('');
+                        let error = xhr.responseJSON.errors;
+                        $.each( error, function( key, value ) {
+                            $(`.${key}_error`).html(value)
+                        }); 
+                    }
+            });
         });
 
         $(document).on('click', '.button-delete', function (e) {
             e.preventDefault();
             var key = $(this).data('id');
-            AxiosCall.delete(`admin/jadwal/${key}`);
+            AxiosCall.delete(`admin/delete/hari-libur/${key}`);
+       
         })
         
         
@@ -242,7 +349,7 @@
                 Panel.action('show','update');
                 var key = $(this).data('id');
                 $.ajax({
-                    url:"/admin/master/show/hari-libur/"+key,
+                    url:"/admin/show/hari-libur/"+key,
                     method:"GET",
                     success: function(data){
                       if(data.success){
