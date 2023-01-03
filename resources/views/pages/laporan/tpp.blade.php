@@ -26,7 +26,6 @@
                                 <div class="form-group">
                                     <label for="satuan_kerja">Pilih Satuan Kerja</label>
                                     <select class="form-control" id="satuan_kerja">
-                                        {{-- <option disabled selected>Pilih Satuan Kerja</option> --}}
                                         @if ($satuan_kerja != null)
                                             @foreach ($satuan_kerja as $key => $value)
                                                 <option value="{{ $value['id'] }}">{{ $value['nama_satuan_kerja'] }}
@@ -41,7 +40,6 @@
                                 <div class="form-group">
                                     <label>Bulan</label>
                                     <select id="month" class="form-control form-control-solid">
-                                        <option disabled selected>Pilih Bulan</option>
                                         <option value="1">Januari</option>
                                         <option value="2">Februari</option>
                                         <option value="3">Maret</option>
@@ -83,11 +81,19 @@
 
 @section('script')
     <script>
+         $('#satuan_kerja').select2({
+                placeholder : 'Pilih Satuan Kerja'
+            });
+            $('#month').select2({
+                placeholder : 'Pilih bulan'
+            });
         jQuery(document).ready(function() {
             // console.log($('#satuan_kerja').val());
 
-            $('#satuan_kerja').select2();
-            $('#month').select2();
+           
+
+                    $('#satuan_kerja').val(null).trigger('change');
+                         $('#month').val(null).trigger('change');
 
             let typeRole = {!! json_encode($TypeRole) !!};
 
@@ -99,19 +105,25 @@
 
             $('#preview-excel').on('click', function() {
                 let month = $('#month').val();
+                let satuan_kerja = $('#satuan_kerja option:selected').val();
+                     let nama_satuan_kerja = $('#satuan_kerja option:selected').text();
+                           let nama_bulan = $('#month option:selected').text();
                 if (month != null) {
                     let params = {
                         'month': month,
                         'type': 'pdf',
                         'role': typeRole,
-                        'satuanKerja': $('#satuan_kerja').val()
+                        'satuanKerja': satuan_kerja
                     };
 
 
                     let dataParams = JSON.stringify(params);
                     console.log(dataParams);
-                    url = '/laporan-admin/export/rekapitulasi_tpp/' + dataParams;
+                    url = '/laporan-admin/export/rekapitulasi_tpp/' + dataParams + '?perangkat_daerah='+nama_satuan_kerja+'&nama_bulan='+nama_bulan;
+                        $('#satuan_kerja').val(null).trigger('change');
+                         $('#month').val(null).trigger('change');
                     window.open(url);
+                  
                 } else {
                     Swal.fire(
                         "Perhatian",

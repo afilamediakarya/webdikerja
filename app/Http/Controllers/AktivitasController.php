@@ -109,8 +109,17 @@ class AktivitasController extends Controller
             },
             ARRAY_FILTER_USE_KEY
         );
+
+        $checkAbsen =  Http::withToken($token)->get($url."/absen/check-absen-by-date?tanggal=".$request->tanggal);
+
+        if ($checkAbsen['status'] !== true && $checkAbsen['data'] == null) {
+            return response()->json(['invalid'=> ['error'=> [
+                'text' => 'Anda belum bisa menambah aktivitas',
+                'title' => 'Maaf Anda belum Absen'
+            ]] ]);
+        }
+
         $response = Http::withToken($token)->post($url."/aktivitas/store", $filtered);
-        // return $response;
         if($response->successful()){
             return response()->json(['success'=> 'Berhasil Menambah Data']);
         }else{

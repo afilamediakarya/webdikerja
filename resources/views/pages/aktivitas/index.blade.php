@@ -82,24 +82,17 @@
                         </select>
                     </div>
                     <div class="row">
-                        <div class="form-group col">
+                        <div class="form-group col-4">
                             <label for="exampleInputPassword1">Hasil</label>
                             <input type="number" value="0" min="0" name="hasil" class="form-control" id="exampleInputPassword1" placeholder="Hasil">
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col-4">
                             <label for="exampleSelect1">Satuan</label>
                             <input type="text" class="form-control" id="satuan" name="satuan" readonly>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col">
+                          <div class="form-group col-4">
                             <label>Waktu</label>
                             <input type="number" min="0" id="waktu" name="waktu" class="form-control" readonly>
-                        </div>
-                        <div class="form-group col" style="display:none">
-                            <label>Jenis</label>
-                            <input type="text" class="form-control" id="jenis" readonly name="jenis" readonly>
                         </div>
                     </div>
 
@@ -143,7 +136,7 @@
 
         $(document).on('click','#kt_quick_user_toggle', function () {
             // if (dataabsen.status == true) {
-                Panel.action('show','submit')                
+                Panel.action('show','submit');                
             // }else{
             //       swal.fire({
             //         text: "Anda belum bisa menambah aktivitas",
@@ -385,11 +378,11 @@
                             });
                         }else if(res.invalid){
                             $.each(res.invalid, function( key, value ) {
-                                console.log(key);
+                                // console.log(value);
                                 if (key == 'error') {
                                         swal.fire({
-                                            text: value,
-                                            title:"Error",
+                                            text: value.text,
+                                            title: value.title,
                                             timer: 2000,
                                             icon: "warning",
                                             showConfirmButton:false,
@@ -399,7 +392,6 @@
                                     $("select[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
                                     $("textarea[name='"+key+"']").addClass('is-invalid').siblings('.invalid-feedback').html(value[0]);
                                 }
-                         
                             });
                         }else if(res.success){
                             swal.fire({

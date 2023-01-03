@@ -515,6 +515,8 @@ class LaporanController extends Controller
     public function exportRekapTpp($params)
     {
         $val = json_decode($params);
+        $nama_dinas = request('perangkat_daerah');
+        $nama_bulan = request('nama_bulan');
 
         $url = env('API_URL');
         $token = session()->get('user.access_token');
@@ -524,10 +526,10 @@ class LaporanController extends Controller
 
         $data = $response['data'];
 
-        return $this->printRekapTpp($data, $val->month, $val->type);
+        return $this->printRekapTpp($data, $val->month, $val->type,$nama_dinas,$nama_bulan);
     }
 
-    public function printRekapTpp($data, $bulan, $type)
+    public function printRekapTpp($data, $bulan, $type,$nama_dinas,$nama_bulan)
     {
         $spreadsheet = new Spreadsheet();
 
@@ -567,8 +569,8 @@ class LaporanController extends Controller
 
         $sheet->setCellValue('A1', 'LAPORAN PEMBAYARAN TAMBAHAN PENGAHASILAN PEGAWAI')->mergeCells('A1:U1');
         //$sheet->setCellValue('A2', 'OPD ' . strtoupper($data['satuan_kerja']))->mergeCells('A2:U2');
-        $sheet->setCellValue('A2', 'OPD ........')->mergeCells('A2:U2');
-        $sheet->setCellValue('A3', '' . strtoupper(date('F Y', mktime(0, 0, 0, $bulan + 1, 0))))->mergeCells('A3:U3');
+        $sheet->setCellValue('A2', strtoupper($nama_dinas))->mergeCells('A2:U2');
+        $sheet->setCellValue('A3', '' . strtoupper($nama_bulan). ' '. date('Y'))->mergeCells('A3:U3');
 
         $sheet->getStyle('A5:V8')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('E1F5FE');
 

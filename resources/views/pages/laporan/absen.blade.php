@@ -27,7 +27,6 @@
                                     <label for="satuan_kerja">Pilih Satuan Kerja</label>
                                     <select class="form-control" id="satuan_kerja">
                                         @if ($satuan_kerja != null)
-                                            <option selected disabled> Pilih Satuan Kerja </option>
                                             @foreach ($satuan_kerja as $key => $value)
                                                 <option value="{{ $value['id'] }}">{{ $value['nama_satuan_kerja'] }}
                                                 </option>
@@ -98,15 +97,17 @@
             return year;
         }
 
-        jQuery(document).ready(function() {
-            // console.log($('#satuan_kerja').val());
-
-            console.log(maxdate());
-            $('#satuan_kerja').select2();
+        $('#satuan_kerja').select2({
+                placeholder : 'Pilih satuan kerja'
+            });
               $('#pegawai').select2({
                 placeholder : 'Pilih Pegawai'
               });
 
+        jQuery(document).ready(function() {
+      
+             $('#satuan_kerja').val(null).trigger('change');
+                         $('#pegawai').val(null).trigger('change');
             let typeRole = {!! json_encode($TypeRole) !!};
             console.log(typeRole);
             let current = {!! json_encode($current) !!};
@@ -209,6 +210,8 @@
 
                     let dataParams = JSON.stringify(params);
                     url = '/laporan-pegawai/export/rekapitulasi_pegawai/' + dataParams+'?perangkat_daerah='+perangkat_daerah+'&pegawai='+pegawai;
+                     $('#satuan_kerja').val(null).trigger('change');
+                         $('#pegawai').val(null).trigger('change');
                     window.open(url);
                        $('#pegawai').val('').trigger('change');
                 } else {

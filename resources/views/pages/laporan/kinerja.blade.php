@@ -36,7 +36,6 @@
                         <div class="form-group col-6">
                                 <label>Bulan</label>
                                 <select id="bulan" class="form-control form-control-solid">
-                                    <option disabled selected>Pilih Bulan</option>
                                     <option value="1">Januari</option>
                                     <option value="2">Februari</option>
                                     <option value="3">Maret</option>
@@ -56,8 +55,6 @@
                                 <div class="form-group col-3">
                                     <label>Pilih Dinas</label>
                                     <select id="dinas" class="form-control form-control-solid">
-                                        <option disabled selected>Pilih Dinas</option>
-                                        <option value="0">Semua Dinas</option>
                                         @foreach ($getDataDinas as $item)
                                             <option value="{{ $item['id'] }}">{{ $item['nama_satuan_kerja'] }}</option>
                                         @endforeach
@@ -95,6 +92,8 @@
 
         jQuery(document).ready(function() {
        
+              $('#bulan').val(null).trigger('change');
+                         $('#dinas').val(null).trigger('change');
             $('#kt_daterangepicker_2').daterangepicker({
                     buttonClasses: ' btn',
                     applyClass: 'btn-primary',
@@ -138,7 +137,8 @@
                 if (bulan != '') {
               
                     url = '/laporan-pegawai/export/kinerja?bulan='+bulan+`&tipe=${type}`+'&nama_bulan='+nama_bulan+'&dinas='+dinas+'&nama_dinas='+nama_dinas;
-                    // alert(url);
+                            $('#bulan').val(null).trigger('change');
+                         $('#dinas').val(null).trigger('change');
                     window.open(url);
                 } else {
                     Swal.fire(

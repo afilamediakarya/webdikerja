@@ -240,14 +240,14 @@ $path = explode('/', Request::path());
                                     </a>
                                 </li>
 
-                                <li class="menu-item {{ $path[0] == 'laporan-pegawai' && $path[1] == 'bankom' && $path[2] == 'pegawai' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
+                                <!-- <li class="menu-item {{ $path[0] == 'laporan-pegawai' && $path[1] == 'bankom' && $path[2] == 'pegawai' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
                                     <a href="{{ url('/laporan-pegawai/bankom/pegawai') }}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
                                             <span></span>
                                         </i>
                                         <span class="menu-text text-capitalize">Bankom</span>
                                     </a>
-                                </li>
+                                </li> -->
 
 
                             </ul>
