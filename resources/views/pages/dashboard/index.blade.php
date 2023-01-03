@@ -249,7 +249,7 @@
                                     <span class="text-muted">Besaran Pagu TPP</span>
                                 </div>
                                 <div class="font-weight-bold">
-                                    <span class="text-dark">Rp. {{ $data['informasi_tpp']['besaran_tpp'] }}</span>
+                                    <span class="text-primary">Rp. {{ $data['informasi_tpp']['besaran_tpp'] }}</span>
                                 </div>
                             </div>
 
@@ -259,7 +259,7 @@
                                 </div>
                                 <div class="font-weight-bold">
                                     <span
-                                        class="text-dark">Rp. {{ $data['informasi_tpp']['produktivitas_kerja'] }}</span>
+                                        class="text-success"> + Rp. {{ $data['informasi_tpp']['produktivitas_kerja'] }}</span>
                                 </div>
                             </div>
 
@@ -269,7 +269,7 @@
                                 </div>
                                 <div class="font-weight-bold">
                                     <span
-                                        class="text-dark">Rp. {{$data['informasi_tpp']['kehadiran_kerja']}}</span>
+                                        class="text-success"> + Rp. {{$data['informasi_tpp']['kehadiran_kerja']}}</span>
                                 </div>
                             </div>
 
@@ -279,7 +279,7 @@
                                 </div>
                                 <div class="font-weight-bold">
                                     <span
-                                        class="text-dark">Rp. {{$data['informasi_tpp']['potongan_bpjs_pph21']}}</span>
+                                        class="text-danger"> - Rp. {{$data['informasi_tpp']['potongan_bpjs_pph21']}}</span>
                                 </div>
                             </div>
 
