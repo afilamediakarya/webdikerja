@@ -23,18 +23,19 @@ class SkpController extends Controller
         $level = $this->checkLevel();
 
         if ($type == 'tahunan') {
-            if ($level == 1 || $level == 2) {
+            if ($level == 0 ||  $level == 1 || $level == 2) {
                 $data = Http::withToken($token)->get($url . "/skp/list/kepala?tahun=" . session('tahun_penganggaran') . "&type=tahunan");
             } else {
                 $data = Http::withToken($token)->get($url . "/skp/list/pegawai?tahun=" . session('tahun_penganggaran') . "&type=tahunan");
             }
-        } else {
-            if ($level == 1 || $level == 2) {
-                $data = Http::withToken($token)->get($url . "/skp/list/kepala?tahun=" . session('tahun_penganggaran') . "&type=bulanan&bulan=" . request('bulan'));
-            } else {
-                $data = Http::withToken($token)->get($url . "/skp/list/pegawai?tahun=" . session('tahun_penganggaran') . "&type=bulanan&bulan=" . request('bulan'));
-            }
-        }
+        } 
+        // else {
+        //     if ($level == 1 || $level == 2) {
+        //         $data = Http::withToken($token)->get($url . "/skp/list/kepala?tahun=" . session('tahun_penganggaran') . "&type=bulanan&bulan=" . request('bulan'));
+        //     } else {
+        //         $data = Http::withToken($token)->get($url . "/skp/list/pegawai?tahun=" . session('tahun_penganggaran') . "&type=bulanan&bulan=" . request('bulan'));
+        //     }
+        // }
 
         return $data;
     }

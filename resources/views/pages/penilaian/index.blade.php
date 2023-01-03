@@ -18,7 +18,7 @@
             <div class="card card-custom">
 
                 <div class="card-body">
-                    @if ($type == 'realisasi')
+                    <!-- @if ($type == 'realisasi')
                         <select id="bulan_" class="form-control" style="position: relative;bottom: 11px;width: 12rem;">
                             <option selected disabled> Pilih bulan </option>
                             <option value="0">Tahunan</option>
@@ -27,7 +27,7 @@
                                     {{ $month }}</option>
                             @endforeach
                         </select>
-                    @endif
+                    @endif -->
                     <!--begin: Datatable-->
                     <table class="table table-borderless table-head-bg" id="kt_datatable"
                         style="margin-top: 13px !important">
@@ -182,7 +182,7 @@
         }
 
         jQuery(document).ready(function() {
-            datatable($('#bulan_').val());
+            datatable(0);
             // KTDatatablesAdvancedRowGrouping.init();
         });
     </script>

@@ -22,7 +22,7 @@
                         </h3>
                     </div>
                     <div class="card-toolbar">
-                        <button onclick="Panel.action('show','submit')" class="btn btn-light-primary font-weight-bold" id="kt_quick_user_toggle">
+                        <button class="btn btn-light-primary font-weight-bold" id="kt_quick_user_toggle">
                             <i class="ki ki-plus "></i> Tambah Aktivitas
                         </button>
                     </div>
@@ -54,25 +54,13 @@
 			<div class="offcanvas-content pr-5 mr-n5">
                 <form class="form" id="createForm">
                     <div class="row">
-                        <div class="col-5">
+                        <div class="col-12">
                             <div class="form-group">
                                 <label>Tanggal Kegiatan </label>
                                 <input type="date" id="tanggal" class="form-control" name="tanggal"/>
                             </div>
                         </div>
                         <input type="text" style="display:none" name="id">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>waktu awal</label>
-                                <input type="time" class="form-control" name="waktu_awal" />
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label>waktu akhir </label>
-                                <input  type="time" class="form-control" name="waktu_akhir" />
-                            </div>
-                        </div>
                     </div>
                     <div class="form-group">
                         <label for="exampleSelect1">Sasaran Kinerja</label>
@@ -139,14 +127,35 @@
     <script src="{{asset('plugins/custom/fullcalendar/fullcalendar.bundle.js')}}"></script>
     <script>
 
-        function checkAbsen(params) {
-     
-            if (params['status'] == true) {
-                if (params['data']['status'] !== 'hadir' || params['data']['status'] !== 'izin' || params['data']['status'] !== 'sakit') {
-                    $('#kt_quick_user_toggle').prop('disabled', false);
-                }
+        // function checkAbsen(params) {
+        //     // console.log(params['status']);
+        //     if (params['status'] == true) {
+        //         if (params['data']['status'] !== 'hadir') {
+        //             // || params['data']['status'] !== 'izin' || params['data']['status'] !== 'sakit'
+        //             // $('#kt_quick_user_toggle').prop('disabled', false);
+        //         }
+        //     }else{
+        //             //    $('#kt_quick_user_toggle').prop('disabled', true);
+        //     }
+        // }
+
+        let dataabsen = {!! json_encode($checkAbsen) !!};
+
+        $(document).on('click','#kt_quick_user_toggle', function () {
+            if (dataabsen.status == true) {
+                Panel.action('show','submit')                
+            }else{
+                  swal.fire({
+                    text: "Anda belum bisa menambah aktivitas",
+                    title:"Maaf Anda belum Absen",
+                    timer: 2000,
+                    icon: "warning",
+                    showConfirmButton:false,
+                });
             }
-        }
+        })
+
+        
         
         function maxdate() {
             var dtToday = new Date();
@@ -197,9 +206,7 @@
 
                 });
             })
-
-            let dataabsen = {!! json_encode($checkAbsen) !!};
-            checkAbsen(dataabsen);
+            // checkAbsen(dataabsen);
 
 
             var dataActivity = [];

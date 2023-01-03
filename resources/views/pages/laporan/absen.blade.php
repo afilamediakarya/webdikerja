@@ -15,7 +15,7 @@
             <!--begin::Card-->
             <div class="card card-custom gutter-b example example-compact">
                 <div class="card-header">
-                    <h3 class="card-title">Laporans</h3>
+                    <h3 class="card-title">Laporan</h3>
                 </div>
                 <div class="card-body">
                     <!--begin::Form-->
@@ -87,14 +87,15 @@
 
         function maxdate() {
             var dtToday = new Date();
-            var month = dtToday.getMonth() + 1;
-            var day = dtToday.getDate();
+            // var month = dtToday.getMonth() + 1;
+            // var day = dtToday.getDate();
             var year = dtToday.getFullYear();
          
             
-            var maxDate = month + '/' + day + '/' + year;
-            return maxDate;
+            // var maxDate = month + '/' + day + '/' + year;
+            // return maxDate;
             // $('#tanggal').attr('min', maxDate);
+            return year;
         }
 
         jQuery(document).ready(function() {
@@ -147,7 +148,7 @@
                     buttonClasses: ' btn',
                     applyClass: 'btn-primary',
                     cancelClass: 'btn-danger',
-                    minDate: maxdate()
+                    minDate: '1/1/'+maxdate()
                 },
            
             );
