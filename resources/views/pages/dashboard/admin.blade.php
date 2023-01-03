@@ -140,34 +140,7 @@
               
                 
 
-                <div class="col-lg-12 col-xxl-12 order-1 order-xxl-2">
-                    <div class="card card-custom card-stretch gutter-b">
-                        <!--begin::Header-->
-                        <div class="card-header border-0">
-                            <h3 class="card-title font-weight-bolder text-dark">Pegawai yang dinilai</h3>
-                        </div>
-                        <!--end::Header-->
-                        <!--begin::Body-->
-                        <div class="card-body pt-2">
-                  
-                        
-                        <table class="table table-borderless table-head-bg" id="kt_datatable" style="margin-top: 13px !important">
-                            <thead>
-                                <tr>
-                                    <th>No.</th>
-                                    <th>Nama</th>
-                                    <th>NIP</th>
-                                    <th>Jabatan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                
-                            </tbody>
-                        </table>
-                        </div>
-                        <!--end::Body-->
-                    </div>
-                </div>
+              
             </div>
         </div>
         <!--end::Container-->
@@ -191,54 +164,7 @@
             }
             
         }
-        // reviewSkp = () =>{
-        //     alert('dsfsdf');
-        // }
-
-        var dataRow = function() {
-
-        var init = function() {
-            var table = $('#kt_datatable');
-
-            table.DataTable({
-                responsive: true,
-                pageLength: 10,
-                order: [[0, 'asc']],
-                processing:true,
-                ajax: "/get_data/penilaian/realisasi",
-                columns:[{ 
-                        data : null, 
-                        render: function (data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                        }  
-                    },{
-                        data:'nama'
-                    },{
-                        data:'nip'
-                    },{
-                        data:'nama_jabatan'
-                    }
-                ]
-            });
-
-        };
-
-        var destroy = function(){
-            var table = $('#kt_datatable').DataTable();
-            table.destroy();
-        }
-
-        return {
-            init: function() {
-                init();
-            },
-            destroy:function(){
-                destroy();
-            }
-
-        };
-
-        }();
+    
 
         jQuery(document).ready(function() {
             dataRow.init();

@@ -98,7 +98,7 @@
     <div id="side_form" class="offcanvas offcanvas-right p-10">
         <!--begin::Header-->
         <div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
-            <h3 class="font-weight-bold m-0">Tambah Jabatan<h3>
+            <h3 class="font-weight-bold m-0" id="title_modal">Tambah Jabatan<h3>
                     <a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="side_form_close">
                         <i class="ki ki-close icon-xs text-muted"></i>
                     </a>
@@ -422,6 +422,11 @@
 
         };
 
+        $(document).on('click','#side_form_open',function () {
+            $('#title_modal').html("Tambah Jabatan");
+        })
+
+
         $(document).on('submit', "#createForm[data-type='submit']", function(e) {
             e.preventDefault();
             AxiosCall.post("{{ route('post-jabatan') }}", $(this).serialize(), "#createForm");
@@ -507,6 +512,7 @@
                 $('#pegawai').val(null).trigger('change');
                 $('#parent').val(null).trigger('change');
                 Panel.action('show', 'update');
+                $('#title_modal').html('Edit Jabatan');
                 var key = $(this).data('id');
                 $.ajax({
                     url: "admin/jabatan/jabatan/" + key,

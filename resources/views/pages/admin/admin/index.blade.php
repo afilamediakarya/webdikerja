@@ -35,6 +35,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
+                                <th>Nip</th>
                                 <th>Satuan Kerja</th>
                                 <th>Aksi</th>
                             </tr>
@@ -122,6 +123,8 @@
                             }  
                         },{
                             data:'nama'
+                        },{
+                            data:'nip'
                         },{
                             data:'satuan_kerja.nama_satuan_kerja'
                         },{

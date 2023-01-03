@@ -226,7 +226,7 @@
                     _url = "{{route('post-master-aktivitas')}}";
                 }else{
                     console.log('ini update '+type)
-                    _url = "admin/master/master-aktivitas/"+_id;
+                    _url = "admin/master-aktivitas/master-aktivitas/"+_id;
                 }
 
                 $.ajax({
@@ -281,7 +281,7 @@
           
                 var key = $(this).data('id');
                 $.ajax({
-                    url:"admin/master/master-aktivitas/"+key,
+                    url:"admin/master-aktivitas/master-aktivitas/"+key,
                     method:"GET",
                     success: function(data){
                       if(data.success){

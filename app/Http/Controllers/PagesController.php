@@ -24,7 +24,7 @@ class PagesController extends Controller
         $response = '';
 
         if ($params == 'pegawai') {
-            $response = Http::withToken($token)->get($url . "/dashboard/pegawai?bulan=" . session('bulan'));
+            $response = Http::withToken($token)->get($url . "/dashboard/pegawai?bulan=" . session('bulan') . '&tahun='.session('tahun_penganggaran'));
         } elseif ($params == 'admin') {
             $response = Http::withToken($token)->get($url . "/dashboard/admin_opd");
         } else {
@@ -35,7 +35,6 @@ class PagesController extends Controller
 
     public function index($type)
     {
-        // return $type;
         $page_title = 'Dashboard';
         $page_description = 'Some description for the page';
         $breadcumb = ['Daftar Sasaran Kinerja Pegawai'];

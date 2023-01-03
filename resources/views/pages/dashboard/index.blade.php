@@ -246,7 +246,7 @@
                             <!--begin::Item-->
                             <div class="d-flex align-items-center justify-content-between pb-5 mb-5 border-bottom">
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
-                                    <span class="text-muted">Besaran TPP</span>
+                                    <span class="text-muted">Besaran Pagu TPP</span>
                                 </div>
                                 <div class="font-weight-bold">
                                     <span class="text-dark">Rp. {{ $data['informasi_tpp']['besaran_tpp'] }}</span>
@@ -255,29 +255,21 @@
 
                             <div class="d-flex align-items-center justify-content-between pb-5 mb-5 border-bottom">
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
-                                    <span class="text-muted">Tunjangan Prestasi Kerja (60%)</span>
+                                    <span class="text-muted">Produktivitas Kerja (60%)</span>
                                 </div>
                                 <div class="font-weight-bold">
                                     <span
-                                        class="text-dark">Rp.{{ $data['informasi_tpp']['tunjangan_prestasi_kerja'] }}</span>
+                                        class="text-dark">Rp. {{ $data['informasi_tpp']['produktivitas_kerja'] }}</span>
                                 </div>
                             </div>
 
                             <div class="d-flex align-items-center justify-content-between pb-5 mb-5 border-bottom">
                                 <div class="d-flex flex-column flex-grow-1 font-weight-bold">
-                                    <span class="text-muted">Tunjangan Kehadiran Kerja (40%)</span>
+                                    <span class="text-muted">Kehadiran Kerja (40%)</span>
                                 </div>
                                 <div class="font-weight-bold">
                                     <span
-                                        class="text-dark">Rp.{{ $data['informasi_tpp']['tunjangan_prestasi_kehadiran'] }}</span>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between pb-5 mb-5 border-bottom">
-                                <div class="d-flex flex-column flex-grow-1 font-weight-bold">
-                                    <span class="text-muted">Potongan (JKN + Pph21)</span>
-                                </div>
-                                <div class="font-weight-bold">
-                                    <span class="text-dark">Rp.0</span>
+                                        class="text-dark">Rp. {{$data['informasi_tpp']['kehadiran_kerja']}}</span>
                                 </div>
                             </div>
 
@@ -286,7 +278,7 @@
                                     <span class="text-muted">Total TPP yang diterima</span>
                                 </div>
                                 <div class="font-weight-bolder">
-                                    <span class="text-dark">Rp.{{ $data['informasi_tpp']['tpp_diterima'] }}</span>
+                                    <span class="text-dark">Rp {{$data['informasi_tpp']['tpp_diterima']}}</span>
                                 </div>
                             </div>
                         </div>
