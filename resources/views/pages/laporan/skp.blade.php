@@ -78,11 +78,11 @@
 
                             <div class="col-8 row">
                                 <div class="col">
-                                    <button type="reset" id="export-excel" class="btn btn-block btn-success"><i
+                                    <button type="reset" id="export-excel" data-type="excel" class="btn btn-block btn-success"><i
                                             class="flaticon2-pie-chart"></i>Export Excel</button>
                                 </div>
                                 <div class="col">
-                                    <button type="reset" id="preview-excel" class="btn btn-block btn-danger"><i
+                                    <button type="reset" id="preview-excel" data-type="pdf" class="btn btn-block btn-danger"><i
                                             class="flaticon2-pie-chart"></i>Tampilkan Data</button>
                                 </div>
                             </div>
@@ -127,7 +127,7 @@
                 placeholder: "Pilih Jenis"
             });
 
-            $('#preview-excel').on('click', function() {
+            $('#preview-excel,#export-excel').on('click', function() {
 
                 let jenis_skp = $('#jenis-skp-select').val();
                 let bulan = 0;
@@ -136,58 +136,29 @@
 
                 let pegawai = $('#pegawai').val();
                 if (jenis_skp !== null && bulan !== null) {
-                    // if (level == 'super_admin') {
-                    //     alert('super_admin : '+id_pegawai);
-                    //     // let idDinas = $('#dinas').val();
-                    //     // url =
-                    //     //     `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}?dinas=${idDinas}`;
-                    //     // window.open(url);
-                    //     // $('#dinas').val(null).trigger("change");
-                    //     // $('#jenis-skp-select').val(null).trigger("change");
-                    //     // $('#bulan').val(null).trigger("change");
-
-                    // } else if (level == 'admin_opd') {
-                    //   alert('admin_opd : '+id_pegawai);
-                    //     // if (id_pegawai == 0) {
-                    //     //     url = `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}`;
-                    //     //     window.open(url);
-                    //     // }
-                    //     // url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
-                    //     // window.open(url);
-                    //     // $('#pegawai').val(null).trigger("change");
-                    //     // $('#jenis-skp-select').val(null).trigger("change");
-                    //     // $('#bulan').val(null).trigger("change");
-
-                    // } else {
-                    //    alert('pegwai : '+id_pegawai);
-                    //     // url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
-                    //     // window.open(url);
-                    //     // $('#jenis-skp-select').val(null).trigger("change");
-                    //     // $('#bulan').val(null).trigger("change");
-                    // }
 
                     if (type == 'admin') {
                         if (level == 'super_admin') {
                                  let idDinas = $('#dinas').val();
                                 url =
-                                    `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}?dinas=${idDinas}`;
+                                    `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/${$(this).attr('data-type')}/${bulan}?dinas=${idDinas}`;
                                 window.open(url);
                                 $('#dinas').val(null).trigger("change");
                                 $('#jenis-skp-select').val(null).trigger("change");
                                 $('#bulan').val(null).trigger("change");
                         }else{
                                   if (id_pegawai == 0) {
-                            url = `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/pdf/${bulan}`;
+                            url = `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/${$(this).attr('data-type')}/${bulan}`;
                             window.open(url);
                         }
-                        url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
+                        url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/${$(this).attr('data-type')}/${bulan}/${id_pegawai}`;
                         window.open(url);
                         $('#pegawai').val(null).trigger("change");
                         $('#jenis-skp-select').val(null).trigger("change");
                         $('#bulan').val(null).trigger("change");
                         }
                     }else{
-                        url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/pdf/${bulan}/${id_pegawai}`;
+                        url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/${$(this).attr('data-type')}/${bulan}/${id_pegawai}`;
                         window.open(url);
                         $('#jenis-skp-select').val(null).trigger("change");
                         $('#bulan').val(null).trigger("change");
@@ -203,41 +174,41 @@
                 }
             })
 
-            $('#export-excel').on('click', function() {
+            // $('#export-excel').on('click', function() {
 
-                let jenis_skp = $('#jenis-skp-select').val();
-                let bulan = $('#bulan').val();
-                let id_pegawai = (level == 'admin_opd' || level == 'super_admin') ? $('#pegawai').val() :
-                    {!! json_encode($id_pegawai) !!};
+            //     let jenis_skp = $('#jenis-skp-select').val();
+            //     let bulan = $('#bulan').val();
+            //     let id_pegawai = (level == 'admin_opd' || level == 'super_admin') ? $('#pegawai').val() :
+            //         {!! json_encode($id_pegawai) !!};
 
-                let pegawai = $('#pegawai').val();
-                if (jenis_skp !== null && bulan !== null) {
-                    if (level == 'admin_opd') {
-                        if (id_pegawai == 0) {
-                            url = `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/excel/${bulan}`;
-                            window.open(url);
-                        }
-                        url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}/${id_pegawai}`;
-                        window.open(url);
-                        $('#pegawai').val(null).trigger("change");
-                        $('#jenis-skp-select').val(null).trigger("change");
-                        $('#bulan').val(null).trigger("change");
+            //     let pegawai = $('#pegawai').val();
+            //     if (jenis_skp !== null && bulan !== null) {
+            //         if (level == 'admin_opd') {
+            //             if (id_pegawai == 0) {
+            //                 url = `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/excel/${bulan}`;
+            //                 window.open(url);
+            //             }
+            //             url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}/${id_pegawai}`;
+            //             window.open(url);
+            //             $('#pegawai').val(null).trigger("change");
+            //             $('#jenis-skp-select').val(null).trigger("change");
+            //             $('#bulan').val(null).trigger("change");
 
-                    } else {
-                        // url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}`;
-                        url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/excel/${bulan}/${id_pegawai}`;
-                        window.open(url);
-                        $('#jenis-skp-select').val(null).trigger("change");
-                        $('#bulan').val(null).trigger("change");
-                    }
-                } else {
-                    Swal.fire(
-                        "Perhatian",
-                        "Lengkapi form terlebih dahulu",
-                        "warning"
-                    );
-                }
-            })
+            //         } else {
+            //             // url = `/laporan/export/laporanSkp/${jenis_skp}/excel/${bulan}`;
+            //             url = `/laporan-pegawai/export/laporanSkp/${jenis_skp}/excel/${bulan}/${id_pegawai}`;
+            //             window.open(url);
+            //             $('#jenis-skp-select').val(null).trigger("change");
+            //             $('#bulan').val(null).trigger("change");
+            //         }
+            //     } else {
+            //         Swal.fire(
+            //             "Perhatian",
+            //             "Lengkapi form terlebih dahulu",
+            //             "warning"
+            //         );
+            //     }
+            // })
 
         });
     </script>

@@ -925,7 +925,7 @@ class LaporanController extends Controller
     {
         $pegawai = request('pegawai');
         $val = json_decode($params);
-        return $val;
+        // return $val;
         $perangkat_daerah = request('perangkat_daerah');
 
         if ($val->role == 'pegawai') {
