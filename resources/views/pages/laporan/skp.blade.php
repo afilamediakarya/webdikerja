@@ -58,7 +58,6 @@
                                     <label>Pilih Dinas</label>
                                     <select id="dinas" class="form-control form-control-solid">
                                         <option disabled selected>Pilih Dinas</option>
-                                        <option value="0">Semua Dinas</option>
                                         @foreach ($getDataDinas as $item)
                                             <option value="{{ $item['id'] }}">{{ $item['nama_satuan_kerja'] }}</option>
                                         @endforeach

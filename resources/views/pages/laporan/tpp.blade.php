@@ -96,6 +96,8 @@
                          $('#month').val(null).trigger('change');
 
             let typeRole = {!! json_encode($TypeRole) !!};
+    
+            let current_satuan_kerja = {!! json_encode($satuan_kerja_current) !!}
 
             if (typeRole == 'super_admin') {
                 $('#satuan_kerja__').css('display', 'block');
@@ -105,9 +107,15 @@
 
             $('#preview-excel').on('click', function() {
                 let month = $('#month').val();
-                let satuan_kerja = $('#satuan_kerja option:selected').val();
+                let satuan_kerja = $('#satuan_kerja').val();
                      let nama_satuan_kerja = $('#satuan_kerja option:selected').text();
                            let nama_bulan = $('#month option:selected').text();
+
+                if (typeRole == 'admin') {
+                    satuan_kerja = current_satuan_kerja.id_satuan_kerja;
+                    nama_satuan_kerja = current_satuan_kerja.nama_satuan_kerja;
+                }
+
                 if (month != null) {
                     let params = {
                         'month': month,

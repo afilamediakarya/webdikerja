@@ -500,6 +500,7 @@ class LaporanController extends Controller
 
         $url = env('API_URL');
         $token = session()->get('user.access_token');
+        $satuan_kerja_current = session()->get('user.current');
 
         if ($TypeRole == 'super_admin') {
             $data = Http::withToken($token)->get($url . "/satuan_kerja/list");
@@ -509,7 +510,7 @@ class LaporanController extends Controller
             $satuan_kerja = $data['data'];
         }
         // return $satuan_kerja;
-        return view('pages.laporan.tpp', compact('page_title', 'page_description', 'breadcumb', 'TypeRole', 'satuan_kerja'));
+        return view('pages.laporan.tpp', compact('page_title', 'page_description', 'breadcumb', 'TypeRole', 'satuan_kerja','satuan_kerja_current'));
     }
 
     public function exportRekapTpp($params)
@@ -522,7 +523,7 @@ class LaporanController extends Controller
         $token = session()->get('user.access_token');
         $data = array();
         $response = '';
-        $response = Http::withToken($token)->get($url . "/laporan-rekapitulasi-tpp/admin-opd?satuan_kerja=$val->satuanKerja&bulan=$val->month");
+        $response = Http::withToken($token)->get($url . "/laporan-rekapitulasi-tpp/admin-opd?satuan_kerja=".$val->satuanKerja.'&bulan='.$val->month);
 
         $data = $response['data'];
 
@@ -1099,7 +1100,6 @@ class LaporanController extends Controller
                             foreach ($v['target_skp'] as $mk => $rr) {
                                 $kategori_ = '';
                                 if ($rr['bulan'] ==  $bulan) {
-
                                     if ($rr['target'] > 0) {
                                         $single_rate = ($v['realisasi_skp'][$mk]['realisasi_bulanan'] / $rr['target']) * 100;
                                     }
