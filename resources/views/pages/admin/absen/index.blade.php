@@ -527,6 +527,8 @@
             });
         })
 
+      
+
         jQuery(document).ready(function() {
             Panel.init('side_form');
             $('#id_satuan_kerja').select2({
@@ -538,9 +540,6 @@
             $('#filter-satuan-kerja').select2({
                 placeholder: "Pilih Satuan Kerja"
             });
-
-
-            
             datatable_();
 
             

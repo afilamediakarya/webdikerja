@@ -51,6 +51,13 @@ class AbsenController extends Controller
         return $result;
     }
 
+    public function checkAbsenbyDate(){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $result =  Http::withToken($token)->get($url."/absen/check-absen-by-date?tanggal=".request('tanggal'));
+        return $result;
+    }
+
     public function store(Request $request)
     {
 

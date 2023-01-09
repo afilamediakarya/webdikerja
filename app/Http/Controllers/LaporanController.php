@@ -310,10 +310,12 @@ class LaporanController extends Controller
 
 
         if ($export_type == 'excel') {
-            // Untuk download 
+         
             $writer = new Xlsx($spreadsheet);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="Daftar Laporan TPP"' . $data['satuan_kerja'] . ' Bulan ' . ucwords(date('F Y', mktime(0, 0, 0, $bulan + 1, 0))) . ' .xlsx"');
+            // header('Content-Disposition: attachment;filename="Laporan TPP"' . $data['pegawai_dinilai']['nama'] .' _ '.$data['pegawai_dinilai']['nip']. ' Bulan ' . $nama_bulan . ' .xlsx"');
+            header('Content-Disposition: attachment;filename="Laporan TPP '. $data['pegawai_dinilai']['nama'] .'".xlsx');
+            
         } else {
             $spreadsheet->getActiveSheet()->getHeaderFooter()
                 ->setOddHeader('&C&H' . url()->current());
@@ -853,13 +855,11 @@ class LaporanController extends Controller
         $sheet->setCellValue('C' . $cell, 'NIP')->mergeCells('C' . $cell . ':D' . $cell);
         $sheet->getStyle('C' . $cell . ':S' . $cell)->getAlignment()->setVertical('center')->setHorizontal('center');
 
-
-
         if ($type == 'excel') {
             // Untuk download 
             $writer = new Xlsx($spreadsheet);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="Daftar Laporan TPP"' . $data['satuan_kerja'] . ' Bulan ' . ucwords(date('F Y', mktime(0, 0, 0, $bulan + 1, 0))) . ' .xlsx"');
+            header('Content-Disposition: attachment;filename="Daftar Laporan TPP"' . strtr( $nama_dinas, ",", "-" ) . ' Bulan ' . $nama_bulan . ' .xlsx"');
         } else {
             $spreadsheet->getActiveSheet()->getHeaderFooter()
                 ->setOddHeader('&C&H' . url()->current());
@@ -3172,14 +3172,13 @@ class LaporanController extends Controller
 
         $cell = 11;
 
-        $jumlah_tidak_hadir_apel= 0;
         $total_potongan_apel = 0;
         $jml_potongan_kehadiran_kerja = 0;
 
         foreach ($data['pegawai'] as $i => $val) {        
             $total_potongan_persen_keterlambatan = 0;
              $total_potongan_persen_pulang_kerja = 0;
-     
+        $jumlah_tidak_hadir_apel= 0;
 
             $sheet->getRowDimension($cell)->setRowHeight(30);
             $selisih_waktu = 0;
@@ -3204,14 +3203,12 @@ class LaporanController extends Controller
         
                   $count_absen = 0;
                   if (isset($v['jumlah_apel'])) {
-                                //    return ((int)$data['count_monday'] - (int)$v['jumlah_apel']);
-                   $jumlah_tidak_hadir_apel = ((int)$data['count_monday'] - (int)$v['jumlah_apel']); 
-                //    $jumlah_tidak_hadir_apel -= 1;
+
+                    if ($v['jumlah_apel'] > 0) {
+                          $jumlah_tidak_hadir_apel += (int)$v['jumlah_apel']; 
+                    }
                   }
 
-
-                //   return $jumlah_tidak_hadir_apel;
-                
                 if (isset($v['status'])) {
                     $count_absen = array_count_values(array_column($val, 'tanggal_absen'))[$v['tanggal_absen']];
                     if ($count_absen == 1) {
@@ -3258,6 +3255,8 @@ class LaporanController extends Controller
                     $jml_tanpa_keterangan += $nums + 1;
                 }
             }
+
+              $jumlah_tidak_hadir_apel = ((int)$data['count_monday'] - $jumlah_tidak_hadir_apel); 
 
             $sheet->setCellValue('D' . $cell, count($jml_hari_kerja));
             $sheet->setCellValue('E' . $cell, $jml_tanpa_keterangan);

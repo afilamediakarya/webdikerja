@@ -265,66 +265,104 @@
                 // $('#kt_quick_user').modal('show');
             });
 
-            // kalender.on('dateClick', function (data) {
-            //     // let dates = new Date(data.dateStr);
-            //     // alert(dates);
-            //     // var d = todayDate.format('DD/MM//YYYY');
-            //     Panel.action('show','submit');
-            //     $("#tanggal").val(data.dateStr);
-            // })
+            converValueDate = (params) =>{
+                if (params.toString().length < 2) {
+                    params = '0'+params;
+                }
+                return params;
+            }
 
-            // dayRender: function (date, cell) {
-            //             var today = new Date();
-            //             var end = new Date();
-            //             end.setDate(today.getDate()+7);
-                        
-            //             if (date.getDate() === today.getDate()) {
-            //                 cell.css("background-color", "red");
-            //             }
-                        
-            //             if(date > today && date <= end) {
-            //                 cell.css("background-color", "yellow");
-            //             }
+            downDate = (day,year,month,type) => {
+                let array_pre = [];
+                let array_ot = [];
+                let result = [];
+                let num = 0;
+                console.log(day);
+                if (type == 'previousDate') {
+                    num = day + 5;
+                }
+                
+                // if (type == 'previousDate' && type == 'nextDate') {
+                //     for (let index = day; index <= num; index++) {
+                //         array_.push(year+'-'+converValueDate(month)+'-'+converValueDate(index));
+                //     }
+                // }else{
+                //     // alert(day);
                     
-            //         }  
+                // }
+
+                 for (let index = day; index < num; index++) {
+                     array_pre.push(year+'-'+converValueDate(month)+'-'+converValueDate(index));
+                    result['previous'] = array_pre;   
+                }
+
+                for (let i = 1; i < day; i++) {
+                      array_ot.push(year+'-'+converValueDate(month)+'-'+converValueDate(i));
+                      result['other'] = array_ot;   
+                }
+                
+                return result;
+            }
         
-            // kalender.on('dayRender',function (event) {
-            //     // console.log($(event.el).attr('data-date'));
-            //  var today = new Date();
-            //  var thismonth = today.getMonth() + 1;
-            // var thisday = today.getDate();
-            // var thisyear = today.getFullYear();
-            // let daydown = today.getDate() - 5;
-            // let thisdate = thisyear + '-' + thismonth + '-' + thisday;
-            
-            // // let array_5_hari = [];
-            // // for (let index = daydown; index >= 5; index++) {
-            // //     array_5_hari[index] = index;
-            // // }
+            kalender.on('dayRender',function (event) {
+                console.log(event);
+             var today = new Date();
+             var thismonth = today.getMonth() + 1;
+            var thisday = today.getDate();
+            var thisyear = today.getFullYear();
+            let daydown = today.getDate() - 4;
+            let previousDate = [];
+            let afterDate = [];
+            let nextDate = [];
+            let data_date = $(event.el).attr('data-date');
 
-            // // let tanggal_lima_hari_belakang = today.getDate();
-            // console.log(array_5_hari);
+            // let thisdate = thisyear + '-' + converValueDate(thismonth) + '-' + converValueDate(thisday);
 
-            //  // var month = today.getMonth() + 1;
-            // // var day = today.getDate() - 5;
-            // // var year = today.getFullYear();
+            // if (thisdate == $(event.el).attr('data-date')) {
+            //      $(event.el).css("background-color", "#4daff0");
+            // }
 
-            // // if (thisdate == $(event.el).attr('data-date')) {
-            // //      $(event.el).css("background-color", "red");
-            // // }
+            previousDate = downDate(daydown,thisyear,thismonth,'previousDate');
+            $.each(previousDate.previous, function (x,y) {
+                if (y == $(event.el).attr('data-date')) {
+                    console.log(data_date);
+                    $.ajax({
+                        url : '/admin/absen/checkAbsenbyDate?tanggal='+data_date,
+                        method : 'GET',
+                        success : function (res) {
+                            res = JSON.parse(res);
+                            if (res.status == true) {
+                                $(event.el).css("background-color", "#7bd188");
+                            }else{
+                                  $(event.el).css("background-color", "#ebebe4");
+                            }
+                        }
+                    })
+                      
+                }
+            })
+
+                $.each(previousDate.other, function (x,y) {
+                if (y == $(event.el).attr('data-date')) {
+                    console.log(data_date);
+                    $.ajax({
+                        url : '/admin/absen/checkAbsenbyDate?tanggal='+data_date,
+                        method : 'GET',
+                        success : function (res) {
+                            res = JSON.parse(res);
+                            if (res.status == true) {
+                                $(event.el).css("background-color", "#74c1e8");
+                            }else{
+                                  $(event.el).css("background-color", "#ebebe4");
+                            }
+                        }
+                    })
+                      
+                }
+            })
                  
-            //         // var today = new Date();
-            //         //     var end = new Date();
-            //         //     let element = event.el;
-            //         //     // console.log(element);
-            //         //     end.setDate(today.getDate()+7);       
-            //         //     if (today.getDate() == date('d')) {
-            //         //         $(event.el).css("background-color", "red");
-            //         //     }
-            //             // if(date > today && date <= end) {
-            //             //     cell.css("background-color", "yellow");
-            //             // }
-            // })
+                
+            })
 
             kalender.render();
 

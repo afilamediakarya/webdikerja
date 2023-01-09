@@ -149,7 +149,8 @@
                     buttonClasses: ' btn',
                     applyClass: 'btn-primary',
                     cancelClass: 'btn-danger',
-                    // minDate: '1/1/'+maxdate()
+                    // minDate: '1/1/'+maxdate(),
+                    // maxDate : new Date()
                 },
            
             );
@@ -207,8 +208,6 @@
                         'satuanKerja': satuan_kerja,
                         // 'perangkat_daerah':perangkat_daerah
                     };
-
-                   console.log(params);
 
                     let dataParams = JSON.stringify(params);
                     url = '/laporan-pegawai/export/rekapitulasi_pegawai/' + dataParams+'?perangkat_daerah='+perangkat_daerah+'&pegawai='+pegawai;

@@ -307,6 +307,7 @@ Route::middleware('Auth')->group(function () {
             Route::prefix('absen')->group(function () {
                 Route::get('/', [AbsenController::class, 'index'])->name('absen');
                 Route::get('/datatable', [AbsenController::class, 'datatable_'])->name('absen.filter');
+                Route::get('/checkAbsenbyDate', [AbsenController::class, 'checkAbsenbyDate'])->name('absen.checkAbsenbyDate');
                 Route::post('/', [AbsenController::class, 'store'])->name('post-absen');
                 Route::get('/{pegawai}/{tanggal}/{valid}', [AbsenController::class, 'show'])->name('show-absen');
                 Route::post('/{id_pegawai}', [AbsenController::class, 'update'])->name('update-absen');

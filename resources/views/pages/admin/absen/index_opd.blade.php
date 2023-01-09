@@ -31,7 +31,7 @@
                     <div class="row" style="margin-bottom: 1rem">
                         <div class="col-lg-2">
                           <label for="valid_" class="form-label">Tanggal</label>
-                            <input type="date" value="{{ date('Y-m-d') }}" class="form-control" id="filter-tanggal">
+                            <input type="date" value="{{ date('Y-m-d') }}" class="form-control tanggal_" id="filter-tanggal">
                         </div>
                         <div class="col-lg-2">
                             <label for="filter-valid" class="form-label">Validation</label>
@@ -136,7 +136,7 @@
                     <div class="row">
                         <div class="form-group col-6">
                             <label>Tanggal</label>
-                            <input type="date" class="form-control" name="tanggal">
+                            <input type="date" class="form-control tanggal_" name="tanggal">
                            <small class="text-danger tanggal_error"></small>
                         </div>
                         <div class="form-group col-6 form-create-form">
@@ -506,19 +506,20 @@
     function  maxdate() {
          var dtToday = new Date();
         var month = dtToday.getMonth() + 1;
-        var day = dtToday.setDate(dtToday.getDate() - 5) ;
+        var day = dtToday.getDate() - 5 ;
         var year = dtToday.getFullYear();
         //  date.setMonth (date.getMonth () - 12);
-        // if(month < 10)
-        //     month = '0' + month.toString();
-        // if(day < 10)
-        //     day = '0' + day.toString();
+        if(month < 10)
+            month = '0' + month.toString();
+        if(day < 10)
+            day = '0' + day.toString();
         
-        var maxDate = year + '-' + month + '-' + dtToday.getDate();
+        var maxDate = year + '-' + month + '-' + day;
         // let maxDate = date('Y-m-d', strtotime('-7 days', strtotime( date )))
         // or instead:
         // var maxDate = dtToday.toISOString().substr(0, 10);
-        $('#filter-tanggal').attr('min', maxDate);
+        // alert();
+        $('.tanggal_').attr('min', maxDate);
     }
 
         jQuery(document).ready(function() {

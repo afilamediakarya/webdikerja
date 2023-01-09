@@ -119,7 +119,7 @@
                             <option value="{{ $value['id'] }}">{{ $value['nama_satuan_kerja'] }}</option>
                         @endforeach
                     </select>
-                    <div class="invalid-feedback"></div>
+                      <small class="text-danger id_satuan_kerja_error"></small>
                 </div>
 
                 <div class="form-group">
@@ -131,13 +131,13 @@
                             <option value="{{ $x }}">{{ $x }}</option>
                         @endfor
                     </select>
-                    <div class="invalid-feedback"></div>
+                      <small class="text-danger kelas_jabatan_error"></small>
                 </div>
 
                 <div class="form-group">
                     <label>Nama Jabatan</label>
                     <input class="form-control form-control-solid" type="text" name="nama_jabatan" />
-                    <div class="invalid-feedback"></div>
+                      <small class="text-danger nama_jabatan_error"></small>
                 </div>
 
               
@@ -151,23 +151,15 @@
                             <option value="{{ $item['id'] }}">{{ $item['value'] }}</option>
                         @endforeach
                     </select>
-                    <div class="invalid-feedback"></div>
+                      <small class="text-danger id_jenis_jabatan_error"></small>
                 </div>
 
-                  <div class="form-group">
-                    <label>Kelompok Jabatan</label>
-                    <select class="form-control form-control-solid select_" type="text" name="kelompok_jabatan"
-                        id="kelompok_jabatan">
-    
-                     
-                    </select>
-                    <div class="invalid-feedback"></div>
-                </div>
+                  
 
                 <div class="form-group">
                     <label>Nilai Jabatan</label>
                     <input type="text" class="form-control form-control-solid price" name="nilai_jabatan">
-                    <div class="invalid-feedback"></div>
+                      <small class="text-danger nilai_jabatan_error"></small>
                 </div>
 
                 <div class="form-group">
@@ -180,7 +172,7 @@
                             <input type="radio" value="PLT/PLS" name="status_jabatan">
                             <span></span>PLT/PLS</label>
                     </div>
-                    <div class="invalid-feedback"></div>
+                      <small class="text-danger status_jabatan_error"></small>
                 </div>
 
                 <div class="form-group">
@@ -194,7 +186,7 @@
                             <option value="{{ $item['id'] }}">{{ $item['value'] }}</option>
                         @endforeach
                     </select>
-                    <div class="invalid-feedback"></div>
+                      <small class="text-danger id_pegawai_error"></small>
 
                 </div>
 
@@ -211,22 +203,31 @@
                             <input type="radio" value="0" name="pembayaran_tpp">
                             <span></span>0%</label>
                     </div>
-                    <div class="invalid-feedback"></div>
+                      <small class="text-danger pembayaran_tpp_error"></small>
                 </div>
 
                 <div class="form-group">
                     <label>Target Waktu</label>
                     <input type="number" class="form-control form-control-solid" value="6750" name="target_waktu">
-                    <div class="invalid-feedback"></div>
+                      <small class="text-danger target_waktu_error"></small>
                 </div>
 
+                <div class="form-group">
+                    <label>Kelompok Jabatan</label>
+                    <select class="form-control form-control-solid select_" type="text" name="kelompok_jabatan"
+                        id="kelompok_jabatan">
+    
+                     
+                    </select>
+                      <small class="text-danger "></small>
+                </div>
 
                 <div class="form-group">
                     <label>Atasan langsung</label>
                     <select class="form-control form-control-solid" type="text" name="parent_id" id="parent">
 
                     </select>
-                    <div class="invalid-feedback"></div>
+                      <small class="text-danger parent_id_error"></small>
                 </div>
 
                 <div class="form-group">
@@ -238,7 +239,7 @@
                             <option value="{{ $locs['id'] }}">{{ $locs['nama_lokasi'] }}</option>
                         @endforeach
                     </select>
-                    <div class="invalid-feedback"></div>
+                      <small class="text-danger id_lokasi_error"></small>
 
                 </div>
 
@@ -429,8 +430,59 @@
 
         $(document).on('submit', "#createForm[data-type='submit']", function(e) {
             e.preventDefault();
-            AxiosCall.post("{{ route('post-jabatan') }}", $(this).serialize(), "#createForm");
-                    Panel.action("hide");
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            $.ajax({
+                url : "{{ route('post-jabatan') }}",
+                method : 'POST',
+                data: $('#createForm').serialize(),
+                success : function (res) {
+                    $('.text_danger').html('');
+                    if (res.success) {
+                        swal.fire({
+                            text: 'Absen berhasil di tambahkan',
+                            icon: "success",
+                            showConfirmButton:true,
+                            confirmButtonText: "OK, Siip",
+                        }).then(function() {
+                            $("#createForm")[0].reset();
+                            Panel.action('hide');
+                            $('.text_danger').html('');
+                            $('#pegawai').val(null).trigger('change');
+                            $('#id_satuan_kerja').val(null).trigger('change');
+                            datatable_();
+                            // $('#kt_datatable').DataTable().ajax.reload();
+                        });      
+                    }else if(res.fails){
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Maaf, Anda tidak bisa absen',
+                            text: res.fails
+                        })
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Maaf, terjadi kesalahan',
+                            text: 'Silahkan Hubungi Admin'
+                        })
+                    }
+                
+                },
+                error : function (xhr) {
+                    $('.text_danger').html('');
+                    let error = xhr.responseJSON;
+                    $.each( error, function( key, value ) {
+                        console.log(key + ' | ' +value)
+                        $(`.${key}_error`).html(value)
+                    }); 
+                }
+            });
+            // AxiosCall.post("{{ route('post-jabatan') }}", $(this).serialize(), "#createForm");
+            //         Panel.action("hide");
         });
 
         $(document).on('change', '#id_satuan_kerja', function() {
@@ -447,8 +499,60 @@
         $(document).on('submit', "#createForm[data-type='update']", function(e) {
             e.preventDefault();
             var _id = $("input[name='id']").val();
-            AxiosCall.post(`admin/jabatan/jabatan/${_id}`, $(this).serialize(), "#createForm");
-                             Panel.action("hide");
+            // AxiosCall.post(`admin/jabatan/jabatan/${_id}`, $(this).serialize(), "#createForm");
+            //                  Panel.action("hide");
+
+               $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            $.ajax({
+                url : `admin/jabatan/jabatan/${_id}`,
+                method : 'POST',
+                data: $(this).serialize(),
+                success : function (res) {
+                    $('.text_danger').html('');
+                    if (res.success) {
+                        swal.fire({
+                            text: 'Absen berhasil di tambahkan',
+                            icon: "success",
+                            showConfirmButton:true,
+                            confirmButtonText: "OK, Siip",
+                        }).then(function() {
+                            $("#createForm")[0].reset();
+                            Panel.action('hide');
+                            $('.text_danger').html('');
+                            $('#pegawai').val(null).trigger('change');
+                            $('#id_satuan_kerja').val(null).trigger('change');
+                            datatable_();
+                            // $('#kt_datatable').DataTable().ajax.reload();
+                        });      
+                    }else if(res.fails){
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Maaf, Anda tidak bisa absen',
+                            text: res.fails
+                        })
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Maaf, terjadi kesalahan',
+                            text: 'Silahkan Hubungi Admin'
+                        })
+                    }
+                
+                },
+                error : function (xhr) {
+                    $('.text_danger').html('');
+                    let error = xhr.responseJSON;
+                    $.each( error, function( key, value ) {
+                        console.log(key + ' | ' +value)
+                        $(`.${key}_error`).html(value)
+                    }); 
+                }
+            });
         });
 
         $(document).on('click', '.button-delete', function(e) {

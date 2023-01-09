@@ -110,18 +110,21 @@ class JabatanController extends Controller
         // return $filtered;
 
         $response = Http::withToken($token)->post($url . "/jabatan/store", $filtered);
+
         if ($response->successful()) {
-            $data = $response->object();
-            if (isset($data->status)) {
-                return response()->json([
-                    'success' => 'Berhasil Menambah Data',
-                    'data' => $data
-                ]);
-            } else {
-                return response()->json(['invalid' => $response->json()]);
-            }
+            return 'tes';
+            // $data = $response->object();
+            // if (isset($data->status)) {
+            //     return response()->json([
+            //         'success' => 'Berhasil Menambah Data',
+            //         'data' => $data
+            //     ]);
+            // } else {
+            //     return response()->json($response, 422);
+            //     // return response()->json(['invalid' => $response->json()]);
+            // }
         } else {
-            return response()->json(['failed' => $response->json()]);
+            return response()->json($response->json(),422);
         }
     }
 
