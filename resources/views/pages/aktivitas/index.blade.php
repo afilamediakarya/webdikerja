@@ -150,21 +150,21 @@
 
         
         
-        function maxdate() {
-            var dtToday = new Date();
-            var month = dtToday.getMonth() + 1;
-            var day = dtToday.getDate() - 5;
-            var year = dtToday.getFullYear();
-            //  date.setMonth (date.getMonth () - 12);
-            if(month < 10)
-                month = '0' + month.toString();
-            if(day < 10)
-                day = '0' + day.toString();
+        // function maxdate() {
+        //     var dtToday = new Date();
+        //     var month = dtToday.getMonth() + 1;
+        //     var day = dtToday.getDate() - 5;
+        //     var year = dtToday.getFullYear();
+        //     //  date.setMonth (date.getMonth () - 12);
+        //     if(month < 10)
+        //         month = '0' + month.toString();
+        //     if(day < 10)
+        //         day = '0' + day.toString();
             
-            var maxDate = year + '-' + month + '-' + day;
+        //     var maxDate = year + '-' + month + '-' + day;
 
-            $('#tanggal').attr('min', maxDate);
-        }
+        //     $('#tanggal').attr('min', maxDate);
+        // }
         
         jQuery(document).ready(function() {
             Panel.init('side_form');
@@ -173,7 +173,7 @@
             placeholder: "Pilih"
         });
 
-        maxdate();
+        // maxdate();
 
         
 
@@ -304,65 +304,59 @@
                 return result;
             }
         
-            kalender.on('dayRender',function (event) {
-                console.log(event);
-             var today = new Date();
-             var thismonth = today.getMonth() + 1;
-            var thisday = today.getDate();
-            var thisyear = today.getFullYear();
-            let daydown = today.getDate() - 4;
-            let previousDate = [];
-            let afterDate = [];
-            let nextDate = [];
-            let data_date = $(event.el).attr('data-date');
+            // kalender.on('dayRender',function (event) {
+            //     console.log(event);
+            //  var today = new Date();
+            //  var thismonth = today.getMonth() + 1;
+            // var thisday = today.getDate();
+            // var thisyear = today.getFullYear();
+            // let daydown = today.getDate() - 4;
+            // let previousDate = [];
+            // let afterDate = [];
+            // let nextDate = [];
+            // let data_date = $(event.el).attr('data-date');
 
-            // let thisdate = thisyear + '-' + converValueDate(thismonth) + '-' + converValueDate(thisday);
-
-            // if (thisdate == $(event.el).attr('data-date')) {
-            //      $(event.el).css("background-color", "#4daff0");
-            // }
-
-            previousDate = downDate(daydown,thisyear,thismonth,'previousDate');
-            $.each(previousDate.previous, function (x,y) {
-                if (y == $(event.el).attr('data-date')) {
-                    console.log(data_date);
-                    $.ajax({
-                        url : '/admin/absen/checkAbsenbyDate?tanggal='+data_date,
-                        method : 'GET',
-                        success : function (res) {
-                            res = JSON.parse(res);
-                            if (res.status == true) {
-                                $(event.el).css("background-color", "#7bd188");
-                            }else{
-                                  $(event.el).css("background-color", "#ebebe4");
-                            }
-                        }
-                    })
+            // previousDate = downDate(daydown,thisyear,thismonth,'previousDate');
+            // $.each(previousDate.previous, function (x,y) {
+            //     if (y == $(event.el).attr('data-date')) {
+            //         console.log(data_date);
+            //         $.ajax({
+            //             url : '/admin/absen/checkAbsenbyDate?tanggal='+data_date,
+            //             method : 'GET',
+            //             success : function (res) {
+            //                 res = JSON.parse(res);
+            //                 if (res.status == true) {
+            //                     $(event.el).css("background-color", "#7bd188");
+            //                 }else{
+            //                       $(event.el).css("background-color", "#ebebe4");
+            //                 }
+            //             }
+            //         })
                       
-                }
-            })
+            //     }
+            // })
 
-                $.each(previousDate.other, function (x,y) {
-                if (y == $(event.el).attr('data-date')) {
-                    console.log(data_date);
-                    $.ajax({
-                        url : '/admin/absen/checkAbsenbyDate?tanggal='+data_date,
-                        method : 'GET',
-                        success : function (res) {
-                            res = JSON.parse(res);
-                            if (res.status == true) {
-                                $(event.el).css("background-color", "#74c1e8");
-                            }else{
-                                  $(event.el).css("background-color", "#ebebe4");
-                            }
-                        }
-                    })
+            //     $.each(previousDate.other, function (x,y) {
+            //     if (y == $(event.el).attr('data-date')) {
+            //         console.log(data_date);
+            //         $.ajax({
+            //             url : '/admin/absen/checkAbsenbyDate?tanggal='+data_date,
+            //             method : 'GET',
+            //             success : function (res) {
+            //                 res = JSON.parse(res);
+            //                 if (res.status == true) {
+            //                     $(event.el).css("background-color", "#74c1e8");
+            //                 }else{
+            //                       $(event.el).css("background-color", "#ebebe4");
+            //                 }
+            //             }
+            //         })
                       
-                }
-            })
+            //     }
+            // })
                  
                 
-            })
+            // })
 
             kalender.render();
 
