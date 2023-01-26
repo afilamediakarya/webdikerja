@@ -98,6 +98,8 @@ class LaporanController extends Controller
         $data = array();
         $fungsi = '';
 
+        // return $tipe;
+
         if ($tipe == 'pegawai') {
             // return 'tes1';
             $data_kinerja_pegawai = Http::withToken($token)->get($url . "/laporan/kinerja?bulan=".$bulan);

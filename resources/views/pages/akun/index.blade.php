@@ -232,14 +232,13 @@
                 <div class="card-body">
                     <form id="change-password">
                         <div class="form-group col-6">
-                            <label>Password Baru</label>
-                            <input type="text" class="form-control form-control-solid" name="password_baru">
+                            <label>Masukkan Password lama</label>
+                            <input type="password" class="form-control form-control-solid" name="password_lama">
                             <span class="invalid-feedback"></span>
                         </div>
-
                         <div class="form-group col-6">
-                            <label>Kenformasi Password</label>
-                            <input type="text" class="form-control form-control-solid" name="password_lama">
+                            <label>Masukkan Password Baru</label>
+                            <input type="password" class="form-control form-control-solid" name="password_baru">
                             <span class="invalid-feedback"></span>
                         </div>
                     </form>

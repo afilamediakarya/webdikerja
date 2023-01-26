@@ -77,7 +77,8 @@ class JabatanController extends Controller
     {
         $url = env('API_URL');
         $token = session()->get('user.access_token');
-        $parent = Http::withToken($token)->get($url . "/jabatan/get-option-parent/" . $params);
+        
+        $parent = Http::withToken($token)->get($url . "/jabatan/get-option-parent/" . $params .'?satuan_kerja='.request('satuan_kerja'));
         $dataParent = $parent->json();
         return $dataParent;
     }

@@ -123,56 +123,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Kelas Jabatan</label>
-                    <select class="form-control form-control-solid" type="text" id="kelas_jabatan"
-                        name="kelas_jabatan">
-                        <option disabled selected> Pilih Kelas Jabatan </option>
-                        @for ($x=0; $x <= 14; $x++)
-                            <option value="{{ $x }}">{{ $x }}</option>
-                        @endfor
-                    </select>
-                      <small class="text-danger kelas_jabatan_error"></small>
-                </div>
-
-                <div class="form-group">
                     <label>Nama Jabatan</label>
                     <input class="form-control form-control-solid" type="text" name="nama_jabatan" />
                       <small class="text-danger nama_jabatan_error"></small>
-                </div>
-
-              
-
-                <div class="form-group">
-                    <label>Jenis Jabatan</label>
-                    <select class="form-control form-control-solid" type="text" name="id_jenis_jabatan"
-                        id="id_jenis_jabatan">
-                        <option disabled selected>Pilih Jenis Jabatan</option>
-                        @foreach ($jenisJabatan as $item)
-                            <option value="{{ $item['id'] }}">{{ $item['value'] }}</option>
-                        @endforeach
-                    </select>
-                      <small class="text-danger id_jenis_jabatan_error"></small>
-                </div>
-
-                  
-
-                <div class="form-group">
-                    <label>Nilai Jabatan</label>
-                    <input type="text" class="form-control form-control-solid price" name="nilai_jabatan">
-                      <small class="text-danger nilai_jabatan_error"></small>
-                </div>
-
-                <div class="form-group">
-                    <label>Status Jabatan</label>
-                    <div class="radio-inline">
-                        <label class="radio">
-                            <input type="radio" value="Definitif" name="status_jabatan">
-                            <span></span>Definitif</label>
-                        <label class="radio">
-                            <input type="radio" value="PLT/PLS" name="status_jabatan">
-                            <span></span>PLT/PLS</label>
-                    </div>
-                      <small class="text-danger status_jabatan_error"></small>
                 </div>
 
                 <div class="form-group">
@@ -189,6 +142,69 @@
                       <small class="text-danger id_pegawai_error"></small>
 
                 </div>
+
+                  <div class="form-group">
+                    <label>Status Jabatan</label>
+                    <div class="radio-inline">
+                        <label class="radio">
+                            <input type="radio" value="Definitif" name="status_jabatan">
+                            <span></span>Definitif</label>
+                        <label class="radio">
+                            <input type="radio" value="PLT/PLS" name="status_jabatan">
+                            <span></span>PLT/PLS</label>
+                    </div>
+                      <small class="text-danger status_jabatan_error"></small>
+                </div>
+
+                <div class="form-group">
+                    <label>Kelas Jabatan</label>
+                    <select class="form-control form-control-solid" type="text" id="kelas_jabatan"
+                        name="kelas_jabatan">
+                        <option disabled selected> Pilih Kelas Jabatan </option>
+                        @for ($x=0; $x <= 15; $x++)
+                            <option value="{{ $x }}">{{ $x }}</option>
+                        @endfor
+                    </select>
+                      <small class="text-danger kelas_jabatan_error"></small>
+                </div>
+
+                <div class="form-group">
+                    <label>Jenis Jabatan</label>
+                    <select class="form-control form-control-solid" type="text" name="id_jenis_jabatan"
+                        id="id_jenis_jabatan">
+                        <option disabled selected>Pilih Jenis Jabatan</option>
+                        @foreach ($jenisJabatan as $item)
+                            <option value="{{ $item['id'] }}">{{ $item['value'] }}</option>
+                        @endforeach
+                    </select>
+                      <small class="text-danger id_jenis_jabatan_error"></small>
+                </div>
+
+                 <div class="form-group">
+                    <label>Kelompok Jabatan</label>
+                    <select class="form-control form-control-solid select_" type="text" name="kelompok_jabatan"
+                        id="kelompok_jabatan">
+    
+                     
+                    </select>
+                      <small class="text-danger "></small>
+                </div>
+
+                <div class="form-group">
+                    <label>Atasan langsung</label>
+                    <select class="form-control form-control-solid" type="text" name="parent_id" id="parent">
+
+                    </select>
+                      <small class="text-danger parent_id_error"></small>
+                </div>
+                  
+
+                <div class="form-group">
+                    <label>Nilai Jabatan</label>
+                    <input type="text" class="form-control form-control-solid price" name="nilai_jabatan">
+                      <small class="text-danger nilai_jabatan_error"></small>
+                </div>
+                
 
                 <div class="form-group">
                     <label>Pembayaran TPP</label>
@@ -212,23 +228,8 @@
                       <small class="text-danger target_waktu_error"></small>
                 </div>
 
-                <div class="form-group">
-                    <label>Kelompok Jabatan</label>
-                    <select class="form-control form-control-solid select_" type="text" name="kelompok_jabatan"
-                        id="kelompok_jabatan">
-    
-                     
-                    </select>
-                      <small class="text-danger "></small>
-                </div>
-
-                <div class="form-group">
-                    <label>Atasan langsung</label>
-                    <select class="form-control form-control-solid" type="text" name="parent_id" id="parent">
-
-                    </select>
-                      <small class="text-danger parent_id_error"></small>
-                </div>
+               
+                
 
                 <div class="form-group">
 
@@ -266,7 +267,6 @@
         let role = {!! json_encode($role) !!};
 
         let dinas = $('#filter-satuan-kerja').val();
-        console.log(dinas);
 
         $(function() {
             datatable_(dinas);
@@ -493,6 +493,8 @@
         $(document).on('change','#id_jenis_jabatan',function () {
            let params = $(this).val();
             kelompok_jabatan_select(params);
+              jenis_jabatan(params, '');
+            //   beddu
         })
 
 
@@ -563,6 +565,7 @@
         })
 
         function kelompok_jabatan_select(params, value = null) {
+            // alert('kelompok jabatan');
          $('#kelompok_jabatan').html('').trigger('change');
             $.ajax({
                 url : '/admin/master-aktivitas/kelompok-jabatan/get-option/'+params,
@@ -585,6 +588,37 @@
                 }
             })
         }
+
+         function jenis_jabatan(val, parent) {
+         
+                let newOption = '<option selected disabled>Pilih atasan langsung</option><option>-</option>';
+                $.ajax({
+                    type: "GET",
+                    url: "/admin/jabatan/getParent/" + val + '?satuan_kerja='+$('#id_satuan_kerja').val(),
+                    success: function(response) {
+                        console.log(response);
+                        $('#parent').empty();
+                        if (response != '') {
+
+
+                            $.each(response, function(indexInArray, valueOfElement) {
+                                // var newOption = new Option(valueOfElement.value, valueOfElement.id, false, false);
+                                // console.log(newOption);
+                                newOption +=
+                                    `<option value="${valueOfElement.id}">${valueOfElement.value}</option>`;
+
+
+                            });
+
+                            $('#parent').append(newOption).trigger('change');
+                            if (parent !== '') {
+                                $('#parent').val(parent);
+                                $("#parent").trigger('change');
+                            }
+                        }
+                    }
+                });
+            }
 
         jQuery(document).ready(function() {
             Panel.init('side_form');
@@ -680,50 +714,6 @@
                 });
 
             })
-
-            $(document).on('change', '#id_jenis_jabatan', function() {
-                let val = $(this).val();
-                jenis_jabatan(val, '');
-            })
-
-            function jenis_jabatan(val, parent) {
-                // let newOption = '';
-                let newOption = '<option selected disabled>Pilih atasan langsung</option><option>-</option>';
-                // $('#parent').append(fist_element).trigger('change');
-                $.ajax({
-                    type: "GET",
-                    url: "/admin/jabatan/getParent/" + val,
-                    success: function(response) {
-                        $('#parent').empty();
-                        if (response != '') {
-
-
-                            $.each(response, function(indexInArray, valueOfElement) {
-                                // var newOption = new Option(valueOfElement.value, valueOfElement.id, false, false);
-                                // console.log(newOption);
-                                newOption +=
-                                    `<option value="${valueOfElement.id}">${valueOfElement.value}</option>`;
-
-
-                            });
-
-                            $('#parent').append(newOption).trigger('change');
-                            if (parent !== '') {
-                                $('#parent').val(parent);
-                                $("#parent").trigger('change');
-                            }
-                        }
-                    }
-                });
-            }
-
-
-
-
-
-            // jenis_jabatan = (val) =>{
-
-            // }
 
         });
 

@@ -24,9 +24,12 @@ class AuthController extends Controller
        
         if ($current_user > 0) {
            $role = session()->get('user.role');
+  
            if ($role == 'admin_opd') {
                return redirect('/dashboard/admin');
-           }else{
+           }elseif ($role == 'super_admin') {
+            return redirect('/dashboard/super_admin');
+           }{
             return redirect('/dashboard/pegawai');
            }
             // return redirect('/');
