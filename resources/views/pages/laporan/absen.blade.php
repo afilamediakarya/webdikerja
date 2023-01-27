@@ -83,7 +83,7 @@
 
 @section('script')
     <script>
-
+     let type = '';
         function maxdate() {
             var dtToday = new Date();
             // var month = dtToday.getMonth() + 1;
@@ -128,7 +128,7 @@
             }
 
             function pegawaiBySatuanKerja(params) {
-                // alert(params);
+       
                      $('#pegawai').html('').trigger('change');
                 $.ajax({
                     url : '/admin/pegawai/byPerangkatDaerah/'+params,
@@ -165,11 +165,12 @@
             })
 
             $('#preview-excel, #export-excel').on('click', function() {
+             
                 let val_range = $('#kt_daterangepicker_2 input').val();
                 let perangkat_daerah = $('#satuan_kerja option:selected').text();
                 let satuan_kerja = $('#satuan_kerja').val();
                 let pegawai = $("#pegawai").val();
-                let type = '';
+           
 
                 if (typeRole == 'super_admin') {
                     if (pegawai !== 0 && satuan_kerja !== null) {
@@ -211,10 +212,12 @@
 
                     let dataParams = JSON.stringify(params);
                     url = '/laporan-pegawai/export/rekapitulasi_pegawai/' + dataParams+'?perangkat_daerah='+perangkat_daerah+'&pegawai='+pegawai;
-                     $('#satuan_kerja').val(null).trigger('change');
-                         $('#pegawai').val(null).trigger('change');
+                    //  $('#satuan_kerja').val(null).trigger('change');
+                        //  $('#pegawai').val(null).trigger('change');
+                         
+                         pegawaiBySatuanKerja(current.id_satuan_kerja);
                     window.open(url);
-                       $('#pegawai').val('').trigger('change');
+                    //    $('#pegawai').val('').trigger('change');
                 } else {
                     Swal.fire(
                         "Perhatian",

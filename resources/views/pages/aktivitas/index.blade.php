@@ -435,6 +435,8 @@
                             }).then(function() {
                                 $("#createForm")[0].reset();
                                 Panel.action('hide');
+                                // $('.select2').select2('val', '');
+                                $('.select2').val(null).trigger('change');
                                 // calendar.addEventSource( response );
                                 kalender.refetchEvents();
 
