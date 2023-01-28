@@ -112,19 +112,28 @@ class AktivitasController extends Controller
 
         $checkAbsen =  Http::withToken($token)->get($url."/absen/check-absen-by-date?tanggal=".$request->tanggal);
 
-        if ($checkAbsen['status'] !== true && $checkAbsen['data'] == null) {
-            return response()->json(['invalid'=> ['error'=> [
-                'text' => 'Anda belum bisa menambah aktivitas',
-                'title' => 'Maaf Anda belum Absen'
-            ]] ]);
+        if ($checkAbsen['data'] == null) {
+             return response()->json(['invalid'=> ['error'=> [
+                    'text' => 'Anda belum bisa menambah aktivitas',
+                    'title' => 'Maaf Anda belum Absen'
+                ]] ]);
+        }else{
+            if ($checkAbsen['data']['status'] == 'izin' || $checkAbsen['data']['status'] == 'sakit'  || $checkAbsen['data']['status'] == 'cuti') {
+                return response()->json(['invalid'=> ['error'=> [
+                    'text' => 'Anda belum bisa menambah aktivitas',
+                    'title' => 'Maaf Anda sedang '.$checkAbsen['data']['status']
+                ]] ]);
+            }
         }
 
-        $response = Http::withToken($token)->post($url."/aktivitas/store", $filtered);
+         $response = Http::withToken($token)->post($url."/aktivitas/store", $filtered);
         if($response->successful()){
             return response()->json(['success'=> 'Berhasil Menambah Data']);
         }else{
             return response()->json(['invalid'=> $response->json()]);
         }
+
+        
     }
 
     public function update(Request $request,$id){

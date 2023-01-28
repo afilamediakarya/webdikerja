@@ -49,6 +49,7 @@ Route::post('/login', [AuthController::class, 'setLogin'])->name('do-Login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::get('/laporan/viewexport/rekapitulasi_pegawai/{params1}/{params2}/{params3}', [LaporanController::class, 'viewexportRekapAbsen'])->name('laporan-view-absen-pegawai');
+ Route::get('/laporan-kinerja', [LaporanController::class, 'kinerjaView'])->name('laporan-kinerja-view');
 Route::get('/maintanence', [AuthController::class, 'aborts'])->name('aborts');
 Route::get('/', [AuthController::class, 'indexes'])->name('indexes');
 Route::get('set-tahun-penganggaran', [Controller::class, 'setTahunAnggaran'])->name('set-tahun-penganggaran');

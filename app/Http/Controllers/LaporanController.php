@@ -60,6 +60,22 @@ class LaporanController extends Controller
         return view('pages.laporan.kinerja', compact('page_title', 'page_description', 'breadcumb','getDataDinas','level','type','id_pegawai'));
     }
 
+    public function kinerjaView(){
+              $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $bulan = request('bulan');
+        $pegawai = request('pegawai');
+        $tahun = date('Y');
+        $nama_bulan = date('nama_bulan');
+        $nama_dinas = request('nama_dinas');
+        $data_kinerja_pegawai = Http::withToken($token)->get($url . "/laporan-kinerja?bulan=".$bulan."&pegawai=".$pegawai);
+        $data = $data_kinerja_pegawai->json();
+
+        $fungsi = 'export_kinerja_pegawai';
+        // return $data;
+        return $this->{$fungsi}('pegawai',$data,$tahun,$nama_bulan,$nama_dinas,'pdf');
+    }
+
     public function skp(Request $request)
     {
         $url = env('API_URL');
@@ -394,7 +410,7 @@ class LaporanController extends Controller
             if ($value['kelas_jabatan'] == 1 || $value['kelas_jabatan'] == 3 || $value['kelas_jabatan'] == 15) {
                 $nilai_kinerja = 100;
             }else{
-                if ($capaian_menit > 0 || $target_nilai > 0) {
+                if ($target_nilai > 0) {
                     $nilai_kinerja = ( $capaian_menit / $target_nilai ) * 100;
                 }else {
                     $nilai_kinerja = 0;
