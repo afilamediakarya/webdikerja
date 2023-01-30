@@ -408,9 +408,11 @@
                                 showConfirmButton:false,
                             });
                         }else if(res.invalid){
+                            alert('pi')
                             $.each(res.invalid, function( key, value ) {
-                                // console.log(value);
+                                console.log(key);
                                 if (key == 'error') {
+                                          console.log(value.text + '|' +value.title);
                                         swal.fire({
                                             text: value.text,
                                             title: value.title,

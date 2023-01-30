@@ -280,6 +280,10 @@ class LaporanController extends Controller
          $nilai_produktivitas_kerja = ($capaian_prod_kinerja / $target_produktivitas_kerja) * 100;
        }
 
+       if ($nilai_produktivitas_kerja > 100) {
+            $nilai_produktivitas_kerja = 100;
+       }
+
     
 
         for ($i=0; $i < 3 ; $i++) { 
@@ -711,6 +715,10 @@ class LaporanController extends Controller
                 $nilaiKinerjaByAktivitas = 0;
             }
                 
+            }
+
+            if ($nilaiKinerjaByAktivitas > 100) {
+                $nilaiKinerjaByAktivitas = 100;
             }
 
           
