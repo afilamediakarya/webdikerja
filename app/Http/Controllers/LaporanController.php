@@ -356,7 +356,7 @@ class LaporanController extends Controller
 
     // rekaptulasi kinerja
     public function export_kinerja_rekapitulasi($tipe,$data,$tahun,$nama_bulan,$nama_dinas,$export_type){
-    
+   
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
@@ -433,6 +433,10 @@ class LaporanController extends Controller
             }
 
             // return $pegawai_ttd;
+
+            if ($nilai_kinerja > 100) {
+                $nilai_kinerja = 100;
+            }
 
             $nilai_kinerja < 50 ? $keterangan = 'TMS' : $keterangan = 'MS';
 
@@ -549,6 +553,7 @@ class LaporanController extends Controller
         $data = array();
         $response = '';
         $response = Http::withToken($token)->get($url . "/laporan-rekapitulasi-tpp/admin-opd?satuan_kerja=".$val->satuanKerja.'&bulan='.$val->month);
+        // return $response;
 
         $data = $response['data'];
 
@@ -708,13 +713,12 @@ class LaporanController extends Controller
              
             if ($capaian_prod > 0 || $target_prod > 0) {
                 $nilaiKinerjaByAktivitas = ($capaian_prod / $target_prod) * 100;
-            }else {
-                  if ($value['kelas_jabatan'] == 1 || $value['kelas_jabatan'] == 3 || $value['kelas_jabatan'] == 15) {
-                $nilaiKinerjaByAktivitas = 100;
             }else{
                 $nilaiKinerjaByAktivitas = 0;
             }
-                
+
+            if ($value['kelas_jabatan'] == 1 || $value['kelas_jabatan'] == 3 || $value['kelas_jabatan'] == 15) {
+                    $nilaiKinerjaByAktivitas = 100;
             }
 
             if ($nilaiKinerjaByAktivitas > 100) {
