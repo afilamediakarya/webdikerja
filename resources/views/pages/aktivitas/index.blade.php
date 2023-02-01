@@ -408,7 +408,6 @@
                                 showConfirmButton:false,
                             });
                         }else if(res.invalid){
-                            alert('pi')
                             $.each(res.invalid, function( key, value ) {
                                 console.log(key);
                                 if (key == 'error') {
