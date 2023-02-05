@@ -150,30 +150,21 @@
 
         
         
-        // function maxdate() {
-        //     var dtToday = new Date();
-        //     var month = dtToday.getMonth() + 1;
-        //     var day = dtToday.getDate() - 5;
-        //     var year = dtToday.getFullYear();
-        //     //  date.setMonth (date.getMonth () - 12);
-        //     if(month < 10)
-        //         month = '0' + month.toString();
-        //     if(day < 10)
-        //         day = '0' + day.toString();
-            
-        //     var maxDate = year + '-' + month + '-' + day;
-
-        //     $('#tanggal').attr('min', maxDate);
-        // }
+        function maxdate() {
+            const inputElement = document.getElementById("tanggal");
+            const fiveDaysAgo = new Date();
+            fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+            inputElement.setAttribute("min", fiveDaysAgo.toISOString().split("T")[0]);
+        }
         
         jQuery(document).ready(function() {
             Panel.init('side_form');
 
             $('.select2').select2({
-            placeholder: "Pilih"
-        });
+                placeholder: "Pilih"
+            });
 
-        // maxdate();
+            maxdate();
 
         
 
