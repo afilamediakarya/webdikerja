@@ -149,6 +149,14 @@ $path = explode('/', Request::path());
                                         <span class="menu-text text-capitalize">Review Realisasi SKP</span>
                                     </a>
                                 </li>
+                                <li class="menu-item {{ $path[0] == 'penilaian' && $path[1] == 'kinerja' ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                                    <a href="{{ route('penilaian', ['type' => 'kinerja']) }}" class="menu-link">
+                                        <i class="menu-bullet menu-bullet-dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="menu-text text-capitalize">Review Aktivitas</span>
+                                    </a>
+                                </li>
                                 <!-- <li class="menu-item" aria-haspopup="true">
                                 <a href="{{ route('penilaian', ['type' => 'perilaku']) }}" class="menu-link">
                                     <i class="menu-bullet menu-bullet-dot">

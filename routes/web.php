@@ -118,6 +118,8 @@ Route::middleware('Auth')->group(function () {
     });
 
     Route::get('/penilaian/{type}', [PenilaianController::class, 'index'])->name('penilaian');
+    // Route::get('/penilaian-kinerja', [PenilaianController::class, 'review_aktivitas_view'])->name('penilaian.review_aktivitas');
+
     Route::get('/penilaian-create', [PenilaianController::class, 'create'])->name('tambah-penilaian');
     Route::get('/datatable/penilaian-skp-review', [PenilaianController::class, 'datatable'])->name('datatable-penilaian');
     Route::get('/get_data/penilaian/{type}', [PenilaianController::class, 'getData'])->name('getdata_penilaian');

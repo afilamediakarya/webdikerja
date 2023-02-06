@@ -14,7 +14,21 @@ class PenilaianController extends Controller
         $page_description = 'Daftar Pegawai yang dinilai';
         $breadcumb = ['Daftar Pegawai yang dinilai'];
         $nama_bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-        return view('pages.penilaian.index', compact('page_title', 'page_description', 'breadcumb', 'type', 'nama_bulan'));
+
+        if ($type !== 'kinerja') {
+           return view('pages.penilaian.index', compact('page_title', 'page_description', 'breadcumb', 'type', 'nama_bulan'));
+        }else{
+            $page_title = 'Review Aktivitas';
+            $page_description = 'Daftar kinerja pegawai';
+            $breadcumb = ['Daftar kinerja pegawai'];
+            return view('pages.penilaian.review_aktivitas', compact('page_title', 'page_description', 'breadcumb','type','nama_bulan'));
+        }
+
+        
+    }
+
+    public function review_aktivitas_view(){
+      
     }
 
     public function getData($type)
@@ -26,7 +40,11 @@ class PenilaianController extends Controller
         $response = '';
         if ($type == 'skp') {
             $response = Http::withToken($token)->get($url . "/review_skp/list?tahun=" . session('tahun_penganggaran'));
-        } else {
+        }elseif ($type == 'kinerja') {
+            // return $url . "/aktivitas/review_aktivitas_list?bulan=" . request('bulan');
+            $response = Http::withToken($token)->get($url . "/aktivitas/review_aktivitas_list?bulan=" . request('bulan'));
+        } 
+        else {
             // $response = Http::withToken($token)->get($url."/review_realisasi/list?tahun=".session('tahun_penganggaran'));
             $response = Http::withToken($token)->get($url . "/review_realisasi/list?tahun=" . session('tahun_penganggaran') . "&bulan=" . request('bulan'));
         }
