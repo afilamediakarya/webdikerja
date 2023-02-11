@@ -27,10 +27,6 @@ class PenilaianController extends Controller
         
     }
 
-    public function review_aktivitas_view(){
-      
-    }
-
     public function getData($type)
     {
         // return request('bulan');
@@ -83,7 +79,10 @@ class PenilaianController extends Controller
 
         if ($type == 'realisasi') {
             $data = Http::withToken($token)->get($url . "/review_realisasi/skpbyId/" . request('id_pegawai') . "?type=pegawai&bulan=" . request('bulan') . "&tahun=" . session('tahun_penganggaran'));
-        } else {
+        }elseif ($type == 'kinerja') {
+           $data = Http::withToken($token)->get($url . "/aktivitas/review_aktivitas_list/" . request('id_pegawai') . "?&bulan=" . request('bulan'));
+        }
+         else {
             $data = Http::withToken($token)->get($url . "/review_skp/skpbyId/" . request('id_pegawai') . "?&tahun=" . session('tahun_penganggaran'));
         }
         return $data;
@@ -98,6 +97,25 @@ class PenilaianController extends Controller
         $page_description = 'Daftar Pegawai yang dinilai';
         $breadcumb = ['Daftar Pegawai yang dinilai', 'Tambah Realisasi'];
         return view('pages.penilaian.' . request('type'), compact('page_title', 'page_description', 'breadcumb', 'id_pegawai', 'level', 'bulan'));
+    }
+
+    public function create_penilaian_kinerja(){
+        $pegawai = request('pegawai');
+        $bulan = request('bulan');
+        $page_title = 'Penilaian';
+        $page_description = 'Daftar Review kinerja';
+        $breadcumb = ['Review Aktivitas', 'Review kinerja'];
+        return view('pages.penilaian.realisasi_aktivitas',compact('page_title','page_description','breadcumb','bulan'));
+    }
+
+    public function realisasi_kinerja(){
+        // $id_pegawai = request('id_pegawai');
+        // $level = json_decode($this->checkLevelByIdPegawai($id_pegawai))->level_jabatan;
+        $bulan = request('bulan');
+        $page_title = 'Penilaian';
+        $page_description = 'Daftar Pegawai yang dinilai';
+        $breadcumb = ['Daftar Pegawai yang dinilai', 'Tambah Realisasi'];
+        return view('pages.penilaian.' . request('type'), compact('page_title', 'page_description', 'breadcumb', 'bulan'));
     }
 
     public function createRealisasi($type, $id, $bulan)

@@ -127,6 +127,7 @@ class AktivitasController extends Controller
         }
 
          $response = Http::withToken($token)->post($url."/aktivitas/store", $filtered);
+        //  return $response;
         if($response->successful()){
             return response()->json(['success'=> 'Berhasil Menambah Data']);
         }else{

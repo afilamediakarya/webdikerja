@@ -113,7 +113,7 @@
                         title: 'Actions',
                         orderable: false,
                         render: function(data) {
-                            return `<a href="#" role="button" class="btn btn-primary">Review</a>`;
+                            return `<a href="/penilaian-kinerja?pegawai=${data.id_pegawai}&bulan=${bulan}" role="button" class="btn btn-primary">Review</a>`;
 
                         },
                     }

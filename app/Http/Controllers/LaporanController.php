@@ -3299,8 +3299,9 @@ class LaporanController extends Controller
                     $tes = [];
                     if ($v['jenis'] == 'checkin') {
 
-                        if ((int)$v['jumlah_hadir'] > 0) {
+                        if ((int)$v['jumlah_hadir'] > 0 || (int)$v['jumlah_apel'] > 0) {
                             $jumlah_hadir += (int)$v['jumlah_hadir'];
+                            $jumlah_hadir += (int)$v['jumlah_apel'];
                         }
 
                         if ((int)$v['jumlah_sakit'] > 0) {
@@ -3354,7 +3355,6 @@ class LaporanController extends Controller
             }
 
               $jumlah_tidak_hadir_apel = ((int)$data['count_monday'] - $jumlah_tidak_hadir_apel); 
-
                 $sheet->setCellValue('D' . $cell, $jumlah_hadir);
                 $sheet->setCellValue('E' . $cell, $jumlah_sakit);
                 $sheet->setCellValue('F' . $cell, $jumlah_cuti);

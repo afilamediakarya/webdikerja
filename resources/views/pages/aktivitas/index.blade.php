@@ -136,6 +136,7 @@
 
         $(document).on('click','#kt_quick_user_toggle', function () {
             // if (dataabsen.status == true) {
+                $("#createForm")[0].reset();
                 Panel.action('show','submit');                
             // }else{
             //       swal.fire({
