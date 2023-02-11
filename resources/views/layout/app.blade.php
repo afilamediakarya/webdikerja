@@ -145,6 +145,7 @@
                         </div>
                     </div>
                     <!--end::Subheader-->
+                    <marquee><p class="text-danger">- Batas waktu penginputan aktifitas 5 hari sebelumnya - Batas waktu perubahan data absen paling lambat 5 hari sebelumnya</p></marquee>
 
                     @yield('content')
 
