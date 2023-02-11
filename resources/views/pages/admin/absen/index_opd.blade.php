@@ -519,12 +519,19 @@
         // or instead:
         // var maxDate = dtToday.toISOString().substr(0, 10);
         // alert();
-        $('.tanggal_').attr('min', maxDate);
+        // $('.tanggal_').attr('min', maxDate);
 
-            const inputElement = document.getElementsByClassName("tanggal_");
+            // const inputElement = document.getElementsByClassName("tanggal_");
+            // const fiveDaysAgo = new Date();
+            // fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+            // inputElement.setAttribute("min", fiveDaysAgo.toISOString().split("T")[0]);
+
+                        const inputElement = document.getElementById("filter-tanggal");
             const fiveDaysAgo = new Date();
             fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+            minDate = fiveDaysAgo.toISOString().split("T")[0]
             inputElement.setAttribute("min", fiveDaysAgo.toISOString().split("T")[0]);
+
     }
 
         jQuery(document).ready(function() {

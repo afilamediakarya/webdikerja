@@ -133,10 +133,12 @@
         // }
 
         let dataabsen = {!! json_encode($checkAbsen) !!};
+        let minDate = '';
 
         $(document).on('click','#kt_quick_user_toggle', function () {
             // if (dataabsen.status == true) {
                 $("#createForm")[0].reset();
+                $("#tanggal").prop("disabled", false);
                 Panel.action('show','submit');                
             // }else{
             //       swal.fire({
@@ -155,6 +157,7 @@
             const inputElement = document.getElementById("tanggal");
             const fiveDaysAgo = new Date();
             fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+            minDate = fiveDaysAgo.toISOString().split("T")[0]
             inputElement.setAttribute("min", fiveDaysAgo.toISOString().split("T")[0]);
         }
         
@@ -246,6 +249,14 @@
          
                                 Panel.action('show','update');
                                 $.each(data, function( key, value ) {
+                                    if (key == 'tanggal') {
+                                        if (value < minDate) {
+                                            $("#tanggal").prop("disabled", true);
+                                        }else{
+                                            $("input[name='"+key+"']").val(value);
+                                        }
+                                        
+                                    }
                                     $("input[name='"+key+"']").val(value);
                                     $("select[name='"+key+"']").val(value);
                                     $("textarea[name='"+key+"']").val(value);
