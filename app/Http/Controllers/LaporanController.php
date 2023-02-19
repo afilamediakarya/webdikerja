@@ -3246,6 +3246,8 @@ class LaporanController extends Controller
         $total_potongan_apel = 0;
         $jml_potongan_kehadiran_kerja = 0;
 
+        // return $data['pegawai'];
+
         foreach ($data['pegawai'] as $i => $val) {        
             $total_potongan_persen_keterlambatan = 0;
              $total_potongan_persen_pulang_kerja = 0;
@@ -3299,21 +3301,29 @@ class LaporanController extends Controller
                     $tes = [];
                     if ($v['jenis'] == 'checkin') {
 
-                        if ((int)$v['jumlah_hadir'] > 0 || (int)$v['jumlah_apel'] > 0) {
-                            $jumlah_hadir += (int)$v['jumlah_hadir'];
-                            $jumlah_hadir += (int)$v['jumlah_apel'];
+                        if ((int)$v['jumlah_hadir'] > 0) {
+                            $jumlah_hadir += 1;
                         }
 
+                        if ((int)$v['jumlah_apel'] > 0) {
+                           $jumlah_hadir += 1;
+                        }
+
+                        // if ((int)$v['jumlah_hadir'] > 0) {
+                        //     $jumlah_hadir += (int)$v['jumlah_hadir'];
+                        //     // $jumlah_hadir += (int)$v['jumlah_apel'];
+                        // }
+
                         if ((int)$v['jumlah_sakit'] > 0) {
-                            $jumlah_sakit += (int)$v['jumlah_sakit'];
+                            $jumlah_sakit += 1;
                         }
 
                         if ((int)$v['jumlah_cuti'] > 0) {
-                            $jumlah_cuti += (int)$v['jumlah_cuti'];
+                            $jumlah_cuti += 1;
                         }
 
                         if ((int)$v['jumlah_dinas_luar'] > 0) {
-                            $jumlah_dinas_luar += (int)$v['jumlah_dinas_luar'];
+                            $jumlah_dinas_luar += 1;
                         }
 
                         $jml_hari_kerja[] = $v['id'];
