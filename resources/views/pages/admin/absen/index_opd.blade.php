@@ -136,7 +136,7 @@
                     <div class="row">
                         <div class="form-group col-6">
                             <label>Tanggal</label>
-                            <input type="date" class="form-control tanggal_" name="tanggal">
+                            <input type="date" class="form-control tanggal_" id="filter-tanggal-form" name="tanggal">
                            <small class="text-danger tanggal_error"></small>
                         </div>
                         <div class="form-group col-6 form-create-form">
@@ -503,34 +503,13 @@
         }
     })
 
-    function  maxdate() {
-        //  var dtToday = new Date();
-        // var month = dtToday.getMonth() + 1;
-        // var day = dtToday.getDate() - 5 ;
-        // var year = dtToday.getFullYear();
-        // //  date.setMonth (date.getMonth () - 12);
-        // if(month < 10)
-        //     month = '0' + month.toString();
-        // if(day < 10)
-        //     day = '0' + day.toString();
-        
-        // var maxDate = year + '-' + month + '-' + day;
-        // let maxDate = date('Y-m-d', strtotime('-7 days', strtotime( date )))
-        // or instead:
-        // var maxDate = dtToday.toISOString().substr(0, 10);
-        // alert();
-        // $('.tanggal_').attr('min', maxDate);
+    function  maxdate(params) {
 
-            // const inputElement = document.getElementsByClassName("tanggal_");
-            // const fiveDaysAgo = new Date();
-            // fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
-            // inputElement.setAttribute("min", fiveDaysAgo.toISOString().split("T")[0]);
-
-                        const inputElement = document.getElementById("filter-tanggal");
-            const fiveDaysAgo = new Date();
-            fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
-            minDate = fiveDaysAgo.toISOString().split("T")[0]
-            inputElement.setAttribute("min", fiveDaysAgo.toISOString().split("T")[0]);
+        const inputElement = document.getElementById(params);
+        const fiveDaysAgo = new Date();
+        fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+        minDate = fiveDaysAgo.toISOString().split("T")[0]
+        inputElement.setAttribute("min", fiveDaysAgo.toISOString().split("T")[0]);
 
     }
 
@@ -545,7 +524,8 @@
             });
             
             satuanKerjaChange();
-            maxdate();
+            maxdate('filter-tanggal');
+            maxdate('filter-tanggal-form');
 
             datatable_();
 

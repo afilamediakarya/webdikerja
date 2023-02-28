@@ -63,7 +63,7 @@ class LaporanController extends Controller
     }
 
     public function kinerjaView(){
-              $url = env('API_URL');
+        $url = env('API_URL');
         $token = session()->get('user.access_token');
         $bulan = request('bulan');
         $pegawai = request('pegawai');
@@ -130,7 +130,7 @@ class LaporanController extends Controller
 
 
         $fungsi = 'export_kinerja_'.$tipe;
-        // return $data;
+        return $fungsi;
         return $this->{$fungsi}($tipe,$data,$tahun,$nama_bulan,$nama_dinas,$export_type);
 
     }
