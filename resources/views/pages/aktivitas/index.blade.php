@@ -120,35 +120,13 @@
     <script src="{{asset('plugins/custom/fullcalendar/fullcalendar.bundle.js')}}"></script>
     <script>
 
-        // function checkAbsen(params) {
-        //     // console.log(params['status']);
-        //     if (params['status'] == true) {
-        //         if (params['data']['status'] !== 'hadir') {
-        //             // || params['data']['status'] !== 'izin' || params['data']['status'] !== 'sakit'
-        //             // $('#kt_quick_user_toggle').prop('disabled', false);
-        //         }
-        //     }else{
-        //             //    $('#kt_quick_user_toggle').prop('disabled', true);
-        //     }
-        // }
-
         let dataabsen = {!! json_encode($checkAbsen) !!};
         let minDate = '';
 
         $(document).on('click','#kt_quick_user_toggle', function () {
-            // if (dataabsen.status == true) {
-                $("#createForm")[0].reset();
-                $("#tanggal").prop("disabled", false);
-                Panel.action('show','submit');                
-            // }else{
-            //       swal.fire({
-            //         text: "Anda belum bisa menambah aktivitas",
-            //         title:"Maaf Anda belum Absen",
-            //         timer: 2000,
-            //         icon: "warning",
-            //         showConfirmButton:false,
-            //     });
-            // }
+            $("#createForm")[0].reset();
+            $("#tanggal").prop("disabled", false);
+            Panel.action('show','submit');               
         })
 
         
@@ -169,8 +147,6 @@
             });
 
             maxdate();
-
-        
 
             $(document).on('click','.btn-cancel', function(){
                 Panel.action('hide');

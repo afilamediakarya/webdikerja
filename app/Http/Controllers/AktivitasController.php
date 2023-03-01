@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Collection;
-
 class AktivitasController extends Controller
 {
 
@@ -110,7 +109,7 @@ class AktivitasController extends Controller
             ARRAY_FILTER_USE_KEY
         );
 
-        $checkAbsen =  Http::withToken($token)->get($url."/absen/check-absen-by-date?tanggal=".$request->tanggal);
+        $checkAbsen =  Http::withToken($token)->get($url."/absen/check-absen-by-date?tanggal=".$request->tanggal."&pegawai=".request('pegawai'));
 
         if ($checkAbsen['data'] == null) {
              return response()->json(['invalid'=> ['error'=> [
@@ -157,6 +156,21 @@ class AktivitasController extends Controller
         }else{
             return response()->json(['invalid'=> $response->json()]);
         }
+    }
+
+   public function delete(Request $request, $id)
+    {
+        $url = env('API_URL');
+        $token = $request->session()->get('user.access_token');
+        $response = Http::withToken($token)->delete($url . "/aktivitas/delete/" . $id);
+        if ($response->successful()) {
+            return response()->json([
+                'success' => true,
+                'data' => $response->json()
+            ]);
+        }
+
+        return response()->json(['error' => true]);
     }
 
 }

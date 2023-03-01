@@ -118,14 +118,16 @@ Route::middleware('Auth')->group(function () {
     });
 
     Route::get('/penilaian/{type}', [PenilaianController::class, 'index'])->name('penilaian');
-    // Route::get('/penilaian-kinerja', [PenilaianController::class, 'review_aktivitas_view'])->name('penilaian.review_aktivitas');
 
-    Route::get('/penilaian-create', [PenilaianController::class, 'create'])->name('tambah-penilaian');
+    // Route::get('/penilaian-create', [PenilaianController::class, 'create'])->name('tambah-penilaian');
     Route::get('/datatable/penilaian-skp-review', [PenilaianController::class, 'datatable'])->name('datatable-penilaian');
     Route::get('/get_data/penilaian/{type}', [PenilaianController::class, 'getData'])->name('getdata_penilaian');
     // Route::get('/get_data/penilaian/{type}', [PenilaianController::class, 'getData'])->name('getdata_penilaian');
     Route::post('/review_skp', [PenilaianController::class, 'postReviewSkp'])->name('postReviewSkp');
     Route::post('/review_realisasi', [PenilaianController::class, 'postReviewRealisasiSkp'])->name('postReviewRealisasiSkp');
+    Route::post('/review_aktivitas', [PenilaianController::class, 'postReviewAktivitas'])->name('postReviewAktivitas');
+
+        Route::get('/penilaian-kinerja', [PenilaianController::class, 'create_penilaian_kinerja'])->name('create_penilaian_kinerja');
 
     Route::prefix('aktivitas')->group(function () {
         Route::get('/', [AktivitasController::class, 'index'])->name('aktivitas');
@@ -133,6 +135,7 @@ Route::middleware('Auth')->group(function () {
         Route::post('/store', [AktivitasController::class, 'store'])->name('store-aktivitas');
         Route::get('/detail/{params}', [AktivitasController::class, 'detail'])->name('detail-aktivitas');
         Route::post('/update/{params}', [AktivitasController::class, 'update'])->name('update-aktivitas');
+        Route::delete('/delete/{params}', [AktivitasController::class, 'delete'])->name('delete-aktivitas');
     });
 
     Route::prefix('bankom')->group(function () {
