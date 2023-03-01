@@ -130,7 +130,6 @@ class LaporanController extends Controller
 
 
         $fungsi = 'export_kinerja_'.$tipe;
-        return $fungsi;
         return $this->{$fungsi}($tipe,$data,$tahun,$nama_bulan,$nama_dinas,$export_type);
 
     }
