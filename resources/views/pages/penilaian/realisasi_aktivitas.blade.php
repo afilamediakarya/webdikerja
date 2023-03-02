@@ -77,7 +77,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label>Tanggal Kegiatan </label>
-                                <input type="date" id="tanggal" class="form-control" name="tanggal"/>
+                                <input type="date" id="tanggal" class="form-control" onkeydown="return false" name="tanggal"/>
                             </div>
                         </div>
                         <input type="text" style="display:none" name="id">
