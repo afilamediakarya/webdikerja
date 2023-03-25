@@ -356,7 +356,7 @@
                                 confirmButton: "btn font-weight-bold btn-light-primary"
                             }
                         }).then(function() {
-                            // window.location.href = '/penilaian/skp';
+                            window.location.href = '/penilaian/kinerja';
                             table.DataTable().ajax.reload();
                         });
                     },
