@@ -69,7 +69,6 @@ class JabatanController extends Controller
                 return $data;
             }
         }
-
         return view('pages.admin.jabatan.index', compact('page_title', 'page_description', 'breadcumb', 'kelas', 'dinas', 'pegawai', 'jenisJabatan', 'role', 'lokasiKerja'));
     }
 

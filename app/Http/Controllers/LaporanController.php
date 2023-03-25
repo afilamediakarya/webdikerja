@@ -237,10 +237,13 @@ class LaporanController extends Controller
          $sheet->setCellValue('G12', 'Keterangan aktivitas')->mergeCells('G12:H12');
         $sheet->setCellValue('I12', 'Output');
         $sheet->setCellValue('J12', 'Waktu (menit)');
+        $sheet->setCellValue('K12', 'Waktu di muat');
         $sheet->getStyle('I12')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('J12')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('K12')->getAlignment()->setHorizontal('center');
 
-              $sheet->getStyle('A12:J12')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('BCCBE1');
+
+              $sheet->getStyle('A12:K12')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('BCCBE1');
 
 
         // $sheet->setCellValue('F12', 'Waktu (Menit)');
@@ -271,6 +274,9 @@ class LaporanController extends Controller
 
                 foreach ($value['aktivitas'] as $k => $v) {
 
+                    $selisih = strtotime($v['created_at']) - strtotime($v['tanggal']);
+                    $selisih_hari = $selisih / (60 * 60 * 24);
+
                     $index2 = $k+1;
                     $capaian_prod_kinerja += $v['waktu'];
                     // $sheet->setCellValue('A' . $cell, $index1.'.'.$index2);
@@ -283,10 +289,14 @@ class LaporanController extends Controller
                     $sheet->setCellValue('I' . $cell, " ".$v['hasil'].' '.$v['satuan']);
                     $sheet->getStyle('I'. $cell)->getAlignment()->setHorizontal('center');
                     $sheet->setCellValue('J' . $cell, $v['waktu']);
+                    $sheet->setCellValue('K' . $cell, date("d/m/y", strtotime($v['created_at'])));
+                    if ($selisih_hari >= 5) {
+                        $sheet->getStyle('K'.$cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('e83343');
+                    }
                     $sheet->getStyle('J'. $cell)->getAlignment()->setHorizontal('center');
-                            // $sheet->getStyle('F'.$cell)->getAlignment()->setHorizontal('center');
-                            // $sheet->getStyle('E'.$cell)->getAlignment()->setHorizontal('center');
                     $cell++;
+//  round($selisih_hari,0)
+                    // Carbon::createFromTimestamp($v['created_at'])->format('Y')
                 }
                
             }
@@ -317,21 +327,21 @@ class LaporanController extends Controller
         for ($i=0; $i < 3 ; $i++) { 
             if ($i == 0) {
                 $sheet->setCellValue('B'.$cell, ' Capaian Produktivitas Kerja (Menit)')->mergeCells('B'.$cell.':I'.$cell);
-                $sheet->setCellValue('J'.$cell, $capaian_prod_kinerja); 
-                        $sheet->getStyle('J'.$cell)->getAlignment()->setHorizontal('center');
-                        $sheet->getStyle('A'.$cell.':J'.$cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('ECF1E0');
+                $sheet->setCellValue('K'.$cell, $capaian_prod_kinerja); 
+                        $sheet->getStyle('K'.$cell)->getAlignment()->setHorizontal('center');
+                        $sheet->getStyle('A'.$cell.':K'.$cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('ECF1E0');
             }elseif ($i == 1) {
                 $sheet->setCellValue('B'.$cell, ' Target Produktivitas Kerja (Menit)')->mergeCells('B'.$cell.':I'.$cell); 
-                $sheet->setCellValue('J'.$cell, $target_produktivitas_kerja); 
-                        $sheet->getStyle('J'.$cell)->getAlignment()->setHorizontal('center');
-                        $sheet->getStyle('A'.$cell.':J'.$cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('ECF1E0');
+                $sheet->setCellValue('K'.$cell, $target_produktivitas_kerja); 
+                        $sheet->getStyle('K'.$cell)->getAlignment()->setHorizontal('center');
+                        $sheet->getStyle('A'.$cell.':K'.$cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('ECF1E0');
             }else{
                 $sheet->setCellValue('B'.$cell, ' Nilai Produktifitas Kerja (%)')->mergeCells('B'.$cell.':I'.$cell);  
-                $sheet->setCellValue('J'.$cell, round($nilai_produktivitas_kerja,2)); 
-                        $sheet->getStyle('J'.$cell)->getAlignment()->setHorizontal('center');
-                        $sheet->getStyle('A'.$cell.':J'.$cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('BCCBE1');
+                $sheet->setCellValue('K'.$cell, round($nilai_produktivitas_kerja,2)); 
+                        $sheet->getStyle('K'.$cell)->getAlignment()->setHorizontal('center');
+                        $sheet->getStyle('A'.$cell.':K'.$cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('BCCBE1');
             }
-            $spreadsheet->getActiveSheet()->getStyle('J'.$cell.':J'.$cell)->getFont()->setBold(true);
+            $spreadsheet->getActiveSheet()->getStyle('J'.$cell.':K'.$cell)->getFont()->setBold(true);
             $cell++;
         }
 
@@ -354,7 +364,7 @@ class LaporanController extends Controller
             ],
         ];
 
-        $sheet->getStyle('A12:J'.$cell)->applyFromArray($border_row);
+        $sheet->getStyle('A12:K'.$cell)->applyFromArray($border_row);
 
 
 
@@ -955,7 +965,6 @@ class LaporanController extends Controller
         $token = session()->get('user.access_token');
 
         $response = Http::withToken($token)->get($url . "/laporan-rekapitulasi-absen/rekapByUser/" . $params1 . "/" . $params2 .'?pegawai='.$pegawai);
-
         if ($response->successful() && isset($response->object()->data)) {
             return $response->json();
         } else {
@@ -3480,6 +3489,19 @@ class LaporanController extends Controller
         $writer->save('php://output');
     }
 
+    function getDateRange()
+    {
+        $start_date = '2023-03-24';
+        $end_date = '2023-04-23';
+
+        $dates = [];
+        for ($date = Carbon::parse($start_date); $date->lte(Carbon::parse($end_date)); $date->addDay()) {
+            $dates[] = $date->format('Y-m-d');
+        }
+
+        return $dates;
+    }
+
     public function konvertWaktu($params, $waktu)
     {
         $diff = '';
@@ -3490,7 +3512,17 @@ class LaporanController extends Controller
             $waktu_absen = strtotime($waktu);
             $diff = $waktu_absen - $waktu_tetap_absen;
         } else {
-            $waktu_tetap_absen = strtotime('16:00:00');
+
+            $waktu_checkout = '16:00:00';
+            $arr = $this->getDateRange();
+            $key = array_search($waktu, $arr);
+            return $key;
+
+            if ($key !== false) {
+                $waktu_checkout = '15:00:00';
+            }
+
+            $waktu_tetap_absen = strtotime($waktu_checkout);
             $waktu_absen = strtotime($waktu);
             $diff = $waktu_tetap_absen - $waktu_absen;
             // return $diff;

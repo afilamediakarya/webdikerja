@@ -42,7 +42,7 @@
                         </div>
                         <div class="col-lg-2">
                         <label for="filter-tanggal" class="form-label">Tanggal</label>
-                            <input type="date" value="{{ date('Y-m-d') }}" class="form-control" id="filter-tanggal">
+                            <input type="date" value="{{ date('Y-m-d') }}" class="form-control tanggal_" id="filter-tanggal">
                         </div>
                         <div class="col-lg-2">
                         <label for="filter-valid" class="form-label">Validation</label>
@@ -79,6 +79,8 @@
                                 <th>Waktu Masuk</th>
                                 <th>Waktu Pulang</th>
                                 <th>Validation</th>
+                                <th>User Update</th>
+                                <th>Waktu Dimuat</th>
                                 <th>Aksi</th>
                             </tr>
                             
@@ -159,7 +161,7 @@
                     <div class="row">
                         <div class="form-group col-6">
                             <label>Tanggal</label>
-                            <input type="date" class="form-control" name="tanggal">
+                            <input type="date" class="form-control tanggal_" name="tanggal">
                            <small class="text-danger tanggal_error"></small>
                         </div>
                         <div class="form-group col-6 form-create-form">
@@ -216,6 +218,10 @@
         satuanKerjaChange('',$(this).val());
     
     })
+
+    $(document).on('keydown','.tanggal_', function(e) {
+        e.preventDefault();
+    });
 
     $(document).on('click','#side_form_open', function (e) {
         e.preventDefault();
@@ -448,6 +454,10 @@
                     },{
                         data:'validation',
                     },{
+                        data:'user_update',
+                    },{
+                        data:'updated_at',
+                    },{
                         data:null,
                     }
                 ],
@@ -463,6 +473,12 @@
                             }
                         },
                     },
+                    // {
+                    //     targets: 7,
+                    //     render: function(data, type, full, meta) {
+                    //        return '-';
+                    //     },
+                    // },
                     {
                         targets: -1,
                         title: 'Actions',

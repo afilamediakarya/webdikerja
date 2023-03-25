@@ -144,7 +144,6 @@ class AbsenController extends Controller
         $token = session()->get('user.access_token');
 
         $response = Http::withToken($token)->post($url . "/absen/store", $filtered);
-
         if ($response->successful()) {
             return response()->json(['success' => $response->json()]);
         } else {

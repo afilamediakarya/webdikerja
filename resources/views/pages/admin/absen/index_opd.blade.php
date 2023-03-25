@@ -194,6 +194,10 @@
         datatable_();
     })
 
+    $(document).on('keydown','.tanggal_', function(e) {
+        e.preventDefault();
+    });
+
 
     $(document).on('click','#side_form_open', function (e) {
         e.preventDefault();

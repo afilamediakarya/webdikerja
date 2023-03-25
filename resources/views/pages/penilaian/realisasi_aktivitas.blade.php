@@ -77,7 +77,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label>Tanggal Kegiatan </label>
-                                <input type="date" id="tanggal" class="form-control" onkeydown="return false" name="tanggal"/>
+                                <input type="date" id="tanggal" class="form-control" name="tanggal"/>
                             </div>
                         </div>
                         <input type="text" style="display:none" name="id">
@@ -147,6 +147,10 @@
             $("#tanggal").prop("disabled", false);
             Panel.action('show','submit');               
         })
+
+        $(document).on('keydown','#tanggal', function(e) {
+            e.preventDefault();
+        });
 
         function maxdate() {
             const inputElement = document.getElementById("tanggal");

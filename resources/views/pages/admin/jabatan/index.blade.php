@@ -6,6 +6,7 @@
 
 
 @section('button')
+    @if($role !== 'admin_opd')
     <button onclick="Panel.action('show','submit')" class="btn btn-primary font-weight-bolder" id="side_form_open">
         <span class="svg-icon">
             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg
@@ -22,6 +23,7 @@
         </span>
         Tambah Jabatan
     </button>
+    @endif
 @endsection
 
 
@@ -76,7 +78,10 @@
                                     <th>Satuan Kerja</th>
                                 @endif
                                 <th>Atasan Langsung</th>
-                                <th>Aksi</th>
+                                @if ($role !== 'admin_opd')
+                                    <th>Aksi</th>
+                                @endif
+                                
                             </tr>
 
                         </thead>
@@ -184,8 +189,6 @@
                     <label>Kelompok Jabatan</label>
                     <select class="form-control form-control-solid select_" type="text" name="kelompok_jabatan"
                         id="kelompok_jabatan">
-    
-                     
                     </select>
                       <small class="text-danger "></small>
                 </div>
@@ -341,18 +344,9 @@
                     data: 'nama'
                 }, {
                     data: 'atasan_langsung'
-                }, {
-                    data: 'id',
                 }];
 
-                columnDefs = [{
-                        targets: -1,
-                        title: 'Actions',
-                        orderable: false,
-                        render: function(data, type, full, meta) {
-                            return `<a href="javascript:;" type="button" data-id="${data}" class="btn btn-secondary button-update">ubah<a>`;
-                        },
-                    },
+                columnDefs = [
                     {
                         targets: 3,
                         render: function(data, type, full, meta) {
