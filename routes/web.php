@@ -77,6 +77,7 @@ Route::middleware('Auth')->group(function () {
         Route::post('/skp/update/{params}', [SkpController::class, 'update'])->name('update-skp');
         // Route::post('/skp/update/kepala/{params}', [SkpController::class, 'update_kepala'])->name('update_kepala');
         Route::delete('/skp/delete/{params}', [SkpController::class, 'delete'])->name('delete-skp');
+        Route::get('/skp-get-option', [SkpController::class, 'getOption'])->name('getoption-skp');
     });
 
 

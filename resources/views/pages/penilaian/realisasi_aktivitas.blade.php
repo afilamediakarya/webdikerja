@@ -73,6 +73,7 @@
 			<div class="offcanvas-content pr-5 mr-n5">
                 <form class="form" id="createForm">
                     <input type="hidden" name="id_pegawai" value="{{$pegawai}}">
+                     <input type="text" style="display:none" name="id">
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
@@ -83,12 +84,9 @@
                         <input type="text" style="display:none" name="id">
                     </div>
                     <div class="form-group">
-                        <label for="exampleSelect1">Sasaran Kinerja</label>
-                        <select class="form-control select2" name="id_skp" id="exampleSelect1">
-                            <option disabled selected>Pilih Sasaran Kinerja</option>
-                           @foreach($sasaran_kinerja as $key => $va)
-                                <option value="{{$va['id']}}">{{$va['value']}}</option>
-                           @endforeach
+                        <label for="option-skp">Sasaran Kinerja</label>
+                        <select class="form-control select2" name="id_skp" id="option-skp">
+                            
                         </select>
                     </div>
                     <div class="form-group">
@@ -179,7 +177,28 @@
             });
         })
 
+        function optionSkp(params) {
+            $('#option-skp').html('');
+            // alert(params);
+            $.ajax({
+                type : 'GET',
+                url : `/skp-get-option?pegawai=${params}`,
+                success : function (res) {
+                    console.log(res);
+                    let option = `<option><option disabled selected>Pilih Sasaran Kinerja</option></option>`;
+                    $.each(res, function (x,y) {
+                        option += `<option value="${y.id}"> ${y.value} </option>`;
+                    })
+                    $('#option-skp').html(option);
+                },error: function (xhr) {
+                    alert('gagal');
+                }
+            });
+            
+        }
+
         $(function() {
+            optionSkp(pegawai);
             maxdate()
             Panel.init('side_form');
             $('.select2').select2({
@@ -252,14 +271,14 @@
                                 checked_false = 'checked';
                             }
                             return `
-                             <input type="hidden" value="${row.id}" name="id_aktivitas${meta.row}" class="test"/>
+                             <input type="hidden" value="${row.id}" name="id_aktivitas[${meta.row}]" class="test"/>
                             <div class="form-group">
                                 <div class="radio-inline">
                                     <label for="kesesuaian_true${meta.row}" class="radio">
-                                    <input type="radio" class="kesesuaian_true" id="kesesuaian_true${meta.row}" ${checked_true} value="1" name="kesesuaian${meta.row}" />
+                                    <input type="radio" class="kesesuaian_true" id="kesesuaian_true${meta.row}" ${checked_true} value="1" name="kesesuaian[${meta.row}]" />
                                     <span></span>Sesuai</label>
                                     <label for="kesesuaian_false${meta.row}" class="radio">
-                                    <input type="radio" class="kesesuaian_flase" id="kesesuaian_false${meta.row}" ${checked_false} value="0" name="kesesuaian${meta.row}" />
+                                    <input type="radio" class="kesesuaian_flase" id="kesesuaian_false${meta.row}" ${checked_false} value="0" name="kesesuaian[${meta.row}]" />
                                     <span></span>Tidak</label>
                                 </div>
                             </div>
@@ -271,7 +290,8 @@
                         title: 'Actions',
                         orderable: false,
                         render: function(data, type, row, meta) {
-                            return `<button type="button" class="btn btn-success btn-sm" id="ubah_review_aktivitas" data-index="${meta.row}"> Ubah </button><button type="button" class="btn btn-danger btn-sm ml-2" id="hapus_aktivitas" data-id="${data}"> Hapus </button>`;
+                            console.log(row);
+                            return `<button type="button" class="btn btn-success btn-sm" id="ubah_review_aktivitas" data-index="${data}"> Ubah </button><button type="button" class="btn btn-danger btn-sm ml-2" id="hapus_aktivitas" data-id="${data}"> Hapus </button>`;
                         },
                     }
                 ],
@@ -329,39 +349,36 @@
 
             $(document).on('click','#ubah_review_aktivitas', function (e) {
                 e.preventDefault();
-                let index = $(this).attr('data-index');
-                 let formData = {
-                    id_aktivitas: $(`input[name="id_aktivitas${index}"]`).val(),
-                    kesesuaian: $(`input[name="kesesuaian${index}"]:checked`).val(),
-                 };
-
-                var serializedData = $.param(formData);
-                $.ajaxSetup({
-                    headers: {
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                    },
-                });
-
+                let id = $(this).attr('data-index');
                 $.ajax({
-                    type: "POST",
-                    url: "/review_aktivitas",
-                    data: serializedData,
-                    success: function(response) {
-                        swal.fire({
-                            text: "Aktivitas berhasil di Review.",
-                            icon: "success",
-                            buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn font-weight-bold btn-light-primary"
-                            }
-                        }).then(function() {
-                            window.location.href = '/penilaian/kinerja';
-                            table.DataTable().ajax.reload();
-                        });
-                    },
-                    error: function(xhr) {
-
+                    url : '/aktivitas/detail/'+id,
+                    method:"GET",
+                    success: function(res){
+                        let data = JSON.parse(res);
+                        if (data.status == true) {
+                            data = data.data;
+                                // optionSkp(pegawai);
+                                Panel.action('show','update');
+                                $.each(data, function( key, value ) {
+                                    if (key == 'tanggal') {
+                                        if (value < minDate) {
+                                            $("#tanggal").prop("disabled", true);
+                                        }else{
+                                            $("input[name='"+key+"']").val(value);
+                                        }
+                                        
+                                    }
+                                    if (key == 'id_skp') {
+                                        console.log(key+ ' | ' +value);
+                                         $("select[name='"+key+"']").val(value);
+                                         $('#exampleSelect1').trigger('change');
+                                    }
+                                    $("input[name='"+key+"']").val(value);
+                                    $("select[name='"+key+"']").val(value);
+                                    $("textarea[name='"+key+"']").val(value);
+                                });
+                                $('.select2').trigger('change');
+                        }
                     }
                 });
             })
@@ -376,8 +393,20 @@
                     },
                 });
 
+                let id_ = $("input[name=id]").val();
+                let url ='';
+                let text = '';
+
+                if (id_ == '') {
+                    url = `/aktivitas/store?pegawai=${pegawai}`;
+                    text = 'Data anda berhasil di simpan';
+                } else {
+                    url = `/aktivitas/update/${id_}?pegawai=${pegawai}`;
+                    text = 'Data anda berhasil di update';
+                }
+
                 $.ajax({
-                    url : `/aktivitas/store?pegawai=${pegawai}`,
+                    url : url,
                     type : 'POST',
                     data : $('#createForm').serialize(),
                     success : function (res) {
@@ -410,7 +439,7 @@
                             });
                         }else if(res.success){
                             swal.fire({
-                                text: 'Aktivitas berhasil di tambahkan',
+                                text: text,
                                 title:"Sukses",
                                 icon: "success",
                                 showConfirmButton:true,
@@ -424,7 +453,40 @@
                         }
                     }   
                 });
-            });
+        });
+
+        $(document).on('click','#submit_review_skp', function () {
+            alert('dsff');
+              // let index = $(this).attr('data-index');
+                $.ajaxSetup({
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                    },
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/review_aktivitas",
+                    data: $('#review_aktivitas').serialize(),
+                    success: function(response) {
+                        swal.fire({
+                            text: "Aktivitas berhasil di Review.",
+                            icon: "success",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn font-weight-bold btn-light-primary"
+                            }
+                        }).then(function() {
+                            window.location.href = '/penilaian/kinerja';
+                            table.DataTable().ajax.reload();
+                        });
+                    },
+                    error: function(xhr) {
+
+                    }
+                });
+        })
         // console.log($('#kt_datatable').column(4).data())
     </script>
 @endsection

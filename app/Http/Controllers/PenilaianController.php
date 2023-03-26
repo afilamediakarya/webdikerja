@@ -30,9 +30,8 @@ class PenilaianController extends Controller
             $page_title = 'Penilaian';
             $page_description = 'Daftar Review kinerja';
             $breadcumb = ['Review Aktivitas', 'Review kinerja | '.request('nama')];
-            $sasaran_kinerja = Http::withToken($token)->get($url."/aktivitas/get-option-sasaran-kinerja?pegawai=".$pegawai)->json();
             $masterAktivitas = Http::withToken($token)->get($url."/master_aktivitas/option")->json();
-            return view('pages.penilaian.realisasi_aktivitas',compact('page_title','page_description','breadcumb','bulan','pegawai','sasaran_kinerja','masterAktivitas'));
+            return view('pages.penilaian.realisasi_aktivitas',compact('page_title','page_description','breadcumb','bulan','pegawai','masterAktivitas'));
         }
 
         

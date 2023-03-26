@@ -56,10 +56,12 @@
                                 </div>
                                 <div class="col-12 row">
 
+                                    @if($TypeRole !== 'admin')
                                     <div class="col">
                                         <button type="reset" id="export-excel" data-type="excel" class="btn btn-block btn-success"><i
                                                 class="flaticon2-pie-chart"></i>Export Excel</button>
                                     </div>
+                                    @endif    
                                     <div class="col">
                                         <button type="reset" id="preview-excel" data-type="pdf" class="btn btn-block btn-danger"><i
                                                 class="flaticon2-pie-chart"></i>Tampilkan Data</button>

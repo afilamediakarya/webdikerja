@@ -580,7 +580,6 @@ class LaporanController extends Controller
             $data = Http::withToken($token)->get($url . "/satuan_kerja/byAdminOpd");
             $satuan_kerja = $data['data'];
         }
-        // return $satuan_kerja;
         return view('pages.laporan.tpp', compact('page_title', 'page_description', 'breadcumb', 'TypeRole', 'satuan_kerja','satuan_kerja_current'));
     }
 

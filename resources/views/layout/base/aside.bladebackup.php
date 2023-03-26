@@ -43,7 +43,7 @@ $path = explode('/', Request::path());
             data-menu-dropdown-timeout="500">
             <!--begin::Menu Nav-->
             <ul class="menu-nav">
-                @if (Session::get('user.role') !== 'super_admin' && Session::get('user.role') !== 'keuangan')
+                @if (Session::get('user.role') !== 'super_admin')
                     <li class="menu-item {{ Request::path() == '/dashboard/pegawai' ? 'menu-item-active' : '' }}"
                         aria-haspopup="true">
                         <a href="{{ url('/dashboard/pegawai') }}" class="menu-link">
@@ -351,7 +351,7 @@ $path = explode('/', Request::path());
                                 <span class="menu-text text-capitalize">Dashboard</span>
                             </a>
                         </li>
-                    @elseif(Session::get('user.role') == 'pegawai')
+                    @else
                         <li class="menu-item {{ $path[0] == 'dashboard' && $path[1] == 'admin' ? 'menu-item-active' : '' }}"
                             aria-haspopup="true">
                             <a href="{{ url('/dashboard/admin') }}" class="menu-link">
@@ -374,7 +374,9 @@ $path = explode('/', Request::path());
                                 <span class="menu-text text-capitalize">Dashboard</span>
                             </a>
                         </li>
-                        <li class="menu-item {{ $path[0] == 'admin' && $path[1] == 'absen' ? 'menu-item-active' : '' }}"
+                    @endif
+
+                    <li class="menu-item {{ $path[0] == 'admin' && $path[1] == 'absen' ? 'menu-item-active' : '' }}"
                         aria-haspopup="true">
                         <a href="{{ route('absen') }}" class="menu-link">
                             <span class="svg-icon menu-icon">
@@ -397,7 +399,6 @@ $path = explode('/', Request::path());
                         </a>
                     </li>
 
-                     @endif
 
                     <li class="menu-item menu-item-submenu {{ $path[0] == 'laporan-admin' ? 'menu-item-open' : '' }}"
                         aria-haspopup="true" data-menu-toggle="hover">
@@ -424,7 +425,6 @@ $path = explode('/', Request::path());
                             <i class="menu-arrow"></i>
                             <ul class="menu-subnav">
 
-                                 @if(Session::get('user.role') !== 'keuangan')
                                 <li class="menu-item {{ $path[0] == 'laporan-admin' && $path[1] == 'skp' ? 'menu-item-active' : '' }}" aria-haspopup="true">
                                     <a href="{{ url('laporan-admin/skp?type=admin') }}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
@@ -433,7 +433,6 @@ $path = explode('/', Request::path());
                                         <span class="menu-text text-capitaslize">SKP</span>
                                     </a>
                                 </li>
-                                @endif
 
                                 @if (Session::get('user.role') == 'super_admin')
                                     <li class="menu-item {{ $path[0] == 'laporan-admin' && $path[1] == 'absen' && $path[2] == 'super_admin' ? 'menu-item-active' : '' }}" aria-haspopup="true">
@@ -444,7 +443,7 @@ $path = explode('/', Request::path());
                                             <span class="menu-text text-capitalize">Kehadiran</span>
                                         </a>
                                     </li>
-                                @elseif(Session::get('user.role') == 'pegawai')
+                                @else
                                     <li class="menu-item {{ $path[0] == 'laporan-admin' && $path[1] == 'absen' && $path[2] == 'admin' ? 'menu-item-active' : '' }}" aria-haspopup="true">
                                         <a href="{{ url('/laporan-admin/absen/admin') }}" class="menu-link">
                                             <i class="menu-bullet menu-bullet-dot">
@@ -455,7 +454,6 @@ $path = explode('/', Request::path());
                                     </li>
                                 @endif
 
-                                @if(Session::get('user.role') !== 'keuangan')
                                 <li class="menu-item {{ $path[0] == 'laporan-admin' && $path[1] == 'kinerja' ? 'menu-item-active menu-item-open' : '' }}" aria-haspopup="true">
                                     <a href="{{ url('laporan-admin/kinerja?type=rekapitulasi') }}" class="menu-link">
                                         <i class="menu-bullet menu-bullet-dot">
@@ -464,9 +462,8 @@ $path = explode('/', Request::path());
                                         <span class="menu-text text-capitalize">Kinerja</span>
                                     </a>
                                 </li>
-                                @endif
 
-                                @if (Session::get('user.role') == 'super_admin' || Session::get('user.role') == 'keuangan')
+                                @if (Session::get('user.role') == 'super_admin')
                                     <li class="menu-item {{ $path[0] == 'laporan-admin' && $path[1] == 'tpp' && $path[2] == 'super_admin' ? 'menu-item-active' : '' }}" aria-haspopup="true">
                                         <a href="{{ url('/laporan-admin/tpp/super_admin') }}" class="menu-link">
                                             <i class="menu-bullet menu-bullet-dot">
@@ -509,7 +506,6 @@ $path = explode('/', Request::path());
                         </div>
                     </li>
 
-                    @if(Session::get('user.role') !== 'keuangan')
                     <li class="menu-item {{ $path[0] == 'admin' && $path[1] == 'pegawai' ? 'menu-item-active' : '' }}"
                         aria-haspopup="true">
                         <a href="{{ route('pegawai') }}" class="menu-link">
@@ -532,51 +528,48 @@ $path = explode('/', Request::path());
                             <span class="menu-text text-capitalize">pegawai</span>
                         </a>
                     </li>
-                    @endif
 
-                    @if(Session::get('user.role') !== 'keuangan')
-                    <li class="menu-item menu-item-submenu {{ $path[0] == 'admin' && $path[1] == 'verifikasi' ? 'menu-item-active menu-item-open' : '' }}"
-                        aria-haspopup="true" data-menu-toggle="hover">
-                        <a href="javascript:;" class="menu-link menu-toggle">
-                            <span class="svg-icon menu-icon">
-                                <!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-arrange.svg-->
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <polygon points="0 0 24 0 24 24 0 24" />
-                                        <path
-                                            d="M4.85714286,1 L11.7364114,1 C12.0910962,1 12.4343066,1.12568431 12.7051108,1.35473959 L17.4686994,5.3839416 C17.8056532,5.66894833 18,6.08787823 18,6.52920201 L18,19.0833333 C18,20.8738751 17.9795521,21 16.1428571,21 L4.85714286,21 C3.02044787,21 3,20.8738751 3,19.0833333 L3,2.91666667 C3,1.12612489 3.02044787,1 4.85714286,1 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z"
-                                            fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                        <path
-                                            d="M6.85714286,3 L14.7364114,3 C15.0910962,3 15.4343066,3.12568431 15.7051108,3.35473959 L20.4686994,7.3839416 C20.8056532,7.66894833 21,8.08787823 21,8.52920201 L21,21.0833333 C21,22.8738751 20.9795521,23 19.1428571,23 L6.85714286,23 C5.02044787,23 5,22.8738751 5,21.0833333 L5,4.91666667 C5,3.12612489 5.02044787,3 6.85714286,3 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z"
-                                            fill="#000000" fill-rule="nonzero" />
-                                    </g>
-                                </svg>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-text text-capitalize">Verifikasi</span>
-                            <i class="menu-arrow"></i>
-                        </a>
-                        <div class="menu-submenu">
-                            <i class="menu-arrow"></i>
-                            <ul class="menu-subnav">
-                                @if (Session::get('user.role') == 'admin_opd')
-                                    <li class="menu-item {{ $path[0] == 'verifikasi' && $path[1] == 'pendidikan-formal' ? 'menu-item-active' : '' }}" aria-haspopup="true">
-                                        <a href="{{ url('/verifikasi/pendidikan-formal') }}" class="menu-link">
-                                            <i class="menu-bullet menu-bullet-dot">
-                                                <span></span>
-                                            </i>
-                                            <span class="menu-text text-capitalize">Pendidikan Formal</span>
-                                        </a>
-                                    </li>
-                                @endif
-                            </ul>
-                        </div>
-                    </li>
-                    @endif
-                 
+                    {{-- @if (Session::get('user.role') == 'admin_opd')
+                        <li class="menu-item menu-item-submenu {{ $path[0] == 'admin' && $path[1] == 'verifikasi' ? 'menu-item-active menu-item-open' : '' }}"
+                            aria-haspopup="true" data-menu-toggle="hover">
+                            <a href="javascript:;" class="menu-link menu-toggle">
+                                <span class="svg-icon menu-icon">
+                                    <!--begin::Svg Icon | path:assets/media/svg/icons/Layout/Layout-arrange.svg-->
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path
+                                                d="M4.85714286,1 L11.7364114,1 C12.0910962,1 12.4343066,1.12568431 12.7051108,1.35473959 L17.4686994,5.3839416 C17.8056532,5.66894833 18,6.08787823 18,6.52920201 L18,19.0833333 C18,20.8738751 17.9795521,21 16.1428571,21 L4.85714286,21 C3.02044787,21 3,20.8738751 3,19.0833333 L3,2.91666667 C3,1.12612489 3.02044787,1 4.85714286,1 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z"
+                                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                            <path
+                                                d="M6.85714286,3 L14.7364114,3 C15.0910962,3 15.4343066,3.12568431 15.7051108,3.35473959 L20.4686994,7.3839416 C20.8056532,7.66894833 21,8.08787823 21,8.52920201 L21,21.0833333 C21,22.8738751 20.9795521,23 19.1428571,23 L6.85714286,23 C5.02044787,23 5,22.8738751 5,21.0833333 L5,4.91666667 C5,3.12612489 5.02044787,3 6.85714286,3 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z"
+                                                fill="#000000" fill-rule="nonzero" />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-text text-capitalize">Verifikasi</span>
+                                <i class="menu-arrow"></i>
+                            </a>
+                            <div class="menu-submenu">
+                                <i class="menu-arrow"></i>
+                                <ul class="menu-subnav">
+                                    @if (Session::get('user.role') == 'admin_opd')
+                                        <li class="menu-item {{ $path[0] == 'verifikasi' && $path[1] == 'pendidikan-formal' ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                                            <a href="{{ url('/verifikasi/pendidikan-formal') }}" class="menu-link">
+                                                <i class="menu-bullet menu-bullet-dot">
+                                                    <span></span>
+                                                </i>
+                                                <span class="menu-text text-capitalize">Pendidikan Formal</span>
+                                            </a>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
+                        </li>
+                    @endif --}}
 
-                    @if(Session::get('user.role') !== 'keuangan')
                     <li class="menu-item {{ $path[0] == 'admin' && $path[1] == 'jabatan' ? 'menu-item-active' : '' }}"
                         aria-haspopup="true">
                         <a href="{{ route('jabatan') }}" class="menu-link">
@@ -599,10 +592,6 @@ $path = explode('/', Request::path());
                             <span class="menu-text text-capitalize">Jabatan</span>
                         </a>
                     </li>
-                    @endif
-                   
-
-                    
 
                     @if (Session::get('user.role') == 'super_admin')
 
@@ -743,6 +732,28 @@ $path = explode('/', Request::path());
                         </li>
                     @endif
 
+                    <!-- <li class="menu-item {{ $path[0] == 'admin' && $path[1] == 'informasi' ? 'menu-item-active menu-item-open' : '' }}"
+                        aria-haspopup="true">
+                        <a href="{{ route('informasi') }}" class="menu-link">
+                            <span class="svg-icon menu-icon">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24" />
+                                        <circle fill="#000000" opacity="0.3" cx="12" cy="12"
+                                            r="10" />
+                                        <rect fill="#000000" x="11" y="10" width="2"
+                                            height="7" rx="1" />
+                                        <rect fill="#000000" x="11" y="7" width="2"
+                                            height="2" rx="1" />
+                                    </g>
+                                </svg>
+                            </span>
+                            <span class="menu-text text-capitalize">informasi</span>
+                        </a>
+                    </li> -->
+
                     @if (Session::get('user.role') == 'super_admin')
                      
                         <li class="menu-item menu-item-submenu {{ $path[0] == 'admin' && $path[1] == 'master' ? 'menu-item-active menu-item-open' : '' }}"
@@ -786,6 +797,15 @@ $path = explode('/', Request::path());
                                             <span class="menu-text text-capitalize">satuan</span>
                                         </a>
                                     </li>
+<!-- 
+                                    <li class="menu-item  {{ $path[0] == 'maintanence' ? 'menu-item-active' : '' }}" aria-haspopup="true">
+                                        <a href="{{ route('aborts') }}" class="menu-link">
+                                            <i class="menu-bullet menu-bullet-dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="menu-text text-capitalize">perilaku</span>
+                                        </a>
+                                    </li> -->
                                
                                 </ul>
                             </div>

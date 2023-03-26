@@ -665,4 +665,12 @@ class SkpController extends Controller
         }
         return $response;
     }
+
+    public function getOption(){
+        $url = env('API_URL');
+        $token = session()->get('user.access_token');
+        $pegawai = request('pegawai');
+        $response = Http::withToken($token)->get($url."/aktivitas/get-option-sasaran-kinerja?pegawai=".$pegawai)->json();
+        return $response;
+    }
 }
