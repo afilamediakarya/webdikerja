@@ -59,8 +59,6 @@ Route::middleware('Auth')->group(function () {
     Route::get('/dashboard/{type}', [PagesController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/pegawai/level', [PagesController::class, 'pegawai_dinilai'])->name('dashboard.pegawai');
 
-    // Route::get('/', [PagesController::class, 'index_'])->name('main');
-
     Route::get('atasan/update/{id}', [AkunController::class, 'update_atasan'])->name("update-atasan");
 
     Route::middleware('roles:pegawai|admin_opd|super_admin')->group(function () {
@@ -155,21 +153,18 @@ Route::middleware('Auth')->group(function () {
         Route::post('/add-pendidikan-formal', [ProfileController::class, 'storePendidikanFormal'])->name('add-pendidikan-formal');
         Route::post('/update-pendidikan-formal', [ProfileController::class, 'updatePendidikanFormal'])->name('update-pendidikan-formal');
         Route::delete('/delete-pendidikan-formal/{id}', [ProfileController::class, 'deletePendidikanFormal'])->name('delete-pendidikan-formal');
-
         // pendidikan non-formal
         Route::get('/list-pendidikan-nonformal', [ProfileController::class, 'listPendidikanNonFormal'])->name('list-pendidikan-nonformal');
         Route::post('/add-pendidikan-nonformal', [ProfileController::class, 'storePendidikanNonFormal'])->name('add-pendidikan-nonformal');
         Route::get('/pendidikan-nonformal/{id}', [ProfileController::class, 'getPendidikanNonFormal'])->name('get-pendidikan-nonformal');
         Route::post('/update-pendidikan-nonformal', [ProfileController::class, 'updatePendidikanNonFormal'])->name('update-pendidikan-nonformal');
         Route::delete('/delete-pendidikan-nonformal/{id}', [ProfileController::class, 'deletePendidikanNonFormal'])->name('delete-pendidikan-nonformal');
-
         // kepangkatan
         Route::get('/list-kepangkatan', [ProfileController::class, 'listKepangkatan'])->name('list-kepangkatan');
         Route::post('/add-kepangkatan', [ProfileController::class, 'storeKepangkatan'])->name('add-kepangkatan');
         Route::get('/kepangkatan/{id}', [ProfileController::class, 'getKepangkatan'])->name('get-kepangkatan');
         Route::post('/update-kepangkatan', [ProfileController::class, 'updateKepangkatan'])->name('update-kepangkatan');
         Route::delete('/delete-kepangkatan/{id}', [ProfileController::class, 'deleteKepangkatan'])->name('delete-kepangkatan');
-
         // jabatan
         Route::get('/list-jabatan', [ProfileController::class, 'listJabatan'])->name('list-jabatan');
         Route::post('/add-jabatan', [ProfileController::class, 'storeJabatan'])->name('add-jabatan');
@@ -191,7 +186,7 @@ Route::middleware('Auth')->group(function () {
         Route::post('/pegawai/{id}', [PegawaiController::class, 'update'])->name('update-profil');
         Route::get('/bantuan', [AkunController::class, 'bantuan'])->name('bantuan');
     });
-    Route::middleware('roles:super_admin|admin_opd|pegawai')->group(function () {
+    Route::middleware('roles:super_admin|admin_opd|pegawai|keuangan')->group(function () {
         Route::prefix('admin')->group(function () {
 
             Route::prefix('pegawai')->group(function () {

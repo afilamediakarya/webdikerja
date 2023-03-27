@@ -109,10 +109,9 @@
              $('#satuan_kerja').val(null).trigger('change');
                          $('#pegawai').val(null).trigger('change');
             let typeRole = {!! json_encode($TypeRole) !!};
-            console.log(typeRole);
             let current = {!! json_encode($current) !!};
 
-            if (typeRole == 'super_admin' || typeRole == 'pegawai') {
+            if (typeRole == 'super_admin' || typeRole == 'keuangan' || typeRole == 'pegawai') {
                 $('#satuan_kerja__').css('display', 'block');
             } else {
                 $('#satuan_kerja__').css('display', 'none');
@@ -128,12 +127,12 @@
             }
 
             function pegawaiBySatuanKerja(params) {
-       
-                     $('#pegawai').html('').trigger('change');
+                $('#pegawai').html('').trigger('change');
                 $.ajax({
                     url : '/admin/pegawai/byPerangkatDaerah/'+params,
                     method : 'GET',
                     success : function (res) {
+                        console.log(res);
                         let newOption = '<option value="0"> Semua </option>'; 
                         $.each(res, function(indexInArray, valueOfElement) {
                                 newOption += `<option value="${valueOfElement.id}">${valueOfElement.value}</option>`;
@@ -172,7 +171,7 @@
                 let pegawai = $("#pegawai").val();
            
 
-                if (typeRole == 'super_admin') {
+                if (typeRole == 'super_admin' || typeRole == 'keuangan') {
                     if (pegawai !== 0 && satuan_kerja !== null) {
                         type = 'pegawai'
                     }

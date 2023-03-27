@@ -51,7 +51,7 @@
                                 </select>
                             </div>
 
-                            @if ($level['current']['role'] == 'super_admin')
+                            @if ($level['current']['role'] == 'super_admin' || $level['current']['role'] == 'keuangan')
                                 <div class="form-group col-3">
                                     <label>Pilih Dinas</label>
                                     <select id="dinas" class="form-control form-control-solid">

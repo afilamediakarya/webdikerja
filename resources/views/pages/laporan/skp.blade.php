@@ -53,7 +53,7 @@
                                 </select>
                             </div> -->
 
-                            @if ($level == 'super_admin' && $type == 'admin')
+                            @if ($level == 'super_admin' || $level == 'keuangan' && $type == 'admin')
                                 <div class="form-group col-3">
                                     <label>Pilih Dinas</label>
                                     <select id="dinas" class="form-control form-control-solid">
@@ -138,7 +138,7 @@
                 if (jenis_skp !== null && bulan !== null) {
 
                     if (type == 'admin') {
-                        if (level == 'super_admin') {
+                        if (level == 'super_admin' || level == 'keuangan') {
                                  let idDinas = $('#dinas').val();
                                 url =
                                     `/laporan-pegawai/export/rekapitulasiSkp/${jenis_skp}/${$(this).attr('data-type')}/${bulan}?dinas=${idDinas}`;

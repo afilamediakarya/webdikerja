@@ -28,14 +28,14 @@ class LaporanController extends Controller
         $token = session()->get('user.access_token');
         $current = session()->get('user.current');
 
-        if ($TypeRole == 'super_admin') {
+        if ($TypeRole == 'super_admin' || $TypeRole == 'keuangan') {
             $data = Http::withToken($token)->get($url . "/satuan_kerja/list");
             $satuan_kerja = $data['data'];
         } else {
             $data = Http::withToken($token)->get($url . "/satuan_kerja/byAdminOpd");
             $satuan_kerja = $data['data'];
         }
-        // return $satuan_kerja;
+        
         return view('pages.laporan.absen', compact('page_title', 'page_description', 'breadcumb', 'TypeRole', 'satuan_kerja','current'));
     }
 
@@ -52,11 +52,10 @@ class LaporanController extends Controller
         $type = request('type');
         $getDataDinas = array();
 
-        if ($level['current']['role'] == 'super_admin') {
+        if ($level['current']['role'] == 'super_admin' || $level['current']['role'] == 'keuangan') {
             $dataDinas = Http::withToken($token)->get($url . "/satuan_kerja/list");
             $getDataDinas = $dataDinas['data'];
         }
-
         $id_pegawai = session()->get('user.current.id_pegawai');
      
         return view('pages.laporan.kinerja', compact('page_title', 'page_description', 'breadcumb','getDataDinas','level','type','id_pegawai'));
@@ -92,12 +91,12 @@ class LaporanController extends Controller
         $id_pegawai = session()->get('user.current.id_pegawai');
         $pegawai = Http::withToken($token)->get($url . "/jabatan/pegawaiBySatuanKerja")->collect();
 
-        if ($level == 'super_admin') {
+        if ($level == 'super_admin' || $level == 'keuangan') {
             $dataDinas = Http::withToken($token)->get($url . "/satuan_kerja/list");
             $getDataDinas = $dataDinas['data'];
             return view('pages.laporan.skp', compact('page_title', 'page_description', 'breadcumb', 'level', 'pegawai', 'id_pegawai', 'getDataDinas','type'));
         }
-
+        
         return view('pages.laporan.skp', compact('page_title', 'page_description', 'breadcumb', 'level', 'pegawai', 'id_pegawai','type'));
     }
 
@@ -1044,7 +1043,7 @@ class LaporanController extends Controller
     {
         $res = [];
         $data = $this->getRekapSkp($bulan);
-        // return $data;
+       
         if ($data['status'] == true) {
             $res = $data['data'];
         }
@@ -1430,7 +1429,7 @@ class LaporanController extends Controller
 
     public function exportLaporanSkp($jenis, $type, $bulan, $id_pegawai)
     {
-
+        return 'ce';
         $level = $this->checkLevel($id_pegawai);
         $res = [];
 
