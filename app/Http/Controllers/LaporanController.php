@@ -1429,7 +1429,7 @@ class LaporanController extends Controller
 
     public function exportLaporanSkp($jenis, $type, $bulan, $id_pegawai)
     {
-        return 'ce';
+     
         $level = $this->checkLevel($id_pegawai);
         $res = [];
 
