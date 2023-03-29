@@ -3299,12 +3299,9 @@ class LaporanController extends Controller
                  
                     if ($v['jenis'] == 'checkin') {
 
-                        if ($v['status'] === 'apel' || $v['status'] === 'dinas luar') {
+                        if ($v['status'] === 'apel' || $v['status'] === 'dinas luar' || $v['status'] === 'izin' || $v['status'] === 'cuti') {
                             if (in_array($v['tanggal_absen'], $data['monday'])) {
                                 $jumlah_apel += 1;
-                            //    if ($v['pegawai']['nama'] === 'Andi Buyung Saputra, SSTP, MM') {
-                            //     $tes[] =  $v['tanggal_absen'];
-                            //    }
                             };
                         }
 
