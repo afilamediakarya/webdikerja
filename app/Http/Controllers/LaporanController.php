@@ -1003,6 +1003,7 @@ class LaporanController extends Controller
             $this->exportrekapPegawai($data, $val->type, 'desktop');
         } else if ($val->role == 'rekapitulasi') {
             $data = $this->getRekappegawaiByOpd($val->startDate, $val->endDate, $val->satuanKerja);
+            // return $data;
             return $this->exportrekapOpd($data, $val->type, $val->startDate, $val->endDate, $perangkat_daerah);
         }
     }
@@ -3145,7 +3146,6 @@ class LaporanController extends Controller
 
     public function exportrekapOpd($data, $type, $startDate, $endDate, $perangkat_daerah)
     {
-        // return $data;
         $spreadsheet = new Spreadsheet();
 
         $spreadsheet->getProperties()->setCreator('BKPSDM BULUKUMBA')
@@ -3251,13 +3251,14 @@ class LaporanController extends Controller
 
         $total_potongan_apel = 0;
         $jml_potongan_kehadiran_kerja = 0;
-
+        $tes = [];
         // return $data['pegawai'];
 
-        foreach ($data['pegawai'] as $i => $val) {        
+        foreach ($data['pegawai'] as $i => $val) {     
+           
             $total_potongan_persen_keterlambatan = 0;
              $total_potongan_persen_pulang_kerja = 0;
-            $jumlah_tidak_hadir_apel= 0;
+            $jumlah_apel= 0;
             $jumlah_hadir= 0;
             $jumlah_cuti= 0;
             $jumlah_sakit= 0;
@@ -3286,17 +3287,8 @@ class LaporanController extends Controller
           
 
             foreach ($val as $t => $v) {
-        
+                
                   $count_absen = 0;
-                  if (isset($v['jumlah_apel'])) {
-
-                    if ($v['jumlah_apel'] > 0) {
-                          $jumlah_tidak_hadir_apel += (int)$v['jumlah_apel']; 
-                    }
-                  }
-
-                  
-
                 if (isset($v['status'])) {
                     $count_absen = array_count_values(array_column($val, 'tanggal_absen'))[$v['tanggal_absen']];
                     if ($count_absen == 1) {
@@ -3304,16 +3296,25 @@ class LaporanController extends Controller
                     }
                     // if ($v['status'] == 'hadir') {
                     array_push($date_val, $v['tanggal_absen']);
-                    $tes = [];
+                 
                     if ($v['jenis'] == 'checkin') {
+
+                        if ($v['status'] === 'apel' || $v['status'] === 'dinas luar') {
+                            if (in_array($v['tanggal_absen'], $data['monday'])) {
+                                $jumlah_apel += 1;
+                            //    if ($v['pegawai']['nama'] === 'Andi Buyung Saputra, SSTP, MM') {
+                            //     $tes[] =  $v['tanggal_absen'];
+                            //    }
+                            };
+                        }
 
                         if ((int)$v['jumlah_hadir'] > 0) {
                             $jumlah_hadir += 1;
                         }
 
-                        if ((int)$v['jumlah_apel'] > 0) {
-                           $jumlah_hadir += 1;
-                        }
+                        // if ((int)$v['jumlah_apel'] > 0) {
+                        //    $jumlah_hadir += 1;
+                        // }
 
                         // if ((int)$v['jumlah_hadir'] > 0) {
                         //     $jumlah_hadir += (int)$v['jumlah_hadir'];
@@ -3364,13 +3365,15 @@ class LaporanController extends Controller
                     // }
                 }
             }
+
+            // return $tes;
             foreach ($data['range'] as $k => $vv) {
                 if (in_array($vv, $date_val) == false) {
                     $jml_tanpa_keterangan += $nums + 1;
                 }
             }
 
-              $jumlah_tidak_hadir_apel = ((int)$data['count_monday'] - $jumlah_tidak_hadir_apel); 
+              $jumlah_apel = (count($data['monday']) - $jumlah_apel); 
                 $sheet->setCellValue('D' . $cell, $jumlah_hadir);
                 $sheet->setCellValue('E' . $cell, $jumlah_sakit);
                 $sheet->setCellValue('F' . $cell, $jumlah_cuti);
@@ -3405,8 +3408,8 @@ class LaporanController extends Controller
             $sheet->setCellValue('AA' . $cell, count($cpk_90_keatas) * 1.5);
 
             $sheet->setCellValue('AB' . $cell, $total_potongan_persen_pulang_kerja);
-            $sheet->setCellValue('AC' . $cell, $jumlah_tidak_hadir_apel);
-            $total_potongan_apel = $jumlah_tidak_hadir_apel * 2;
+            $sheet->setCellValue('AC' . $cell, $jumlah_apel);
+            $total_potongan_apel = $jumlah_apel * 2;
             $sheet->setCellValue('AD' . $cell, $total_potongan_apel );
 
             $jml_potongan_kehadiran_kerja = ($jml_tanpa_keterangan * 3) + $total_potongan_persen_keterlambatan + $total_potongan_persen_pulang_kerja + $total_potongan_apel;

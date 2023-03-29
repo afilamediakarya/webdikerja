@@ -78,9 +78,9 @@
                                     <th>Satuan Kerja</th>
                                 @endif
                                 <th>Atasan Langsung</th>
-                                @if ($role !== 'admin_opd')
+                       
                                     <th>Aksi</th>
-                                @endif
+                           
                                 
                             </tr>
 
@@ -247,11 +247,13 @@
 
                 </div>
 
+                @if($role !== 'admin_opd')
                 <div class="separator separator-dashed mt-8 mb-5"></div>
                 <div class="">
                     <button type="reset" class="btn btn-outline-primary mr-2 btn-cancel">Batal</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
+                @endif
             </form>
 
             <!--begin::Separator-->
@@ -344,9 +346,19 @@
                     data: 'nama'
                 }, {
                     data: 'atasan_langsung'
+                }, {
+                    data: 'id',
                 }];
 
                 columnDefs = [
+                    {
+                        targets: -1,
+                        title: 'Actions',
+                        orderable: false,
+                        render: function(data, type, full, meta) {
+                            return `<a href="javascript:;" type="button" data-id="${data}" class="btn btn-secondary button-update">Lihat</a>`;
+                        },
+                    },
                     {
                         targets: 3,
                         render: function(data, type, full, meta) {
