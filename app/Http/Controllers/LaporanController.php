@@ -742,6 +742,10 @@ class LaporanController extends Controller
         $golongan = '';
         foreach ($data['list_pegawai'] as $key => $value) {
             // return $value;
+            // if ($value['nip'] === '196808142000051001') {
+            //     return $value;
+            // }
+            // return $value;
             // $nilaiKinerjaByAktivitas = $value beddu
             //return explode("/",$value['golongan']);
 
@@ -765,7 +769,7 @@ class LaporanController extends Controller
                 $nilaiKinerjaByAktivitas = 100;
             }
 
-          
+            $nilaiPaguTpp = $value['nilai_jabatan'] * ( $value['pembayaran_tpp']/100 );
 
             $sheet->setCellValue('A' . $cell, $key + 1);
             $sheet->setCellValue('B' . $cell, $value['nama'] . PHP_EOL . "'" . $value['nip']);
@@ -775,21 +779,21 @@ class LaporanController extends Controller
             // kelas jabatan
             $value['kelas_jabatan'] !== null ? $kelas_jabatan = $value['kelas_jabatan'] : $kelas_jabatan = '-';
             $sheet->setCellValue('F' . $cell, $kelas_jabatan);
-            $sheet->setCellValue('G' . $cell, number_format($value['nilai_jabatan']));
+            $sheet->setCellValue('G' . $cell, number_format($nilaiPaguTpp));
 
             
 
-            $nilai_kinerja = $value['nilai_jabatan']* 60/100; 
+            $nilai_kinerja = $nilaiPaguTpp* 60/100; 
 
             $sheet->setCellValue('H' . $cell, number_format($nilai_kinerja));
             $sheet->setCellValue('I' . $cell, round($nilaiKinerjaByAktivitas,2));
 
-            // $nilaiKinerja = (60 * $value['nilai_jabatan'] / 100) * ($value['total_kinerja'] / 120);
+            // $nilaiKinerja = (60 * $nilaiPaguTpp / 100) * ($value['total_kinerja'] / 120);
             
                $nilaiKinerjaByAktivitas <= 50 ? $nilaiKinerja = 0 : $nilaiKinerja = $nilaiKinerjaByAktivitas * $nilai_kinerja / 100; 
             $sheet->setCellValue('J' . $cell, number_format($nilaiKinerja));
 
-            $persentaseKehadiran = 40 * $value['nilai_jabatan'] / 100;
+            $persentaseKehadiran = 40 * $nilaiPaguTpp / 100;
             $sheet->setCellValue('K' . $cell, number_format($persentaseKehadiran));
             $sheet->setCellValue('L' . $cell, $value['persentase_pemotongan']);
 
@@ -799,10 +803,19 @@ class LaporanController extends Controller
             $jumlahKehadiran = $persentaseKehadiran - $nilaiKehadiran;
             $sheet->setCellValue('N' . $cell, number_format($jumlahKehadiran));
 
-            $bpjs = 1 * $value['nilai_jabatan'] / 100;
+            $bpjs = 1 * $nilaiPaguTpp / 100;
             $sheet->setCellValue('O' . $cell, number_format($bpjs));
 
-            $tppBruto = $nilaiKinerja + $jumlahKehadiran - $bpjs;
+            $nilaiKinerjaByAktivitas <= 50 && $value['jumlah_alpa'] > 3 ? $keterangan = 'TMS'  : $keterangan = 'MS'; 
+
+            $tppBruto = 0;
+
+            if ($keterangan === 'TMS') {
+                $tppBruto = 0;
+            }else{
+                $nilaiKinerja + $jumlahKehadiran - $bpjs;
+            }
+
             $sheet->setCellValue('P' . $cell, number_format($tppBruto));
 
             // $golongan = $value['golongan'];
@@ -822,7 +835,7 @@ class LaporanController extends Controller
             $tppNetto = $tppBruto - $pphPsl;
             $sheet->setCellValue('R' . $cell, number_format($tppNetto));
 
-            $iuran = 4 * $value['nilai_jabatan'] / 100;
+            $iuran = 4 * $nilaiPaguTpp / 100;
             $brutoSpm = $nilaiKinerja + $jumlahKehadiran + $iuran;
             $sheet->setCellValue('S' . $cell, number_format($brutoSpm));
 
@@ -832,7 +845,7 @@ class LaporanController extends Controller
             $sheet->setCellValue('U' . $cell, number_format($iuran));
 
 
-           $nilaiKinerjaByAktivitas <= 50 && $value['jumlah_alpa'] > 3 ? $keterangan = 'TMS'  : $keterangan = 'MS'; 
+           
             $sheet->setCellValue('V'.$cell, $keterangan);
             if ($keterangan == 'TMS') {
                 $sheet->getStyle('V' . $cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('F44336');
@@ -842,7 +855,7 @@ class LaporanController extends Controller
              }
 
             // JUMLAH
-            $jmlPaguTpp += $value['nilai_jabatan'];
+            $jmlPaguTpp += $nilaiPaguTpp;
             $jmlNilaiKinerja += $nilaiKinerja;
             $jmlNilaiKehadiran += $jumlahKehadiran;
             $jmlBpjs += $bpjs;
