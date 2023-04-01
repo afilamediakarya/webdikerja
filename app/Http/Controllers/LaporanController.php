@@ -775,7 +775,19 @@ class LaporanController extends Controller
             $sheet->setCellValue('B' . $cell, $value['nama'] . PHP_EOL . "'" . $value['nip']);
             $sheet->setCellValue('C' . $cell, $golongan);
             $sheet->setCellValue('D' . $cell, $value['nama_jabatan']);
-            $sheet->setCellValue('E' . $cell, $value['jenis_jabatan']);
+
+            $jenis_jabatan = '';
+            if ($value['id_jenis_jabatan'] <= 2) {
+                $jenis_jabatan = 'JPT';
+            }elseif ($value['id_jenis_jabatan'] <= 5) {
+                $jenis_jabatan = 'Administrator';
+            }elseif ($value['id_jenis_jabatan'] <= 7) {
+                $jenis_jabatan = 'Pengawas';
+            }else {
+                $jenis_jabatan = 'Fungsional';
+            }
+
+            $sheet->setCellValue('E' . $cell, $jenis_jabatan);
             // kelas jabatan
             $value['kelas_jabatan'] !== null ? $kelas_jabatan = $value['kelas_jabatan'] : $kelas_jabatan = '-';
             $sheet->setCellValue('F' . $cell, $kelas_jabatan);
