@@ -813,7 +813,7 @@ class LaporanController extends Controller
             if ($keterangan === 'TMS') {
                 $tppBruto = 0;
             }else{
-                $nilaiKinerja + $jumlahKehadiran - $bpjs;
+                $tppBruto = $nilaiKinerja + $jumlahKehadiran - $bpjs;
             }
 
             $sheet->setCellValue('P' . $cell, number_format($tppBruto));
