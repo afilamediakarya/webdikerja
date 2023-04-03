@@ -378,7 +378,7 @@ $path = explode('/', Request::path());
 
                      @endif
 
-                     @if(Session::get('user.role') == 'pegawai' || Session::get('user.role') == 'super_admin')
+                     @if(Session::get('user.role') == 'admin_opd' || Session::get('user.role') == 'super_admin')
                         <li class="menu-item {{ $path[0] == 'admin' && $path[1] == 'absen' ? 'menu-item-active' : '' }}"
                             aria-haspopup="true">
                             <a href="{{ route('absen') }}" class="menu-link">
