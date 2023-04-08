@@ -767,6 +767,8 @@ class LaporanController extends Controller
 
             if ($nilaiKinerjaByAktivitas > 100) {
                 $nilaiKinerjaByAktivitas = 100;
+            }elseif ($nilaiKinerjaByAktivitas <= 50) {
+                $nilaiKinerjaByAktivitas = 0;
             }
 
             $nilaiPaguTpp = $value['nilai_jabatan'] * ( $value['pembayaran_tpp']/100 );
@@ -818,7 +820,7 @@ class LaporanController extends Controller
             $bpjs = 1 * $nilaiPaguTpp / 100;
             $sheet->setCellValue('O' . $cell, number_format($bpjs));
 
-            $nilaiKinerjaByAktivitas <= 50 || $value['jumlah_alpa'] > 3 ? $keterangan = 'TMS'  : $keterangan = 'MS'; 
+            $nilaiKinerjaByAktivitas <= 50 && $value['jumlah_alpa'] > 3 ? $keterangan = 'TMS'  : $keterangan = 'MS'; 
 
             $tppBruto = 0;
 
