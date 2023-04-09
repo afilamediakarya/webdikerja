@@ -294,8 +294,6 @@ class LaporanController extends Controller
                     }
                     $sheet->getStyle('J'. $cell)->getAlignment()->setHorizontal('center');
                     $cell++;
-//  round($selisih_hari,0)
-                    // Carbon::createFromTimestamp($v['created_at'])->format('Y')
                 }
                
             }

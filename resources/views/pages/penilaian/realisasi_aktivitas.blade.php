@@ -2,6 +2,7 @@
 
 @section('style')
     <link href="{{ asset('plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 @endsection
 
 
@@ -21,18 +22,31 @@
             <div class="card card-custom">
 
                 <div class="card-body">
+                    <!-- <input type="checkbox" data-toggle="switch" data-on-label="Yes, I'm in" data-off-label="No, thanks"> -->
+
+                    <!-- <div class="form-check form-switch form-check-custom form-check-solid">
+                    <label class="form-check-label" for="flexSwitchDefault">
+                        Default switch
+                    </label>
+                    <input class="form-check-input" type="checkbox" value="" id="flexSwitchDefault"/>
+                    <label class="form-check-label" for="flexSwitchDefault">
+                        Default switch
+                    </label>
+                </div> -->
+
                     <!--begin: Datatable-->
                     <form id="review_aktivitas">
                         <div class="table-responsive">
-                            <table class="table table-group table-head-bg" id="kt_datatable"
+                            <table class="table table-group table-head-bg" id="kt_tb_review"
                                 style="margin-top: 13px !important">
                                 <thead>
                                     <tr>
                                         <th>No.</th>
                                         <th>Tanggal</th>
-                                        <th>Rencana Kerja</th>
-                                        <th>Aktivitas</th>
+                                        <th>Tanggal input</th>
+                                        <th width="350px">Aktivitas</th>
                                         <th>Hasil</th>
+                                        <th>Waktu</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -47,10 +61,10 @@
                     <!--end: Datatable-->
                 </div>
 
-                <div class="card-footer border-0">
+                <!-- <div class="card-footer border-0">
                     <button type="reset" class="btn btn-outline-primary mr-2">Batal</button>
                     <button id="submit_review_skp" type="button" class="btn btn-primary">Simpan</button>
-                </div>
+                </div> -->
             </div>
             <!--end::Card-->
         </div>
@@ -134,7 +148,7 @@
 
 @section('script')
     <script src="{{ asset('plugins/custom/datatables/datatables.bundle.js') }}"></script>
-    <script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
+    <!-- <script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script> -->
         <script>
         let bulan = {!! json_encode($bulan) !!};
         let pegawai = {!! json_encode($pegawai) !!};
@@ -177,6 +191,67 @@
             });
         })
 
+        $(document).on('change','.update_kesesuaian', function () {
+            let id_ = $(this).attr('data-index');
+            // alert(id_);
+            let value = 0;
+            if ($(this).is(':checked')) {
+                value = 1;
+            } else {
+                value = 0;
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+
+            $.ajax({
+                    url : "/review_aktivitas",
+                    type : 'POST',
+                    data : {
+                        'kesesuaian' : value,
+                        'id_aktivitas' : id_
+                    },
+                    success : function (res) {
+                        swal.fire({
+                            text: "Aktivitas berhasil di update",
+                            title: "Sukses",
+                            icon: "success",
+                            showConfirmButton: true,
+                            confirmButtonText: "OK, Siip",
+                        }).then(function() {
+                            Panel.reviewAktivitas(pegawai,bulan);
+                        });
+                    },
+                    error : function (xhr) {
+                        console.log(xhr);
+                    }   
+            });
+        })
+
+        // $(document).on('change','#nama-aktivitas', function () {
+        //     let params = $('option:selected', this).attr('data-id');
+        //     $.ajax({
+        //         url:"admin/master-aktivitas/master-aktivitas/"+params,
+        //         method : 'GET',
+        //         success: function(res) {
+        //             if (res.success) {
+        //                 $('#satuan').val(res.success.data.satuan);
+        //                 $('#waktu').val(res.success.data.waktu);
+        //                 $('#jenis').val(res.success.data.jenis);
+        //             }
+        //         },
+        //         error: function(xhr) {
+        //             // alert(xhr);
+        //         }
+
+        //     });
+        // })
+
+
+
         function optionSkp(params) {
             $('#option-skp').html('');
             // alert(params);
@@ -209,98 +284,103 @@
             var current = null;
             var cnt = 0;
 
-            table.DataTable({
+            Panel.reviewAktivitas(pegawai,bulan);
 
-                responsive: true,
-                pageLength: 10,
-                order: [
-                    [1, 'desc']
-                ],
-                "bPaginate": false,
-                processing: true,
-                ajax: `/get_data/penilaian/review-aktivitas?pegawai=${pegawai}&bulan=${bulan}`,
-                columns: [{
-                    data: 'id',
-                    render: function(data, type, row, meta) {
-                        let id = row.id;
+            // table.DataTable({
 
-                        if (row.id != currentNumber) {
-                            currentNumber = row.id;
-                            cntNumber++;
-                        }
+            //     responsive: true,
+            //     pageLength: 10,
+            //     order: [
+            //         [1, 'desc']
+            //     ],
+            //     "bPaginate": false,
+            //     processing: true,
+            //     ajax: `/get_data/penilaian/review-aktivitas?pegawai=${pegawai}&bulan=${bulan}`,
+            //     columns: [{
+            //         data: 'id',
+            //         render: function(data, type, row, meta) {
+            //             let id = row.id;
 
-                        if (row.id != current) {
-                            current = row.id;
-                            cnt = 1;
-                        } else {
-                            cnt++;
-                        }
-                        return cntNumber;
-                    }
-                }, {
-                    data: 'tanggal'
-                }, {
-                    data: 'skp.rencana_kerja'
-                }, {
-                    data: 'nama_aktivitas'
-                }, {
-                    data: 'hasil'
-                }, {
-                    data: null
-                }, {
-                    data: 'id'
-                }],
-                columnDefs: [
-                    {
-                        targets: [2],
-                        visible: false
-                    },
-                    {
-                        targets: 5,
-                        title : 'status',
-                        orderable : false,
-                        width: '10rem',
-                        class: "wrapok",
-                        render: function(data, type, row, meta) {
-                            let checked_true = '';
-                            let checked_false = '';
-                            let keterangan = '';
-                            if (row.kesesuaian == '1') {
-                                checked_true = 'checked';
-                            } else {
-                                checked_false = 'checked';
-                            }
-                            return `
-                             <input type="hidden" value="${row.id}" name="id_aktivitas[${meta.row}]" class="test"/>
-                            <div class="form-group">
-                                <div class="radio-inline">
-                                    <label for="kesesuaian_true${meta.row}" class="radio">
-                                    <input type="radio" class="kesesuaian_true" id="kesesuaian_true${meta.row}" ${checked_true} value="1" name="kesesuaian[${meta.row}]" />
-                                    <span></span>Sesuai</label>
-                                    <label for="kesesuaian_false${meta.row}" class="radio">
-                                    <input type="radio" class="kesesuaian_flase" id="kesesuaian_false${meta.row}" ${checked_false} value="0" name="kesesuaian[${meta.row}]" />
-                                    <span></span>Tidak</label>
-                                </div>
-                            </div>
-                            `;
-                        },
-                    },
-                    {
-                        targets: -1,
-                        title: 'Actions',
-                        orderable: false,
-                        render: function(data, type, row, meta) {
-                            console.log(row);
-                            return `<button type="button" class="btn btn-success btn-sm" id="ubah_review_aktivitas" data-index="${data}"> Ubah </button><button type="button" class="btn btn-danger btn-sm ml-2" id="hapus_aktivitas" data-id="${data}"> Hapus </button>`;
-                        },
-                    }
-                ],
-                rowGroup: {
-                    dataSrc: ['skp.rencana_kerja']
-                },
-                // "rowsGroup": [-1, 0, 3],
-                "ordering": false,
-            });
+            //             if (row.id != currentNumber) {
+            //                 currentNumber = row.id;
+            //                 cntNumber++;
+            //             }
+
+            //             if (row.id != current) {
+            //                 current = row.id;
+            //                 cnt = 1;
+            //             } else {
+            //                 cnt++;
+            //             }
+            //             return cntNumber;
+            //         }
+            //     }, {
+            //         data: 'tanggal'
+            //     }, {
+            //         data: 'skp.rencana_kerja'
+            //     }, {
+            //         data: 'nama_aktivitas'
+            //     }, {
+            //         data: 'hasil'
+            //     }, {
+            //         data: null
+            //     }, {
+            //         data: 'id'
+            //     }],
+            //     columnDefs: [
+            //         {
+            //             targets: [2],
+            //             visible: false
+            //         },
+            //         {
+            //             targets: 5,
+            //             title : 'status',
+            //             orderable : false,
+            //             width: '10rem',
+            //             class: "wrapok",
+            //             render: function(data, type, row, meta) {
+            //                 let checked_true = '';
+            //                 let checked_false = '';
+            //                 let keterangan = '';
+            //                 if (row.kesesuaian == '1') {
+            //                     checked_true = 'checked';
+            //                 } else {
+            //                     checked_false = 'checked';
+            //                 }
+            //                 return `
+            //                  <input type="hidden" value="${row.id}" name="id_aktivitas[${meta.row}]" class="test"/>
+            //                 <div class="form-group">
+            //                     <div class="radio-inline">
+            //                         <label for="kesesuaian_true${meta.row}" class="radio">
+            //                         <input type="radio" class="kesesuaian_true" id="kesesuaian_true${meta.row}" ${checked_true} value="1" name="kesesuaian[${meta.row}]" />
+            //                         <span></span>Sesuai</label>
+            //                         <label for="kesesuaian_false${meta.row}" class="radio">
+            //                         <input type="radio" class="kesesuaian_flase" id="kesesuaian_false${meta.row}" ${checked_false} value="0" name="kesesuaian[${meta.row}]" />
+            //                         <span></span>Tidak</label>
+            //                     </div>
+            //                 </div>
+            //                 `;
+            //             },
+            //         },
+            //         {
+            //             targets: -1,
+            //             title: 'Actions',
+            //             orderable: false,
+            //             render: function(data, type, row, meta) {
+            //                 console.log(row);
+            //                 return `<button type="button" class="btn btn-success btn-sm" id="ubah_review_aktivitas" data-index="${data}"> Ubah </button><button type="button" class="btn btn-danger btn-sm ml-2" id="hapus_aktivitas" data-id="${data}"> Hapus </button>`;
+            //             },
+            //         }
+            //     ],
+            //     rowGroup: {
+            //         dataSrc: ['skp.rencana_kerja']
+            //     },
+            //     // "rowsGroup": [-1, 0, 3],
+            //     "ordering": false,
+            // });
+
+
+
 
             $(document).on('click','#hapus_aktivitas', function (e) {
                 e.preventDefault();
@@ -331,7 +411,8 @@
                                         showConfirmButton: true,
                                         confirmButtonText: "OK, Siip",
                                     }).then(function() {
-                                        table.DataTable().ajax.reload();
+                                        // table.DataTable().ajax.reload();
+                                        Panel.reviewAktivitas(pegawai,bulan);
                                         
                                     });
                                 } else {
@@ -455,38 +536,36 @@
                 });
         });
 
-        $(document).on('click','#submit_review_skp', function () {
-            alert('dsff');
-              // let index = $(this).attr('data-index');
-                $.ajaxSetup({
-                    headers: {
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                    },
-                });
+        // $(document).on('click','#submit_review_skp', function () {
+        //         $.ajaxSetup({
+        //             headers: {
+        //                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        //             },
+        //         });
 
-                $.ajax({
-                    type: "POST",
-                    url: "/review_aktivitas",
-                    data: $('#review_aktivitas').serialize(),
-                    success: function(response) {
-                        swal.fire({
-                            text: "Aktivitas berhasil di Review.",
-                            icon: "success",
-                            buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn font-weight-bold btn-light-primary"
-                            }
-                        }).then(function() {
-                            window.location.href = '/penilaian/kinerja';
-                            table.DataTable().ajax.reload();
-                        });
-                    },
-                    error: function(xhr) {
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "/review_aktivitas",
+        //             data: $('#review_aktivitas').serialize(),
+        //             success: function(response) {
+        //                 swal.fire({
+        //                     text: "Aktivitas berhasil di Review.",
+        //                     icon: "success",
+        //                     buttonsStyling: false,
+        //                     confirmButtonText: "Ok, got it!",
+        //                     customClass: {
+        //                         confirmButton: "btn font-weight-bold btn-light-primary"
+        //                     }
+        //                 }).then(function() {
+        //                     window.location.href = '/penilaian/kinerja';
+        //                     table.DataTable().ajax.reload();
+        //                 });
+        //             },
+        //             error: function(xhr) {
 
-                    }
-                });
-        })
+        //             }
+        //         });
+        // })
         // console.log($('#kt_datatable').column(4).data())
     </script>
 @endsection

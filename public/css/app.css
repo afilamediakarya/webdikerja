@@ -1,1 +1,21 @@
+.edit-icon-custom {
+    background: url("/image/edit_custom.svg");
+    height: 100%;
+    width: 100%;
+    display: block;
+    background-repeat: no-repeat;
+    position: relative;
+    left: 4px;
+    top: 4px;
+}
 
+.trash-icon-custom {
+    background: url("/image/trash2.svg");
+    height: 100%;
+    width: 100%;
+    display: block;
+    background-repeat: no-repeat;
+    position: relative;
+    left: 4px;
+    top: 4px;
+}

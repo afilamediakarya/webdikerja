@@ -55,7 +55,6 @@ class PenilaianController extends Controller
         if ($type == 'skp') {
             $response = Http::withToken($token)->get($url . "/review_skp/list?tahun=" . session('tahun_penganggaran'));
         }elseif ($type == 'kinerja') {
-            // return $url . "/aktivitas/review_aktivitas_list?bulan=" . request('bulan');
             $response = Http::withToken($token)->get($url . "/aktivitas/review_aktivitas_list?bulan=" . request('bulan'));
         }elseif($type == 'realisasi') {
             $response = Http::withToken($token)->get($url . "/review_realisasi/list?tahun=" . session('tahun_penganggaran') . "&bulan=" . request('bulan'));
