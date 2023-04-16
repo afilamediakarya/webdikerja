@@ -816,19 +816,21 @@ class LaporanController extends Controller
             $sheet->setCellValue('N' . $cell, number_format($jumlahKehadiran));
 
             $bpjs = 1 * $nilaiPaguTpp / 100;
-            $sheet->setCellValue('O' . $cell, number_format($bpjs));
+            
 
             //$nilaiKinerjaByAktivitas <= 50 && $value['jumlah_alpa'] > 3 ? $keterangan = 'TMS'  : $keterangan = 'MS'; 
             $nilaiKinerjaByAktivitas <= 50  ? $keterangan = 'TMS'  : $keterangan = 'MS';
-
+            
             $tppBruto = 0;
             $iuran = 4 * $nilaiPaguTpp / 100;
             if ($keterangan === 'TMS') {
                 $tppBruto = 0;
                 $bpjs=0;
                 $iuran=0;
+                $brutoSpm=0;
             }else{
                 $tppBruto = $nilaiKinerja + $jumlahKehadiran - $bpjs;
+                $brutoSpm = $nilaiKinerja + $jumlahKehadiran + $iuran;
             }
 
             $sheet->setCellValue('P' . $cell, number_format($tppBruto));
@@ -844,14 +846,14 @@ class LaporanController extends Controller
           
 
            
-
+            $sheet->setCellValue('O' . $cell, number_format($bpjs));
             $sheet->setCellValue('Q' . $cell, number_format($pphPsl) );
 
             $tppNetto = $tppBruto - $pphPsl;
             $sheet->setCellValue('R' . $cell, number_format($tppNetto));
 
             //$iuran = 4 * $nilaiPaguTpp / 100;
-            $brutoSpm = $nilaiKinerja + $jumlahKehadiran + $iuran;
+            
             $sheet->setCellValue('S' . $cell, number_format($brutoSpm));
 
             // norek
@@ -861,7 +863,7 @@ class LaporanController extends Controller
 
 
            
-            $sheet->setCellValue('V'.$cell, $keterangan);
+            $sheet->setCellValue('V'.$cell, $keterangan. , .$nilaiKinerjaByAktivitas);
             if ($keterangan == 'TMS') {
                 $sheet->getStyle('V' . $cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('F44336');
                 
