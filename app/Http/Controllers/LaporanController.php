@@ -818,11 +818,12 @@ class LaporanController extends Controller
             $bpjs = 1 * $nilaiPaguTpp / 100;
             
 
-            //$nilaiKinerjaByAktivitas <= 50 && $value['jumlah_alpa'] > 3 ? $keterangan = 'TMS'  : $keterangan = 'MS'; 
+            //$nilaiKinerjaByAktivitas <= 50 || $value['jumlah_alpa'] > 3 ? $keterangan = 'TMS'  : $keterangan = 'MS'; 
             
-            $nilaiKinerjaByAktivitas <= 50  ? $keterangan = 'TMS'  : $keterangan = 'MS';
-            $value['jumlah_alpa'] > 3  ? $keterangan = 'TMS'  : $keterangan = $keterangan;
             
+            $value['jumlah_alpa'] <= 3  ? $keterangan = 'TMS'  : $keterangan = 'MS';
+            //$nilaiKinerjaByAktivitas <= 50  ? $keterangan = 'TMS'  : $keterangan = 'MS';
+
             $tppBruto = 0;
             $iuran = 4 * $nilaiPaguTpp / 100;
             if ($keterangan === 'TMS') {
