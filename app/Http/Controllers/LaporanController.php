@@ -802,7 +802,7 @@ class LaporanController extends Controller
 
             // $nilaiKinerja = (60 * $nilaiPaguTpp / 100) * ($value['total_kinerja'] / 120);
             
-               $nilaiKinerjaByAktivitas <= 50 ? $nilaiKinerja = 0 : $nilaiKinerja = $nilaiKinerjaByAktivitas * $nilai_kinerja / 100; 
+            $nilaiKinerjaByAktivitas <= 50 ? $nilaiKinerja = 0 : $nilaiKinerja = $nilaiKinerjaByAktivitas * $nilai_kinerja / 100; 
             $sheet->setCellValue('J' . $cell, number_format($nilaiKinerja));
 
             $persentaseKehadiran = 40 * $nilaiPaguTpp / 100;
