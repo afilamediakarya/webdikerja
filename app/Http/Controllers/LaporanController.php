@@ -818,12 +818,15 @@ class LaporanController extends Controller
             $bpjs = 1 * $nilaiPaguTpp / 100;
             $sheet->setCellValue('O' . $cell, number_format($bpjs));
 
-            $nilaiKinerjaByAktivitas <= 50 && $value['jumlah_alpa'] > 3 ? $keterangan = 'TMS'  : $keterangan = 'MS'; 
+            //$nilaiKinerjaByAktivitas <= 50 && $value['jumlah_alpa'] > 3 ? $keterangan = 'TMS'  : $keterangan = 'MS'; 
+            $nilaiKinerjaByAktivitas <= 50  ? $keterangan = 'TMS'  : $keterangan = 'MS';
 
             $tppBruto = 0;
-
+            $iuran = 4 * $nilaiPaguTpp / 100;
             if ($keterangan === 'TMS') {
                 $tppBruto = 0;
+                $bpjs=0;
+                $iuran=0;
             }else{
                 $tppBruto = $nilaiKinerja + $jumlahKehadiran - $bpjs;
             }
@@ -847,7 +850,7 @@ class LaporanController extends Controller
             $tppNetto = $tppBruto - $pphPsl;
             $sheet->setCellValue('R' . $cell, number_format($tppNetto));
 
-            $iuran = 4 * $nilaiPaguTpp / 100;
+            //$iuran = 4 * $nilaiPaguTpp / 100;
             $brutoSpm = $nilaiKinerja + $jumlahKehadiran + $iuran;
             $sheet->setCellValue('S' . $cell, number_format($brutoSpm));
 
