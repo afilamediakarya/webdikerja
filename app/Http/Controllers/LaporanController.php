@@ -863,7 +863,7 @@ class LaporanController extends Controller
 
 
            
-            $sheet->setCellValue('V'.$cell, $keterangan. , .$nilaiKinerjaByAktivitas);
+            $sheet->setCellValue('V'.$cell, $keterangan);
             if ($keterangan == 'TMS') {
                 $sheet->getStyle('V' . $cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('F44336');
                 
