@@ -3202,29 +3202,29 @@ class LaporanController extends Controller
         $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
 
         $sheet->setCellValue('A1', 'REKAPITULASI CAPAIAN DISIPLIN / KEHADIRAN KERJA');
-        $sheet->mergeCells('A1:AB1');
+        $sheet->mergeCells('A1:AF1');
 
         $sheet->setCellValue('A3', 'PERANGKAT DAERAH');
         $sheet->mergeCells('A3:B3');
         $sheet->setCellValue('C3', ': ');
-        $sheet->setCellValue('D3', $perangkat_daerah)->mergeCells('D3:AB3');
+        $sheet->setCellValue('D3', $perangkat_daerah)->mergeCells('D3:AF3');
 
         $sheet->setCellValue('A4', 'PERIODE');
         $sheet->mergeCells('A4:B4');
         $sheet->setCellValue('C4', ':');
-        $sheet->setCellValue('D4', $startDate . ' s/d ' . $endDate)->mergeCells('D4:AB4');
+        $sheet->setCellValue('D4', $startDate . ' s/d ' . $endDate)->mergeCells('D4:AF4');
 
         $sheet->setCellValue('A5', ' ');
 
         
         
-        $sheet->getStyle('A1:AB1')->getFont()->setSize(16);
-        $sheet->getStyle('A3:AB4')->getFont()->setSize(12);
+        $sheet->getStyle('A1:AF1')->getFont()->setSize(16);
+        $sheet->getStyle('A3:AF4')->getFont()->setSize(12);
 
         $sheet->getColumnDimension('B')->setWidth(35);
        
 
-        $sheet->getStyle('A6:AB10')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D9D9D9');
+        $sheet->getStyle('A6:AF10')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D9D9D9');
 
         // konten
         $sheet->setCellValue('A6', 'No')->mergeCells('A6:A10');
@@ -3489,14 +3489,14 @@ class LaporanController extends Controller
         $sheet->getStyle('K7:S' . $cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('F5D6B7');
         $sheet->getStyle('T7:AB' . $cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('F9EADB');
         $sheet->getStyle('AC7:AD' . $cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('BCCBE2');
-        $sheet->getStyle('AE7:AE' . $cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('4EAD5A');
+        $sheet->getStyle('AE7:AF' . $cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('4EAD5A');
         //$sheet->getStyle('AB6:AB10')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('00E676');
 
         $sheet->getStyle('A6:AF' . $cell)->applyFromArray($border);
-        $sheet->getStyle('A:AB')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A:AB')->getAlignment()->setVertical('center');
+        $sheet->getStyle('A:AF')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('A:AF')->getAlignment()->setVertical('center');
         $sheet->getStyle('B7:B' . $cell)->getAlignment()->setHorizontal('rigth');
-        $sheet->getStyle('A3:AB4')->getAlignment()->setHorizontal('rigth');
+        $sheet->getStyle('A3:AF4')->getAlignment()->setHorizontal('rigth');
 
         if ($type == 'excel') {
             // Untuk download 
