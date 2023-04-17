@@ -167,7 +167,7 @@
         function maxdate() {
             const inputElement = document.getElementById("tanggal");
             const fiveDaysAgo = new Date();
-            fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 6);
+            fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
             minDate = fiveDaysAgo.toISOString().split("T")[0]
             inputElement.setAttribute("min", fiveDaysAgo.toISOString().split("T")[0]);
         }

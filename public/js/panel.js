@@ -135,7 +135,7 @@ var Panel = (function () {
                             row += `<tr><td>${num}</td><td>${
                                 v.tanggal
                             }</td><td><span class="${
-                                diffDays >= 6
+                                diffDays >= 7
                                     ? "text-danger fw-bolder"
                                     : "text-dark"
                             }">${formattedDate}</span></td>
