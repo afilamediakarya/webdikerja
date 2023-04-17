@@ -167,7 +167,7 @@ class LaporanController extends Controller
         
 
         $sheet->setCellValue('A1', 'LAPORAN KINERJA PEGAWAI (AKTIVITAS)')->mergeCells('A1:J1');
-        $sheet->setCellValue('A2', $nama_bulan)->mergeCells('A2:J2');
+        $sheet->setCellValue('A2', strtoupper($nama_bulan))->mergeCells('A2:J2');
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
 
@@ -175,22 +175,22 @@ class LaporanController extends Controller
 
 
         $sheet->setCellValue('A4', 'PEGAWAI YANG DINILAI')->mergeCells('A4:E4');
-        $sheet->setCellValue('F4', 'PEJABAT PENILAI')->mergeCells('F4:J4');
+        $sheet->setCellValue('F4', 'PEJABAT PENILAI')->mergeCells('F4:H4');
         $sheet->getStyle('A4:F4')->getAlignment()->setHorizontal('center');
 
-        $sheet->getStyle('A4:J4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('BCCBE1');
+        $sheet->getStyle('A4:H4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('BCCBE1');
         
         $sheet->setCellValue('A5', ' Nama')->mergeCells('A5:C5');
         $sheet->setCellValue('D5', ' '.$data['pegawai_dinilai']['nama'])->mergeCells('D5:E5');
 
         $sheet->setCellValue('F5', ' Nama');
-        $sheet->setCellValue('G5', ' '.$data['pegawai_penilai']['nama'])->mergeCells('G5:J5');
+        $sheet->setCellValue('G5', ' '.$data['pegawai_penilai']['nama'])->mergeCells('G5:H5');
 
         $sheet->setCellValue('A6', ' NIP')->mergeCells('A6:C6');
         $sheet->setCellValue('D6', " " .$data['pegawai_dinilai']['nip'])->mergeCells('D6:E6');
 
         $sheet->setCellValue('F6', ' NIP');
-        $sheet->setCellValue('G6', " ".$data['pegawai_penilai']['nip'])->mergeCells('G6:J6');
+        $sheet->setCellValue('G6', " ".$data['pegawai_penilai']['nip'])->mergeCells('G6:H6');
 
         $golongan_pegawai = '';
         $golongan_atasan = '';
@@ -202,19 +202,19 @@ class LaporanController extends Controller
         $sheet->setCellValue('D7', $golongan_pegawai)->mergeCells('D7:E7');
 
         $sheet->setCellValue('F7', ' Pangkat / Gol Ruang');
-        $sheet->setCellValue('G7', ' '.$golongan_atasan)->mergeCells('G7:J7');
+        $sheet->setCellValue('G7', ' '.$golongan_atasan)->mergeCells('G7:H7');
 
         $sheet->setCellValue('A8', ' Jabatan')->mergeCells('A8:C8');
         $sheet->setCellValue('D8', ' '.$data['pegawai_dinilai']['jabatan'])->mergeCells('D8:E8');
 
         $sheet->setCellValue('F8', ' Jabatan');
-        $sheet->setCellValue('G8', ' '.$data['pegawai_penilai']['jabatan'])->mergeCells('G8:J8');
+        $sheet->setCellValue('G8', ' '.$data['pegawai_penilai']['jabatan'])->mergeCells('G8:H8');
 
         $sheet->setCellValue('A9', ' Unit kerja')->mergeCells('A9:C9');
         $sheet->setCellValue('D9', ' '.$data['pegawai_dinilai']['unit_kerja'])->mergeCells('D9:E9');
 
         $sheet->setCellValue('F9', ' Unit kerja');
-        $sheet->setCellValue('G9', ' '.$data['pegawai_penilai']['unit_kerja'])->mergeCells('G9:J9');
+        $sheet->setCellValue('G9', ' '.$data['pegawai_penilai']['unit_kerja'])->mergeCells('G9:H9');
 
         $sheet->getColumnDimension('D')->setWidth(30);
         $sheet->getColumnDimension('F')->setWidth(30);
@@ -289,7 +289,7 @@ class LaporanController extends Controller
                     $sheet->getStyle('I'. $cell)->getAlignment()->setHorizontal('center');
                     $sheet->setCellValue('J' . $cell, $v['waktu']);
                     $sheet->setCellValue('K' . $cell, date("d/m/y", strtotime($v['created_at'])));
-                    if ($selisih_hari >= 5) {
+                    if ($selisih_hari >= 6) {
                         $sheet->getStyle('K'.$cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('e83343');
                     }
                     $sheet->getStyle('J'. $cell)->getAlignment()->setHorizontal('center');
