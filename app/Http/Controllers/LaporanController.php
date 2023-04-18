@@ -865,7 +865,7 @@ class LaporanController extends Controller
 
            
             $sheet->setCellValue('V'.$cell, $keterangan);
-            if ($keterangan == 'TMS') {
+            if ($keterangan === 'TMS') {
                 $sheet->getStyle('V' . $cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('F44336');
                 
              }else{
@@ -3447,9 +3447,8 @@ class LaporanController extends Controller
              $sheet->setCellValue('AE' . $cell, $jml_potongan_kehadiran_kerja );
              $sheet->setCellValue('AF' . $cell, $keterangan);
 
-             if ($keterangan == 'TMS') {
-                $sheet->getStyle('AF' . $cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('F44336');
-                
+             if ($keterangan === 'TMS') {
+                $sheet->getStyle('AF' . $cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('F44336'); 
              }else{
                 $sheet->getStyle('AF' . $cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('00E676');
              }
