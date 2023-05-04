@@ -2963,7 +2963,6 @@ class LaporanController extends Controller
         $token = session()->get('user.access_token');
 
         $response = Http::withToken($token)->get($url . "/" . "view-rekapByUser/" . $params1 . "/" . $params2 . "/" . $idpegawai);
-
         if ($response->successful() && isset($response->object()->data)) {
             $data = $response->json();
             $this->exportrekapPegawai($data, 'pdf', 'mobile');
@@ -3008,7 +3007,7 @@ class LaporanController extends Controller
         $spreadsheet->getActiveSheet()->getPageMargins()->setBottom(0.3);
 
         $sheet->setCellValue('A1', 'Laporan Rekapitulasi Absen Pegawai')->mergeCells('A1:G1');
-        $sheet->setCellValue('A2', '' . $data['data']['pegawai']['satuan_kerja']['nama_satuan_kerja'])->mergeCells('A2:G2');
+        $sheet->setCellValue('A2', '' . $data['data']['pegawai']['nama_satuan_kerja'])->mergeCells('A2:G2');
         $sheet->setCellValue('A3',  $data['data']['pegawai']['nama'] . '/ ' . $data['data']['pegawai']['nip'])->mergeCells('A3:G3');
         //$sheet->setCellValue('A4', $startDate.' s/d '.$endDate)->mergeCells('A4:G4');
         $sheet->getStyle('A1:G4')->getAlignment()->setHorizontal('center');
