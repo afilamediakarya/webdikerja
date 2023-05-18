@@ -12,8 +12,6 @@
     <div class="d-flex flex-column-fluid">
         <!--begin::Container-->
         <div class="container">
-            
-            <!--begin::Card-->
             <div class="card card-custom">
                 <div class="card-header">
                     <div class="card-title">
@@ -130,7 +128,13 @@
         })
 
         $(document).on('keydown','#tanggal', function(e) {
-            e.preventDefault();
+            if (navigator.userAgent.indexOf('Firefox') !== -1) {
+                console.log('Firefox');
+                this.blur(); 
+            }else{
+                e.preventDefault();
+                 e.stopPropagation();
+            } 
         });
         
         function maxdate() {

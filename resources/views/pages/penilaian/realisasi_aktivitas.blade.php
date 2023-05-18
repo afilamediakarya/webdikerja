@@ -22,18 +22,6 @@
             <div class="card card-custom">
 
                 <div class="card-body">
-                    <!-- <input type="checkbox" data-toggle="switch" data-on-label="Yes, I'm in" data-off-label="No, thanks"> -->
-
-                    <!-- <div class="form-check form-switch form-check-custom form-check-solid">
-                    <label class="form-check-label" for="flexSwitchDefault">
-                        Default switch
-                    </label>
-                    <input class="form-check-input" type="checkbox" value="" id="flexSwitchDefault"/>
-                    <label class="form-check-label" for="flexSwitchDefault">
-                        Default switch
-                    </label>
-                </div> -->
-
                     <!--begin: Datatable-->
                     <form id="review_aktivitas">
                         <div class="table-responsive">
@@ -231,27 +219,6 @@
             });
         })
 
-        // $(document).on('change','#nama-aktivitas', function () {
-        //     let params = $('option:selected', this).attr('data-id');
-        //     $.ajax({
-        //         url:"admin/master-aktivitas/master-aktivitas/"+params,
-        //         method : 'GET',
-        //         success: function(res) {
-        //             if (res.success) {
-        //                 $('#satuan').val(res.success.data.satuan);
-        //                 $('#waktu').val(res.success.data.waktu);
-        //                 $('#jenis').val(res.success.data.jenis);
-        //             }
-        //         },
-        //         error: function(xhr) {
-        //             // alert(xhr);
-        //         }
-
-        //     });
-        // })
-
-
-
         function optionSkp(params) {
             $('#option-skp').html('');
             // alert(params);
@@ -413,7 +380,6 @@
                                     }).then(function() {
                                         // table.DataTable().ajax.reload();
                                         Panel.reviewAktivitas(pegawai,bulan);
-                                        
                                     });
                                 } else {
                                     Swal.fire(
