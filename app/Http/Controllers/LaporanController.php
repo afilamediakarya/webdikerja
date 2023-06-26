@@ -3339,15 +3339,6 @@ class LaporanController extends Controller
                             $jumlah_hadir += 1;
                         }
 
-                        // if ((int)$v['jumlah_apel'] > 0) {
-                        //    $jumlah_hadir += 1;
-                        // }
-
-                        // if ((int)$v['jumlah_hadir'] > 0) {
-                        //     $jumlah_hadir += (int)$v['jumlah_hadir'];
-                        //     // $jumlah_hadir += (int)$v['jumlah_apel'];
-                        // }
-
                         if ((int)$v['jumlah_sakit'] > 0) {
                             $jumlah_sakit += 1;
                         }
@@ -3400,7 +3391,12 @@ class LaporanController extends Controller
                 }
             }
 
-              $jumlah_apel = (count($data['monday']) - $jumlah_apel); 
+            if (date('m', strtotime($startDate)) === '04' && date('m', strtotime($startDate)) === '04') {
+                $jumlah_apel = 0;
+            }else{
+                $jumlah_apel = (count($data['monday']) - $jumlah_apel); 
+            }
+              
                 $sheet->setCellValue('D' . $cell, $jumlah_hadir);
                 $sheet->setCellValue('E' . $cell, $jumlah_sakit);
                 $sheet->setCellValue('F' . $cell, $jumlah_cuti);
@@ -3436,7 +3432,13 @@ class LaporanController extends Controller
 
             $sheet->setCellValue('AB' . $cell, $total_potongan_persen_pulang_kerja);
             $sheet->setCellValue('AC' . $cell, $jumlah_apel);
-            $total_potongan_apel = $jumlah_apel * 2;
+
+            if (date('m', strtotime($startDate)) === '04' && date('m', strtotime($startDate)) === '04') {
+                $total_potongan_apel = 0;
+            }else{
+                $total_potongan_apel = $jumlah_apel * 2;    
+            }
+
             $sheet->setCellValue('AD' . $cell, $total_potongan_apel );
 
             $jml_potongan_kehadiran_kerja = ($jml_tanpa_keterangan * 3) + $total_potongan_persen_keterlambatan + $total_potongan_persen_pulang_kerja + $total_potongan_apel;

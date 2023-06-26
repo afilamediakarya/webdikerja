@@ -79,7 +79,7 @@ var Panel = (function () {
                 type: "GET",
                 url: `/get_data/penilaian/review-aktivitas?pegawai=${pegawai}&bulan=${bulan}`,
                 success: function (res) {
-                    // console.log(res.data);
+                    console.log(res.data);
                     // let result = [];
                     // $.each(res, function (x, y) {
                     //     const date = new Date(y.tanggal).toLocaleDateString();
@@ -108,6 +108,9 @@ var Panel = (function () {
                     $.each(groupedData, function (x, y) {
                         let jumlah_waktu_pertanggal = 0;
                         $.each(y, function (i, v) {
+                            if (v.tanggal === "2023-02-03") {
+                                console.log(`${v.id} || ${v.nama_aktivitas}`);
+                            }
                             const date = new Date(v.created_at);
                             const year = date.getFullYear();
                             const month = String(date.getMonth() + 1).padStart(
