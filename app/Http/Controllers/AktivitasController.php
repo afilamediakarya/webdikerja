@@ -110,17 +110,6 @@ class AktivitasController extends Controller
         );
 
         $checkAbsen =  Http::withToken($token)->get($url."/absen/check-absen-by-date?tanggal=".$request->tanggal."&pegawai=".request('pegawai'));
-        // date_default_timezone_set('UTC');
-        // $currentDate = date('Y-m-d');
-        // $futureDate = date('Y-m-d', strtotime('-5 days', strtotime($currentDate)));
-
-        // if ($request->tanggal <= $futureDate) {
-        //     return response()->json(['invalid'=> ['error'=> [
-        //         'text' => 'Anda belum bisa menambah aktivitas',
-        //         'title' => 'Tanggal aktivitas sudah lewat 5 hari'
-        //     ]] ]);
-        // }
-
 
         if ($checkAbsen['data'] == null) {
              return response()->json(['invalid'=> ['error'=> [
