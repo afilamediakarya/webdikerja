@@ -125,6 +125,17 @@ class AktivitasController extends Controller
             }
         }
 
+        date_default_timezone_set('UTC');
+        $currentDate = date('Y-m-d');
+        $futureDate = date('Y-m-d', strtotime('-5 days', strtotime($currentDate)));
+
+        if ($request->tanggal <= $futureDate) {
+            return response()->json(['invalid'=> ['error'=> [
+                'text' => 'Anda belum bisa menambah aktivitas',
+                'title' => 'Tanggal aktivitas sudah lewat 5 hari'
+            ]] ]);
+        }
+
         $response = Http::withToken($token)->post($url."/aktivitas/store", $filtered);
         if($response->successful()){
             return response()->json(['success'=> 'Berhasil Menambah Data']);
