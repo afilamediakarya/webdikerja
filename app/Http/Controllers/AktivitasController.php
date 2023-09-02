@@ -127,7 +127,7 @@ class AktivitasController extends Controller
 
         date_default_timezone_set('UTC');
         $currentDate = date('Y-m-d');
-        $futureDate = date('Y-m-d', strtotime('-5 days', strtotime($currentDate)));
+        $futureDate = date('Y-m-d', strtotime('-6 days', strtotime($currentDate)));
 
         if ($request->tanggal <= $futureDate) {
             return response()->json(['invalid'=> ['error'=> [
